@@ -481,9 +481,11 @@ def discord_send(embeds, content=None):
         body = {"username": "One Piece ceny", "embeds": embeds[i:i + 10]}
         if content and i == 0:
             body["content"] = content
-        req = urllib.request.Request(url, data=json.dumps(body).encode("utf-8"),
+        target = url + ("&" if "?" in url else "?") + "wait=true"     # Discord potvrdí doručenie
+        req = urllib.request.Request(target, data=json.dumps(body).encode("utf-8"), method="POST",
                                      headers={"Content-Type": "application/json",
-                                              "User-Agent": "onepiece-ceny (+discord webhook)"})
+                                              # Discord (Cloudflare) odmieta neznáme User-Agenty chybou 403/1010
+                                              "User-Agent": "DiscordBot (https://github.com/factoryofcrazy-coder/onepiece-ceny, 1.0)"})
         for attempt in range(3):
             try:
                 urllib.request.urlopen(req, timeout=20).read()
@@ -492,7 +494,13 @@ def discord_send(embeds, content=None):
                 if e.code == 429 and attempt < 2:
                     time.sleep(2)
                     continue
-                say(f"  ! Discord chyba {e.code}: {e.read()[:200]!r}")
+                detail = e.read()[:300].decode("utf-8", "replace")
+                hint = {401: "webhook URL je neplatná", 404: "webhook bol zmazaný alebo URL je zlá",
+                        403: "Discord odmietol požiadavku"}.get(e.code, "")
+                say(f"  ✖ Discord chyba {e.code} {hint}: {detail}")
+                return False
+            except Exception as e:  # noqa: BLE001  (sieť, SSL…)
+                say(f"  ✖ Discord nedostupný: {e}")
                 return False
         time.sleep(0.6)
     return True
@@ -891,8 +899,8 @@ def main():
             sys.exit("Webhook nie je nastavený (DISCORD_WEBHOOK_URL alebo discord_webhook.txt).")
         ok = discord_send([{"title": "Test – upozornenia fungujú ✅", "color": 0x2DA44E,
                             "description": "Sem budú chodiť lacné One Piece ponuky."}])
-        print("Odoslané." if ok else "Nepodarilo sa odoslať.")
-        return
+        print("✔ Odoslané – pozri Discord." if ok else "✖ Nepodarilo sa odoslať (dôvod je vyššie).")
+        sys.exit(0 if ok else 1)
     if a.rebuild:
         build_static()
         print(f"Prerobené: {DOCS / 'index.html'}")

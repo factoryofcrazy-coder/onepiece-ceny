@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "23 */2 * * *"     # každé 2 hodiny (UTC)
   workflow_dispatch:            # tlačidlo "Run workflow" (Fetch zo stránky)
+    inputs:
+      test_discord:
+        description: "Len poslať skúšobnú správu na Discord"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -21,11 +26,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Test Discordu
+        if: ${{ inputs.test_discord }}
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python onepiece_ceny.py --test-discord
       - name: Stiahnuť ceny, poslať upozornenia, vytvoriť stránku
+        if: ${{ !inputs.test_discord }}
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: python onepiece_ceny.py --once --no-browser
       - name: Uložiť dáta a stránku
+        if: ${{ !inputs.test_discord }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
