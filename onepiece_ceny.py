@@ -5,7 +5,7 @@ One Piece TCG – porovnanie cien booster boxov a packov v SK/CZ e-shopoch + MSR
 Obchody: Card Empire, Pikazard, Veselý drak, iHRYsko (Smarty.sk len ako odkaz – blokuje boty).
 
 Použitie:
-    python onepiece_ceny.py               # lokálna stránka s tlačidlom Fetch (http://localhost:8765)
+    python onepiece_ceny.py               # stiahne ceny, nahrá na GitHub, otvorí stránku (http://localhost:8765)
     python onepiece_ceny.py --watch 2     # stránka + automatický fetch každé 2 hodiny
     python onepiece_ceny.py --once        # raz stiahne ceny, pošle upozornenia, vytvorí docs/index.html
     python onepiece_ceny.py --test-discord   # pošle skúšobnú správu na Discord
@@ -38,6 +38,7 @@ ALERT_STATE = DATA / "alerts_state.json"
 DOCS = HERE / "docs"                    # statická stránka pre GitHub Pages
 MSRP_FILE = HERE / "msrp.json"
 CONFIG_FILE = HERE / "config.json"
+IN_CLOUD = os.environ.get("GITHUB_ACTIONS") == "true"
 HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -49,10 +50,11 @@ MAX_PAGES = 10
 
 # ---------------------------------------------------------------- obchody ---
 SHOPS = {
-    "cardempire": {"label": "Card Empire", "parser": "shoptet", "currency": "EUR",
+    # Shoptet obchody blokujú servery GitHubu (HTTP 500) – sťahujú sa len z PC (cloud: False)
+    "cardempire": {"label": "Card Empire", "parser": "shoptet", "currency": "EUR", "cloud": False,
                    "urls": ["https://www.cardempire.sk/booster-boxy-3/",
                             "https://www.cardempire.sk/booster-packy-2/"]},
-    "pikazard":   {"label": "Pikazard", "parser": "shoptet", "currency": "EUR",
+    "pikazard":   {"label": "Pikazard", "parser": "shoptet", "currency": "EUR", "cloud": False,
                    "urls": ["https://www.pikazard.eu/one-piece-tcg/"]},
     "veselydrak": {"label": "Veselý drak", "parser": "veselydrak", "currency": "EUR",
                    "urls": ["https://www.vesely-drak.sk/produkty/booster-box-one-piece/",
@@ -378,19 +380,19 @@ def load_current():
     cur = load_json(CURRENT, None)
     if cur:
         return cur
-    # migrácia zo starej verzie: posledný snapshot každého obchodu z history.csv
-    hist = load_history()
-    last = {}
-    for r in hist:
-        last[r["shop"]] = r["timestamp"]
+    # záloha / migrácia: posledný známy stav každého produktu z history.csv
+    latest = {}
+    for r in load_history():
+        latest[(r["shop"], r["url"])] = r
     shops = {}
-    for r in hist:
-        if r["timestamp"] == last.get(r["shop"]):
-            s = shops.setdefault(r["shop"], {"ts": r["timestamp"], "ok": True, "items": []})
-            s["items"].append({"name": r["name"], "url": r["url"], "price": float(r["price"]),
-                               "currency": r["currency"], "eur": float(r["priceEUR"]),
-                               "inStock": r["inStock"] == "1"})
-    return {"updated": max(last.values()) if last else None, "fx": FX_FALLBACK, "shops": shops}
+    for (shop, _), r in sorted(latest.items(), key=lambda kv: kv[1]["timestamp"]):
+        s = shops.setdefault(shop, {"ts": r["timestamp"], "ok": True, "items": []})
+        s["ts"] = max(s["ts"], r["timestamp"])
+        s["items"].append({"name": r["name"], "url": r["url"], "price": float(r["price"]),
+                           "currency": r["currency"], "eur": float(r["priceEUR"]),
+                           "inStock": r["inStock"] == "1"})
+    upd = max((s["ts"] for s in shops.values()), default=None)
+    return {"updated": upd, "fx": FX_FALLBACK, "shops": shops}
 
 
 def append_changes(prev_cur, new_items_by_shop, ts):
@@ -422,7 +424,8 @@ def append_changes(prev_cur, new_items_by_shop, ts):
 def snapshot(only=None):
     fx = fx_rates()
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    keys = [k for k in SHOPS if SHOPS[k].get("enabled", True) and (not only or k in only)]
+    keys = [k for k in SHOPS if SHOPS[k].get("enabled", True) and (not only or k in only)
+            and not (IN_CLOUD and SHOPS[k].get("cloud") is False)]
     say(f"  kurz 1 € = {fx['CZK']:.2f} Kč = {fx['USD']:.3f} $ = {fx['JPY']:.1f} ¥, sťahujem {len(keys)} obchody…")
 
     def one(key):
@@ -558,7 +561,8 @@ def page_data():
         hist.setdefault(r["url"], []).append([r["timestamp"], float(r["priceEUR"]), r["inStock"] == "1"])
     used = set(cur.get("shops", {}))
     shops = {k: v["label"] for k, v in SHOPS.items() if v.get("enabled", True) or k in used}
-    status = {k: {"ts": s.get("ts"), "ok": s.get("ok", True), "error": s.get("error")}
+    status = {k: {"ts": s.get("ts"), "ok": s.get("ok", True), "error": s.get("error"),
+                  "pc": SHOPS.get(k, {}).get("cloud") is False}
               for k, s in cur.get("shops", {}).items()}
     links = [{"label": v["label"], "url": v["link"]} for v in SHOPS.values()
              if not v.get("enabled", True) and v.get("link")]
@@ -577,8 +581,128 @@ def build_static():
     (DOCS / ".nojekyll").write_text("", encoding="utf-8")
 
 
+# ------------------------------------------------- synchronizácia s GitHubom
+SYNC_FILES = ["data/current.json", "data/history.csv", "data/alerts_state.json", "docs/index.html", "docs/.nojekyll"]
+
+
+def gh_token():
+    t = os.environ.get("GITHUB_SYNC_TOKEN", "").strip()
+    f = HERE / "github_token.txt"
+    if not t and f.exists():
+        t = f.read_text(encoding="utf-8").strip()
+    return t or None
+
+
+def gh_repo():
+    return load_json(CONFIG_FILE, {}).get("github_repo")
+
+
+def gh_api(method, path, body=None, raw=False):
+    req = urllib.request.Request(
+        f"https://api.github.com/repos/{gh_repo()}/{path}", method=method,
+        data=json.dumps(body).encode("utf-8") if body is not None else None,
+        headers={"Authorization": f"Bearer {gh_token()}", "User-Agent": "onepiece-ceny",
+                 "X-GitHub-Api-Version": "2022-11-28",
+                 "Content-Type": "application/json",
+                 "Accept": "application/vnd.github.raw" if raw else "application/vnd.github+json"})
+    with urllib.request.urlopen(req, timeout=40) as r:
+        data = r.read()
+    return data if raw else json.loads(data or b"{}")
+
+
+def merge_history(remote_text):
+    """Zjednotí lokálnu a vzdialenú history.csv (podľa času + URL)."""
+    rows = {}
+    for src in (remote_text, HISTORY.read_text(encoding="utf-8") if HISTORY.exists() else ""):
+        for r in csv.DictReader(src.splitlines()):
+            if r.get("timestamp") and r.get("url"):
+                rows[(r["timestamp"], r["url"])] = r
+    with HISTORY.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=FIELDS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(sorted(rows.values(), key=lambda r: r["timestamp"]))
+
+
+def merge_current(remote):
+    """Pre každý obchod nechá novšie dáta (lokálne alebo z GitHubu)."""
+    local = load_json(CURRENT, None) if CURRENT.exists() else None
+    if not local:
+        return remote
+    out = dict(local)
+    out["shops"] = dict(local.get("shops", {}))
+    for k, s in remote.get("shops", {}).items():
+        mine = out["shops"].get(k)
+        if not mine or (s.get("ts") or "") > (mine.get("ts") or ""):
+            out["shops"][k] = s
+    out["updated"] = max(local.get("updated") or "", remote.get("updated") or "") or None
+    return out
+
+
+def sync_pull():
+    """Stiahne zdieľané dáta z GitHubu a zlúči ich s lokálnymi."""
+    head = gh_api("GET", "git/ref/heads/main")["object"]["sha"]
+    DATA.mkdir(exist_ok=True)
+    try:
+        remote_cur = json.loads(gh_api("GET", f"contents/data/current.json?ref={head}", raw=True))
+        CURRENT.write_text(json.dumps(merge_current(remote_cur), ensure_ascii=False, indent=1), encoding="utf-8")
+    except urllib.error.HTTPError as e:
+        if e.code != 404:
+            raise
+    try:
+        merge_history(gh_api("GET", f"contents/data/history.csv?ref={head}", raw=True).decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        if e.code != 404:
+            raise
+    try:
+        remote_state = json.loads(gh_api("GET", f"contents/data/alerts_state.json?ref={head}", raw=True))
+        local_state = load_json(ALERT_STATE, {})
+        ALERT_STATE.write_text(json.dumps({**local_state, **remote_state}, ensure_ascii=False, indent=0), encoding="utf-8")
+    except urllib.error.HTTPError as e:
+        if e.code != 404:
+            raise
+    return head
+
+
+def sync_push(message):
+    """Nahrá dáta a stránku na GitHub jedným commitom (pri kolízii zlúči a skúsi znova)."""
+    import base64
+    for attempt in range(3):
+        head = gh_api("GET", "git/ref/heads/main")["object"]["sha"]
+        base_tree = gh_api("GET", f"git/commits/{head}")["tree"]["sha"]
+        tree = []
+        for rel in SYNC_FILES:
+            f = HERE / rel
+            if f.exists():
+                blob = gh_api("POST", "git/blobs", {"content": base64.b64encode(f.read_bytes()).decode(),
+                                                     "encoding": "base64"})
+                tree.append({"path": rel, "mode": "100644", "type": "blob", "sha": blob["sha"]})
+        new_tree = gh_api("POST", "git/trees", {"base_tree": base_tree, "tree": tree})
+        if new_tree["sha"] == base_tree:
+            return "bez zmien"
+        commit = gh_api("POST", "git/commits", {"message": message, "tree": new_tree["sha"], "parents": [head]})
+        try:
+            gh_api("PATCH", "git/refs/heads/main", {"sha": commit["sha"], "force": False})
+            return commit["sha"][:7]
+        except urllib.error.HTTPError as e:
+            if e.code != 422 or attempt == 2:
+                raise
+            sync_pull()                      # medzitým zapísal GitHub Actions – zlúč a skús znova
+            build_static()
+    return None
+
+
+def sync_enabled():
+    return not IN_CLOUD and bool(gh_token()) and bool(gh_repo())
+
+
 def run_once(only=None, notify=True):
     say(datetime.now().strftime("%d.%m.%Y %H:%M") + " – sťahujem ceny")
+    if sync_enabled():
+        try:
+            sync_pull()
+            say(f"  ⇣ stiahnuté aktuálne dáta z GitHubu ({gh_repo()})")
+        except Exception as e:  # noqa: BLE001
+            say(f"  ! GitHub sync (stiahnutie) zlyhal: {e} – pokračujem s lokálnymi dátami")
     prev = load_current()
     first_run = not CURRENT.exists() and not prev.get("shops")
     ts, fx, results = snapshot(only)
@@ -603,6 +727,17 @@ def run_once(only=None, notify=True):
             say(f"  🔔 {len(embeds)} upozornení (Discord webhook nie je nastavený)")
     build_static()
     total = sum(len(i) for i in fresh.values())
+    if sync_enabled():
+        try:
+            r = sync_push("ceny z PC " + datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"))
+            say(f"  ⇡ nahraté na GitHub ({r}) – online stránka sa obnoví o ~1 min")
+        except urllib.error.HTTPError as e:
+            hint = " – skontroluj github_token.txt (oprávnenie Contents: Read and write)" if e.code in (401, 403, 404) else ""
+            say(f"  ✖ GitHub sync zlyhal: HTTP {e.code}{hint}")
+        except Exception as e:  # noqa: BLE001
+            say(f"  ✖ GitHub sync zlyhal: {e}")
+    elif not IN_CLOUD:
+        say("  (GitHub sync vypnutý – chýba github_token.txt)")
     say(f"Hotovo – {total} produktov, {n_changes} zmien cien/dostupnosti")
     return cur
 
@@ -664,7 +799,7 @@ class Handler(BaseHTTPRequestHandler):
         pass
 
 
-def serve(port, only=None, open_browser=True, watch=None):
+def serve(port, only=None, open_browser=True, watch=None, fetch_on_start=True):
     Handler.only = only
     for p in range(port, port + 20):
         try:
@@ -676,6 +811,9 @@ def serve(port, only=None, open_browser=True, watch=None):
         sys.exit("Nenašiel som voľný port.")
     url = f"http://localhost:{srv.server_address[1]}/"
     print(f"Stránka beží na {url}  (Ctrl+C = koniec)")
+    if fetch_on_start and not watch:
+        start_fetch(only)
+        print("Sťahujem aktuálne ceny…")
     if watch:
         def auto():
             while True:
@@ -698,6 +836,7 @@ def main():
     ap.add_argument("--port", type=int, default=8765, help="port lokálnej stránky (predvolene 8765)")
     ap.add_argument("--no-browser", action="store_true", help="neotvárať prehliadač")
     ap.add_argument("--no-notify", action="store_true", help="neposielať upozornenia")
+    ap.add_argument("--no-fetch", action="store_true", help="po spustení stránky nesťahovať hneď ceny")
     ap.add_argument("--rebuild", action="store_true", help="len prerobiť docs/index.html z uložených dát")
     ap.add_argument("--test-discord", action="store_true", help="poslať skúšobnú správu na Discord")
     ap.add_argument("--only", help="čiarkou oddelené obchody: " + ",".join(SHOPS))
@@ -720,7 +859,7 @@ def main():
         if not a.no_browser:
             webbrowser.open((DOCS / "index.html").as_uri())
         return
-    serve(a.port, only, open_browser=not a.no_browser, watch=a.watch)
+    serve(a.port, only, open_browser=not a.no_browser, watch=a.watch, fetch_on_start=not a.no_fetch)
 
 
 TEMPLATE = r"""<!doctype html>
@@ -861,6 +1000,8 @@ document.getElementById("q").oninput=e=>{st.q=e.target.value;st.sel=null;draw();
 const fmt=t=>t?new Date(t).toLocaleString("sk-SK",{day:"numeric",month:"numeric",hour:"2-digit",minute:"2-digit"}):"—";
 document.getElementById("upd").textContent=fmt(P.updated);
 document.getElementById("status").innerHTML=SK.map(s=>{const x=P.status[s];if(!x)return `<span>${esc(SHOPS[s])}: zatiaľ nič</span>`;
+  const old=x.ts&&(Date.now()-new Date(x.ts))>36e5*24;
+  if(x.ok&&x.pc)return `<span class="${old?"bad":""}" title="Tento obchod blokuje servery GitHubu, sťahuje sa pri spustení na PC">${old?"⚠":"✔"} ${esc(SHOPS[s])} · z PC ${fmt(x.ts)}</span>`;
   return x.ok?`<span>✔ ${esc(SHOPS[s])}</span>`:`<span class="bad" title="${esc(x.error||"")}">⚠ ${esc(SHOPS[s])}: posledný fetch zlyhal, dáta z ${fmt(x.ts)}</span>`}).join("")
   +(P.links.length?`<span>Bez automatického sťahovania:${P.links.map(l=>`<a class="ext" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</span>`:"");
 // Fetch: lokálny server → API; GitHub Pages → spustenie workflow
