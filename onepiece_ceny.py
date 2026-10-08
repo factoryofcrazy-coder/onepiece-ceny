@@ -829,6 +829,32 @@ def serve(port, only=None, open_browser=True, watch=None, fetch_on_start=True):
         print("\nKoniec.")
 
 
+def setup_wizard():
+    """Uloží Discord webhook a GitHub token do lokálnych súborov (nenahrávajú sa na GitHub) a otestuje ich."""
+    print("=== Nastavenie (Enter = ponechať / preskočiť) ===\n")
+    print("1) Discord webhook URL (Discord → kanál → Upraviť → Integrácie → Webhooky → Kopírovať URL)")
+    url = input("   vlož URL: ").strip()
+    if url:
+        if not re.match(r"https://(ptb\.|canary\.)?discord(app)?\.com/api/webhooks/\d+/[\w-]+$", url):
+            print("   ✖ Toto nevyzerá ako Discord webhook URL – neuložené.")
+        else:
+            (HERE / "discord_webhook.txt").write_text(url, encoding="utf-8")
+            ok = discord_send([{"title": "Test – upozornenia fungujú ✅", "color": 0x2DA44E,
+                                "description": "Sem budú chodiť lacné One Piece ponuky."}])
+            print("   ✔ uložené, skúšobná správa odoslaná – pozri Discord" if ok else "   ✖ uložené, ale Discord správu neprijal")
+    print("\n2) GitHub token (github.com → Settings → Developer settings → Fine-grained tokens,")
+    print("   repo onepiece-ceny, Contents: Read and write)")
+    tok = input("   vlož token: ").strip()
+    if tok:
+        (HERE / "github_token.txt").write_text(tok, encoding="utf-8")
+        try:
+            gh_api("GET", "git/ref/heads/main")
+            print(f"   ✔ uložené, prístup k {gh_repo()} funguje")
+        except urllib.error.HTTPError as e:
+            print(f"   ✖ uložené, ale GitHub vrátil HTTP {e.code} – skontroluj repozitár a oprávnenia tokenu")
+    print("\nHotovo. Spusti spustit.bat.")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--once", action="store_true", help="raz stiahnuť ceny, poslať upozornenia, vytvoriť docs/index.html")
@@ -839,10 +865,14 @@ def main():
     ap.add_argument("--no-fetch", action="store_true", help="po spustení stránky nesťahovať hneď ceny")
     ap.add_argument("--rebuild", action="store_true", help="len prerobiť docs/index.html z uložených dát")
     ap.add_argument("--test-discord", action="store_true", help="poslať skúšobnú správu na Discord")
+    ap.add_argument("--setup", action="store_true", help="sprievodca: uložiť Discord webhook a GitHub token")
     ap.add_argument("--only", help="čiarkou oddelené obchody: " + ",".join(SHOPS))
     a = ap.parse_args()
     only = set(a.only.split(",")) if a.only else None
 
+    if a.setup:
+        setup_wizard()
+        return
     if a.test_discord:
         if not webhook_url():
             sys.exit("Webhook nie je nastavený (DISCORD_WEBHOOK_URL alebo discord_webhook.txt).")
