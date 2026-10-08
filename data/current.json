@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-08T14:11:23Z",
+ "updated": "2026-10-08T14:12:35Z",
  "fx": {
   "CZK": 24.403,
   "USD": 1.1186,
@@ -387,7 +387,7 @@
      "inStock": true
     }
    ],
-   "error": "HTTP Error 500: Internal Server Error"
+   "error": "HTTP Error 500: Internal Server Error (https://www.cardempire.sk/booster-boxy-3/)"
   },
   "pikazard": {
    "ts": "2026-10-08T13:49:25Z",
@@ -586,10 +586,10 @@
      "inStock": false
     }
    ],
-   "error": "HTTP Error 500: Internal Server Error"
+   "error": "HTTP Error 500: Internal Server Error (https://www.pikazard.eu/one-piece-tcg/)"
   },
   "veselydrak": {
-   "ts": "2026-10-08T14:11:23Z",
+   "ts": "2026-10-08T14:12:35Z",
    "ok": true,
    "items": [
     {
@@ -1315,7 +1315,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-08T14:11:23Z",
+   "ts": "2026-10-08T14:12:35Z",
    "ok": true,
    "items": [
     {
