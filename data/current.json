@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-08T14:12:35Z",
+ "updated": "2026-10-08T14:35:51Z",
  "fx": {
   "CZK": 24.403,
   "USD": 1.1186,
@@ -91,22 +91,6 @@
      "inStock": true
     },
     {
-     "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Box (Japonsky)",
-     "url": "https://www.cardempire.sk/one-piece-tcg-op-17-the-world--s-strongest-warriors-booster-box--japonsky-/",
-     "price": 180.0,
-     "currency": "EUR",
-     "eur": 180.0,
-     "inStock": true
-    },
-    {
-     "name": "One Piece TCG - OP17 - The World´s Strongest Warriors - Booster Box",
-     "url": "https://www.cardempire.sk/one-piece-tcg-the-world--s-strongest-warriors-booster-box/",
-     "price": 350.0,
-     "currency": "EUR",
-     "eur": 350.0,
-     "inStock": true
-    },
-    {
      "name": "One Piece TCG - OP17 - The World´s Strongest Warriors - Booster Box - Case",
      "url": "https://www.cardempire.sk/one-piece-tcg-the-worlds-strongest-warriors-booster-box-case/",
      "price": 4200.0,
@@ -115,35 +99,11 @@
      "inStock": true
     },
     {
-     "name": "One Piece TCG - Illustration Box Vol.8",
-     "url": "https://www.cardempire.sk/one-piece-tcg-illustration-box-vol-8/",
-     "price": 45.0,
-     "currency": "EUR",
-     "eur": 45.0,
-     "inStock": true
-    },
-    {
-     "name": "One Piece TCG - Illustration Box Vol.7",
-     "url": "https://www.cardempire.sk/one-piece-card-game--illustration-box-vol-7--ib-07-/",
-     "price": 45.0,
-     "currency": "EUR",
-     "eur": 45.0,
-     "inStock": true
-    },
-    {
      "name": "One Piece TCG - The Time of Battle Booster Box Case (OP16) - EN",
      "url": "https://www.cardempire.sk/one-piece-tcg-the-time-of-battle-booster-box-case--op16-en/",
      "price": 2300.0,
      "currency": "EUR",
      "eur": 2300.0,
-     "inStock": true
-    },
-    {
-     "name": "One Piece TCG - The Time of Battle Booster Box (OP16) - EN",
-     "url": "https://www.cardempire.sk/one-piece-tcg-the-time-of-battle-booster-box--op16-en/",
-     "price": 190.0,
-     "currency": "EUR",
-     "eur": 190.0,
      "inStock": true
     },
     {
@@ -283,48 +243,8 @@
      "inStock": true
     },
     {
-     "name": "One piece - Jump Promo Pack - Ultimate Warriors",
-     "url": "https://www.cardempire.sk/one-piece-jump-promo-pack-ultimate-warriors/",
-     "price": 48.0,
-     "currency": "EUR",
-     "eur": 48.0,
-     "inStock": true
-    },
-    {
-     "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Pack",
-     "url": "https://www.cardempire.sk/one-piece-tcg-op17-the-world--s-strongest-warriors-booster-pack/",
-     "price": 15.0,
-     "currency": "EUR",
-     "eur": 15.0,
-     "inStock": true
-    },
-    {
-     "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Pack (Japonsky)",
-     "url": "https://www.cardempire.sk/one-piece-tcg-op17-the-world--s-strongest-warriors-booster-pack--japonsky-/",
-     "price": 8.0,
-     "currency": "EUR",
-     "eur": 8.0,
-     "inStock": true
-    },
-    {
-     "name": "One Piece TCG - The Time of Battle Booster Pack (OP16) - EN",
-     "url": "https://www.cardempire.sk/one-piece-tcg-the-time-of-battle-booster-pack--op16-en/",
-     "price": 8.0,
-     "currency": "EUR",
-     "eur": 8.0,
-     "inStock": true
-    },
-    {
      "name": "One Piece TCG - 500 Years Into The Future - Booster Pack - Japonský",
      "url": "https://www.cardempire.sk/one-piece-tcg-500-years-into-the-future-booster-pack-japonsky/",
-     "price": 4.5,
-     "currency": "EUR",
-     "eur": 4.5,
-     "inStock": true
-    },
-    {
-     "name": "One Piece TCG - OP15 Adventure of the God’s Island – Booster Pack - Japonský",
-     "url": "https://www.cardempire.sk/one-piece-tcg-op15-adventure-of-the-god-s-island---booster-pack-japonsky/",
      "price": 4.5,
      "currency": "EUR",
      "eur": 4.5,
@@ -336,14 +256,6 @@
      "price": 5.0,
      "currency": "EUR",
      "eur": 5.0,
-     "inStock": true
-    },
-    {
-     "name": "One Piece TCG - Emperors In The New World - Booster Pack - Japonský",
-     "url": "https://www.cardempire.sk/one-piece-tcg-emperors-in-the-new-world-booster-pack-japonsky/",
-     "price": 7.0,
-     "currency": "EUR",
-     "eur": 7.0,
      "inStock": true
     },
     {
@@ -387,7 +299,7 @@
      "inStock": true
     }
    ],
-   "error": "HTTP Error 500: Internal Server Error (https://www.cardempire.sk/booster-boxy-3/)"
+   "error": "HTTP Error 502: Bad Gateway (https://www.cardempire.sk/booster-boxy-3/)"
   },
   "pikazard": {
    "ts": "2026-10-08T13:49:25Z",
@@ -399,38 +311,6 @@
      "price": 16.5,
      "currency": "EUR",
      "eur": 16.5,
-     "inStock": true
-    },
-    {
-     "name": "One Piece SD01 - Set Sail Deck Set",
-     "url": "https://www.pikazard.eu/one-piece-sd01-set-sail-deck-set/",
-     "price": 24.99,
-     "currency": "EUR",
-     "eur": 24.99,
-     "inStock": true
-    },
-    {
-     "name": "One Piece OP17 - Double pack set The Worlds strongest Warriors (DP12)",
-     "url": "https://www.pikazard.eu/one-piece-op17-double-pack-set-the-worlds-strongest-warriors--dp12-/",
-     "price": 34.5,
-     "currency": "EUR",
-     "eur": 34.5,
-     "inStock": false
-    },
-    {
-     "name": "One Piece OP17 - The World's Strongest Warriors - balíček",
-     "url": "https://www.pikazard.eu/one-piece-op17-the-world-s-strongest-warriors-balicek/",
-     "price": 12.5,
-     "currency": "EUR",
-     "eur": 12.5,
-     "inStock": false
-    },
-    {
-     "name": "One Piece OP17 - The World's Strongest Warriors - Booster Box",
-     "url": "https://www.pikazard.eu/one-piece-op17-the-world-s-strongest-warriors-booster-box/",
-     "price": 300.0,
-     "currency": "EUR",
-     "eur": 300.0,
      "inStock": true
     },
     {
@@ -492,14 +372,6 @@
     {
      "name": "One Piece ST36 - Starter Deck - Eustass \"Captain Kid\"",
      "url": "https://www.pikazard.eu/one-piece-st36-starter-deck-eustass--captain-kid-/",
-     "price": 16.5,
-     "currency": "EUR",
-     "eur": 16.5,
-     "inStock": true
-    },
-    {
-     "name": "One Piece ST35 - Starter Deck - Sabo",
-     "url": "https://www.pikazard.eu/one-piece-st35-starter-deck-sabo/",
      "price": 16.5,
      "currency": "EUR",
      "eur": 16.5,
@@ -589,7 +461,7 @@
    "error": "HTTP Error 500: Internal Server Error (https://www.pikazard.eu/one-piece-tcg/)"
   },
   "veselydrak": {
-   "ts": "2026-10-08T14:12:35Z",
+   "ts": "2026-10-08T14:35:51Z",
    "ok": true,
    "items": [
     {
@@ -1315,7 +1187,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-08T14:12:35Z",
+   "ts": "2026-10-08T14:35:51Z",
    "ok": true,
    "items": [
     {
