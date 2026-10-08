@@ -1,0 +1,22 @@
+{
+  "_info": [
+    "Nastavenia upozornení na Discord. Webhook URL sem NEDÁVAJ – patrí do GitHub Secrets",
+    "(DISCORD_WEBHOOK_URL) alebo lokálne do súboru discord_webhook.txt (ten sa na GitHub nenahrá).",
+    "max_pct_vs_msrp: prah oproti MSRP podľa jazyka. EN 0 = upozorni, keď je box skladom na MSRP alebo pod ním.",
+    "JP MSRP je japonská domáca cena (box ~35 €), na SK sa JP boxy predávajú 2–5× drahšie – preto JP 150 = do +150 %.",
+    "Jazyk, ktorý v max_pct_vs_msrp nie je, sa podľa MSRP nesleduje (len cez watchlist).",
+    "watchlist: vlastné cieľové ceny. product = 'KÓD TYP JAZYK' (napr. 'OP09 Box JP'), max_eur = cieľová cena.",
+    "Typy: Box, Pack, Double Pack, Case. Jazyky: EN, JP, CN, KR."
+  ],
+  "alerts": {
+    "max_pct_vs_msrp": { "EN": 0, "JP": 150 },
+    "kinds": ["Box"],
+    "back_in_stock_watchlist": true,
+    "new_products": true,
+    "realert_drop_pct": 3
+  },
+  "watchlist": [
+    { "product": "OP09 Box JP", "max_eur": 120 },
+    { "product": "OP16 Box EN", "max_eur": 140 }
+  ]
+}

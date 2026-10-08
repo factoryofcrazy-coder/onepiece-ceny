@@ -1,0 +1,32 @@
+{
+  "_info": [
+    "Odporúčané ceny (MSRP) od Bandai. Stránka ich prepočíta na EUR aktuálnym kurzom ECB a pripočíta DPH.",
+    "EN: oficiálna US cena za balíček v USD bez dane (en.onepiece-cardgame.com/products).",
+    "JP: oficiálna japonská cena za balíček v JPY vrátane 10 % JP dane (box = 24 balíčkov, PRB = 10).",
+    "Kľúče sú kódy edícií (OP09, EB02, PRB01...); 'default' platí pre všetko ostatné (nové edície).",
+    "override_eur: ak chceš pre konkrétny produkt vlastnú hodnotu v EUR, napr. \"OP16 Box EN\": 150."
+  ],
+  "vat": 0.23,
+  "en": {
+    "pack_usd": {
+      "default": 4.99,
+      "OP01": 4.19, "OP02": 4.19, "OP03": 4.19,
+      "OP04": 4.49, "OP05": 4.49, "OP06": 4.49, "OP07": 4.49, "OP08": 4.49, "OP09": 4.49,
+      "EB01": 4.49,
+      "PRB01": 5.49, "PRB02": 5.49
+    },
+    "box_packs": { "default": 24, "PRB": null }
+  },
+  "jp": {
+    "pack_jpy": {
+      "default": 240,
+      "OP01": 198, "OP02": 198, "OP03": 198,
+      "OP04": 220, "OP05": 220, "OP06": 220, "OP07": 220, "OP08": 220, "OP09": 220,
+      "OP10": 220, "OP11": 220, "OP12": 220, "OP13": 220, "OP14": 220, "OP15": 220, "OP16": 220,
+      "EB01": 220, "EB02": 220, "EB03": 220, "EB04": 220,
+      "PRB01": 550, "PRB02": 550
+    },
+    "box_packs": { "default": 24, "PRB": 10 }
+  },
+  "override_eur": {}
+}
