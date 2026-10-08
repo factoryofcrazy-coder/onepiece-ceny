@@ -45,16 +45,16 @@ HEADERS = {
                   "(KHTML, like Gecko) Chrome/128.0 Safari/537.36",
     "Accept-Language": "sk,cs;q=0.9,en;q=0.8",
 }
-DELAY = 1.0          # pauza medzi stránkami toho istého obchodu (s)
+DELAY = 1.0          # pauza medzi stránkami toho istého obchodu (s); Shoptet obchody majú 3 s
+MIN_REFETCH_MIN = 30  # pri automatickom spustení nesťahuj obchod, ktorý sa sťahoval pred menej ako 30 min
 MAX_PAGES = 10
 
 # ---------------------------------------------------------------- obchody ---
 SHOPS = {
     # Shoptet obchody blokujú servery GitHubu (HTTP 500) – sťahujú sa len z PC (cloud: False)
     "cardempire": {"label": "Card Empire", "parser": "shoptet", "currency": "EUR", "cloud": False,
-                   "urls": ["https://www.cardempire.sk/booster-boxy-3/",
-                            "https://www.cardempire.sk/booster-packy-2/"]},
-    "pikazard":   {"label": "Pikazard", "parser": "shoptet", "currency": "EUR", "cloud": False,
+                   "delay": 3, "urls": ["https://www.cardempire.sk/one-piece/"]},
+    "pikazard":   {"label": "Pikazard", "parser": "shoptet", "currency": "EUR", "cloud": False, "delay": 3,
                    "urls": ["https://www.pikazard.eu/one-piece-tcg/"]},
     "veselydrak": {"label": "Veselý drak", "parser": "veselydrak", "currency": "EUR",
                    "urls": ["https://www.vesely-drak.sk/produkty/booster-box-one-piece/",
@@ -309,7 +309,7 @@ def crawl(shop):
                 seen_urls.add(i["url"])
                 new.append(i)
             rows += new
-            time.sleep(DELAY)
+            time.sleep(shop.get("delay", DELAY))
             if not new or shop["parser"] == "smarty":
                 break
     return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
@@ -421,11 +421,24 @@ def append_changes(prev_cur, new_items_by_shop, ts):
     return len(rows)
 
 
-def snapshot(only=None):
+def recently_fetched(key, minutes=MIN_REFETCH_MIN):
+    s = load_json(CURRENT, {}).get("shops", {}).get(key) if CURRENT.exists() else None
+    if not s or not s.get("ok") or not s.get("ts"):
+        return False
+    age = datetime.now(timezone.utc) - datetime.strptime(s["ts"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+    return age.total_seconds() < minutes * 60
+
+
+def snapshot(only=None, force=True):
     fx = fx_rates()
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     keys = [k for k in SHOPS if SHOPS[k].get("enabled", True) and (not only or k in only)
             and not (IN_CLOUD and SHOPS[k].get("cloud") is False)]
+    if not force:
+        skip = [k for k in keys if recently_fetched(k)]
+        if skip:
+            say("  ⏭ preskakujem (stiahnuté pred < %d min): %s" % (MIN_REFETCH_MIN, ", ".join(SHOPS[k]["label"] for k in skip)))
+        keys = [k for k in keys if k not in skip]
     say(f"  kurz 1 € = {fx['CZK']:.2f} Kč = {fx['USD']:.3f} $ = {fx['JPY']:.1f} ¥, sťahujem {len(keys)} obchody…")
 
     def one(key):
@@ -695,7 +708,7 @@ def sync_enabled():
     return not IN_CLOUD and bool(gh_token()) and bool(gh_repo())
 
 
-def run_once(only=None, notify=True):
+def run_once(only=None, notify=True, force=True):
     say(datetime.now().strftime("%d.%m.%Y %H:%M") + " – sťahujem ceny")
     if sync_enabled():
         try:
@@ -705,7 +718,7 @@ def run_once(only=None, notify=True):
             say(f"  ! GitHub sync (stiahnutie) zlyhal: {e} – pokračujem s lokálnymi dátami")
     prev = load_current()
     first_run = not CURRENT.exists() and not prev.get("shops")
-    ts, fx, results = snapshot(only)
+    ts, fx, results = snapshot(only, force=force)
     cur = {"updated": ts, "fx": fx, "shops": dict(prev.get("shops", {}))}
     fresh = {}
     for key, items, err in results:
@@ -747,7 +760,7 @@ STATE = {"running": False, "log": [], "finished": None}
 LOCK = threading.Lock()
 
 
-def start_fetch(only=None):
+def start_fetch(only=None, force=True):
     with LOCK:
         if STATE["running"]:
             return False
@@ -755,7 +768,7 @@ def start_fetch(only=None):
 
     def job():
         try:
-            run_once(only)
+            run_once(only, force=force)
         except Exception as e:  # noqa: BLE001
             say(f"✖ chyba: {e}")
         finally:
@@ -812,7 +825,7 @@ def serve(port, only=None, open_browser=True, watch=None, fetch_on_start=True):
     url = f"http://localhost:{srv.server_address[1]}/"
     print(f"Stránka beží na {url}  (Ctrl+C = koniec)")
     if fetch_on_start and not watch:
-        start_fetch(only)
+        start_fetch(only, force=False)
         print("Sťahujem aktuálne ceny…")
     if watch:
         def auto():
