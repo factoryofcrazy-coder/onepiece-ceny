@@ -286,12 +286,19 @@ def crawl(shop):
     for start in shop["urls"]:
         for n in range(1, MAX_PAGES + 1):
             url = page_url(shop["parser"], start, n)
-            try:
-                page = fetch(url)
-            except urllib.error.HTTPError as e:
-                if e.code == 404 and n > 1:
+            page = None
+            for attempt in range(2):
+                try:
+                    page = fetch(url)
                     break
-                raise
+                except urllib.error.HTTPError as e:
+                    if n > 1:                     # za poslednou stranou niektoré obchody vrátia 404/500
+                        break
+                    if attempt == 1:
+                        raise urllib.error.HTTPError(url, e.code, f"{e.reason} ({url})", e.headers, None)
+                    time.sleep(3)
+            if page is None:
+                break
             new = []
             for i in parse(page, url):
                 if i["id"] in seen_ids or i["url"] in seen_urls:
