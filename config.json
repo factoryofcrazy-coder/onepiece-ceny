@@ -6,12 +6,14 @@
     "JP MSRP je japonská domáca cena (box ~35 €), na SK sa JP boxy predávajú 2–5× drahšie – preto JP 150 = do +150 %.",
     "Jazyk, ktorý v max_pct_vs_msrp nie je, sa podľa MSRP nesleduje (len cez watchlist).",
     "watchlist: vlastné cieľové ceny. product = 'KÓD TYP JAZYK' (napr. 'OP09 Box JP'), max_eur = cieľová cena.",
-    "Typy: Box, Pack, Double Pack, Case. Jazyky: EN, JP, CN, KR.",
+    "Typy: Box, Pack, Double Pack, Case, Starter, Kolekcie (= Premium + Illustration + Kolekcia). Jazyky: EN, JP, CN, KR.",
     "github_repo: kam sa pri spustení na PC nahrajú dáta (token v súbore github_token.txt).",
     "digest: denný súhrn na Discord (raz denne po hodine 'hour' miestneho času).",
     "preorders: upozorniť, keď obchod spustí predobjednávku boxu. Ostatné upozornenia chodia len na tovar skladom.",
     "shipping: cena dopravy (Packeta na SK) a hranica dopravy zdarma v EUR; null = neznáme, doplň podľa košíka obchodu. pickup = osobný odber.",
-    "watch_drop_pct: produkt z watchlistu skladom zlacnel aspoň o toľko % od posledného fetchu → upozornenie."
+    "watch_drop_pct: produkt z watchlistu skladom zlacnel aspoň o toľko % od posledného fetchu → upozornenie.",
+    "kinds: pre ktoré typy chodia upozornenia (MSRP prah, nový produkt, predobjednávka). MSRP majú len Box a Pack.",
+    "back_in_stock_kinds: typy bez MSRP – upozorní, keď sa produkt vráti na sklad."
   ],
   "alerts": {
     "max_pct_vs_msrp": {
@@ -19,13 +21,20 @@
       "JP": 150
     },
     "kinds": [
-      "Box"
+      "Box",
+      "Pack",
+      "Double Pack",
+      "Kolekcie"
     ],
     "back_in_stock_watchlist": true,
     "new_products": true,
     "realert_drop_pct": 3,
     "preorders": true,
-    "watch_drop_pct": 10
+    "watch_drop_pct": 10,
+    "back_in_stock_kinds": [
+      "Double Pack",
+      "Kolekcie"
+    ]
   },
   "watchlist": [
     {

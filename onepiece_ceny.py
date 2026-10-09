@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09j"
+VERSION = "2026-10-09k"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -926,7 +926,13 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
     a = cfg.get("alerts", {})
     th = a.get("max_pct_vs_msrp", {"EN": 0})
     th = {l: float(th) for l in ("EN", "JP")} if not isinstance(th, dict) else {k: float(v) for k, v in th.items()}
-    kinds = set(a.get("kinds", ["Box"]))
+    def expand(lst):                       # "Kolekcie" = Premium + Illustration + Kolekcia (ako na stránke)
+        out = set()
+        for k in lst:
+            out |= set(KIND_GROUPS.get(k, (k,)))
+        return out
+    kinds = expand(a.get("kinds", ["Box"]))
+    restock_kinds = expand(a.get("back_in_stock_kinds", ["Double Pack", "Kolekcie"])) & kinds
     redrop = float(a.get("realert_drop_pct", 3)) / 100
     watch = {}
     for w in cfg.get("watchlist", []):
@@ -957,6 +963,9 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                 if a.get("back_in_stock_watchlist", True) and ident in watch and p and not p["inStock"]:
                     reasons.append("znova skladom")
                 drop = float(a.get("watch_drop_pct", 10)) / 100
+                # produkty bez MSRP (double packy, kolekcie): upozorni, keď sa vrátia na sklad
+                if kind in restock_kinds and p and not p["inStock"] and "znova skladom" not in reasons:
+                    reasons.append("znova skladom")
                 if ident in watch and p and p["inStock"] and i["eur"] <= p["eur"] * (1 - drop):
                     reasons.append(f"📉 zlacnené o {(1 - i['eur'] / p['eur']) * 100:.0f} % ({eur(p['eur'])} → {eur(i['eur'])})")
             # nový produkt / predobjednávka – len keď sa dá kúpiť alebo objednať
@@ -965,7 +974,7 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                 reasons.append("🆕 spustená predobjednávka" if i.get("preorder") and not i["inStock"] else "nový produkt skladom")
             p = prev.get(i["url"])
             if a.get("preorders", True) and not first_run and p and i.get("preorder") and not p.get("preorder") \
-                    and not i["inStock"] and kind in ("Box", "Case"):
+                    and not i["inStock"] and (kind in kinds or kind == "Case"):
                 reasons.append("🆕 spustená predobjednávka")
             if not reasons:
                 continue
