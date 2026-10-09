@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09i"
+VERSION = "2026-10-09j"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -1185,6 +1185,10 @@ def run_once(only=None, notify=True, force=True):
                     i["img"] = old_img[i["url"]]
             cur["shops"][key] = {"ts": ts, "ok": True, "items": items}
             fresh[key] = items
+    # vypnuté obchody (napr. Smarty len ako odkaz) bez dát z obchodu nezobrazuj – inak by tam visela stará chyba
+    for key in [k for k, v in cur["shops"].items()
+                if SHOPS.get(k, {}).get("enabled", True) is False and not v.get("items")]:
+        del cur["shops"][key]
     DATA.mkdir(exist_ok=True)
     n_changes = append_changes(prev, fresh, ts)
     CURRENT.write_text(json.dumps(cur, ensure_ascii=False, indent=1), encoding="utf-8")
