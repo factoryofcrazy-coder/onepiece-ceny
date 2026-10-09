@@ -3,7 +3,7 @@
 Sleduje ceny One Piece booster boxov a packov v obchodoch **Card Empire, Pikazard,
 Veselý drak, iHRYsko, Najáda, Tolarie, Černý rytíř, Nekonečno, Pokemon4U a Hra na netu**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
 pošle upozornenie na **Discord**. Smarty.sk blokuje automatické sťahovanie
-(Cloudflare) – jeho ceny sa načítajú zo stránky, ktorú si uložíš v prehliadači (nižšie).
+(Cloudflare), preto je na stránke len odkaz naň.
 
 ## Ako to beží
 
@@ -53,13 +53,7 @@ python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
   „s dopr.“ cenu. Overené: Veselý drak 2,36 € (zdarma od 80 €), Card Empire 3,50 € (zdarma od 200 €),
   Nekonečno osobný odber v Bratislave (Eurovea, Bory Mall). Ostatné doplň podľa košíka obchodu.
 - **Cardmarket** – pri každom produkte odkaz na vyhľadávanie na Cardmarkete (reálna trhová cena).
-- **Smarty.sk – uložená stránka**: otvor v prehliadači
-  `https://www.smarty.sk/Vyhladavanie?query=one+piece+tcg`, stlač **Ctrl+S** a ulož ju (stačí
-  „iba HTML“) do priečinka `import` alebo do Stiahnutých súborov (názov musí obsahovať „smarty“,
-  predvolený názov ho obsahuje). Pri ďalšom `spustit.bat` / Fetch sa Smarty načíta, ceny pôjdu
-  na web aj do upozornení. Viac strán výsledkov = ulož každú. Súbory staršie ako 3 dni sa ignorujú,
-  rovnaký súbor sa nespracuje dvakrát.
-- **Smarty.sk – feed (automaticky)**: legálna cesta bez ukladania je ich affiliate **XML feed** (eHUB → program
+- **Smarty.sk** – web blokuje roboty, legálna cesta je ich affiliate **XML feed** (eHUB → program
   Smarty.sk → „XML feed na vyžiadanie u affiliate managera“). URL feedu ulož do GitHub secretu
   `SMARTY_FEED_URL` (a na PC do `smarty_feed.txt`) – Smarty sa potom zapne automaticky.
 
