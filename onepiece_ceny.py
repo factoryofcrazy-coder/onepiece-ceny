@@ -23,6 +23,7 @@ import sys
 import threading
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import webbrowser
 from concurrent.futures import ThreadPoolExecutor
@@ -39,6 +40,11 @@ DOCS = HERE / "docs"                    # statická stránka pre GitHub Pages
 MSRP_FILE = HERE / "msrp.json"
 CONFIG_FILE = HERE / "config.json"
 IN_CLOUD = os.environ.get("GITHUB_ACTIONS") == "true"
+
+
+def _enable_feeds():
+    if feed_url():
+        SHOPS["smarty"]["enabled"] = True
 HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -72,9 +78,10 @@ SHOPS = {
                    "urls": ["https://eshop-api.cernyrytir.eu/api/public/merch/list#677"]},
     "nekonecno":  {"label": "Nekonečno", "parser": "shoptet", "currency": "EUR", "cloud": False, "delay": 3,
                    "urls": ["https://www.nekonecno.sk/one-piece-karty/"]},
-    # Smarty.sk blokuje automatické sťahovanie (Cloudflare ochrana proti botom),
-    # preto sa nesťahuje – na stránke je len odkaz na ich vyhľadávanie.
-    "smarty":     {"label": "Smarty.sk", "parser": "smarty", "currency": "EUR", "enabled": False,
+    # Smarty.sk blokuje automatické sťahovanie webu (Cloudflare). Legálna cesta je ich affiliate
+    # XML feed (eHUB – „XML feed na vyžiadanie u affiliate managera“). Keď je URL feedu nastavená
+    # (SMARTY_FEED_URL / smarty_feed.txt), obchod sa zapne automaticky; inak je na stránke len odkaz.
+    "smarty":     {"label": "Smarty.sk", "parser": "xmlfeed", "currency": "EUR", "enabled": False,
                    "link": "https://www.smarty.sk/Vyhladavanie?query=one+piece+tcg",
                    "urls": ["https://www.smarty.sk/Vyhladavanie?query=one+piece+tcg"]},
 }
@@ -94,6 +101,7 @@ SET_NAMES = {
     "heroines edition": "EB03", "egghead crisis": "EB04",
     "the best vol. 2": "PRB02", "the best vol.2": "PRB02", "the best 2": "PRB02", "the best": "PRB01",
 }
+PREORDER_RX = re.compile(r"(?:p[řr]edobjedn|pre-?order|presale|predpredaj)", re.I)
 CODE_RX = re.compile(r"\b(OP|EB|PRB|ST)\s?-?\s?(\d{1,2})\b", re.I)
 
 
@@ -214,12 +222,15 @@ def parse_shoptet(page, base):
         price = re.search(r'data-micro-price="([\d.]+)"', attrs)
         cur = re.search(r'data-micro-price-currency="(\w+)"', attrs)
         av = re.search(r'data-micro-availability="[^"]*/(\w+)"', attrs)
+        avtxt = re.search(r'class="availability"[^>]*>(.*?)</div>', chunk, re.S)
+        avtxt = clean(avtxt.group(1)) if avtxt else ""
         out.append({"id": pid.group(1) if pid else clean(name.group(1)),
                     "name": clean(name.group(1)),
                     "url": absolute(base, href.group(1)) if href else base,
                     "price": float(price.group(1)) if price else None,
                     "currency": cur.group(1) if cur else None,
-                    "inStock": bool(av and av.group(1) == "InStock")})
+                    "inStock": bool(av and av.group(1) == "InStock") and not PREORDER_RX.search(avtxt),
+                    "preorder": bool(av and av.group(1) == "PreOrder") or bool(PREORDER_RX.search(avtxt))})
     return out
 
 
@@ -237,6 +248,7 @@ def parse_veselydrak(page, base):
         out.append({"id": a.group(1), "name": clean(a.group(2)), "url": absolute(base, a.group(1)),
                     "price": num(ptxt), "currency": "CZK" if "Kč" in ptxt else "EUR",
                     "inStock": bool(re.search(r"sklad", avtxt, re.I)) and not re.search(r"nie je|není|vypred", avtxt, re.I),
+                    "preorder": bool(PREORDER_RX.search(avtxt)) or bool(re.search(r'ribbon[^"]*"[^>]*>\s*<span>\s*P[řr]edobjedn', chunk, re.I)),
                     "availText": avtxt})
     return out
 
@@ -265,7 +277,8 @@ def parse_jsonld(page, base):
                         "url": p.get("url") if off.get("url") in (None, "") else off.get("url"),
                         "price": num(price) if price is not None else None,
                         "currency": cur or "EUR",
-                        "inStock": "InStock" in str(off.get("availability", ""))})
+                        "inStock": "InStock" in str(off.get("availability", "")),
+                        "preorder": "PreOrder" in str(off.get("availability", ""))})
     return out
 
 
@@ -282,7 +295,8 @@ def parse_tolarie(page, base):
         ptxt = clean(pr.group(1))
         out.append({"id": a.group(1), "name": clean(a.group(2)), "url": absolute(base, a.group(1)),
                     "price": num(ptxt), "currency": "EUR" if "€" in ptxt else "CZK",
-                    "inStock": bool(st and "--ok" in st.group(1))})
+                    "inStock": bool(st and "--ok" in st.group(1)),
+                    "preorder": bool(PREORDER_RX.search(clean(chunk)))})
     return out
 
 
@@ -310,7 +324,8 @@ def crawl_cernyrytir(shop):
                         "url": f"https://cernyrytir.cz/merch/detail/{it.get('productUid')}",
                         "price": float(price), "currency": "CZK",
                         # e-shop sklad alebo predajňa v Prahe
-                        "inStock": (it.get("availEshopQty") or 0) > 0 or (it.get("availStoreQty") or 0) > 0})
+                        "inStock": (it.get("availEshopQty") or 0) > 0 or (it.get("availStoreQty") or 0) > 0,
+                        "preorder": bool(it.get("presale"))})
     return out
 
 
@@ -352,7 +367,41 @@ def page_url(parser, url, n):
     return url + ("&" if "?" in url else "?") + f"page={n}"
 
 
+def feed_url():
+    u = os.environ.get("SMARTY_FEED_URL", "").strip()
+    f = HERE / "smarty_feed.txt"
+    if not u and f.exists():
+        u = f.read_text(encoding="utf-8").strip()
+    return u or None
+
+
+def crawl_xmlfeed(shop):
+    """Produktový XML feed (Heureka / Google formát), číta sa po kúskoch – feed môže mať stovky MB."""
+    import xml.etree.ElementTree as ET
+    req = urllib.request.Request(feed_url(), headers={"User-Agent": HEADERS["User-Agent"]})
+    out = []
+    with urllib.request.urlopen(req, timeout=120) as r:
+        for _, el in ET.iterparse(r, events=("end",)):
+            tag = el.tag.split("}")[-1].upper()
+            if tag not in ("SHOPITEM", "ITEM", "ENTRY"):
+                continue
+            f = {c.tag.split("}")[-1].upper(): (c.text or "").strip() for c in el}
+            name = f.get("PRODUCTNAME") or f.get("PRODUCT") or f.get("TITLE") or ""
+            if re.search(r"one\s*piece", name, re.I) and re.search(r"booster|box|display|pack|deck", name, re.I):
+                price = num(f.get("PRICE_VAT") or f.get("PRICE") or f.get("SALE_PRICE") or "")
+                av = (f.get("DELIVERY_DATE") or f.get("AVAILABILITY") or "").lower()
+                out.append({"id": f.get("ITEM_ID") or f.get("ID") or f.get("URL") or name, "name": name,
+                            "url": f.get("URL") or f.get("LINK") or "", "price": price,
+                            "currency": "CZK" if "Kč" in (f.get("PRICE_VAT") or "") else shop["currency"],
+                            "inStock": av in ("0", "in stock", "in_stock", "skladom", "skladem"),
+                            "preorder": "preorder" in av or "pre-order" in av})
+            el.clear()
+    return out
+
+
 def crawl(shop):
+    if shop["parser"] == "xmlfeed":
+        return [r for r in crawl_xmlfeed(shop) if r["price"]]
     if shop["parser"] == "cernyrytir":
         rows = crawl_cernyrytir(shop)
         return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
@@ -435,7 +484,15 @@ def msrp_eur(code, kind, lang, msrp, fx):
     return round(per_pack * packs, 2) if packs else None
 
 
-def box_packs(code, lang, msrp):
+def packs_from_name(name):
+    m = re.search(r"(\d{1,2})\s*(?:x\s*)?(?:booster|balíč|balic|packs?\b|bal\.)", name, re.I)
+    return int(m.group(1)) if m and 4 <= int(m.group(1)) <= 36 else None
+
+
+def box_packs(code, lang, msrp, name=""):
+    n = packs_from_name(name) if name else None
+    if n:
+        return n
     sec = msrp.get("en" if lang == "EN" else "jp", {})
     return _lookup(sec.get("box_packs", {}), code) if lang in ("EN", "JP") and code else None
 
@@ -532,6 +589,8 @@ def snapshot(only=None, force=True):
                     "eur": round(eur, 2), "inStock": bool(i["inStock"])}
             if i.get("hint"):
                 item["hint"] = i["hint"]
+            if i.get("preorder"):
+                item["preorder"] = True
             out.append(item)
         n_stock = sum(1 for i in out if i["inStock"])
         say(f"  ✔ {shop['label']}: {len(out)} produktov ({n_stock} skladom)"
@@ -589,6 +648,109 @@ def eur(v):
     return f"{v:,.2f} €".replace(",", " ").replace(".", ",") if v is not None else "—"
 
 
+def shipping_cfg(key):
+    return load_json(CONFIG_FILE, {}).get("shipping", {}).get(key) or {}
+
+
+def shipping_cost(key, price_eur):
+    sh = shipping_cfg(key)
+    if sh.get("cost") is None:
+        return None
+    if sh.get("free_from") is not None and price_eur >= float(sh["free_from"]):
+        return 0.0
+    return float(sh["cost"])
+
+
+def shipping_note(key, price_eur):
+    sh = shipping_cfg(key)
+    parts = []
+    c = shipping_cost(key, price_eur)
+    if c is not None:
+        parts.append("zdarma" if c == 0 else f"{eur(c)} ({sh.get('method', 'Packeta')})")
+    if sh.get("pickup"):
+        parts.append("osobný odber: " + sh["pickup"])
+    return " · ".join(parts)
+
+
+def cardmarket_url(name):
+    q = re.sub(r"(?i)^one piece( tcg| card game| cg)?\s*[:\-–]?\s*", "", name)
+    q = re.sub(r"(?i)\s*[-–(]\s*(japonsk\w*|japan|jp|en|asijsk\w*|korejsk\w*|čínsk\w*)\)?\s*$", "", q)
+    q = re.sub(r"\s*\((OP|EB|PRB)-?\d+\)|\b(OP|EB|PRB)-?\d+\b", "", q).strip(" -–")
+    return "https://www.cardmarket.com/en/OnePiece/Products/Search?searchString=" + urllib.parse.quote(q)
+
+
+def local_now():
+    try:
+        from zoneinfo import ZoneInfo
+        return datetime.now(ZoneInfo("Europe/Bratislava"))
+    except Exception:  # noqa: BLE001  (Windows bez tzdata – PC je v Bratislave)
+        return datetime.now()
+
+
+DIGEST_STATE = DATA / "digest_state.json"
+
+
+def build_digest(cur, msrp, cfg):
+    """Denný súhrn: najlepšie boxy skladom vs MSRP a zmeny za 24 h."""
+    fx = cur["fx"]
+    best = {}
+    for key, s in cur["shops"].items():
+        for i in s.get("items", []):
+            if not i["inStock"]:
+                continue
+            code, kind, lang = classify(i["name"], i.get("hint"))
+            m = msrp_eur(code, kind, lang, msrp, fx)
+            if kind != "Box" or not m:
+                continue
+            g = f"{code} {lang}"
+            if g not in best or i["eur"] < best[g][0]:
+                best[g] = (i["eur"], m, key, i)
+    lines = {}
+    for lang in ("EN", "JP"):
+        rows = sorted(((v[0] / v[1] - 1) * 100, g, v) for g, v in best.items() if g.endswith(lang))[:5]
+        lines[lang] = [f"`{p:+4.0f} %` **{g.split()[0]}** – [{eur(v[0])}]({v[3]['url']}) · {SHOPS.get(v[2], {}).get('label', v[2])}"
+                       for p, g, v in rows]
+    # zmeny za 24 h z histórie
+    since = (datetime.now(timezone.utc).timestamp() - 86400)
+    hist = load_history()
+    last_before, changes = {}, []
+    for r in hist:
+        t = datetime.strptime(r["timestamp"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).timestamp()
+        code, kind, lang = classify(r["name"])
+        if kind not in ("Box", "Case"):
+            continue
+        if t < since:
+            last_before[r["url"]] = r
+            continue
+        old = last_before.get(r["url"])
+        if old and r["inStock"] == "1" and old["inStock"] != "1":
+            changes.append(f"✅ znova skladom: **{code or r['name'][:40]} {lang}** {eur(float(r['priceEUR']))} · {SHOPS.get(r['shop'], {}).get('label', r['shop'])}")
+        elif old and r["inStock"] == "1" and float(r["priceEUR"]) < float(old["priceEUR"]) * 0.97:
+            changes.append(f"📉 zlacnené: **{code or r['name'][:40]} {lang}** {eur(float(old['priceEUR']))} → {eur(float(r['priceEUR']))} · {SHOPS.get(r['shop'], {}).get('label', r['shop'])}")
+        last_before[r["url"]] = r
+    fields = [{"name": "🇬🇧 EN boxy skladom – najbližšie k MSRP", "value": "\n".join(lines["EN"]) or "nič skladom"},
+              {"name": "🇯🇵 JP boxy skladom", "value": "\n".join(lines["JP"]) or "nič skladom"},
+              {"name": "Zmeny za 24 h", "value": "\n".join(changes[:10]) or "žiadne"}]
+    repo = os.environ.get("GITHUB_REPOSITORY") or gh_repo() or ""
+    owner, _, name = repo.partition("/")
+    url = f"https://{owner}.github.io/{name}/" if owner else None
+    return {"title": "☀️ Denný súhrn One Piece cien", "url": url, "color": 0xD29922, "fields": fields,
+            "footer": {"text": "% = rozdiel oproti MSRP (s 23 % DPH)"}}
+
+
+def maybe_send_digest(cur, msrp, cfg):
+    d = cfg.get("digest", {})
+    if not d.get("enabled", True) or not webhook_url():
+        return
+    now = local_now()
+    state = load_json(DIGEST_STATE, {})
+    if now.hour < int(d.get("hour", 8)) or state.get("last") == now.strftime("%Y-%m-%d"):
+        return
+    if discord_send([build_digest(cur, msrp, cfg)]):
+        DIGEST_STATE.write_text(json.dumps({"last": now.strftime("%Y-%m-%d")}), encoding="utf-8")
+        say("  ☀️ denný súhrn odoslaný na Discord")
+
+
 def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
     """Vráti zoznam embedov pre Discord a aktualizuje stav upozornení."""
     a = cfg.get("alerts", {})
@@ -622,9 +784,14 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                 p = prev.get(i["url"])
                 if a.get("back_in_stock_watchlist", True) and ident in watch and p and not p["inStock"]:
                     reasons.append("znova skladom")
+            # nový produkt / predobjednávka – len keď sa dá kúpiť alebo objednať
             if a.get("new_products", True) and not first_run and key in known_shops and i["url"] not in prev \
-                    and kind in ("Box", "Pack", "Double Pack", "Case"):
-                reasons.append("nový produkt v obchode")
+                    and kind in ("Box", "Pack", "Double Pack", "Case") and (i["inStock"] or i.get("preorder")):
+                reasons.append("🆕 spustená predobjednávka" if i.get("preorder") and not i["inStock"] else "nový produkt skladom")
+            p = prev.get(i["url"])
+            if a.get("preorders", True) and not first_run and p and i.get("preorder") and not p.get("preorder") \
+                    and not i["inStock"] and kind in ("Box", "Case"):
+                reasons.append("🆕 spustená predobjednávka")
             if not reasons:
                 continue
             last = state.get(i["url"])
@@ -635,9 +802,14 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
             fields = [{"name": "Cena", "value": eur(i["eur"]) + (f" ({i['price']:.0f} Kč)" if i["currency"] == "CZK" else ""), "inline": True},
                       {"name": "MSRP", "value": eur(m) if m else "—", "inline": True},
                       {"name": "Obchod", "value": label, "inline": True}]
-            if kind == "Box" and box_packs(code, lang, msrp):
-                fields.append({"name": "Za balíček", "value": eur(i["eur"] / box_packs(code, lang, msrp)), "inline": True})
-            fields.append({"name": "Sklad", "value": "✅ skladom" if i["inStock"] else "❌ nedostupné", "inline": True})
+            bp = box_packs(code, lang, msrp, i["name"]) if kind == "Box" else None
+            if bp:
+                fields.append({"name": "Za balíček", "value": eur(i["eur"] / bp), "inline": True})
+            ship = shipping_note(key, i["eur"])
+            if ship:
+                fields.append({"name": "Doprava", "value": ship, "inline": True})
+            fields.append({"name": "Sklad", "value": "✅ skladom" if i["inStock"] else "🕒 predobjednávka", "inline": True})
+            fields.append({"name": "Cardmarket", "value": f"[porovnať]({cardmarket_url(i['name'])})", "inline": True})
             embeds.append({"title": i["name"][:250], "url": i["url"],
                            "description": "🔥 " + " · ".join(reasons),
                            "color": 0x2DA44E if (pct is not None and pct <= 0) or "cieľovou" in " ".join(reasons) else 0x1F6FEB,
@@ -657,7 +829,8 @@ def page_data():
             code, kind, lang = classify(i["name"], i.get("hint"))
             offers.append([key, i["name"], code, kind, lang, i["eur"], i["inStock"], i["url"],
                            i["price"], i["currency"], msrp_eur(code, kind, lang, msrp, fx),
-                           box_packs(code, lang, msrp) if kind == "Box" else None])
+                           box_packs(code, lang, msrp, i["name"]) if kind == "Box" else None,
+                           bool(i.get("preorder")), shipping_cost(key, i["eur"]), cardmarket_url(i["name"])])
     hist = {}
     for r in load_history():
         hist.setdefault(r["url"], []).append([r["timestamp"], float(r["priceEUR"]), r["inStock"] == "1"])
@@ -668,9 +841,10 @@ def page_data():
               for k, s in cur.get("shops", {}).items()}
     links = [{"label": v["label"], "url": v["link"]} for v in SHOPS.values()
              if not v.get("enabled", True) and v.get("link")]
+    pickup = {k: shipping_cfg(k).get("pickup") for k in SHOPS if shipping_cfg(k).get("pickup")}
     repo = os.environ.get("GITHUB_REPOSITORY", "")
     return {"offers": offers, "hist": hist, "shops": shops, "status": status, "links": links,
-            "updated": cur.get("updated"), "repo": repo}
+            "updated": cur.get("updated"), "repo": repo, "pickup": pickup}
 
 
 def render():
@@ -684,7 +858,8 @@ def build_static():
 
 
 # ------------------------------------------------- synchronizácia s GitHubom
-SYNC_FILES = ["data/current.json", "data/history.csv", "data/alerts_state.json", "docs/index.html", "docs/.nojekyll"]
+SYNC_FILES = ["data/current.json", "data/history.csv", "data/alerts_state.json", "data/digest_state.json",
+              "docs/index.html", "docs/.nojekyll"]
 
 
 def gh_token():
@@ -762,6 +937,13 @@ def sync_pull():
     except urllib.error.HTTPError as e:
         if e.code != 404:
             raise
+    try:
+        remote_d = json.loads(gh_api("GET", f"contents/data/digest_state.json?ref={head}", raw=True))
+        if (remote_d.get("last") or "") > (load_json(DIGEST_STATE, {}).get("last") or ""):
+            DIGEST_STATE.write_text(json.dumps(remote_d), encoding="utf-8")
+    except urllib.error.HTTPError as e:
+        if e.code != 404:
+            raise
     return head
 
 
@@ -827,6 +1009,10 @@ def run_once(only=None, notify=True, force=True):
             say(f"  🔔 odoslaných {len(embeds)} upozornení na Discord")
         elif embeds:
             say(f"  🔔 {len(embeds)} upozornení (Discord webhook nie je nastavený)")
+        try:
+            maybe_send_digest(cur, load_json(MSRP_FILE, {}), load_json(CONFIG_FILE, {}))
+        except Exception as e:  # noqa: BLE001
+            say(f"  ! denný súhrn zlyhal: {e}")
     build_static()
     total = sum(len(i) for i in fresh.values())
     if sync_enabled():
@@ -958,6 +1144,7 @@ def setup_wizard():
 
 
 def main():
+    _enable_feeds()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--once", action="store_true", help="raz stiahnuť ceny, poslať upozornenia, vytvoriť docs/index.html")
     ap.add_argument("--watch", type=float, metavar="HODINY", help="automaticky sťahovať každých N hodín")
@@ -1038,6 +1225,8 @@ tr.sel td{background:color-mix(in srgb,var(--acc) 10%,transparent)!important}
 .dash{color:var(--off)}.empty{padding:40px 10px;text-align:center;color:var(--mute)}
 .ext{display:inline-block;margin-left:6px;padding:2px 9px;border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--ink);text-decoration:none}
 .hint{color:var(--mute);font-size:12px;margin-top:6px}
+.pre{color:var(--warn)!important;border-color:var(--warn)!important}
+a.cm{font-size:11px;color:var(--mute);text-decoration:none;margin-left:4px}a.cm:hover{color:var(--ink);text-decoration:underline}
 </style></head><body><div class="wrap">
 <div class="top">
   <div><h1>One Piece TCG – ceny v obchodoch</h1>
@@ -1065,7 +1254,7 @@ tr.sel td{background:color-mix(in srgb,var(--acc) 10%,transparent)!important}
 <script>
 const P=__PAYLOAD__;
 const SHOPS=P.shops, SK=Object.keys(SHOPS);
-// offer: [shop,name,code,kind,lang,eur,inStock,url,price,currency,msrp,packs]
+// offer: [shop,name,code,kind,lang,eur,inStock,url,price,currency,msrp,packs,preorder,ship,cm]
 const keyOf=o=>o[2]?`${o[2]}|${o[3]}|${o[4]}`:`~${o[1].toLowerCase()}|${o[3]}|${o[4]}`;
 const groups={};
 P.offers.forEach(o=>{const k=keyOf(o);const g=groups[k]||(groups[k]={key:k,code:o[2],kind:o[3],lang:o[4],name:o[1],msrp:o[10],packs:o[11],shops:{},all:[]});
@@ -1093,8 +1282,10 @@ function draw(){
   document.getElementById("tb").innerHTML=R.map(g=>{const b=bestOf(g);
     const cells=SK.map(s=>{const o=g.shops[s]; if(!o)return `<td class="n"><span class="dash">—</span></td>`;
       const extra=g.all.filter(x=>x[0]===s).length>1?` <small title="obchod má viac variantov">+${g.all.filter(x=>x[0]===s).length-1}</small>`:"";
-      return `<td class="n ${o[6]?"":"out"}"><span class="p"><a href="${esc(o[7])}" target="_blank" rel="noopener" title="${esc(o[1])}" class="${b&&o===b?"best":""}">${eur(o[5])}</a>${o[6]?pctHtml(pctOf(o[5],g.msrp)):"<small>vypredané</small>"}${o[9]!=="EUR"?`<small>${Math.round(o[8]).toLocaleString("sk-SK")} Kč</small>`:""}${extra}</span></td>`}).join("");
-    const title=g.code?`<span class="tag">${g.code}</span><span class="tag">${g.lang}</span>${g.kind}`:`<span class="tag">${g.lang}</span>${esc(g.kind)}`;
+      const ship=o[13]==null?"":o[13]===0?`<small title="doprava zdarma">+0 € doprava</small>`:`<small title="cena s dopravou">s dopr. ${eur(o[5]+o[13])}</small>`;
+      return `<td class="n ${o[6]?"":"out"}"><span class="p"><a href="${esc(o[7])}" target="_blank" rel="noopener" title="${esc(o[1])}" class="${b&&o===b?"best":""}">${eur(o[5])}</a>${o[6]?pctHtml(pctOf(o[5],g.msrp)):(o[12]?'<small class="pre">predobjednávka</small>':"<small>vypredané</small>")}${o[9]!=="EUR"?`<small>${Math.round(o[8]).toLocaleString("sk-SK")} Kč</small>`:""}${o[6]?ship:""}${extra}</span></td>`}).join("");
+    const pre=g.all.some(o=>o[12]&&!o[6])?'<span class="tag pre">predobjednávka</span>':"";
+    const title=(g.code?`<span class="tag">${g.code}</span><span class="tag">${g.lang}</span>${g.kind}`:`<span class="tag">${g.lang}</span>${esc(g.kind)}`)+" "+pre+` <a class="cm" href="${esc(g.all[0][14])}" target="_blank" rel="noopener" title="Porovnať na Cardmarkete">Cardmarket ↗</a>`;
     const per=b&&g.packs?`<br><small style="color:var(--mute)">${eur(b[5]/g.packs)} / balíček</small>`:"";
     return `<tr data-k="${esc(g.key)}" class="${st.sel===g.key?"sel":""}"><td>${title}<br><small style="color:var(--mute)">${esc(short(g.name).slice(0,62))}</small></td>
       <td class="n msrp">${g.msrp?eur(g.msrp):'<span class="dash">—</span>'}${g.msrp&&g.packs?`<br><small>${eur(g.msrp/g.packs)} / bal.</small>`:""}</td>${cells}
@@ -1135,6 +1326,7 @@ document.getElementById("status").innerHTML=SK.map(s=>{const x=P.status[s];if(!x
   const old=x.ts&&(Date.now()-new Date(x.ts))>36e5*24;
   if(x.ok&&x.pc)return `<span class="${old?"bad":""}" title="Tento obchod blokuje servery GitHubu, sťahuje sa pri spustení na PC">${old?"⚠":"✔"} ${esc(SHOPS[s])} · z PC ${fmt(x.ts)}</span>`;
   return x.ok?`<span>✔ ${esc(SHOPS[s])}</span>`:`<span class="bad" title="${esc(x.error||"")}">⚠ ${esc(SHOPS[s])}: posledný fetch zlyhal, dáta z ${fmt(x.ts)}</span>`}).join("")
+  +(Object.keys(P.pickup||{}).length?`<span>📍 Osobný odber: ${Object.entries(P.pickup).map(([k,v])=>`${esc(SHOPS[k]||k)} (${esc(v)})`).join(", ")}</span>`:"")
   +(P.links.length?`<span>Bez automatického sťahovania:${P.links.map(l=>`<a class="ext" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</span>`:"");
 // Fetch: lokálny server → API; GitHub Pages → spustenie workflow
 const btn=document.getElementById("fetchBtn"),lbl=document.getElementById("fetchLbl"),logEl=document.getElementById("log"),fh=document.getElementById("fhint");

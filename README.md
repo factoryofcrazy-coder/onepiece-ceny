@@ -35,6 +35,19 @@ python onepiece_ceny.py --once          # raz stiahne + nahrá, bez stránky (na
 python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
 ```
 
+## Novinky
+- **Upozornenia len na dostupný tovar** – cena/watchlist/nový produkt chodia iba keď je tovar skladom;
+  výnimkou je 🆕 **spustená predobjednávka** boxu (dá sa objednať; vypneš `"preorders": false`).
+- **Denný súhrn** na Discord raz denne po 8:00 – top EN a JP boxy skladom vs MSRP + zmeny za 24 h
+  (`"digest"` v `config.json`).
+- **Doprava** – `config.json → shipping`: cena Packety na SK a hranica dopravy zdarma; tabuľka ukáže
+  „s dopr.“ cenu. Overené: Veselý drak 2,36 € (zdarma od 80 €), Card Empire 3,50 € (zdarma od 200 €),
+  Nekonečno osobný odber v Bratislave (Eurovea, Bory Mall). Ostatné doplň podľa košíka obchodu.
+- **Cardmarket** – pri každom produkte odkaz na vyhľadávanie na Cardmarkete (reálna trhová cena).
+- **Smarty.sk** – web blokuje roboty, legálna cesta je ich affiliate **XML feed** (eHUB → program
+  Smarty.sk → „XML feed na vyžiadanie u affiliate managera“). URL feedu ulož do GitHub secretu
+  `SMARTY_FEED_URL` (a na PC do `smarty_feed.txt`) – Smarty sa potom zapne automaticky.
+
 ## MSRP (`msrp.json`)
 - **EN**: oficiálna US cena Bandai za balíček v USD (OP-01–03 $4.19, OP-04–09 a EB-01 $4.49,
   OP-10+ a EB-02+ $4.99, PRB $5.49), box = 24 balíčkov.

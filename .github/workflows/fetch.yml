@@ -35,6 +35,7 @@ jobs:
         if: ${{ !inputs.test_discord }}
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          SMARTY_FEED_URL: ${{ secrets.SMARTY_FEED_URL }}
         run: python onepiece_ceny.py --once --no-browser
       - name: Uložiť dáta a stránku
         if: ${{ !inputs.test_discord }}
