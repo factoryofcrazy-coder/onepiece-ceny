@@ -16,7 +16,9 @@
     "back_in_stock_kinds: typy bez MSRP – upozorní, keď sa produkt vráti na sklad.",
     "cross_shop_pct: upozorni, keď je produkt skladom aspoň o toľko % lacnejší ako medián toho istého produktu v ostatných obchodoch (min. 2 ďalšie obchody).",
     "low30: upozorni, keď produkt skladom klesne pod najnižšiu cenu za posledných 30 dní.",
-    "Obchod, ktorý 2× po sebe zlyhá alebo vráti 0 produktov, pošle na Discord varovanie (a správu, keď zase funguje)."
+    "Obchod, ktorý 2× po sebe zlyhá alebo vráti 0 produktov, pošle na Discord varovanie (a správu, keď zase funguje).",
+    "mention_top: pri top ponukách (pod MSRP, pod cieľovou cenou, o top_cross_pct % lacnejšie než inde) pridá @here – zazvoní notifikácia.",
+    "shipping: cena je doprava na SK v EUR; cost null = cenu ukáže až košík obchodu (doplň ručne), free_from = doprava zdarma od (EUR)."
   ],
   "alerts": {
     "max_pct_vs_msrp": {
@@ -39,7 +41,9 @@
       "Kolekcie"
     ],
     "cross_shop_pct": 15,
-    "low30": true
+    "low30": true,
+    "mention_top": true,
+    "top_cross_pct": 20
   },
   "watchlist": [
     {
@@ -76,34 +80,56 @@
     "pikazard": {
       "method": "Packeta",
       "cost": null,
-      "free_from": null
+      "free_from": 100,
+      "pickup": "Bratislava – Gessayova 14"
     },
     "ihrysko": {
       "method": "Packeta",
       "cost": null,
-      "free_from": null
+      "free_from": 70,
+      "pickup": "Bratislava"
     },
-    "najada": {
-      "method": "Packeta",
-      "cost": null,
+    "xzone": {
+      "method": "Packeta výdajné miesto",
+      "cost": 2.99,
       "free_from": null
     },
     "tolarie": {
-      "method": "Packeta",
-      "cost": null,
+      "method": "PPL výdejní místo SK (189 Kč)",
+      "cost": 7.78,
       "free_from": null
     },
     "cernyrytir": {
-      "method": "Packeta",
-      "cost": null,
-      "free_from": null
+      "method": "do SK (250 Kč)",
+      "cost": 10.29,
+      "free_from": 123
+    },
+    "hrananetu": {
+      "method": "Zásilkovna (75 Kč, cena pre CZ)",
+      "cost": 3.09,
+      "free_from": 123
     },
     "pokemon4u": {
       "method": "Packeta",
       "cost": null,
-      "free_from": null
+      "free_from": 123
     },
-    "hrananetu": {
+    "poring": {
+      "method": "Packeta",
+      "cost": null,
+      "free_from": 150
+    },
+    "cardstore": {
+      "method": "Packeta",
+      "cost": null,
+      "free_from": 103
+    },
+    "hrydoruky": {
+      "method": "Zásilkovna (69 Kč, len CZ)",
+      "cost": 2.84,
+      "free_from": 62
+    },
+    "najada": {
       "method": "Packeta",
       "cost": null,
       "free_from": null

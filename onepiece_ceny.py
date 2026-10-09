@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09l"
+VERSION = "2026-10-09m"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -98,8 +98,8 @@ SHOPS = {
     "cardstore":  {"label": "Cardstore", "parser": "shoptet", "currency": "CZK", "cloud": False, "delay": 3,
                    "urls": ["https://www.cardstore.cz/one-piece-tcg/"]},
     # Xzone: robots.txt zakazuje parametre ?s=/sort=/term= – sťahuje sa len čistá URL kategórie (Crawl-Delay 3)
-    "xzone":      {"label": "Xzone", "parser": "xzone", "currency": "CZK", "delay": 3, "max_pages": 1,
-                   "urls": ["https://www.xzone.cz/sberatelske-hry-one-piece-tcg"]},
+    "xzone":      {"label": "Xzone.sk", "parser": "xzone", "currency": "EUR", "delay": 3, "max_pages": 1,
+                   "urls": ["https://www.xzone.sk/zberatelske-hry-one-piece-tcg"]},
     # Hry do ruky (nopCommerce): zoznam nemá dostupnosť, preto sa načíta aj detail každého produktu
     "hrydoruky":  {"label": "Hry do ruky", "parser": "hrydoruky", "currency": "CZK", "delay": 2,
                    "urls": ["https://hrydoruky.cz/one-piece"]},
@@ -153,7 +153,14 @@ def set_code(name):
     for k, v in SET_NAMES.items():
         if k in low:
             return v
+    m = re.search(r"\bDP-?(\d{1,2})\b", name, re.I)          # Double Pack Set Vol.12 [DP-12] → boostery OP17
+    if m:
+        return DP_TO_OP.get(int(m.group(1)), "")
     return ""
+
+
+DP_TO_OP = {1: "OP04", 2: "OP05", 3: "OP06", 4: "OP07", 5: "OP08", 6: "OP09", 7: "OP11", 8: "OP12",
+            9: "OP14", 10: "OP15", 11: "OP16", 12: "OP17"}
 
 
 ACCESSORY_RX = re.compile(r"sleeve|obal|album|playmat|podložk|binder|deck box|storage|card case|acryl|akryl|krabičk|"
@@ -457,7 +464,7 @@ def parse_xzone(page, base):
         out.append({"id": a.group(1), "name": clean(a.group(2)), "url": absolute(base, a.group(1)),
                     "price": num(ptxt), "currency": "EUR" if "€" in ptxt else "CZK",
                     "img": first_img(chunk, base), "availText": sttxt, "preorder": pre,
-                    "inStock": bool(re.search(r"skladem", sttxt, re.I)) and not pre})
+                    "inStock": bool(re.match(r"sklad(em|om)", sttxt, re.I)) and not pre})
     return out
 
 
@@ -616,9 +623,12 @@ def msrp_eur(code, kind, lang, msrp, fx):
     ov = msrp.get("override_eur", {}).get(f"{code} {kind} {lang}")
     if ov:
         return float(ov)
+    vat = 1 + float(msrp.get("vat", 0.23))
+    if kind == "Double Pack" and lang == "EN" and code:
+        dp = _lookup(msrp.get("en", {}).get("double_usd", {}), code)
+        return round(dp / fx["USD"] * vat, 2) if dp else None
     if not code or kind not in ("Box", "Pack") or lang not in ("EN", "JP"):
         return None
-    vat = 1 + float(msrp.get("vat", 0.23))
     if lang == "EN":
         sec = msrp.get("en", {})
         pack = _lookup(sec.get("pack_usd", {}), code)
@@ -807,10 +817,10 @@ def shipping_cfg(key):
 
 def shipping_cost(key, price_eur):
     sh = shipping_cfg(key)
-    if sh.get("cost") is None:
-        return None
     if sh.get("free_from") is not None and price_eur >= float(sh["free_from"]):
         return 0.0
+    if sh.get("cost") is None:
+        return None
     return float(sh["cost"])
 
 
@@ -1030,7 +1040,11 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                 fields.append({"name": "Doprava", "value": ship, "inline": True})
             fields.append({"name": "Sklad", "value": "✅ skladom" if i["inStock"] else "🕒 predobjednávka", "inline": True})
             fields.append({"name": "Cardmarket", "value": f"[porovnať]({cardmarket_url(i['name'])})", "inline": True})
-            embeds.append({"title": i["name"][:250], "url": i["url"],
+            top_cross = float(a.get("top_cross_pct", 20))
+            top = (pct is not None and pct <= 0 and kind in ("Box", "Pack", "Double Pack")) \
+                or any("cieľovou" in r for r in reasons) \
+                or any(r.startswith("💰") and float(re.search(r"o (\d+) %", r).group(1)) >= top_cross for r in reasons)
+            embeds.append({"_top": top, "title": ("⭐ " if top else "") + i["name"][:248], "url": i["url"],
                            "description": "🔥 " + " · ".join(reasons),
                            "color": 0x2DA44E if (pct is not None and pct <= 0) or re.search(r"cieľovou|💰|📉 najnižšia", " ".join(reasons)) else 0x1F6FEB,
                            "fields": fields})
@@ -1256,9 +1270,12 @@ def run_once(only=None, notify=True, force=True):
     CURRENT.write_text(json.dumps(cur, ensure_ascii=False, indent=1), encoding="utf-8")
     if notify:
         embeds = evaluate_alerts(prev, cur, load_json(MSRP_FILE, {}), load_json(CONFIG_FILE, {}), first_run)
+        n_top = sum(1 for e in embeds if e.pop("_top", False))
         if embeds and webhook_url():
+            ping = "@here " if n_top and load_json(CONFIG_FILE, {}).get("alerts", {}).get("mention_top", True) else ""
             discord_send(compact_alerts(embeds) if len(embeds) > 4 else embeds,
-                         content=f"**{len(embeds)}** zaujímavých ponúk" + (f" · <{site_url()}>" if site_url() else ""))
+                         content=ping + f"**{len(embeds)}** zaujímavých ponúk" + (f" ({n_top} ⭐ top)" if n_top else "")
+                         + (f" · <{site_url()}>" if site_url() else ""))
             say(f"  🔔 odoslaných {len(embeds)} upozornení na Discord")
         elif embeds:
             say(f"  🔔 {len(embeds)} upozornení (Discord webhook nie je nastavený)")

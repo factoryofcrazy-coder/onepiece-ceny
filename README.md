@@ -2,14 +2,14 @@
 
 Sleduje ceny One Piece booster boxov a packov v obchodoch **Card Empire, Pikazard,
 Veselý drak, iHRYsko, Najáda, Tolarie, Černý rytíř, Nekonečno, Pokemon4U, Hra na netu,
-Poring Cards, Cardstore, Xzone a Hry do ruky**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
+Poring Cards, Cardstore, Xzone.sk a Hry do ruky**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
 pošle upozornenie na **Discord**. Smarty.sk blokuje automatické sťahovanie
 (Cloudflare), preto je na stránke len odkaz naň.
 
 ## Ako to beží
 
 **Online (GitHub Actions + Pages)** – každé 2 hodiny automaticky stiahne **Veselý drak, iHRYsko,
-Najádu, Tolarie, Černého rytíře, Hru na netu, Xzone a Hry do ruky**,
+Najádu, Tolarie, Černého rytíře, Hru na netu, Xzone.sk a Hry do ruky**,
 pošle upozornenia na Discord a obnoví stránku **https://factoryofcrazy-coder.github.io/onepiece-ceny/**.
 Tlačidlo Fetch na online stránke otvorí GitHub Actions → *Run workflow*.
 
@@ -51,19 +51,25 @@ python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
 - **Lacnejšie než inde** (💰): produkt skladom je aspoň o 15 % lacnejší ako bežná cena (medián) v ostatných
   obchodoch – funguje aj pre double packy a kolekcie bez MSRP (`cross_shop_pct`).
 - **Najnižšia cena za 30 dní** (📉): z histórie cien (`low30`).
+- **@here pri top ponukách** (⭐): pod MSRP, pod cieľovou cenou z watchlistu alebo aspoň o 20 % lacnejšie
+  než inde → správa so zmienkou @here (zazvoní na mobile). Ostatné upozornenia chodia potichu (`mention_top`).
 - **Stav obchodov**: keď obchod 2× po sebe zlyhá alebo vráti 0 produktov, príde varovanie na Discord
   (posledné ceny ostanú), a keď zase funguje, príde potvrdenie.
 - **Denný súhrn** na Discord raz denne po 8:00 – top EN a JP boxy skladom vs MSRP + zmeny za 24 h
   (`"digest"` v `config.json`).
-- **Doprava** – `config.json → shipping`: cena Packety na SK a hranica dopravy zdarma; tabuľka ukáže
-  „s dopr.“ cenu. Overené: Veselý drak 2,36 € (zdarma od 80 €), Card Empire 3,50 € (zdarma od 200 €),
-  Nekonečno osobný odber v Bratislave (Eurovea, Bory Mall). Ostatné doplň podľa košíka obchodu.
+- **Doprava** – `config.json → shipping`: doprava na SK v EUR a hranica dopravy zdarma; stránka ukáže
+  cenu „s dopravou“. Overené z webov obchodov: Veselý drak 2,36 € (zdarma od 80 €), Card Empire 3,50 € (od 200 €),
+  Xzone.sk 2,99 €, Tolarie 189 Kč (PPL na SK), Černý rytíř 250 Kč (zdarma od 3000 Kč), Hra na netu 75 Kč
+  a Hry do ruky 69 Kč (ceny pre CZ). Zdarma od: Pikazard 100 €, iHRYsko 70 €, Poring 150 €, Pokemon4U 3000 Kč,
+  Cardstore 2500 Kč. Osobný odber v Bratislave: Pikazard, iHRYsko, Nekonečno. Kde je `cost: null`, cenu ukáže
+  až košík obchodu – doplň ju ručne.
 - **Cardmarket** – pri každom produkte odkaz na vyhľadávanie na Cardmarkete (reálna trhová cena).
 - **Smarty.sk** – web blokuje roboty, legálna cesta je ich affiliate **XML feed** (eHUB → program
   Smarty.sk → „XML feed na vyžiadanie u affiliate managera“). URL feedu ulož do GitHub secretu
   `SMARTY_FEED_URL` (a na PC do `smarty_feed.txt`) – Smarty sa potom zapne automaticky.
 
 ## MSRP (`msrp.json`)
+- **Double Pack Set** (EN): DP-01–08 $9.99, DP-09 a novšie $11.99 (`en.double_usd`).
 - **EN**: oficiálna US cena Bandai za balíček v USD (OP-01–03 $4.19, OP-04–09 a EB-01 $4.49,
   OP-10+ a EB-02+ $4.99, PRB $5.49), box = 24 balíčkov.
 - **JP**: oficiálna japonská cena v JPY s 10 % daňou (OP-01–03 ¥198, OP-04–16 a EB-01–04 ¥220,
