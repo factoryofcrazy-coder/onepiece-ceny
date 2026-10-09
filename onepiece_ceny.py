@@ -124,7 +124,8 @@ def set_code(name):
 def kind_of(name):
     n = name.lower()
     if re.search(r"illustration|premium card|collection set|gift|figúr|figur|sleeve|obal|album|playmat|"
-                 r"podložk|promo|jump|tin\b|binder|deck box|storage|token|don!! card|card case", n):
+                 r"podložk|promo|jump|tin\b|binder|deck box|storage|token|don!! card|card case|"
+                 r"acryl|akryl|krabičk|krabick|protector|chránič|ochran|magnet|graded|trophy|holder|stojan|vitrín|display case|toploader|pouzdr|puzdr", n):
         return "Iné"
     if "starter" in n or "deck set" in n or "ultra deck" in n:
         return "Starter"
@@ -151,7 +152,7 @@ def lang_of(name):
     return "EN"
 
 
-EXCLUDE_RX = re.compile(r"illustration|premium card|collection set|gift|figúr|figur|sleeve|obal|album|playmat|"
+EXCLUDE_RX = re.compile(r"acryl|akryl|krabičk|krabick|protector|chránič|ochran|magnet|graded|trophy|holder|stojan|vitrín|display case|toploader|pouzdr|puzdr|illustration|premium card|collection set|gift|figúr|figur|sleeve|obal|album|playmat|"
                         r"podložk|promo|jump|binder|deck box|storage|token|starter|deck set|samolep|sticker", re.I)
 
 
@@ -213,6 +214,13 @@ def say(msg):
 
 
 # ---------------------------------------------------------------- parsery ---
+def first_img(chunk, base):
+    m = re.search(r'<img[^>]+(?:data-src|src)="([^"]+\.(?:jpe?g|png|webp)[^"]*)"', chunk, re.I)
+    if not m or "transparent" in m.group(1) or "loading.gif" in m.group(1):
+        m = re.search(r'data-src="([^"]+)"', chunk)
+    return absolute(base, m.group(1)) if m else None
+
+
 def parse_shoptet(page, base):
     out = []
     for chunk in page.split('data-micro="product"')[1:]:
@@ -234,6 +242,7 @@ def parse_shoptet(page, base):
                     "url": absolute(base, href.group(1)) if href else base,
                     "price": float(price.group(1)) if price else None,
                     "currency": cur.group(1) if cur else None,
+                    "img": first_img(chunk, base),
                     "inStock": bool(av and av.group(1) == "InStock") and not PREORDER_RX.search(avtxt),
                     "preorder": bool(av and av.group(1) == "PreOrder") or bool(PREORDER_RX.search(avtxt))})
     return out
@@ -250,8 +259,10 @@ def parse_veselydrak(page, base):
             continue
         ptxt = clean(pr.group(1))
         avtxt = clean(av.group(1)) if av else ""
+        dsrc = re.search(r'data-src="([^"]+)"', chunk)
         out.append({"id": a.group(1), "name": clean(a.group(2)), "url": absolute(base, a.group(1)),
                     "price": num(ptxt), "currency": "CZK" if "Kč" in ptxt else "EUR",
+                    "img": absolute(base, dsrc.group(1)) if dsrc else first_img(chunk, base),
                     "inStock": bool(re.search(r"sklad", avtxt, re.I)) and not re.search(r"nie je|není|vypred", avtxt, re.I),
                     "preorder": bool(PREORDER_RX.search(avtxt)) or bool(re.search(r'ribbon[^"]*"[^>]*>\s*<span>\s*P[řr]edobjedn', chunk, re.I)),
                     "availText": avtxt})
@@ -282,6 +293,8 @@ def parse_jsonld(page, base):
                         "url": p.get("url") if off.get("url") in (None, "") else off.get("url"),
                         "price": num(price) if price is not None else None,
                         "currency": cur or "EUR",
+                        "img": (p.get("image")[0] if isinstance(p.get("image"), list) and p.get("image") else
+                                p.get("image") if isinstance(p.get("image"), str) else None),
                         "inStock": "InStock" in str(off.get("availability", "")),
                         "preorder": "PreOrder" in str(off.get("availability", ""))})
     return out
@@ -300,6 +313,7 @@ def parse_tolarie(page, base):
         ptxt = clean(pr.group(1))
         out.append({"id": a.group(1), "name": clean(a.group(2)), "url": absolute(base, a.group(1)),
                     "price": num(ptxt), "currency": "EUR" if "€" in ptxt else "CZK",
+                    "img": first_img(chunk, base),
                     "inStock": bool(st and "--ok" in st.group(1)),
                     "preorder": bool(PREORDER_RX.search(clean(chunk)))})
     return out
@@ -319,6 +333,7 @@ def parse_upgates(page, base):
         sttxt = clean(st.group(2)) if st else ""
         out.append({"id": a.group(1), "name": clean(a.group(2)), "url": absolute(base, a.group(1)),
                     "price": num(ptxt), "currency": "EUR" if "€" in ptxt else "CZK",
+                    "img": first_img(chunk, base),
                     "inStock": bool(st) and "in-stock--not" not in st.group(1) and not re.search(r"není|nie je", sttxt, re.I),
                     "preorder": bool(PREORDER_RX.search(sttxt))})
     return out
@@ -348,6 +363,8 @@ def crawl_cernyrytir(shop):
                         "url": f"https://cernyrytir.cz/merch/detail/{it.get('productUid')}",
                         "price": float(price), "currency": "CZK",
                         # e-shop sklad alebo predajňa v Prahe
+                        "img": ("https://images.cernyrytir.eu/image/cernyrytir/v2?uid=" + it["imageUuid"][0] +
+                                "&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG") if it.get("imageUuid") else None,
                         "inStock": (it.get("availEshopQty") or 0) > 0 or (it.get("availStoreQty") or 0) > 0,
                         "preorder": bool(it.get("presale"))})
     return out
@@ -616,6 +633,8 @@ def snapshot(only=None, force=True):
                 item["hint"] = i["hint"]
             if i.get("preorder"):
                 item["preorder"] = True
+            if i.get("img"):
+                item["img"] = i["img"]
             out.append(item)
         n_stock = sum(1 for i in out if i["inStock"])
         say(f"  ✔ {shop['label']}: {len(out)} produktov ({n_stock} skladom)"
@@ -725,7 +744,7 @@ def build_digest(cur, msrp, cfg):
                 continue
             code, kind, lang = classify(i["name"], i.get("hint"))
             m = msrp_eur(code, kind, lang, msrp, fx)
-            if kind != "Box" or not m:
+            if kind != "Box" or not m or i["eur"] < 0.4 * m:
                 continue
             g = f"{code} {lang}"
             if g not in best or i["eur"] < best[g][0]:
@@ -761,6 +780,24 @@ def build_digest(cur, msrp, cfg):
     url = f"https://{owner}.github.io/{name}/" if owner else None
     return {"title": "☀️ Denný súhrn One Piece cien", "url": url, "color": 0xD29922, "fields": fields,
             "footer": {"text": "% = rozdiel oproti MSRP (s 23 % DPH)"}}
+
+
+def site_url():
+    repo = os.environ.get("GITHUB_REPOSITORY") or gh_repo() or ""
+    owner, _, name = repo.partition("/")
+    return f"https://{owner}.github.io/{name}/" if owner and name else None
+
+
+def compact_alerts(embeds):
+    """Veľa upozornení naraz → jedna prehľadná správa namiesto stĺpca kariet."""
+    lines = []
+    for e in embeds[:25]:
+        f = {x["name"]: x["value"] for x in e.get("fields", [])}
+        lines.append(f"• [{e['title'][:70]}]({e['url']}) – **{f.get('Cena', '')}** · {f.get('Obchod', '')}\n"
+                     f"  {e['description'].replace('🔥 ', '')}")
+    more = f"\n…a ďalších {len(embeds) - 25}" if len(embeds) > 25 else ""
+    return [{"title": f"🔔 {len(embeds)} ponúk", "url": site_url(), "color": 0x2DA44E,
+             "description": ("\n".join(lines) + more)[:4000]}]
 
 
 def maybe_send_digest(cur, msrp, cfg):
@@ -800,6 +837,8 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
             ident = f"{code} {kind} {lang}".upper()
             m = msrp_eur(code, kind, lang, msrp, fx)
             pct = (i["eur"] / m - 1) * 100 if m else None
+            if pct is not None and pct < -60:
+                continue                      # podozrivo lacné – skoro určite doplnok/zlé rozpoznanie, nie box
             reasons = []
             if i["inStock"]:
                 if m and kind in kinds and lang in th and pct <= th[lang]:
@@ -809,6 +848,9 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                 p = prev.get(i["url"])
                 if a.get("back_in_stock_watchlist", True) and ident in watch and p and not p["inStock"]:
                     reasons.append("znova skladom")
+                drop = float(a.get("watch_drop_pct", 10)) / 100
+                if ident in watch and p and p["inStock"] and i["eur"] <= p["eur"] * (1 - drop):
+                    reasons.append(f"📉 zlacnené o {(1 - i['eur'] / p['eur']) * 100:.0f} % ({eur(p['eur'])} → {eur(i['eur'])})")
             # nový produkt / predobjednávka – len keď sa dá kúpiť alebo objednať
             if a.get("new_products", True) and not first_run and key in known_shops and i["url"] not in prev \
                     and kind in ("Box", "Pack", "Double Pack", "Case") and (i["inStock"] or i.get("preorder")):
@@ -821,7 +863,8 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                 continue
             last = state.get(i["url"])
             new_state[i["url"]] = last if last is not None else i["eur"]
-            if last is not None and i["eur"] > last * (1 - redrop) and "znova skladom" not in reasons:
+            if last is not None and i["eur"] > last * (1 - redrop) and "znova skladom" not in reasons \
+                    and not any(r.startswith("📉") for r in reasons):
                 continue                                  # už upozornené, cena výrazne neklesla
             new_state[i["url"]] = i["eur"]
             fields = [{"name": "Cena", "value": eur(i["eur"]) + (f" ({i['price']:.0f} Kč)" if i["currency"] == "CZK" else ""), "inline": True},
@@ -855,7 +898,8 @@ def page_data():
             offers.append([key, i["name"], code, kind, lang, i["eur"], i["inStock"], i["url"],
                            i["price"], i["currency"], msrp_eur(code, kind, lang, msrp, fx),
                            box_packs(code, lang, msrp, i["name"]) if kind == "Box" else None,
-                           bool(i.get("preorder")), shipping_cost(key, i["eur"]), cardmarket_url(i["name"])])
+                           bool(i.get("preorder")), shipping_cost(key, i["eur"]), cardmarket_url(i["name"]),
+                           i.get("img")])
     hist = {}
     for r in load_history():
         hist.setdefault(r["url"], []).append([r["timestamp"], float(r["priceEUR"]), r["inStock"] == "1"])
@@ -868,8 +912,12 @@ def page_data():
              if not v.get("enabled", True) and v.get("link")]
     pickup = {k: shipping_cfg(k).get("pickup") for k in SHOPS if shipping_cfg(k).get("pickup")}
     repo = os.environ.get("GITHUB_REPOSITORY", "")
+    cfg = load_json(CONFIG_FILE, {})
+    th = cfg.get("alerts", {}).get("max_pct_vs_msrp", {"EN": 30, "JP": 150})
     return {"offers": offers, "hist": hist, "shops": shops, "status": status, "links": links,
-            "updated": cur.get("updated"), "repo": repo, "pickup": pickup}
+            "updated": cur.get("updated"), "repo": repo or gh_repo() or "", "pickup": pickup,
+            "th": th if isinstance(th, dict) else {"EN": th, "JP": th},
+            "watch": cfg.get("watchlist", [])}
 
 
 def render():
@@ -1030,7 +1078,8 @@ def run_once(only=None, notify=True, force=True):
     if notify:
         embeds = evaluate_alerts(prev, cur, load_json(MSRP_FILE, {}), load_json(CONFIG_FILE, {}), first_run)
         if embeds and webhook_url():
-            discord_send(embeds, content=f"**{len(embeds)}** zaujímavých ponúk")
+            discord_send(compact_alerts(embeds) if len(embeds) > 4 else embeds,
+                         content=f"**{len(embeds)}** zaujímavých ponúk" + (f" · <{site_url()}>" if site_url() else ""))
             say(f"  🔔 odoslaných {len(embeds)} upozornení na Discord")
         elif embeds:
             say(f"  🔔 {len(embeds)} upozornení (Discord webhook nie je nastavený)")
@@ -1212,148 +1261,269 @@ TEMPLATE = r"""<!doctype html>
 <title>One Piece ceny</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{--bg:#f6f5f2;--card:#fff;--ink:#1d1d1f;--mute:#6b6b70;--line:#e4e2dc;--acc:#c8102e;--good:#1a7f37;--goodbg:#e3f3e7;--warn:#9a6700;--off:#b0b0b5}
-@media (prefers-color-scheme:dark){:root{--bg:#141416;--card:#1e1e21;--ink:#ececef;--mute:#9a9aa2;--line:#2e2e33;--acc:#ff5a6e;--good:#4ac26b;--goodbg:#173a22;--warn:#d29922;--off:#5d5d63}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
-.wrap{max-width:1320px;margin:0 auto;padding:20px 16px 48px}
-h1{font-size:22px;margin:0 0 2px}.sub{color:var(--mute)}
-.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px}
-.status{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--mute);font-size:12px;margin-bottom:14px}
-.status .bad{color:var(--warn)}.status a{color:var(--ink)}
-#fetchBtn{display:inline-flex;align-items:center;gap:8px;background:var(--acc);color:#fff;border:none;border-radius:10px;padding:10px 18px;font:600 15px system-ui,sans-serif;cursor:pointer;text-decoration:none}
-#fetchBtn:hover{filter:brightness(1.08)}#fetchBtn[disabled]{opacity:.6;cursor:progress}
+:root{--bg:#f4f2ee;--card:#fff;--card2:#faf9f6;--ink:#1c1c1e;--mute:#6b6b70;--line:#e6e3dc;--acc:#c8102e;--acc2:#a50d26;
+--good:#1a7f37;--goodbg:#e3f3e7;--warn:#9a6700;--warnbg:#fff4d6;--off:#a9a9ae;--r:14px;--shadow:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.05)}
+@media (prefers-color-scheme:dark){:root{--bg:#121214;--card:#1c1c1f;--card2:#222226;--ink:#ececef;--mute:#9a9aa2;--line:#2d2d32;--acc:#ff5a6e;--acc2:#ff7486;
+--good:#4ac26b;--goodbg:#163a21;--warn:#e3b341;--warnbg:#3a2f12;--off:#5d5d63;--shadow:none}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:inherit}.wrap{max-width:1360px;margin:0 auto;padding:22px 16px 60px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+h1{font-size:24px;margin:0;letter-spacing:-.01em}.sub{color:var(--mute);margin-top:2px}
+#fetchBtn{display:inline-flex;align-items:center;gap:8px;background:var(--acc);color:#fff;border:none;border-radius:12px;padding:11px 18px;font:600 15px system-ui,sans-serif;cursor:pointer;text-decoration:none;white-space:nowrap}
+#fetchBtn:hover{background:var(--acc2)}#fetchBtn[disabled]{opacity:.6;cursor:progress}
 #fetchBtn .spin{width:14px;height:14px;border:2px solid #fff6;border-top-color:#fff;border-radius:50%;display:none;animation:r .8s linear infinite}
 #fetchBtn[disabled] .spin{display:inline-block}@keyframes r{to{transform:rotate(360deg)}}
-.fhint{font-size:12px;color:var(--mute);margin-top:4px;text-align:right;max-width:260px}
-#log{display:none;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;color:var(--mute);margin-bottom:16px}#log.on{display:block}
-.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
-.seg{display:flex}.seg button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:6px 11px;cursor:pointer;font:inherit}
-.seg button:first-child{border-radius:8px 0 0 8px}.seg button:last-child{border-radius:0 8px 8px 0}
-.seg button+button{border-left:none}.seg button.on{background:var(--ink);color:var(--bg)}
-label.chk{display:flex;gap:6px;align-items:center;color:var(--mute);cursor:pointer}
-select,input[type=search]{padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
-input[type=search]{flex:1;min-width:160px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
-.card h2{font-size:14px;margin:0 0 10px;color:var(--mute);font-weight:600}
-.chart{position:relative;height:320px}.scroll{overflow:auto}
-table{width:100%;border-collapse:collapse}th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;vertical-align:top}
-th{font-weight:600;color:var(--mute);position:sticky;top:0;background:var(--card);z-index:1}
-td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
-tbody tr{cursor:pointer}tbody tr:hover td{background:color-mix(in srgb,var(--acc) 5%,transparent)}
-tr.sel td{background:color-mix(in srgb,var(--acc) 10%,transparent)!important}
-.tag{font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid var(--line);color:var(--mute);margin-right:4px}
-.p{display:inline-flex;flex-direction:column;align-items:flex-end;line-height:1.25}
-.p a{color:inherit;text-decoration:none}.p a:hover{text-decoration:underline}
-.p small,.msrp small{font-size:11px;color:var(--mute)}
-.out a{color:var(--off)}.best{background:var(--goodbg);border-radius:6px;padding:1px 6px;color:var(--good);font-weight:700}
-.pct{font-size:11px;font-weight:600}.pct.lo{color:var(--good)}.pct.hi{color:var(--mute)}.pct.vhi{color:var(--acc)}
-.dash{color:var(--off)}.empty{padding:40px 10px;text-align:center;color:var(--mute)}
-.ext{display:inline-block;margin-left:6px;padding:2px 9px;border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--ink);text-decoration:none}
-.hint{color:var(--mute);font-size:12px;margin-top:6px}
-.pre{color:var(--warn)!important;border-color:var(--warn)!important}
-a.cm{font-size:11px;color:var(--mute);text-decoration:none;margin-left:4px}a.cm:hover{color:var(--ink);text-decoration:underline}
+.fhint{font-size:12px;color:var(--mute);margin-top:5px;text-align:right;max-width:280px}
+.status{display:flex;flex-wrap:wrap;gap:4px 12px;color:var(--mute);font-size:12px;margin:6px 0 18px}
+.status .bad{color:var(--warn)}.ext{display:inline-block;margin-left:4px;padding:1px 8px;border:1px solid var(--line);border-radius:7px;background:var(--card);text-decoration:none}
+#log{display:none;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-bottom:16px}#log.on{display:block}
+h2{font-size:15px;margin:0 0 10px;font-weight:650}h2 small{color:var(--mute);font-weight:400;margin-left:6px}
+/* top ponuky */
+.deals{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px;margin-bottom:24px}
+.deal{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow);text-decoration:none;position:relative}
+.deal:hover{border-color:var(--acc)}
+.deal .im{height:110px;display:flex;align-items:center;justify-content:center;background:var(--card2);border-radius:10px;overflow:hidden}
+.deal .im img{max-width:100%;max-height:110px;object-fit:contain}
+.deal .pr{font-size:22px;font-weight:750;letter-spacing:-.02em}.deal .shop{color:var(--mute);font-size:12px}
+.deal .rank{position:absolute;top:8px;left:8px;background:var(--ink);color:var(--bg);font-size:11px;font-weight:700;border-radius:20px;padding:1px 7px}
+/* filtre */
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0}
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:2px}
+.seg button{border:none;background:none;color:var(--ink);padding:5px 10px;border-radius:8px;cursor:pointer;font:inherit;white-space:nowrap}
+.seg button.on{background:var(--ink);color:var(--bg)}
+select,input[type=search],input[type=number]{padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit}
+input[type=search]{flex:1;min-width:150px}input[type=number]{width:96px}
+label.chk{display:flex;gap:5px;align-items:center;color:var(--mute);cursor:pointer;white-space:nowrap}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 11px;cursor:pointer;font:inherit;white-space:nowrap}
+.btn:hover{border-color:var(--acc)}
+.count{color:var(--mute);font-size:12px;margin:-4px 0 10px}
+/* karty produktov */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,430px),1fr));gap:14px}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
+.pc.hit{border-color:var(--good);box-shadow:0 0 0 2px var(--goodbg)}
+.pc-head{display:flex;gap:12px;padding:14px 14px 10px}
+.thumb{width:72px;height:72px;flex:none;border-radius:10px;background:var(--card2);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.thumb img{max-width:100%;max-height:100%;object-fit:contain}.thumb span{font-weight:800;color:var(--mute);font-size:13px}
+.ttl{flex:1;min-width:0}.ttl .nm{font-weight:650;line-height:1.25;margin:3px 0 2px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ttl .meta{color:var(--mute);font-size:12px}
+.tag{display:inline-block;font-size:11px;padding:0 6px;border-radius:5px;border:1px solid var(--line);color:var(--mute);margin-right:3px;line-height:18px}
+.tag.pre{color:var(--warn);border-color:var(--warn)}.tag.hit{color:var(--good);border-color:var(--good)}
+.best{text-align:right;flex:none}.best .pr{font-size:21px;font-weight:750;letter-spacing:-.02em;white-space:nowrap}
+.best .shop{color:var(--mute);font-size:12px}.best .none{color:var(--off);font-size:13px}
+.star{border:none;background:none;cursor:pointer;font-size:19px;line-height:1;color:var(--off);padding:0 0 0 4px}.star.on{color:#e3a008}
+.pct{font-size:11.5px;font-weight:650;padding:0 6px;border-radius:6px;white-space:nowrap}
+.pct.lo{color:var(--good);background:var(--goodbg)}.pct.mid{color:var(--warn);background:var(--warnbg)}.pct.hi{color:var(--mute)}
+.stats{display:flex;align-items:center;gap:12px;padding:0 14px 10px;color:var(--mute);font-size:12px;flex-wrap:wrap}
+.stats svg{display:block}.stats b{color:var(--ink);font-weight:600}
+.trend.dn{color:var(--good)}.trend.up{color:var(--acc)}
+.target{display:flex;align-items:center;gap:5px}.target input{width:70px;padding:3px 6px;border-radius:7px}
+.offers{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.offers li{display:grid;grid-template-columns:1fr auto auto;gap:4px 10px;align-items:center;padding:7px 14px;border-bottom:1px solid var(--line)}
+.offers li:last-child{border-bottom:none}.offers li.top1{background:color-mix(in srgb,var(--good) 7%,transparent)}
+.offers .s{font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.offers .s small{color:var(--mute);font-weight:400}
+.offers .p{text-align:right;font-variant-numeric:tabular-nums;font-weight:650;white-space:nowrap}
+.offers .x{font-size:11.5px;color:var(--mute);grid-column:1/-1;margin-top:-3px}
+.offers .go{text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:2px 8px;font-size:12px;white-space:nowrap}.offers .go:hover{border-color:var(--acc);color:var(--acc)}
+.offers li.out{color:var(--off)}.offers li.out .p{font-weight:500}
+.more{border:none;background:none;color:var(--mute);cursor:pointer;padding:7px 14px;text-align:left;font:inherit;font-size:12px;border-top:1px solid var(--line)}
+.more:hover{color:var(--ink)}
+.pc-foot{display:flex;gap:14px;padding:9px 14px;border-top:1px solid var(--line);background:var(--card2);font-size:12px;margin-top:auto}
+.pc-foot a,.pc-foot button{color:var(--mute);text-decoration:none;background:none;border:none;cursor:pointer;font:inherit;padding:0}
+.pc-foot a:hover,.pc-foot button:hover{color:var(--ink)}
+.chartbox{height:220px;padding:10px 14px;border-top:1px solid var(--line)}
+.empty{padding:50px 10px;text-align:center;color:var(--mute);grid-column:1/-1}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20;max-width:90vw}
+.toast.on{opacity:1}
+@media (max-width:640px){h1{font-size:20px}.bar{overflow-x:auto;flex-wrap:nowrap;padding-bottom:10px}.bar>*{flex:none}
+ input[type=search]{min-width:170px}.best .pr{font-size:18px}.thumb{width:56px;height:56px}.deals{grid-template-columns:repeat(2,1fr)}
+ .deals{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}.deal{flex:0 0 62%;scroll-snap-align:start}
+ .deal .im{height:80px}.deal .im img{max-height:80px}.deal .pr{font-size:18px}.fhint{text-align:left}
+ .pc-head{flex-wrap:wrap;position:relative;padding-right:40px}.ttl{flex:1 1 calc(100% - 70px)}
+ .best{flex:1 1 100%;text-align:left;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+ .star{position:absolute;top:12px;right:12px}.offers li{padding:7px 12px}}
 </style></head><body><div class="wrap">
 <div class="top">
   <div><h1>One Piece TCG – ceny v obchodoch</h1>
-  <div class="sub">Ceny v € · MSRP = oficiálna cena Bandai prepočítaná na € vrátane 23 % DPH · aktualizované <span id="upd">—</span></div></div>
+  <div class="sub">MSRP = oficiálna cena Bandai v € s 23 % DPH · aktualizované <span id="upd">—</span></div></div>
   <div><a id="fetchBtn" href="#"><span class="spin"></span><span id="fetchLbl">⟳ Fetch nové ceny</span></a><div class="fhint" id="fhint"></div></div>
 </div>
 <div class="status" id="status"></div>
-<div class="card" id="log"></div>
+<div id="log"></div>
+
+<section id="dealsSec"><h2>🔥 Najlepšie ponuky skladom <small>booster boxy najbližšie k MSRP (EN aj JP podľa ich prahu)</small></h2><div class="deals" id="deals"></div></section>
 
 <div class="bar">
-  <div class="seg" id="kind"><button data-v="Box" class="on">Boxy</button><button data-v="Pack">Packy</button><button data-v="Double Pack">Double packy</button><button data-v="Case">Cases</button><button data-v="">Všetko</button></div>
-  <div class="seg" id="lang"><button data-v="" class="on">Všetky</button><button data-v="EN">EN</button><button data-v="JP">JP</button><button data-v="CN">Ázia (CN/KR)</button></div>
-  <label class="chk"><input type="checkbox" id="stock"> len skladom</label>
-  <label class="chk"><input type="checkbox" id="under"> len pod MSRP</label>
-  <select id="sort"><option value="code">Podľa edície</option><option value="pct">Najlepšie vs MSRP</option><option value="price">Najlacnejšie</option></select>
+  <div class="seg" id="kind"><button data-v="Box" class="on">Boxy</button><button data-v="Pack">Packy</button><button data-v="Double Pack">Double</button><button data-v="Case">Cases</button><button data-v="">Všetko</button></div>
+  <div class="seg" id="lang"><button data-v="" class="on">Všetky</button><button data-v="EN">EN</button><button data-v="JP">JP</button><button data-v="CN">Ázia</button></div>
+  <select id="set"><option value="">Všetky edície</option></select>
+  <input type="number" id="maxp" placeholder="max €" min="0" step="5" title="Maximálna cena">
+  <label class="chk"><input type="checkbox" id="stock" checked> skladom</label>
+  <label class="chk"><input type="checkbox" id="under"> pod prahom</label>
+  <label class="chk" id="pickupLbl"><input type="checkbox" id="pickup"> 📍 osobne BA</label>
+  <label class="chk"><input type="checkbox" id="starred"> ⭐ sledované</label>
+  <select id="sort"><option value="score">Najlepšie vs MSRP</option><option value="price">Najlacnejšie</option><option value="trend">Najväčší pokles</option><option value="code">Podľa edície</option></select>
   <input type="search" id="q" placeholder="Hľadať (OP09, Emperors…)">
+  <button class="btn" id="exportBtn" title="Uloží ⭐ sledované do config.json → upozornenia na Discord">⭐ Export watchlistu</button>
 </div>
-
-<div class="card"><h2>Zelená = najlacnejšie skladom · % = rozdiel oproti MSRP · sivá = vypredané · klik na riadok = graf</h2>
-<div class="scroll"><table><thead><tr id="head"></tr></thead><tbody id="tb"></tbody></table></div></div>
-
-<div class="card"><h2 id="ctitle">Vývoj ceny</h2><div class="chart"><canvas id="line"></canvas></div>
-<div class="hint">Ukladajú sa len zmeny ceny/dostupnosti – čiara sa napĺňa s každým fetchom.</div></div>
+<div class="count" id="count"></div>
+<div class="grid" id="grid"></div>
 </div>
+<div class="toast" id="toast"></div>
 <script>
 const P=__PAYLOAD__;
-const SHOPS=P.shops, SK=Object.keys(SHOPS);
-// offer: [shop,name,code,kind,lang,eur,inStock,url,price,currency,msrp,packs,preorder,ship,cm]
-const keyOf=o=>o[2]?`${o[2]}|${o[3]}|${o[4]}`:`~${o[1].toLowerCase()}|${o[3]}|${o[4]}`;
-const groups={};
-P.offers.forEach(o=>{const k=keyOf(o);const g=groups[k]||(groups[k]={key:k,code:o[2],kind:o[3],lang:o[4],name:o[1],msrp:o[10],packs:o[11],shops:{},all:[]});
-  g.all.push(o); if(o[10]!=null)g.msrp=o[10];
-  const p=g.shops[o[0]]; if(!p||(o[6]&&!p[6])||(o[6]===p[6]&&o[5]<p[5]))g.shops[o[0]]=o;});
-const st={kind:"Box",lang:"",stock:false,under:false,sort:"code",q:"",sel:null};
+const SHOPS=P.shops, SK=Object.keys(SHOPS), TH=P.th||{EN:30,JP:150};
+// offer: [shop,name,code,kind,lang,eur,inStock,url,price,currency,msrp,packs,preorder,ship,cm,img]
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const eur=v=>v==null?"—":v.toLocaleString("sk-SK",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const eur0=v=>v==null?"—":v.toLocaleString("sk-SK",{maximumFractionDigits:0})+" €";
 const short=n=>n.replace(/^one piece( tcg| card game| cg)?\s*[:\-–]?\s*/i,"");
 const pctOf=(v,m)=>m?(v/m-1)*100:null;
-const pctHtml=p=>p==null?"":`<span class="pct ${p<=0?"lo":p>50?"vhi":"hi"}">${p>0?"+":""}${p.toFixed(0)} %</span>`;
-function bestOf(g){let b=null;for(const s of SK){const o=g.shops[s];if(o&&o[6]&&(!b||o[5]<b[5]))b=o;}return b;}
+const pctCls=(p,lang)=>p==null?"hi":p<=(TH[lang]??30)?"lo":p<=(TH[lang]??30)+40?"mid":"hi";
+const pctHtml=(p,lang)=>p==null?"":`<span class="pct ${pctCls(p,lang)}" title="rozdiel oproti MSRP">${p>0?"+":""}${p.toFixed(0)} %</span>`;
+const LS=(()=>{try{localStorage.setItem("_t","1");localStorage.removeItem("_t");return localStorage}catch(e){return null}})();
+const lsGet=(k,d)=>{try{return JSON.parse(LS.getItem(k))??d}catch(e){return d}}, lsSet=(k,v)=>{try{LS.setItem(k,JSON.stringify(v))}catch(e){}};
+const toast=t=>{const el=document.getElementById("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove("on"),2600)};
+
+// ---- skupiny produktov
+const keyOf=o=>o[2]?`${o[2]}|${o[3]}|${o[4]}`:`~${o[1].toLowerCase()}|${o[3]}|${o[4]}`;
+const G={};
+P.offers.forEach(o=>{const k=keyOf(o);const g=G[k]||(G[k]={key:k,code:o[2],kind:o[3],lang:o[4],name:o[1],msrp:null,packs:null,img:null,all:[]});
+  g.all.push(o);if(o[10]!=null)g.msrp=o[10];if(o[11]&&!g.packs)g.packs=o[11];if(o[15]&&!g.img)g.img=o[15];});
+Object.values(G).forEach(g=>{
+  g.inst=g.all.filter(o=>o[6]).sort((a,b)=>a[5]-b[5]);
+  g.best=g.inst[0]||null;
+  g.pct=g.best&&g.msrp?pctOf(g.best[5],g.msrp):null;
+  g.score=g.pct==null?Infinity:g.pct-(TH[g.lang]??50);
+  g.pre=g.all.some(o=>o[12]&&!o[6]);
+  g.pickup=g.inst.some(o=>P.pickup&&P.pickup[o[0]]);
+  // denné minimum za 30 dní (z histórie zmien)
+  const DAY=864e5, now=P.updated?new Date(P.updated).getTime():Date.now(), days=30;
+  const ev=g.all.map(o=>({o,h:(P.hist[o[7]]||[]).map(x=>[new Date(x[0]).getTime(),x[1],x[2]]).sort((a,b)=>a[0]-b[0])}));
+  const series=[];
+  for(let d=days-1;d>=0;d--){const end=now-d*DAY;let mn=null;
+    ev.forEach(({o,h})=>{let st=null;for(const x of h){if(x[0]<=end)st=x;else break;} if(d===0)st=[now,o[5],o[6]]; if(st&&st[2]&&(mn==null||st[1]<mn))mn=st[1];});
+    series.push(mn);}
+  g.series=series;
+  const vals=series.filter(v=>v!=null);
+  g.low30=vals.length?Math.min(...vals):null;
+  const wk=series[series.length-8];
+  g.trend=(g.best&&wk!=null)?(g.best[5]/wk-1)*100:null;
+});
+// sledované: localStorage + config.json watchlist
+const W=lsGet("op_watch",{});
+(P.watch||[]).forEach(w=>{const [c,k,l]=String(w.product||"").trim().split(/\s+/);if(!c)return;
+  const key=`${c.toUpperCase()}|${k}|${(l||"EN").toUpperCase()}`; if(!(key in W))W[key]=w.max_eur??null;});
+const isHit=g=>g.key in W&&W[g.key]!=null&&g.best&&g.best[5]<=W[g.key];
+
+// ---- sparkline
+function spark(arr,msrp){const v=arr.map((x,i)=>[i,x]).filter(p=>p[1]!=null);if(new Set(v.map(p=>p[1])).size<2)return '<span title="graf sa naplní, keď sa cena začne meniť">bez zmeny</span>';
+  const w=110,h=26,ys=v.map(p=>p[1]).concat(msrp?[msrp]:[]),mn=Math.min(...ys),mx=Math.max(...ys),rg=mx-mn||1;
+  const X=i=>(i/(arr.length-1))*w, Y=y=>h-2-((y-mn)/rg)*(h-4);
+  const d=v.map((p,j)=>(j?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[1]).toFixed(1)).join("");
+  const m=msrp?`<line x1="0" x2="${w}" y1="${Y(msrp).toFixed(1)}" y2="${Y(msrp).toFixed(1)}" stroke="currentColor" stroke-dasharray="3 3" opacity=".35"/>`:"";
+  const last=v[v.length-1];
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-label="vývoj najnižšej ceny 30 dní">${m}<path d="${d}" fill="none" stroke="var(--acc)" stroke-width="1.6"/><circle cx="${X(last[0])}" cy="${Y(last[1])}" r="2.4" fill="var(--acc)"/></svg>`;}
+
+// ---- stav filtrov
+const st=Object.assign({kind:"Box",lang:"",set:"",maxp:null,stock:true,under:false,pickup:false,starred:false,sort:"score",q:""},lsGet("op_filters",{}));
+const open=new Set();
 function rows(){const q=st.q.toLowerCase();
-  let r=Object.values(groups).filter(g=>(!st.kind||g.kind===st.kind)&&(!st.lang||(st.lang==="CN"?["CN","KR","ASIA"].includes(g.lang):g.lang===st.lang))
-    &&(!q||(g.code+" "+g.all.map(o=>o[1]).join(" ")).toLowerCase().includes(q))
-    &&(!st.stock||bestOf(g))&&(!st.under||(bestOf(g)&&g.msrp&&bestOf(g)[5]<=g.msrp)));
-  const bp=g=>{const b=bestOf(g);return b?b[5]:Infinity}, bpc=g=>{const b=bestOf(g);return b&&g.msrp?pctOf(b[5],g.msrp):Infinity};
-  if(st.sort==="pct")r.sort((a,b)=>bpc(a)-bpc(b));
-  else if(st.sort==="price")r.sort((a,b)=>bp(a)-bp(b));
-  else r.sort((a,b)=>(b.code||"").localeCompare(a.code||"",undefined,{numeric:true})||a.lang.localeCompare(b.lang));
-  return r;}
-function draw(){
-  document.getElementById("head").innerHTML=`<th>Produkt</th><th class="n">MSRP</th>`+SK.map(s=>`<th class="n">${esc(SHOPS[s])}</th>`).join("")+`<th class="n">Najlacnejšie skladom</th>`;
-  const R=rows();
-  document.getElementById("tb").innerHTML=R.map(g=>{const b=bestOf(g);
-    const cells=SK.map(s=>{const o=g.shops[s]; if(!o)return `<td class="n"><span class="dash">—</span></td>`;
-      const extra=g.all.filter(x=>x[0]===s).length>1?` <small title="obchod má viac variantov">+${g.all.filter(x=>x[0]===s).length-1}</small>`:"";
-      const ship=o[13]==null?"":o[13]===0?`<small title="doprava zdarma">+0 € doprava</small>`:`<small title="cena s dopravou">s dopr. ${eur(o[5]+o[13])}</small>`;
-      return `<td class="n ${o[6]?"":"out"}"><span class="p"><a href="${esc(o[7])}" target="_blank" rel="noopener" title="${esc(o[1])}" class="${b&&o===b?"best":""}">${eur(o[5])}</a>${o[6]?pctHtml(pctOf(o[5],g.msrp)):(o[12]?'<small class="pre">predobjednávka</small>':"<small>vypredané</small>")}${o[9]!=="EUR"?`<small>${Math.round(o[8]).toLocaleString("sk-SK")} Kč</small>`:""}${o[6]?ship:""}${extra}</span></td>`}).join("");
-    const pre=g.all.some(o=>o[12]&&!o[6])?'<span class="tag pre">predobjednávka</span>':"";
-    const title=(g.code?`<span class="tag">${g.code}</span><span class="tag">${g.lang}</span>${g.kind}`:`<span class="tag">${g.lang}</span>${esc(g.kind)}`)+" "+pre+` <a class="cm" href="${esc(g.all[0][14])}" target="_blank" rel="noopener" title="Porovnať na Cardmarkete">Cardmarket ↗</a>`;
-    const per=b&&g.packs?`<br><small style="color:var(--mute)">${eur(b[5]/g.packs)} / balíček</small>`:"";
-    return `<tr data-k="${esc(g.key)}" class="${st.sel===g.key?"sel":""}"><td>${title}<br><small style="color:var(--mute)">${esc(short(g.name).slice(0,62))}</small></td>
-      <td class="n msrp">${g.msrp?eur(g.msrp):'<span class="dash">—</span>'}${g.msrp&&g.packs?`<br><small>${eur(g.msrp/g.packs)} / bal.</small>`:""}</td>${cells}
-      <td class="n"><b>${b?eur(b[5]):"—"}</b> ${b?pctHtml(pctOf(b[5],g.msrp)):""}${b?`<br><small style="color:var(--mute)">${esc(SHOPS[b[0]]||b[0])}</small>`:""}${per}</td></tr>`}).join("")
-    || `<tr><td colspan="${SK.length+3}" class="empty">${P.offers.length?"Nič nevyhovuje filtru.":"Zatiaľ žiadne dáta – klikni <b>Fetch nové ceny</b>."}</td></tr>`;
-  if(!st.sel||!R.find(g=>g.key===st.sel))st.sel=R.length?R[0].key:null;
-  document.querySelectorAll("tr[data-k]").forEach(tr=>tr.classList.toggle("sel",tr.dataset.k===st.sel));
-  chart();}
-let lc; const pal=["#c8102e","#1f6feb","#d29922","#2da44e","#8250df","#0a7ea4"];
-function chart(){
+  let r=Object.values(G).filter(g=>(!st.kind||g.kind===st.kind)&&(!st.lang||(st.lang==="CN"?["CN","KR","ASIA"].includes(g.lang):g.lang===st.lang))
+    &&(!st.set||g.code===st.set)&&(!st.stock||g.best)&&(!st.maxp||(g.best&&g.best[5]<=st.maxp))
+    &&(!st.under||(g.pct!=null&&g.pct<=(TH[g.lang]??30)))&&(!st.pickup||g.pickup)&&(!st.starred||g.key in W)
+    &&(!q||(g.code+" "+g.all.map(o=>o[1]).join(" ")).toLowerCase().includes(q)));
+  const by={score:(a,b)=>a.score-b.score||(a.best?a.best[5]:1e9)-(b.best?b.best[5]:1e9),
+    price:(a,b)=>(a.best?a.best[5]:1e9)-(b.best?b.best[5]:1e9),
+    trend:(a,b)=>(a.trend??1e9)-(b.trend??1e9),
+    code:(a,b)=>(b.code||"").localeCompare(a.code||"",undefined,{numeric:true})||a.lang.localeCompare(b.lang)};
+  return r.sort(by[st.sort]||by.score);}
+
+function offerLi(g,o,i){const p=pctOf(o[5],g.msrp),pk=P.pickup&&P.pickup[o[0]];
+  const ship=o[6]&&o[13]!=null?(o[13]===0?"doprava zdarma":`s dopravou ${eur(o[5]+o[13])}`):"";
+  const extra=[o[9]!=="EUR"?`${Math.round(o[8]).toLocaleString("sk-SK")} Kč`:"",ship,pk?"📍 "+pk:"",o[12]&&!o[6]?"🕒 predobjednávka":""].filter(Boolean).join(" · ");
+  return `<li class="${o[6]?"":"out"} ${o[6]&&i===0?"top1":""}"><span class="s">${esc(SHOPS[o[0]]||o[0])} <small title="${esc(o[1])}">${o[6]?"":o[12]?"· predobjednávka":"· vypredané"}</small></span>
+    <span class="p">${eur(o[5])} ${o[6]?pctHtml(p,g.lang):""}</span><a class="go" href="${esc(o[7])}" target="_blank" rel="noopener">Otvoriť ↗</a>${extra?`<span class="x">${esc(extra)}</span>`:""}</li>`;}
+
+function card(g){const b=g.best,tgt=W[g.key],starred=g.key in W,hit=isHit(g);
+  const out=g.all.filter(o=>!o[6]).sort((a,b)=>(b[12]-a[12])||a[5]-b[5]);
+  const showOut=open.has(g.key);
+  const img=g.img?`<img src="${esc(g.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${esc(g.code||"OP")}'}))">`:`<span>${esc(g.code||"OP")}</span>`;
+  const tr=g.trend==null||Math.abs(g.trend)<1?"":`<span class="trend ${g.trend<0?"dn":"up"}" title="oproti pred 7 dňami">${g.trend<0?"▼":"▲"} ${Math.abs(g.trend).toFixed(0)} % / 7 dní</span>`;
+  return `<article class="pc ${hit?"hit":""}" data-k="${esc(g.key)}">
+  <div class="pc-head"><div class="thumb">${img}</div>
+    <div class="ttl"><div>${g.code?`<span class="tag">${esc(g.code)}</span>`:""}<span class="tag">${esc(g.lang)}</span><span class="tag">${esc(g.kind)}</span>${g.pre?'<span class="tag pre">predobjednávka</span>':""}${hit?'<span class="tag hit">🎯 pod cieľom</span>':""}</div>
+      <div class="nm" title="${esc(g.name)}">${esc(short(g.name))}</div>
+      <div class="meta">MSRP ${g.msrp?eur(g.msrp):"—"}${g.msrp&&g.packs?` · ${eur(g.msrp/g.packs)}/bal.`:""}</div></div>
+    <div class="best">${b?`<div class="pr">${eur(b[5])}</div><div>${pctHtml(g.pct,g.lang)}</div><div class="shop">${esc(SHOPS[b[0]]||b[0])}${g.packs?` · ${eur(b[5]/g.packs)}/bal.`:""}</div>`:'<div class="none">nie je skladom</div>'}</div>
+    <button class="star ${starred?"on":""}" data-star="${esc(g.key)}" title="${starred?"Prestať sledovať":"Sledovať"}">${starred?"★":"☆"}</button></div>
+  <div class="stats"><span>30 dní min <b>${eur(g.low30)}</b></span>${spark(g.series,g.msrp)}${tr}
+    ${starred?`<span class="target">🎯 cieľ <input type="number" min="0" step="5" value="${tgt??""}" data-tgt="${esc(g.key)}" placeholder="€"></span>`:""}</div>
+  <ul class="offers">${g.inst.map((o,i)=>offerLi(g,o,i)).join("")}${showOut?out.map(o=>offerLi(g,o,99)).join(""):""}</ul>
+  ${out.length?`<button class="more" data-more="${esc(g.key)}">${showOut?"▲ skryť nedostupné":`▼ ${out.length} nedostupné (${out.some(o=>o[12])?"vrátane predobjednávok":"vypredané"})`}</button>`:""}
+  <div class="pc-foot"><a href="${esc(g.all[0][14])}" target="_blank" rel="noopener">Cardmarket ↗</a><button data-chart="${esc(g.key)}">📈 Graf</button></div></article>`;}
+
+function deals(){const top=Object.values(G).filter(g=>g.kind==="Box"&&g.best&&g.msrp&&g.pct>-60&&["EN","JP"].includes(g.lang)).sort((a,b)=>a.score-b.score).slice(0,6);
+  document.getElementById("dealsSec").style.display=top.length?"":"none";
+  document.getElementById("deals").innerHTML=top.map((g,i)=>`<a class="deal" href="${esc(g.best[7])}" target="_blank" rel="noopener"><span class="rank">#${i+1}</span>
+    <div class="im">${g.img?`<img src="${esc(g.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:""}</div>
+    <div>${g.code?`<span class="tag">${esc(g.code)}</span>`:""}<span class="tag">${esc(g.lang)}</span><span class="tag">Box</span></div>
+    <div class="pr">${eur0(g.best[5])} ${pctHtml(g.pct,g.lang)}</div>
+    <div class="shop">${esc(SHOPS[g.best[0]]||g.best[0])}${g.low30!=null&&g.best[5]<=g.low30?" · 🏷️ najnižšia za 30 dní":""}</div></a>`).join("");}
+
+function draw(){lsSet("op_filters",st);Object.keys(charts).forEach(k=>{try{charts[k].c.destroy()}catch(e){}delete charts[k]});const R=rows();
+  document.getElementById("count").textContent=`${R.length} produktov · ${R.reduce((n,g)=>n+g.inst.length,0)} ponúk skladom`;
+  document.getElementById("grid").innerHTML=R.map(card).join("")||`<div class="empty">${P.offers.length?"Nič nevyhovuje filtru.":"Zatiaľ žiadne dáta – klikni Fetch nové ceny."}</div>`;}
+
+// ---- graf v karte
+const charts={};
+function toggleChart(k,art){if(charts[k]){charts[k].c.destroy();charts[k].el.remove();delete charts[k];return;}
+  const g=G[k],box=document.createElement("div");box.className="chartbox";box.innerHTML="<canvas></canvas>";art.querySelector(".pc-foot").before(box);
   const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-  const g=groups[st.sel]; document.getElementById("ctitle").textContent=g?`Vývoj ceny – ${g.code||short(g.name)} ${g.kind} ${g.lang}`:"Vývoj ceny";
-  lc&&lc.destroy(); if(!g)return;
-  const now=P.updated; const ts=new Set(now?[now]:[]);
-  const per={}; g.all.forEach(o=>{(P.hist[o[7]]||[]).forEach(h=>ts.add(h[0]));});
-  const T=[...ts].sort();
-  const ds=SK.map((s,i)=>{const offs=g.all.filter(o=>o[0]===s); if(!offs.length)return null;
-    const series=offs.map(o=>{const h=(P.hist[o[7]]||[]).slice().sort((a,b)=>a[0]<b[0]?-1:1);let j=0,v=null;
-      return T.map(t=>{while(j<h.length&&h[j][0]<=t){v=h[j][2]?h[j][1]:null;j++;} if(t===now)v=o[6]?o[5]:null; return v;});});
-    const data=T.map((_,k)=>{const vs=series.map(x=>x[k]).filter(v=>v!=null);return vs.length?Math.min(...vs):null;});
-    return {label:SHOPS[s],data,borderColor:pal[i%pal.length],backgroundColor:pal[i%pal.length],stepped:true,spanGaps:false,pointRadius:T.length>40?0:3};}).filter(Boolean);
-  if(g.msrp)ds.push({label:"MSRP",data:T.map(()=>g.msrp),borderColor:css("--mute"),borderDash:[6,4],pointRadius:0,borderWidth:1.5});
-  lc=new Chart(document.getElementById("line"),{type:"line",data:{labels:T.map(t=>new Date(t).toLocaleString("sk-SK",{day:"numeric",month:"numeric",hour:"2-digit",minute:"2-digit"})),datasets:ds},
-    options:{maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
-      plugins:{legend:{labels:{color:css("--ink")}},tooltip:{callbacks:{label:c=>c.dataset.label+": "+(c.raw==null?"nedostupné":eur(c.raw))}}},
-      scales:{x:{grid:{color:css("--line")},ticks:{color:css("--mute"),maxRotation:0,autoSkip:true}},y:{grid:{color:css("--line")},ticks:{color:css("--mute"),callback:v=>eur(v)}}}}});}
-document.getElementById("tb").addEventListener("click",e=>{const tr=e.target.closest("tr[data-k]");if(!tr||e.target.closest("a"))return;st.sel=tr.dataset.k;draw();});
-const seg=id=>document.querySelectorAll(`#${id} button`).forEach(b=>b.onclick=()=>{document.querySelectorAll(`#${id} button`).forEach(x=>x.classList.remove("on"));b.classList.add("on");st[id]=b.dataset.v;st.sel=null;draw();});
+  const T=[...new Set(g.all.flatMap(o=>(P.hist[o[7]]||[]).map(h=>h[0])).concat(P.updated?[P.updated]:[]))].sort();
+  const pal=["#c8102e","#1f6feb","#d29922","#2da44e","#8250df","#0a7ea4","#bf3989","#6e7781","#e16f24","#3fb950"];
+  const ds=[...new Set(g.all.map(o=>o[0]))].map((s,i)=>{const offs=g.all.filter(o=>o[0]===s);
+    const data=T.map(t=>{const vs=offs.map(o=>{const h=(P.hist[o[7]]||[]).filter(x=>x[0]<=t).sort((a,b)=>a[0]<b[0]?-1:1).pop();
+      const cur=t===P.updated?[t,o[5],o[6]]:h;return cur&&cur[2]?cur[1]:null}).filter(v=>v!=null);return vs.length?Math.min(...vs):null;});
+    return {label:SHOPS[s]||s,data,borderColor:pal[i%pal.length],backgroundColor:pal[i%pal.length],stepped:true,pointRadius:T.length>30?0:2.5};});
+  if(g.msrp)ds.push({label:"MSRP",data:T.map(()=>g.msrp),borderColor:css("--mute"),borderDash:[6,4],pointRadius:0,borderWidth:1.2});
+  if(typeof Chart==="undefined"){box.textContent="Graf sa nenačítal (offline).";charts[k]={c:{destroy(){}},el:box};return;}
+  const c=new Chart(box.querySelector("canvas"),{type:"line",data:{labels:T.map(t=>new Date(t).toLocaleString("sk-SK",{day:"numeric",month:"numeric",hour:"2-digit",minute:"2-digit"})),datasets:ds},
+    options:{maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{labels:{color:css("--ink"),boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+": "+(c.raw==null?"nedostupné":eur(c.raw))}}},
+    scales:{x:{grid:{color:css("--line")},ticks:{color:css("--mute"),maxRotation:0,autoSkip:true}},y:{grid:{color:css("--line")},ticks:{color:css("--mute"),callback:v=>eur0(v)}}}}});
+  charts[k]={c,el:box};}
+
+// ---- udalosti
+const grid=document.getElementById("grid");
+grid.addEventListener("click",e=>{const t=e.target.closest("[data-star],[data-more],[data-chart]");if(!t)return;
+  if(t.dataset.star!=null){const k=t.dataset.star;if(k in W){delete W[k];toast("Odstránené zo sledovaných");}else{W[k]=G[k].best?Math.floor(G[k].best[5]*0.9/5)*5:null;toast("Sledované ⭐ – nastav cieľovú cenu a daj Export watchlistu");}lsSet("op_watch",W);draw();}
+  else if(t.dataset.more!=null){const k=t.dataset.more;open.has(k)?open.delete(k):open.add(k);draw();}
+  else if(t.dataset.chart!=null){toggleChart(t.dataset.chart,t.closest(".pc"));}});
+grid.addEventListener("change",e=>{const t=e.target.closest("[data-tgt]");if(!t)return;W[t.dataset.tgt]=t.value?Number(t.value):null;lsSet("op_watch",W);draw();});
+const seg=id=>document.querySelectorAll(`#${id} button`).forEach(b=>{b.classList.toggle("on",b.dataset.v===st[id]);b.onclick=()=>{document.querySelectorAll(`#${id} button`).forEach(x=>x.classList.remove("on"));b.classList.add("on");st[id]=b.dataset.v;draw();};});
 seg("kind");seg("lang");
-document.getElementById("stock").onchange=e=>{st.stock=e.target.checked;st.sel=null;draw();};
-document.getElementById("under").onchange=e=>{st.under=e.target.checked;st.sel=null;draw();};
-document.getElementById("sort").onchange=e=>{st.sort=e.target.value;draw();};
-document.getElementById("q").oninput=e=>{st.q=e.target.value;st.sel=null;draw();};
-// stav obchodov
+const sets=[...new Set(Object.values(G).map(g=>g.code).filter(Boolean))].sort((a,b)=>b.localeCompare(a,undefined,{numeric:true}));
+const selSet=document.getElementById("set");selSet.innerHTML+=sets.map(c=>`<option>${c}</option>`).join("");
+const bind=(id,prop,key="value",conv=v=>v)=>{const el=document.getElementById(id);el[key]=st[prop]??(key==="checked"?false:"");el.addEventListener(key==="checked"?"change":"input",()=>{st[prop]=conv(el[key]);draw();});};
+bind("set","set");bind("maxp","maxp","value",v=>v?Number(v):null);bind("sort","sort");bind("q","q");
+["stock","under","pickup","starred"].forEach(k=>bind(k,k,"checked"));
+if(!Object.keys(P.pickup||{}).length)document.getElementById("pickupLbl").style.display="none";
+document.getElementById("exportBtn").onclick=async()=>{
+  const list=Object.entries(W).filter(([k])=>!k.startsWith("~")).map(([k,v])=>{const [c,kd,l]=k.split("|");return {product:`${c} ${kd} ${l}`,max_eur:v??0};});
+  if(!list.length){toast("Najprv označ produkty hviezdičkou ☆");return;}
+  const txt='"watchlist": '+JSON.stringify(list,null,2);
+  try{await navigator.clipboard.writeText(txt);toast("Skopírované – na GitHube nahraď časť \"watchlist\" v config.json");}catch(e){prompt("Skopíruj a vlož do config.json:",txt);}
+  if(P.repo)setTimeout(()=>window.open(`https://github.com/${P.repo}/edit/main/config.json`,"_blank"),600);};
+
+// ---- stav obchodov
 const fmt=t=>t?new Date(t).toLocaleString("sk-SK",{day:"numeric",month:"numeric",hour:"2-digit",minute:"2-digit"}):"—";
 document.getElementById("upd").textContent=fmt(P.updated);
 document.getElementById("status").innerHTML=SK.map(s=>{const x=P.status[s];if(!x)return `<span>${esc(SHOPS[s])}: zatiaľ nič</span>`;
   const old=x.ts&&(Date.now()-new Date(x.ts))>36e5*24;
-  if(x.ok&&x.pc)return `<span class="${old?"bad":""}" title="Tento obchod blokuje servery GitHubu, sťahuje sa pri spustení na PC">${old?"⚠":"✔"} ${esc(SHOPS[s])} · z PC ${fmt(x.ts)}</span>`;
-  return x.ok?`<span>✔ ${esc(SHOPS[s])}</span>`:`<span class="bad" title="${esc(x.error||"")}">⚠ ${esc(SHOPS[s])}: posledný fetch zlyhal, dáta z ${fmt(x.ts)}</span>`}).join("")
-  +(Object.keys(P.pickup||{}).length?`<span>📍 Osobný odber: ${Object.entries(P.pickup).map(([k,v])=>`${esc(SHOPS[k]||k)} (${esc(v)})`).join(", ")}</span>`:"")
-  +(P.links.length?`<span>Bez automatického sťahovania:${P.links.map(l=>`<a class="ext" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</span>`:"");
-// Fetch: lokálny server → API; GitHub Pages → spustenie workflow
+  if(!x.ok)return `<span class="bad" title="${esc(x.error||"")}">⚠ ${esc(SHOPS[s])} (dáta z ${fmt(x.ts)})</span>`;
+  return `<span class="${old?"bad":""}" title="${x.pc?"sťahuje sa pri spustení na PC":"sťahuje sa automaticky každé 2 h"}">${old?"⚠":"✔"} ${esc(SHOPS[s])}${x.pc?` · PC ${fmt(x.ts)}`:""}</span>`}).join("")
+  +(P.links.length?`<span>Bez sťahovania:${P.links.map(l=>`<a class="ext" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</span>`:"");
+
+// ---- Fetch: lokálny server → API; GitHub Pages → workflow
 const btn=document.getElementById("fetchBtn"),lbl=document.getElementById("fetchLbl"),logEl=document.getElementById("log"),fh=document.getElementById("fhint");
 const ghRepo=P.repo||(location.hostname.endsWith("github.io")?location.hostname.split(".")[0]+"/"+location.pathname.split("/")[1]:"");
 let mode="none";
@@ -1366,12 +1536,12 @@ async function poll(){try{const s=await fetch("/api/status",{cache:"no-store"}).
   if(location.protocol.startsWith("http")&&!location.hostname.endsWith("github.io")){
     try{const s=await fetch("/api/status").then(r=>r.json());mode="local";if(s.running){btn.setAttribute("disabled","");poll();}return;}catch(e){}}
   if(ghRepo){mode="gh";btn.href=`https://github.com/${ghRepo}/actions/workflows/fetch.yml`;btn.target="_blank";
-    fh.textContent="Otvorí GitHub → klikni „Run workflow“. Stránka sa obnoví asi o 2 min. Automaticky beží každé 2 h.";return;}
+    fh.textContent="Otvorí GitHub → „Run workflow“. Automaticky každé 2 h.";return;}
   fh.textContent="Spusti: python onepiece_ceny.py";btn.style.opacity=.5;})();
 btn.onclick=async e=>{if(mode==="gh")return;e.preventDefault();if(mode!=="local")return;
   btn.setAttribute("disabled","");lbl.textContent="Sťahujem…";logEl.classList.add("on");logEl.textContent="Spúšťam…";
   try{await fetch("/api/fetch",{method:"POST"});}catch(e){} poll();};
-draw();
+deals();draw();
 </script></body></html>"""
 
 if __name__ == "__main__":

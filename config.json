@@ -10,7 +10,8 @@
     "github_repo: kam sa pri spustení na PC nahrajú dáta (token v súbore github_token.txt).",
     "digest: denný súhrn na Discord (raz denne po hodine 'hour' miestneho času).",
     "preorders: upozorniť, keď obchod spustí predobjednávku boxu. Ostatné upozornenia chodia len na tovar skladom.",
-    "shipping: cena dopravy (Packeta na SK) a hranica dopravy zdarma v EUR; null = neznáme, doplň podľa košíka obchodu. pickup = osobný odber."
+    "shipping: cena dopravy (Packeta na SK) a hranica dopravy zdarma v EUR; null = neznáme, doplň podľa košíka obchodu. pickup = osobný odber.",
+    "watch_drop_pct: produkt z watchlistu skladom zlacnel aspoň o toľko % od posledného fetchu → upozornenie."
   ],
   "alerts": {
     "max_pct_vs_msrp": {
@@ -23,7 +24,8 @@
     "back_in_stock_watchlist": true,
     "new_products": true,
     "realert_drop_pct": 3,
-    "preorders": true
+    "preorders": true,
+    "watch_drop_pct": 10
   },
   "watchlist": [
     {

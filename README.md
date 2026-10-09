@@ -35,6 +35,15 @@ python onepiece_ceny.py --once          # raz stiahne + nahrá, bez stránky (na
 python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
 ```
 
+## Stránka
+- **🔥 Najlepšie ponuky** – 6 boxov skladom najbližšie k MSRP (EN aj JP, každý podľa svojho prahu).
+- **Karty produktov** – obrázok, MSRP, najlacnejšia ponuka, zoznam obchodov od najlacnejšieho,
+  minimum za 30 dní, mini graf, trend za 7 dní, cena s dopravou, 📍 osobný odber, odkaz na Cardmarket.
+- **Filtre** – typ, jazyk, edícia, max. cena, skladom, pod prahom, osobne v BA, ⭐ sledované, zoradenie.
+- **⭐ Sledovať** – pri karte nastavíš cieľovú cenu (uloží sa v prehliadači); **Export watchlistu**
+  skopíruje zoznam a otvorí `config.json` na GitHube → odvtedy chodia upozornenia aj na Discord
+  (pod cieľom, znova skladom, pokles o 10 %).
+
 ## Novinky
 - **Upozornenia len na dostupný tovar** – cena/watchlist/nový produkt chodia iba keď je tovar skladom;
   výnimkou je 🆕 **spustená predobjednávka** boxu (dá sa objednať; vypneš `"preorders": false`).
