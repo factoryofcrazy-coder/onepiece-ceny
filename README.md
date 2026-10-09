@@ -57,7 +57,7 @@ python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
   požiadavkou (bez obchádzania ochrany). Keď Smarty odmietne (403), použije uloženú stránku
   (nižšie), inak ostanú posledné známe ceny s varovaním.
 - **Smarty.sk – uložená stránka**: otvor v prehliadači
-  `https://www.smarty.sk/Vyhladavanie?query=one+piece+tcg`, stlač **Ctrl+S** a ulož ju (stačí
+  `https://www.smarty.sk/Vyhladavanie/one-piece-karty?query=one%20piece%20tcg`, stlač **Ctrl+S** a ulož ju (stačí
   „iba HTML“) do priečinka `import` alebo do Stiahnutých súborov (názov musí obsahovať „smarty“,
   predvolený názov ho obsahuje). Pri ďalšom `spustit.bat` / Fetch sa Smarty načíta, ceny pôjdu
   na web aj do upozornení. Viac strán výsledkov = ulož každú. Súbory staršie ako 3 dni sa ignorujú,
