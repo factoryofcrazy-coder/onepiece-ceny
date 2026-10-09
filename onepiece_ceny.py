@@ -61,6 +61,17 @@ SHOPS = {
                             "https://www.vesely-drak.sk/produkty/booster-one-piece/"]},
     "ihrysko":    {"label": "iHRYsko", "parser": "jsonld", "currency": "EUR",
                    "urls": ["https://www.ihrysko.sk/one-piece-tcg-c100345"]},
+    "najada":     {"label": "Najáda", "parser": "jsonld", "currency": "EUR",
+                   "urls": [{"url": "https://www.najada.games/karetni-hry/one-piece/booster-boxy", "kind": "Box"},
+                            {"url": "https://www.najada.games/karetni-hry/one-piece/boostery", "kind": "Pack"},
+                            "https://www.najada.games/karetni-hry/one-piece/asijske"]},
+    "tolarie":    {"label": "Tolarie", "parser": "tolarie", "currency": "CZK",
+                   "urls": [{"url": "https://www.tolarie.cz/koupit_produkty/katalog/70-one-piece/57-one-piece-booster-boxy/", "kind": "Box"},
+                            {"url": "https://www.tolarie.cz/koupit_produkty/katalog/70-one-piece/72-one-piece-boostery/", "kind": "Pack"}]},
+    "cernyrytir": {"label": "Černý rytíř", "parser": "cernyrytir", "currency": "CZK",
+                   "urls": ["https://eshop-api.cernyrytir.eu/api/public/merch/list#677"]},
+    "nekonecno":  {"label": "Nekonečno", "parser": "shoptet", "currency": "EUR", "cloud": False, "delay": 3,
+                   "urls": ["https://www.nekonecno.sk/one-piece-karty/"]},
     # Smarty.sk blokuje automatické sťahovanie (Cloudflare ochrana proti botom),
     # preto sa nesťahuje – na stránke je len odkaz na ich vyhľadávanie.
     "smarty":     {"label": "Smarty.sk", "parser": "smarty", "currency": "EUR", "enabled": False,
@@ -120,13 +131,22 @@ def lang_of(name):
         return "CN"
     if re.search(r"kórej|korej|korean|\bkr\b", name, re.I):
         return "KR"
+    if re.search(r"asijsk|ázijsk|azijsk|asian\b", name, re.I):
+        return "ASIA"
     if re.search(r"japon|japan|\bjp\b|\bjap\b", name, re.I):
         return "JP"
     return "EN"
 
 
-def classify(name):
-    return set_code(name), kind_of(name), lang_of(name)
+EXCLUDE_RX = re.compile(r"illustration|premium card|collection set|gift|figúr|figur|sleeve|obal|album|playmat|"
+                        r"podložk|promo|jump|binder|deck box|storage|token|starter|deck set|samolep|sticker", re.I)
+
+
+def classify(name, hint=None):
+    kind = kind_of(name)
+    if hint and kind == "Iné" and not EXCLUDE_RX.search(name):
+        kind = hint                     # napr. "OP-17 The World's Strongest Warriors" v kategórii Booster boxy
+    return set_code(name), kind, lang_of(name)
 
 
 # ---------------------------------------------------------------- sieť ------
@@ -236,11 +256,61 @@ def parse_jsonld(page, base):
             off = p.get("offers") or {}
             if isinstance(off, list):
                 off = off[0] if off else {}
-            out.append({"id": str(p.get("sku") or p.get("name")), "name": p.get("name", ""),
-                        "url": off.get("url") or p.get("url") or base,
-                        "price": num(off.get("price")) if off.get("price") is not None else None,
-                        "currency": off.get("priceCurrency", "EUR"),
+            price, cur = off.get("price"), off.get("priceCurrency")
+            spec = off.get("priceSpecification")
+            if price is None and spec:
+                spec = spec[0] if isinstance(spec, list) else spec
+                price, cur = spec.get("price"), spec.get("priceCurrency", cur)
+            out.append({"id": str(p.get("sku") or p.get("name")), "name": html.unescape(p.get("name", "")),
+                        "url": p.get("url") if off.get("url") in (None, "") else off.get("url"),
+                        "price": num(price) if price is not None else None,
+                        "currency": cur or "EUR",
                         "inStock": "InStock" in str(off.get("availability", ""))})
+    return out
+
+
+def parse_tolarie(page, base):
+    out = []
+    for chunk in page.split('<article class="slcard"')[1:]:
+        chunk = chunk.split("</article>")[0]
+        a = re.search(r'class="slcard__name"[^>]*href="([^"]+)"[^>]*>(.*?)</a>', chunk, re.S) or \
+            re.search(r'href="([^"]+)"[^>]*class="slcard__name"[^>]*>(.*?)</a>', chunk, re.S)
+        pr = re.search(r'class="slcard__price"[^>]*>\s*<strong>(.*?)</strong>', chunk, re.S)
+        st = re.search(r'class="slcard__stock ([^"]*)"', chunk)
+        if not (a and pr):
+            continue
+        ptxt = clean(pr.group(1))
+        out.append({"id": a.group(1), "name": clean(a.group(2)), "url": absolute(base, a.group(1)),
+                    "price": num(ptxt), "currency": "EUR" if "€" in ptxt else "CZK",
+                    "inStock": bool(st and "--ok" in st.group(1))})
+    return out
+
+
+def crawl_cernyrytir(shop):
+    """Černý rytíř má verejné JSON API (rovnaké, aké používa ich web)."""
+    out = []
+    for u in shop["urls"]:
+        url, cat = u.split("#")
+        body = json.dumps({"extendedFilter": {"categoryIds": [int(cat)]},
+                           "pagination": {"page": 1, "rowsPerPage": 200, "rowsNumber": 0, "descending": False}})
+        req = urllib.request.Request(url, data=body.encode("utf-8"), method="POST",
+                                     headers={**HEADERS, "Content-Type": "application/json",
+                                              "Accept": "application/json", "Origin": "https://cernyrytir.cz",
+                                              "Referer": "https://cernyrytir.cz/"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            data = json.loads(r.read().decode("utf-8"))
+        for it in data.get("list", []):
+            title = next((t["textFull"] for t in it.get("productTextList", [])
+                          if t.get("typeTxt") == "TITLE" and t.get("langCode") == "CZ"), None) or \
+                next((t["textFull"] for t in it.get("productTextList", []) if t.get("typeTxt") == "TITLE"), "")
+            price = it.get("priceSell")
+            if not title or price is None:
+                continue
+            out.append({"id": it.get("productUid"), "name": title,
+                        "url": f"https://cernyrytir.cz/merch/detail/{it.get('productUid')}",
+                        "price": float(price), "currency": "CZK",
+                        # e-shop sklad alebo predajňa v Prahe
+                        "inStock": (it.get("availEshopQty") or 0) > 0 or (it.get("availStoreQty") or 0) > 0})
     return out
 
 
@@ -271,7 +341,7 @@ def parse_smarty(page, base):
 
 
 PARSERS = {"shoptet": parse_shoptet, "veselydrak": parse_veselydrak,
-           "jsonld": parse_jsonld, "smarty": parse_smarty}
+           "jsonld": parse_jsonld, "smarty": parse_smarty, "tolarie": parse_tolarie}
 
 
 def page_url(parser, url, n):
@@ -283,9 +353,13 @@ def page_url(parser, url, n):
 
 
 def crawl(shop):
+    if shop["parser"] == "cernyrytir":
+        rows = crawl_cernyrytir(shop)
+        return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
     parse = PARSERS[shop["parser"]]
     seen_ids, seen_urls, rows = set(), set(), []
-    for start in shop["urls"]:
+    for entry in shop["urls"]:
+        start, hint = (entry["url"], entry.get("kind")) if isinstance(entry, dict) else (entry, None)
         for n in range(1, MAX_PAGES + 1):
             url = page_url(shop["parser"], start, n)
             page = None
@@ -307,6 +381,8 @@ def crawl(shop):
                     continue
                 seen_ids.add(i["id"])
                 seen_urls.add(i["url"])
+                if hint:
+                    i["hint"] = hint
                 new.append(i)
             rows += new
             time.sleep(shop.get("delay", DELAY))
@@ -406,7 +482,7 @@ def append_changes(prev_cur, new_items_by_shop, ts):
         for i in items:
             if last.get(i["url"]) == (round(i["eur"], 2), bool(i["inStock"])):
                 continue
-            code, kind, lang = classify(i["name"])
+            code, kind, lang = classify(i["name"], i.get("hint"))
             rows.append({"timestamp": ts, "shop": shop, "name": i["name"], "code": code, "kind": kind,
                          "lang": lang, "price": i["price"], "currency": i["currency"],
                          "priceEUR": i["eur"], "inStock": int(i["inStock"]), "url": i["url"]})
@@ -452,8 +528,11 @@ def snapshot(only=None, force=True):
         for i in items:
             cur = i.get("currency") or shop["currency"]
             eur = i["price"] / fx["CZK"] if cur == "CZK" else i["price"]
-            out.append({"name": i["name"], "url": i["url"], "price": round(i["price"], 2), "currency": cur,
-                        "eur": round(eur, 2), "inStock": bool(i["inStock"])})
+            item = {"name": i["name"], "url": i["url"], "price": round(i["price"], 2), "currency": cur,
+                    "eur": round(eur, 2), "inStock": bool(i["inStock"])}
+            if i.get("hint"):
+                item["hint"] = i["hint"]
+            out.append(item)
         n_stock = sum(1 for i in out if i["inStock"])
         say(f"  ✔ {shop['label']}: {len(out)} produktov ({n_stock} skladom)"
             + ("" if out else " – nič sa nenašlo, obchod možno zmenil web"))
@@ -528,7 +607,7 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
     for key, s in cur["shops"].items():
         label = SHOPS.get(key, {}).get("label", key)
         for i in s.get("items", []):
-            code, kind, lang = classify(i["name"])
+            code, kind, lang = classify(i["name"], i.get("hint"))
             ident = f"{code} {kind} {lang}".upper()
             m = msrp_eur(code, kind, lang, msrp, fx)
             pct = (i["eur"] / m - 1) * 100 if m else None
@@ -573,7 +652,7 @@ def page_data():
     offers = []
     for key, s in cur.get("shops", {}).items():
         for i in s.get("items", []):
-            code, kind, lang = classify(i["name"])
+            code, kind, lang = classify(i["name"], i.get("hint"))
             offers.append([key, i["name"], code, kind, lang, i["eur"], i["inStock"], i["url"],
                            i["price"], i["currency"], msrp_eur(code, kind, lang, msrp, fx),
                            box_packs(code, lang, msrp) if kind == "Box" else None])
@@ -968,7 +1047,7 @@ tr.sel td{background:color-mix(in srgb,var(--acc) 10%,transparent)!important}
 
 <div class="bar">
   <div class="seg" id="kind"><button data-v="Box" class="on">Boxy</button><button data-v="Pack">Packy</button><button data-v="Double Pack">Double packy</button><button data-v="Case">Cases</button><button data-v="">Všetko</button></div>
-  <div class="seg" id="lang"><button data-v="" class="on">Všetky</button><button data-v="EN">EN</button><button data-v="JP">JP</button><button data-v="CN">CN/KR</button></div>
+  <div class="seg" id="lang"><button data-v="" class="on">Všetky</button><button data-v="EN">EN</button><button data-v="JP">JP</button><button data-v="CN">Ázia (CN/KR)</button></div>
   <label class="chk"><input type="checkbox" id="stock"> len skladom</label>
   <label class="chk"><input type="checkbox" id="under"> len pod MSRP</label>
   <select id="sort"><option value="code">Podľa edície</option><option value="pct">Najlepšie vs MSRP</option><option value="price">Najlacnejšie</option></select>
@@ -998,7 +1077,7 @@ const pctOf=(v,m)=>m?(v/m-1)*100:null;
 const pctHtml=p=>p==null?"":`<span class="pct ${p<=0?"lo":p>50?"vhi":"hi"}">${p>0?"+":""}${p.toFixed(0)} %</span>`;
 function bestOf(g){let b=null;for(const s of SK){const o=g.shops[s];if(o&&o[6]&&(!b||o[5]<b[5]))b=o;}return b;}
 function rows(){const q=st.q.toLowerCase();
-  let r=Object.values(groups).filter(g=>(!st.kind||g.kind===st.kind)&&(!st.lang||(st.lang==="CN"?["CN","KR"].includes(g.lang):g.lang===st.lang))
+  let r=Object.values(groups).filter(g=>(!st.kind||g.kind===st.kind)&&(!st.lang||(st.lang==="CN"?["CN","KR","ASIA"].includes(g.lang):g.lang===st.lang))
     &&(!q||(g.code+" "+g.all.map(o=>o[1]).join(" ")).toLowerCase().includes(q))
     &&(!st.stock||bestOf(g))&&(!st.under||(bestOf(g)&&g.msrp&&bestOf(g)[5]<=g.msrp)));
   const bp=g=>{const b=bestOf(g);return b?b[5]:Infinity}, bpc=g=>{const b=bestOf(g);return b&&g.msrp?pctOf(b[5],g.msrp):Infinity};
