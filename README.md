@@ -1,18 +1,19 @@
 # One Piece TCG – ceny v SK obchodoch + MSRP + Discord upozornenia
 
 Sleduje ceny One Piece booster boxov a packov v obchodoch **Card Empire, Pikazard,
-Veselý drak a iHRYsko**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
+Veselý drak, iHRYsko, Najáda, Tolarie, Černý rytíř a Nekonečno**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
 pošle upozornenie na **Discord**. Smarty.sk blokuje automatické sťahovanie
 (Cloudflare), preto je na stránke len odkaz naň.
 
 ## Ako to beží
 
-**Online (GitHub Actions + Pages)** – každé 2 hodiny automaticky stiahne **Veselý drak a iHRYsko**,
+**Online (GitHub Actions + Pages)** – každé 2 hodiny automaticky stiahne **Veselý drak, iHRYsko,
+Najádu, Tolarie a Černého rytíře**,
 pošle upozornenia na Discord a obnoví stránku **https://factoryofcrazy-coder.github.io/onepiece-ceny/**.
 Tlačidlo Fetch na online stránke otvorí GitHub Actions → *Run workflow*.
 
-**Card Empire a Pikazard** (Shoptet) blokujú servery GitHubu, preto sa sťahujú z tvojho PC:
-dvojklik na **`spustit.bat`** → hneď stiahne všetky 4 obchody, pošle upozornenia,
+**Card Empire, Pikazard a Nekonečno** (Shoptet) blokujú servery GitHubu, preto sa sťahujú z tvojho PC:
+dvojklik na **`spustit.bat`** → hneď stiahne všetky obchody, pošle upozornenia,
 **nahrá dáta na GitHub** (online stránka ich ukáže ako „z PC“) a otvorí lokálnu stránku.
 
 Jednorazové nastavenie na PC:
@@ -45,7 +46,7 @@ python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
 - Vlastnú hodnotu pre konkrétny produkt dáš do `override_eur`, napr. `"OP16 Box EN": 150`.
 
 ## Upozornenia (`config.json`)
-- **pod MSRP**: EN box skladom na MSRP alebo pod ním (`"EN": 0`), JP box do +150 % (`"JP": 150`).
+- **blízko MSRP**: EN box skladom najviac 30 % nad MSRP (`"EN": 30`), JP box do +150 % (`"JP": 150`).
 - **watchlist**: vlastné cieľové ceny, napr. `{"product": "OP09 Box JP", "max_eur": 120}`
   – upozorní pod touto cenou aj keď sa produkt vráti na sklad.
 - **nový produkt**: obchod pridal nový box/pack (napr. predobjednávky novej edície).

@@ -601,6 +601,8 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
         watch[" ".join(w.get("product", "").split()).upper()] = float(w.get("max_eur", 0))
     state = load_json(ALERT_STATE, {})
     prev = {i["url"]: i for s in prev_cur.get("shops", {}).values() for i in s.get("items", [])}
+    # obchod, ktorý ešte nemal žiadne dáta (práve pridaný), neposiela "nový produkt" za celý sortiment
+    known_shops = {k for k, s in prev_cur.get("shops", {}).items() if s.get("items")}
     fx = cur["fx"]
     embeds, new_state = [], {}
 
@@ -620,7 +622,7 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                 p = prev.get(i["url"])
                 if a.get("back_in_stock_watchlist", True) and ident in watch and p and not p["inStock"]:
                     reasons.append("znova skladom")
-            if a.get("new_products", True) and not first_run and i["url"] not in prev \
+            if a.get("new_products", True) and not first_run and key in known_shops and i["url"] not in prev \
                     and kind in ("Box", "Pack", "Double Pack", "Case"):
                 reasons.append("nový produkt v obchode")
             if not reasons:
