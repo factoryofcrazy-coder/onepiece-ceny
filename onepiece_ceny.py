@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09d"
+VERSION = "2026-10-09e"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -1479,6 +1479,7 @@ const isHit=g=>g.key in W&&W[g.key]!=null&&g.best&&g.best[5]<=W[g.key];
 
 // ---- sparkline
 function spark(arr,msrp){const v=arr.map((x,i)=>[i,x]).filter(p=>p[1]!=null);if(new Set(v.map(p=>p[1])).size<2)return '<span title="graf sa naplní, keď sa cena začne meniť">bez zmeny</span>';
+  if(v.length<3)return '<span title="graf sa naplní po pár dňoch">málo dát</span>';
   const w=110,h=26,ys=v.map(p=>p[1]).concat(msrp?[msrp]:[]),mn=Math.min(...ys),mx=Math.max(...ys),rg=mx-mn||1;
   const X=i=>(i/(arr.length-1))*w, Y=y=>h-2-((y-mn)/rg)*(h-4);
   const d=v.map((p,j)=>(j?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[1]).toFixed(1)).join("");
@@ -1516,7 +1517,7 @@ function card(g){const b=g.best,tgt=W[g.key],starred=g.key in W,hit=isHit(g);
   <div class="pc-head"><div class="thumb">${img}</div>
     <div class="ttl"><div>${g.code?`<span class="tag">${esc(g.code)}</span>`:""}<span class="tag">${esc(g.lang)}</span><span class="tag">${esc(({Premium:"Premium Collection",Illustration:"Illustration Box",Kolekcia:"Kolekcia / set",Doplnky:"Doplnok"})[g.kind]||g.kind)}</span>${g.pre?'<span class="tag pre">predobjednávka</span>':""}${hit?'<span class="tag hit">🎯 pod cieľom</span>':""}</div>
       <div class="nm" title="${esc(g.name)}">${esc(short(g.name))}</div>
-      <div class="meta">MSRP ${g.msrp?eur(g.msrp):"—"}${g.msrp&&g.packs?` · ${eur(g.msrp/g.packs)}/bal.`:""}</div></div>
+      ${g.msrp?`<div class="meta">MSRP ${eur(g.msrp)}${g.packs?` · ${eur(g.msrp/g.packs)}/bal.`:""}</div>`:""}</div>
     <div class="best">${b?`<div class="pr">${eur(b[5])}</div><div>${pctHtml(g.pct,g.lang)}</div><div class="shop">${esc(SHOPS[b[0]]||b[0])}${g.packs?` · ${eur(b[5]/g.packs)}/bal.`:""}</div>`:'<div class="none">nie je skladom</div>'}</div>
     <button class="star ${starred?"on":""}" data-star="${esc(g.key)}" title="${starred?"Prestať sledovať":"Sledovať"}">${starred?"★":"☆"}</button></div>
   <div class="stats"><span>30 dní min <b>${eur(g.low30)}</b></span>${spark(g.series,g.msrp)}${tr}
