@@ -13,7 +13,10 @@
     "shipping: cena dopravy (Packeta na SK) a hranica dopravy zdarma v EUR; null = neznáme, doplň podľa košíka obchodu. pickup = osobný odber.",
     "watch_drop_pct: produkt z watchlistu skladom zlacnel aspoň o toľko % od posledného fetchu → upozornenie.",
     "kinds: pre ktoré typy chodia upozornenia (MSRP prah, nový produkt, predobjednávka). MSRP majú len Box a Pack.",
-    "back_in_stock_kinds: typy bez MSRP – upozorní, keď sa produkt vráti na sklad."
+    "back_in_stock_kinds: typy bez MSRP – upozorní, keď sa produkt vráti na sklad.",
+    "cross_shop_pct: upozorni, keď je produkt skladom aspoň o toľko % lacnejší ako medián toho istého produktu v ostatných obchodoch (min. 2 ďalšie obchody).",
+    "low30: upozorni, keď produkt skladom klesne pod najnižšiu cenu za posledných 30 dní.",
+    "Obchod, ktorý 2× po sebe zlyhá alebo vráti 0 produktov, pošle na Discord varovanie (a správu, keď zase funguje)."
   ],
   "alerts": {
     "max_pct_vs_msrp": {
@@ -34,7 +37,9 @@
     "back_in_stock_kinds": [
       "Double Pack",
       "Kolekcie"
-    ]
+    ],
+    "cross_shop_pct": 15,
+    "low30": true
   },
   "watchlist": [
     {

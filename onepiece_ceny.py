@@ -19,6 +19,7 @@ import html
 import json
 import os
 import re
+import statistics
 import sys
 import threading
 import time
@@ -27,11 +28,11 @@ import urllib.parse
 import urllib.request
 import webbrowser
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09k"
+VERSION = "2026-10-09l"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -943,6 +944,30 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
     known_shops = {k for k, s in prev_cur.get("shops", {}).items() if s.get("items")}
     fx = cur["fx"]
     embeds, new_state = [], {}
+    cross_pct = float(a.get("cross_shop_pct", 15)) / 100
+    # ceny toho istého produktu (kód + typ + jazyk) v jednotlivých obchodoch – najnižšia ponuka obchodu
+    by_ident = {}
+    for key, s in cur["shops"].items():
+        for i in s.get("items", []):
+            code, kind, lang = classify(i["name"], i.get("hint"))
+            if code and kind not in ("Iné", "Doplnky"):
+                d = by_ident.setdefault(f"{code} {kind} {lang}".upper(), {})
+                d[key] = min(d.get(key, i["eur"]), i["eur"])
+    # najnižšia cena skladom za posledných 30 dní (z histórie, bez práve stiahnutých cien)
+    low30, n_hist = {}, {}
+    if a.get("low30", True):
+        since = (datetime.now(timezone.utc) - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        for r in load_history():
+            if r["timestamp"] < since or r["timestamp"] == cur.get("updated") or r["inStock"] != "1":
+                continue
+            code, kind, lang = classify(r["name"])
+            if kind == "Iné" and r.get("kind"):          # typ z URL kategórie (hint) je uložený v histórii
+                code, kind, lang = r.get("code") or code, r["kind"], r.get("lang") or lang
+            if not code:
+                continue
+            ident = f"{code} {kind} {lang}".upper()
+            low30[ident] = min(low30.get(ident, 1e9), float(r["priceEUR"]))
+            n_hist[ident] = n_hist.get(ident, 0) + 1
 
     for key, s in cur["shops"].items():
         label = SHOPS.get(key, {}).get("label", key)
@@ -957,6 +982,16 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
             if i["inStock"]:
                 if m and kind in kinds and lang in th and pct <= th[lang]:
                     reasons.append(f"{pct:+.0f} % oproti MSRP")
+                if kind in kinds and code:
+                    other = [v for k2, v in by_ident.get(ident, {}).items() if k2 != key]
+                    if len(other) >= 2:
+                        med = statistics.median(other)
+                        if med * 0.4 <= i["eur"] <= med * (1 - cross_pct):
+                            reasons.append(f"💰 o {(1 - i['eur'] / med) * 100:.0f} % lacnejšie než inde "
+                                           f"(bežne {eur(med)}, {len(other)} obch.)")
+                    lo = low30.get(ident)
+                    if lo and n_hist.get(ident, 0) >= 3 and key in known_shops and lo * 0.4 <= i["eur"] < lo * 0.98:
+                        reasons.append(f"📉 najnižšia cena za 30 dní (doteraz {eur(lo)})")
                 if ident in watch and i["eur"] <= watch[ident]:
                     reasons.append(f"pod tvojou cieľovou cenou {eur(watch[ident])}")
                 p = prev.get(i["url"])
@@ -997,7 +1032,7 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
             fields.append({"name": "Cardmarket", "value": f"[porovnať]({cardmarket_url(i['name'])})", "inline": True})
             embeds.append({"title": i["name"][:250], "url": i["url"],
                            "description": "🔥 " + " · ".join(reasons),
-                           "color": 0x2DA44E if (pct is not None and pct <= 0) or "cieľovou" in " ".join(reasons) else 0x1F6FEB,
+                           "color": 0x2DA44E if (pct is not None and pct <= 0) or re.search(r"cieľovou|💰|📉 najnižšia", " ".join(reasons)) else 0x1F6FEB,
                            "fields": fields})
     ALERT_STATE.write_text(json.dumps(new_state, ensure_ascii=False, indent=0), encoding="utf-8")
     return embeds
@@ -1182,10 +1217,26 @@ def run_once(only=None, notify=True, force=True):
     ts, fx, results = snapshot(only, force=force)
     cur = {"updated": ts, "fx": fx, "shops": dict(prev.get("shops", {}))}
     fresh = {}
+    health = []                                             # správy o pokazených / opravených obchodoch
     for key, items, err in results:
+        before = cur["shops"].get(key, {})
+        if items is not None and not items and before.get("items"):
+            items, err = None, "obchod vrátil 0 produktov – možno zmenil web alebo URL kategórie"
+        fails = before.get("fails", 0) + 1 if (items is None or not items) else 0
+        warned = before.get("warned", False)
+        label = SHOPS.get(key, {}).get("label", key)
+        if fails >= 2 and not warned:
+            health.append({"title": f"⚠️ {label}: sťahovanie nefunguje", "color": 0xD29922,
+                           "description": (err or "obchod vrátil 0 produktov – možno zmenil web alebo URL kategórie")[:300]
+                           + f"\n{fails}× po sebe. Kým sa to neopraví, z tohto obchodu nechodia upozornenia."})
+            warned = True
+        elif fails == 0 and warned:
+            health.append({"title": f"✅ {label}: opäť funguje", "color": 0x2DA44E,
+                           "description": f"{len(items)} produktov"})
+            warned = False
         if items is None:                                   # obchod zlyhal – nechaj staré dáta
             old = cur["shops"].get(key, {"items": []})
-            cur["shops"][key] = {**old, "ok": False, "error": err}
+            cur["shops"][key] = {**old, "ok": False, "error": err, "fails": fails, "warned": warned}
         else:
             # obrázok sa nesmie stratiť, ak ho tento beh (alebo staršia verzia programu) nepriniesol
             old_img = {i["url"]: i.get("img") for i in prev.get("shops", {}).get(key, {}).get("items", []) if i.get("img")}
@@ -1193,6 +1244,8 @@ def run_once(only=None, notify=True, force=True):
                 if not i.get("img") and old_img.get(i["url"]):
                     i["img"] = old_img[i["url"]]
             cur["shops"][key] = {"ts": ts, "ok": True, "items": items}
+            if fails or warned:
+                cur["shops"][key].update(fails=fails, warned=warned)
             fresh[key] = items
     # vypnuté obchody (napr. Smarty len ako odkaz) bez dát z obchodu nezobrazuj – inak by tam visela stará chyba
     for key in [k for k, v in cur["shops"].items()
@@ -1209,6 +1262,9 @@ def run_once(only=None, notify=True, force=True):
             say(f"  🔔 odoslaných {len(embeds)} upozornení na Discord")
         elif embeds:
             say(f"  🔔 {len(embeds)} upozornení (Discord webhook nie je nastavený)")
+        if health and webhook_url():
+            discord_send(health)
+            say(f"  🔧 odoslané {len(health)} hlásení o stave obchodov")
         try:
             maybe_send_digest(cur, load_json(MSRP_FILE, {}), load_json(CONFIG_FILE, {}))
         except Exception as e:  # noqa: BLE001

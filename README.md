@@ -48,6 +48,11 @@ python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
 ## Novinky
 - **Upozornenia len na dostupný tovar** – cena/watchlist/nový produkt chodia iba keď je tovar skladom;
   výnimkou je 🆕 **spustená predobjednávka** boxu (dá sa objednať; vypneš `"preorders": false`).
+- **Lacnejšie než inde** (💰): produkt skladom je aspoň o 15 % lacnejší ako bežná cena (medián) v ostatných
+  obchodoch – funguje aj pre double packy a kolekcie bez MSRP (`cross_shop_pct`).
+- **Najnižšia cena za 30 dní** (📉): z histórie cien (`low30`).
+- **Stav obchodov**: keď obchod 2× po sebe zlyhá alebo vráti 0 produktov, príde varovanie na Discord
+  (posledné ceny ostanú), a keď zase funguje, príde potvrdenie.
 - **Denný súhrn** na Discord raz denne po 8:00 – top EN a JP boxy skladom vs MSRP + zmeny za 24 h
   (`"digest"` v `config.json`).
 - **Doprava** – `config.json → shipping`: cena Packety na SK a hranica dopravy zdarma; tabuľka ukáže
