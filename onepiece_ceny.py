@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09e"
+VERSION = "2026-10-09i"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -92,6 +92,19 @@ SHOPS = {
                             {"url": "https://www.hrananetu.cz/one-piece-boostery", "kind": "Pack"},
                             "https://www.hrananetu.cz/one-piece-bundly",
                             "https://www.hrananetu.cz/one-piece-balicky"]},
+    "poring":     {"label": "Poring Cards", "parser": "shoptet", "currency": "EUR", "cloud": False, "delay": 3,
+                   "urls": ["https://www.poringcards.eu/one-piece/"]},
+    "cardstore":  {"label": "Cardstore", "parser": "shoptet", "currency": "CZK", "cloud": False, "delay": 3,
+                   "urls": ["https://www.cardstore.cz/one-piece-tcg/"]},
+    # Xzone: robots.txt zakazuje parametre ?s=/sort=/term= – sťahuje sa len čistá URL kategórie (Crawl-Delay 3)
+    "xzone":      {"label": "Xzone", "parser": "xzone", "currency": "CZK", "delay": 3, "max_pages": 1,
+                   "urls": ["https://www.xzone.cz/sberatelske-hry-one-piece-tcg"]},
+    # Hry do ruky (nopCommerce): zoznam nemá dostupnosť, preto sa načíta aj detail každého produktu
+    "hrydoruky":  {"label": "Hry do ruky", "parser": "hrydoruky", "currency": "CZK", "delay": 2,
+                   "urls": ["https://hrydoruky.cz/one-piece"]},
+    # PGS.sk je na rovnakej platforme ako Smarty (Cloudflare) – len odkaz
+    "pgs":        {"label": "PGS.sk", "parser": "shoptet", "currency": "EUR", "enabled": False,
+                   "link": "https://www.pgs.sk/", "urls": []},
     # Smarty.sk blokuje automatické sťahovanie webu (Cloudflare). Legálna cesta je ich affiliate
     # XML feed (eHUB – „XML feed na vyžiadanie u affiliate managera“). Keď je URL feedu nastavená
     # (SMARTY_FEED_URL / smarty_feed.txt), obchod sa zapne automaticky; inak je na stránke len odkaz.
@@ -115,7 +128,7 @@ SET_NAMES = {
     "heroines edition": "EB03", "egghead crisis": "EB04",
     "the best vol. 2": "PRB02", "the best vol.2": "PRB02", "the best 2": "PRB02", "the best": "PRB01",
 }
-PREORDER_RX = re.compile(r"(?:p[řr]edobjedn|pre-?order|presale|predpredaj)", re.I)
+PREORDER_RX = re.compile(r"(?:p[řr]edobjedn|pre-?order|presale|predpredaj|p[řr]edprodej)", re.I)
 CODE_RX = re.compile(r"\b(OP|EB|PRB|ST|IB|SD)\s?-?\s?(\d{1,2})\b", re.I)
 
 
@@ -429,9 +442,69 @@ def parse_smarty(page, base):
     return out
 
 
+def parse_xzone(page, base):
+    out = []
+    for chunk in page.split('class="product-item ')[1:]:
+        chunk = chunk.split('class="w-xl-20')[0]
+        a = re.search(r'class="product-item-name[^"]*"[^>]*>\s*<a[^>]*href="([^"]+)"[^>]*>(.*?)</a>', chunk, re.S)
+        pr = re.search(r'<span class="price">(.*?)</span>', chunk, re.S)
+        st = re.search(r'class="expedice-date[^"]*"[^>]*>(.*?)</div>', chunk, re.S)
+        if not (a and pr):
+            continue
+        ptxt, sttxt = clean(pr.group(1)), clean(st.group(1)) if st else ""
+        pre = bool(PREORDER_RX.search(sttxt))
+        out.append({"id": a.group(1), "name": clean(a.group(2)), "url": absolute(base, a.group(1)),
+                    "price": num(ptxt), "currency": "EUR" if "€" in ptxt else "CZK",
+                    "img": first_img(chunk, base), "availText": sttxt, "preorder": pre,
+                    "inStock": bool(re.search(r"skladem", sttxt, re.I)) and not pre})
+    return out
+
+
+def parse_hrydoruky(page, base):
+    """Zoznam produktov nopCommerce (bez dostupnosti – dopĺňa sa z detailu v crawl_hrydoruky)."""
+    out = []
+    for chunk in page.split('class="product-item"')[1:]:
+        chunk = chunk.split('class="item-box"')[0]
+        a = re.search(r'class="product-title"[^>]*>\s*<a href="([^"]+)"[^>]*>(.*?)</a>', chunk, re.S)
+        pr = re.search(r'class="price actual-price"[^>]*>(.*?)</span>', chunk, re.S)
+        if not (a and pr):
+            continue
+        img = re.search(r'data-lazyloadsrc="([^"]+)"', chunk)
+        ptxt = clean(pr.group(1))
+        out.append({"id": a.group(1), "name": clean(a.group(2)), "url": absolute(base, a.group(1)),
+                    "price": num(ptxt), "currency": "EUR" if "€" in ptxt else "CZK",
+                    "img": absolute(base, img.group(1)) if img else first_img(chunk, base),
+                    "inStock": False})
+    return out
+
+
+def hrydoruky_stock(page):
+    st = re.search(r'class="stock\s*([\w-]*)"[^>]*>(.*?)</div>', page, re.S)
+    txt = clean(st.group(2)) if st else ""
+    ld = re.search(r'"availability"\s*:\s*"[^"]*/(\w+)"', page)
+    pre = bool(PREORDER_RX.search(txt)) or bool(ld and ld.group(1) == "PreOrder")
+    ok = (st and st.group(1) == "in-stock") or bool(re.search(r"skladem", txt, re.I) and not re.search(r"není|vyprod", txt, re.I))
+    if not st and ld:
+        ok = ld.group(1) == "InStock"
+    return bool(ok) and not pre, pre, txt
+
+
+def crawl_hrydoruky(shop):
+    rows = []
+    for start in shop["urls"]:
+        rows += [i for i in parse_hrydoruky(fetch(start), start) if re.search(r"one\s*piece", i["name"], re.I)]
+    for i in rows:
+        time.sleep(shop.get("delay", DELAY))
+        try:
+            i["inStock"], i["preorder"], i["availText"] = hrydoruky_stock(fetch(i["url"]))
+        except Exception as e:  # noqa: BLE001  (detail nedostupný – produkt ostane „nie je skladom“)
+            say(f"    ! Hry do ruky: detail {i['url']} – {e}")
+    return [r for r in rows if r["price"]]
+
+
 PARSERS = {"shoptet": parse_shoptet, "veselydrak": parse_veselydrak,
            "jsonld": parse_jsonld, "smarty": parse_smarty, "tolarie": parse_tolarie,
-           "upgates": parse_upgates}
+           "upgates": parse_upgates, "xzone": parse_xzone}
 
 
 def page_url(parser, url, n):
@@ -477,6 +550,8 @@ def crawl_xmlfeed(shop):
 def crawl(shop):
     if shop["parser"] == "xmlfeed":
         return [r for r in crawl_xmlfeed(shop) if r["price"]]
+    if shop["parser"] == "hrydoruky":
+        return crawl_hrydoruky(shop)
     if shop["parser"] == "cernyrytir":
         rows = crawl_cernyrytir(shop)
         return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
@@ -484,7 +559,7 @@ def crawl(shop):
     seen_ids, seen_urls, rows = set(), set(), []
     for entry in shop["urls"]:
         start, hint = (entry["url"], entry.get("kind")) if isinstance(entry, dict) else (entry, None)
-        for n in range(1, MAX_PAGES + 1):
+        for n in range(1, shop.get("max_pages", MAX_PAGES) + 1):
             url = page_url(shop["parser"], start, n)
             page = None
             for attempt in range(2):
