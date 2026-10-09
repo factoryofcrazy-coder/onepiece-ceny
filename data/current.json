@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T11:23:57Z",
+ "updated": "2026-10-09T11:43:46Z",
  "fx": {
   "CZK": 24.403,
   "USD": 1.1186,
@@ -587,7 +587,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-09T11:22:27Z",
+   "ts": "2026-10-09T11:43:46Z",
    "ok": true,
    "items": [
     {
@@ -1313,7 +1313,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-09T11:22:27Z",
+   "ts": "2026-10-09T11:43:46Z",
    "ok": true,
    "items": [
     {
@@ -1671,7 +1671,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-09T11:22:27Z",
+   "ts": "2026-10-09T11:43:46Z",
    "ok": true,
    "items": [
     {
@@ -1892,7 +1892,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-09T11:22:27Z",
+   "ts": "2026-10-09T11:43:46Z",
    "ok": true,
    "items": [
     {
@@ -1952,7 +1952,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-09T11:22:27Z",
+   "ts": "2026-10-09T11:43:46Z",
    "ok": true,
    "items": [
     {
@@ -2545,6 +2545,48 @@
      "currency": "EUR",
      "eur": 0.99,
      "inStock": false
+    }
+   ]
+  },
+  "hrananetu": {
+   "ts": "2026-10-09T11:43:46Z",
+   "ok": true,
+   "items": [
+    {
+     "name": "One Piece - OP-17 The World's Strongest Warriors Booster Box (24 boosterů)",
+     "url": "https://www.hrananetu.cz/p/one-piece-op-17-the-world-s-strongest-warriors-booster-box-24-boosteru",
+     "price": 8299.0,
+     "currency": "CZK",
+     "eur": 340.08,
+     "inStock": false,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece - The Time of Battle Booster Box [OP-16]",
+     "url": "https://www.hrananetu.cz/p/one-piece-the-time-of-battle-booster-box-op-16",
+     "price": 4299.0,
+     "currency": "CZK",
+     "eur": 176.17,
+     "inStock": true,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece - Adventure on Kami's Island Booster Box [OP-15]",
+     "url": "https://www.hrananetu.cz/p/one-piece-adventure-on-kami-s-island-booster-box-op-15",
+     "price": 4999.0,
+     "currency": "CZK",
+     "eur": 204.85,
+     "inStock": true,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece - OP-17 The World's Strongest Warriors Booster (12 karet)",
+     "url": "https://www.hrananetu.cz/p/one-piece-op-17-the-world-s-strongest-warriors-booster-12-karet",
+     "price": 169.0,
+     "currency": "CZK",
+     "eur": 6.93,
+     "inStock": false,
+     "hint": "Pack"
     }
    ]
   }
