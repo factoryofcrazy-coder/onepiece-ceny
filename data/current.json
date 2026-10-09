@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T11:43:46Z",
+ "updated": "2026-10-09T12:15:58Z",
  "fx": {
   "CZK": 24.403,
   "USD": 1.1186,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-10-09T11:23:57Z",
+   "ts": "2026-10-09T12:15:58Z",
    "ok": true,
    "items": [
     {
@@ -429,7 +429,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-10-09T11:23:57Z",
+   "ts": "2026-10-09T12:15:58Z",
    "ok": true,
    "items": [
     {
@@ -587,7 +587,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-09T11:43:46Z",
+   "ts": "2026-10-09T12:15:58Z",
    "ok": true,
    "items": [
     {
@@ -1313,7 +1313,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-09T11:43:46Z",
+   "ts": "2026-10-09T12:15:58Z",
    "ok": true,
    "items": [
     {
@@ -1671,7 +1671,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-09T11:43:46Z",
+   "ts": "2026-10-09T12:15:58Z",
    "ok": true,
    "items": [
     {
@@ -1892,7 +1892,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-09T11:43:46Z",
+   "ts": "2026-10-09T12:15:58Z",
    "ok": true,
    "items": [
     {
@@ -1952,7 +1952,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-09T11:43:46Z",
+   "ts": "2026-10-09T12:15:58Z",
    "ok": true,
    "items": [
     {
@@ -2071,7 +2071,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-10-09T11:23:57Z",
+   "ts": "2026-10-09T12:15:58Z",
    "ok": true,
    "items": [
     {
@@ -2549,7 +2549,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-09T11:43:46Z",
+   "ts": "2026-10-09T12:15:58Z",
    "ok": true,
    "items": [
     {
@@ -2587,6 +2587,28 @@
      "eur": 6.93,
      "inStock": false,
      "hint": "Pack"
+    }
+   ]
+  },
+  "pokemon4u": {
+   "ts": "2026-10-09T12:15:58Z",
+   "ok": true,
+   "items": [
+    {
+     "name": "One Piece TCG: OP-16 The Time of Battle Booster",
+     "url": "https://www.pokemon4u.cz/one-piece-tcg--op-16-the-time-of-battle-booster/",
+     "price": 179.0,
+     "currency": "CZK",
+     "eur": 7.34,
+     "inStock": true
+    },
+    {
+     "name": "One Piece TCG: OP-16 The Time of Battle Booster Box",
+     "url": "https://www.pokemon4u.cz/one-piece-tcg--op-16-the-time-of-battle-booster-box/",
+     "price": 4299.0,
+     "currency": "CZK",
+     "eur": 176.17,
+     "inStock": true
     }
    ]
   }
