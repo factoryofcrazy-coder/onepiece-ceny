@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T10:37:45Z",
+ "updated": "2026-10-09T10:42:36Z",
  "fx": {
   "CZK": 24.403,
   "USD": 1.1186,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-10-08T17:14:18Z",
+   "ts": "2026-10-09T10:42:36Z",
    "ok": true,
    "items": [
     {
@@ -43,19 +43,19 @@
      "inStock": true
     },
     {
-     "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Box (Japonsky)",
-     "url": "https://www.cardempire.sk/one-piece-tcg-op-17-the-world--s-strongest-warriors-booster-box--japonsky-/",
-     "price": 180.0,
-     "currency": "EUR",
-     "eur": 180.0,
-     "inStock": true
-    },
-    {
      "name": "One Piece TCG - Emperors In The New World - Booster Pack - Japonský",
      "url": "https://www.cardempire.sk/one-piece-tcg-emperors-in-the-new-world-booster-pack-japonsky/",
      "price": 7.0,
      "currency": "EUR",
      "eur": 7.0,
+     "inStock": true
+    },
+    {
+     "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Box (Japonsky)",
+     "url": "https://www.cardempire.sk/one-piece-tcg-op-17-the-world--s-strongest-warriors-booster-box--japonsky-/",
+     "price": 180.0,
+     "currency": "EUR",
+     "eur": 180.0,
      "inStock": true
     },
     {
@@ -80,14 +80,6 @@
      "price": 99.0,
      "currency": "EUR",
      "eur": 99.0,
-     "inStock": true
-    },
-    {
-     "name": "One Piece TCG - Illustration Box Vol.7",
-     "url": "https://www.cardempire.sk/one-piece-card-game--illustration-box-vol-7--ib-07-/",
-     "price": 45.0,
-     "currency": "EUR",
-     "eur": 45.0,
      "inStock": true
     },
     {
@@ -213,6 +205,14 @@
     {
      "name": "One Piece TCG - Illustration Box Vol.8",
      "url": "https://www.cardempire.sk/one-piece-tcg-illustration-box-vol-8/",
+     "price": 45.0,
+     "currency": "EUR",
+     "eur": 45.0,
+     "inStock": true
+    },
+    {
+     "name": "One Piece TCG - Illustration Box Vol.7",
+     "url": "https://www.cardempire.sk/one-piece-card-game--illustration-box-vol-7--ib-07-/",
      "price": 45.0,
      "currency": "EUR",
      "eur": 45.0,
@@ -429,7 +429,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-10-08T17:14:18Z",
+   "ts": "2026-10-09T10:42:36Z",
    "ok": true,
    "items": [
     {
