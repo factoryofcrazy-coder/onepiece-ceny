@@ -18,7 +18,8 @@
     "low30: upozorni, keď produkt skladom klesne pod najnižšiu cenu za posledných 30 dní.",
     "Obchod, ktorý 2× po sebe zlyhá alebo vráti 0 produktov, pošle na Discord varovanie (a správu, keď zase funguje).",
     "mention_top: pri top ponukách (pod MSRP, pod cieľovou cenou, o top_cross_pct % lacnejšie než inde) pridá @here – zazvoní notifikácia.",
-    "shipping: cena je doprava na SK v EUR; cost null = cenu ukáže až košík obchodu (doplň ručne), free_from = doprava zdarma od (EUR)."
+    "shipping: cena je doprava na SK v EUR; cost null = cenu ukáže až košík obchodu (doplň ručne), free_from = doprava zdarma od (EUR).",
+    "default_shipping: odhad dopravy (EUR) pre obchody, kde cena dopravy nie je známa – používa sa pri porovnaní s inými obchodmi."
   ],
   "alerts": {
     "max_pct_vs_msrp": {
@@ -43,7 +44,8 @@
     "cross_shop_pct": 15,
     "low30": true,
     "mention_top": true,
-    "top_cross_pct": 20
+    "top_cross_pct": 20,
+    "default_shipping": 3.5
   },
   "watchlist": [
     {

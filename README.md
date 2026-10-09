@@ -49,7 +49,7 @@ python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
 - **Upozornenia len na dostupný tovar** – cena/watchlist/nový produkt chodia iba keď je tovar skladom;
   výnimkou je 🆕 **spustená predobjednávka** boxu (dá sa objednať; vypneš `"preorders": false`).
 - **Lacnejšie než inde** (💰): produkt skladom je aspoň o 15 % lacnejší ako bežná cena (medián) v ostatných
-  obchodoch – funguje aj pre double packy a kolekcie bez MSRP (`cross_shop_pct`).
+  obchodoch, porovnáva sa cena vrátane dopravy na SK (neznáma doprava = odhad 3,50 €) – funguje aj pre double packy a kolekcie bez MSRP (`cross_shop_pct`, `default_shipping`).
 - **Najnižšia cena za 30 dní** (📉): z histórie cien (`low30`).
 - **@here pri top ponukách** (⭐): pod MSRP, pod cieľovou cenou z watchlistu alebo aspoň o 20 % lacnejšie
   než inde → správa so zmienkou @here (zazvoní na mobile). Ostatné upozornenia chodia potichu (`mention_top`).

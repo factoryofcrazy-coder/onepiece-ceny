@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09m"
+VERSION = "2026-10-09n"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -824,6 +824,14 @@ def shipping_cost(key, price_eur):
     return float(sh["cost"])
 
 
+def with_shipping(key, price_eur, alerts_cfg=None):
+    """Cena vrátane dopravy na SK; neznáma doprava = odhad (alerts.default_shipping, predvolene 3,50 €)."""
+    c = shipping_cost(key, price_eur)
+    if c is None:
+        c = float((alerts_cfg or {}).get("default_shipping", 3.5))
+    return price_eur + c
+
+
 def shipping_note(key, price_eur):
     sh = shipping_cfg(key)
     parts = []
@@ -962,7 +970,7 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
             code, kind, lang = classify(i["name"], i.get("hint"))
             if code and kind not in ("Iné", "Doplnky"):
                 d = by_ident.setdefault(f"{code} {kind} {lang}".upper(), {})
-                d[key] = min(d.get(key, i["eur"]), i["eur"])
+                d[key] = min(d.get(key, 1e9), with_shipping(key, i["eur"], a))
     # najnižšia cena skladom za posledných 30 dní (z histórie, bez práve stiahnutých cien)
     low30, n_hist = {}, {}
     if a.get("low30", True):
@@ -995,10 +1003,11 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                 if kind in kinds and code:
                     other = [v for k2, v in by_ident.get(ident, {}).items() if k2 != key]
                     if len(other) >= 2:
-                        med = statistics.median(other)
-                        if med * 0.4 <= i["eur"] <= med * (1 - cross_pct):
-                            reasons.append(f"💰 o {(1 - i['eur'] / med) * 100:.0f} % lacnejšie než inde "
-                                           f"(bežne {eur(med)}, {len(other)} obch.)")
+                        med = statistics.median(other)           # ceny vrátane dopravy na SK
+                        mine = with_shipping(key, i["eur"], a)
+                        if med * 0.4 <= mine <= med * (1 - cross_pct):
+                            reasons.append(f"💰 o {(1 - mine / med) * 100:.0f} % lacnejšie než inde aj s dopravou "
+                                           f"({eur(mine)} vs bežne {eur(med)}, {len(other)} obch.)")
                     lo = low30.get(ident)
                     if lo and n_hist.get(ident, 0) >= 3 and key in known_shops and lo * 0.4 <= i["eur"] < lo * 0.98:
                         reasons.append(f"📉 najnižšia cena za 30 dní (doteraz {eur(lo)})")
