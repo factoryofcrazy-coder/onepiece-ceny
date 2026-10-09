@@ -53,9 +53,6 @@ python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
   „s dopr.“ cenu. Overené: Veselý drak 2,36 € (zdarma od 80 €), Card Empire 3,50 € (zdarma od 200 €),
   Nekonečno osobný odber v Bratislave (Eurovea, Bory Mall). Ostatné doplň podľa košíka obchodu.
 - **Cardmarket** – pri každom produkte odkaz na vyhľadávanie na Cardmarkete (reálna trhová cena).
-- **Smarty.sk z PC**: pri každom `spustit.bat` / Fetch skúsi skript Smarty stiahnuť bežnou
-  požiadavkou (bez obchádzania ochrany). Keď Smarty odmietne (403), použije uloženú stránku
-  (nižšie), inak ostanú posledné známe ceny s varovaním.
 - **Smarty.sk – uložená stránka**: otvor v prehliadači
   `https://www.smarty.sk/Vyhladavanie?query=one+piece+tcg`, stlač **Ctrl+S** a ulož ju (stačí
   „iba HTML“) do priečinka `import` alebo do Stiahnutých súborov (názov musí obsahovať „smarty“,
