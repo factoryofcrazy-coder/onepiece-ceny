@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09b"
+VERSION = "2026-10-09c"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -1071,6 +1071,11 @@ def run_once(only=None, notify=True, force=True):
             old = cur["shops"].get(key, {"items": []})
             cur["shops"][key] = {**old, "ok": False, "error": err}
         else:
+            # obrázok sa nesmie stratiť, ak ho tento beh (alebo staršia verzia programu) nepriniesol
+            old_img = {i["url"]: i.get("img") for i in prev.get("shops", {}).get(key, {}).get("items", []) if i.get("img")}
+            for i in items:
+                if not i.get("img") and old_img.get(i["url"]):
+                    i["img"] = old_img[i["url"]]
             cur["shops"][key] = {"ts": ts, "ok": True, "items": items}
             fresh[key] = items
     DATA.mkdir(exist_ok=True)
