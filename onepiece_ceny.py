@@ -100,8 +100,8 @@ SHOPS = {
     # Bez feedu sa z lokálneho PC skúsi normálne načítanie aktuálnej kategórie a parser/HTML import;
     # Cloudflare sa neobchádza a GitHub Actions pri chýbajúcom feede Smarty preskočí.
     "smarty":     {"label": "Smarty.sk", "parser": "xmlfeed", "currency": "EUR", "enabled": False, "cloud": False,
-                   "link": "https://www.smarty.sk/Vyhladavanie/one-piece-karty?query=one%20piece%20tcg",
-                   "urls": ["https://www.smarty.sk/Vyhladavanie/one-piece-karty?query=one%20piece%20tcg"]},
+                   "link": "https://www.smarty.sk/zberatelske-karty-4c11213/one-piece-karty?s=l",
+                   "urls": ["https://www.smarty.sk/zberatelske-karty-4c11213/one-piece-karty?s=l"]},
 }
 
 # ----------------------------------------------------- rozpoznanie produktu ---
