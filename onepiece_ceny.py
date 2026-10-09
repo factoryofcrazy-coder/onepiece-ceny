@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09e"
+VERSION = "2026-10-09f"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -45,7 +45,10 @@ IN_CLOUD = os.environ.get("GITHUB_ACTIONS") == "true"
 
 def _enable_feeds():
     if feed_url():
-        SHOPS["smarty"]["enabled"] = True
+        SHOPS["smarty"].update(enabled=True, parser="xmlfeed", cloud=True)
+    elif not IN_CLOUD and saved_pages("smarty"):
+        # Smarty: stránku si uložíš v prehliadači (Ctrl+S), skript ju načíta – bez obchádzania ochrany
+        SHOPS["smarty"].update(enabled=True, parser="saved", cloud=False)
 HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -95,7 +98,7 @@ SHOPS = {
     # Smarty.sk blokuje automatické sťahovanie webu (Cloudflare). Legálna cesta je ich affiliate
     # XML feed (eHUB – „XML feed na vyžiadanie u affiliate managera“). Keď je URL feedu nastavená
     # (SMARTY_FEED_URL / smarty_feed.txt), obchod sa zapne automaticky; inak je na stránke len odkaz.
-    "smarty":     {"label": "Smarty.sk", "parser": "xmlfeed", "currency": "EUR", "enabled": False,
+    "smarty":     {"label": "Smarty.sk", "parser": "xmlfeed", "currency": "EUR", "enabled": False, "cloud": False,
                    "link": "https://www.smarty.sk/Vyhladavanie?query=one+piece+tcg",
                    "urls": ["https://www.smarty.sk/Vyhladavanie?query=one+piece+tcg"]},
 }
@@ -422,10 +425,16 @@ def parse_smarty(page, base):
         if not name or price is None:
             continue
         avail = info.get("available", "")
+        img = re.search(r'<img[^>]+(?:data-src|src)="([^"]+\.(?:jpe?g|png|webp)[^"]*)"', chunk, re.I)
+        ptxt = pr.group(1) if pr else ""
+        eur = "€" in ptxt or ("Kč" not in ptxt and "smarty.cz" not in base)
         out.append({"id": info.get("id") or (url.group(1) if url else name), "name": name,
                     "url": absolute(base, url.group(1)) if url else base,
-                    "price": float(price), "currency": "CZK",
-                    "inStock": bool(re.search(r"skladem", avail, re.I)), "availText": avail})
+                    "price": float(price), "currency": "EUR" if eur else "CZK",
+                    "img": absolute(base, img.group(1)) if img and img.group(1).startswith(("http", "/")) else None,
+                    "inStock": bool(re.search(r"skladom|skladem", avail, re.I)),
+                    "preorder": bool(re.search(r"predobj|předobj|pripravujeme|připravujeme", avail, re.I)),
+                    "availText": avail})
     return out
 
 
@@ -474,7 +483,60 @@ def crawl_xmlfeed(shop):
     return out
 
 
+IMPORT_DIR = HERE / "import"
+SAVED_MAX_AGE_H = 72
+
+
+def saved_pages(key):
+    """Stránky obchodu uložené z prehliadača (Ctrl+S) v priečinku import/ alebo v Stiahnutých súboroch."""
+    dirs = [IMPORT_DIR, Path.home() / "Downloads", Path.home() / "Stiahnuté"]
+    now, out = time.time(), []
+    for d in dirs:
+        try:
+            files = list(d.glob("*.htm*"))
+        except OSError:
+            continue
+        for f in files:
+            try:
+                if (d != IMPORT_DIR and key not in f.name.lower()) or now - f.stat().st_mtime > SAVED_MAX_AGE_H * 3600:
+                    continue
+            except OSError:
+                continue
+            out.append(f)
+    return sorted(out, key=lambda f: f.stat().st_mtime)
+
+
+def saved_is_new(key):
+    s = load_json(CURRENT, {}).get("shops", {}).get(key) if CURRENT.exists() else None
+    files = saved_pages(key)
+    if not files:
+        return False
+    if not s or not s.get("ts"):
+        return True
+    last = datetime.strptime(s["ts"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).timestamp()
+    return files[-1].stat().st_mtime > last
+
+
+def crawl_saved(shop, key="smarty"):
+    rows, seen = [], set()
+    for f in saved_pages(key):
+        page = f.read_text(encoding="utf-8", errors="replace")
+        base = shop["link"]
+        m = re.search(r'<link[^>]+rel="canonical"[^>]+href="([^"]+)"', page) or \
+            re.search(r'saved from url=\(\d+\)(\S+)', page)
+        if m:
+            base = m.group(1)
+        for i in parse_smarty(page, base):
+            if i["url"] not in seen:
+                seen.add(i["url"])
+                rows.append(i)
+        say(f"    · {f.name}: {len(rows)} produktov spolu")
+    return rows
+
+
 def crawl(shop):
+    if shop["parser"] == "saved":
+        return [r for r in crawl_saved(shop) if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
     if shop["parser"] == "xmlfeed":
         return [r for r in crawl_xmlfeed(shop) if r["price"]]
     if shop["parser"] == "cernyrytir":
@@ -638,12 +700,15 @@ def recently_fetched(key, minutes=MIN_REFETCH_MIN):
 
 
 def snapshot(only=None, force=True):
+    _enable_feeds()                         # stránka Smarty mohla byť uložená, kým beží server
     fx = fx_rates()
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     keys = [k for k in SHOPS if SHOPS[k].get("enabled", True) and (not only or k in only)
             and not (IN_CLOUD and SHOPS[k].get("cloud") is False)]
+    # uložené stránky (Smarty) spracuj len keď pribudla novšia – inak ostanú posledné dáta
+    keys = [k for k in keys if SHOPS[k]["parser"] != "saved" or saved_is_new(k)]
     if not force:
-        skip = [k for k in keys if recently_fetched(k)]
+        skip = [k for k in keys if recently_fetched(k) and SHOPS[k]["parser"] != "saved"]
         if skip:
             say("  ⏭ preskakujem (stiahnuté pred < %d min): %s" % (MIN_REFETCH_MIN, ", ".join(SHOPS[k]["label"] for k in skip)))
         keys = [k for k in keys if k not in skip]
