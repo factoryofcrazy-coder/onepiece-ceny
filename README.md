@@ -56,9 +56,6 @@ python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
 - **Smarty.sk z PC**: pri každom `spustit.bat` / Fetch skúsi skript Smarty stiahnuť bežnou
   požiadavkou (bez obchádzania ochrany). Keď Smarty odmietne (403), použije uloženú stránku
   (nižšie), inak ostanú posledné známe ceny s varovaním.
-- **Smarty.sk – `smarty_import.bat`** (najpohodlnejšie): otvorí okno prehliadača so Smarty, prípadné
-  overenie dokončíš sám, stlačíš Enter a skript uloží všetky strany do `import/` a hneď načíta ceny.
-  Prvé spustenie nainštaluje Playwright (~150 MB). Nič neobchádza – overenie vždy robíš ty.
 - **Smarty.sk – uložená stránka**: otvor v prehliadači
   `https://www.smarty.sk/Vyhladavanie/one-piece-karty?query=one%20piece%20tcg`, stlač **Ctrl+S** a ulož ju (stačí
   „iba HTML“) do priečinka `import` alebo do Stiahnutých súborov (názov musí obsahovať „smarty“,
