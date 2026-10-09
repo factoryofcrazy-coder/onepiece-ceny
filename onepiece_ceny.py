@@ -2,7 +2,7 @@
 """
 One Piece TCG – porovnanie cien booster boxov a packov v SK/CZ e-shopoch + MSRP + Discord upozornenia.
 
-Smarty.sk sa skúsi načítať bežnou požiadavkou; pri blokovaní je podporený uložený HTML export alebo oficiálny affiliate XML feed.
+Obchody: Card Empire, Pikazard, Veselý drak, iHRYsko (Smarty.sk len ako odkaz – blokuje boty).
 
 Použitie:
     python onepiece_ceny.py               # stiahne ceny, nahrá na GitHub, otvorí stránku (http://localhost:8765)
@@ -28,11 +28,10 @@ import urllib.request
 import webbrowser
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
-from html.parser import HTMLParser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09h"
+VERSION = "2026-10-09g"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -96,12 +95,12 @@ SHOPS = {
                             {"url": "https://www.hrananetu.cz/one-piece-boostery", "kind": "Pack"},
                             "https://www.hrananetu.cz/one-piece-bundly",
                             "https://www.hrananetu.cz/one-piece-balicky"]},
-    # Preferovaný stabilný zdroj je affiliate XML feed (eHUB; na vyžiadanie u affiliate managera).
-    # Bez feedu sa z lokálneho PC skúsi normálne načítanie aktuálnej kategórie a parser/HTML import;
-    # Cloudflare sa neobchádza a GitHub Actions pri chýbajúcom feede Smarty preskočí.
+    # Smarty.sk blokuje automatické sťahovanie webu (Cloudflare). Legálna cesta je ich affiliate
+    # XML feed (eHUB – „XML feed na vyžiadanie u affiliate managera“). Keď je URL feedu nastavená
+    # (SMARTY_FEED_URL / smarty_feed.txt), obchod sa zapne automaticky; inak je na stránke len odkaz.
     "smarty":     {"label": "Smarty.sk", "parser": "xmlfeed", "currency": "EUR", "enabled": False, "cloud": False,
-                   "link": "https://www.smarty.sk/zberatelske-karty-4c11213/one-piece-karty?s=l",
-                   "urls": ["https://www.smarty.sk/zberatelske-karty-4c11213/one-piece-karty?s=l"]},
+                   "link": "https://www.smarty.sk/Vyhladavanie?query=one+piece+tcg",
+                   "urls": ["https://www.smarty.sk/Vyhladavanie?query=one+piece+tcg"]},
 }
 
 # ----------------------------------------------------- rozpoznanie produktu ---
@@ -407,258 +406,36 @@ def crawl_cernyrytir(shop):
     return out
 
 
-class _SmartyNode:
-    """Minimálny HTML uzol na extrakciu kariet bez externých knižníc."""
-    __slots__ = ("tag", "attrs", "parent", "children")
-
-    def __init__(self, tag, attrs=None, parent=None):
-        self.tag = tag
-        self.attrs = dict(attrs or [])
-        self.parent = parent
-        self.children = []
-
-
-class _SmartyTreeParser(HTMLParser):
-    VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta",
-            "param", "source", "track", "wbr"}
-
-    def __init__(self):
-        super().__init__(convert_charrefs=True)
-        self.root = _SmartyNode("document")
-        self.stack = [self.root]
-
-    def handle_starttag(self, tag, attrs):
-        node = _SmartyNode(tag.lower(), attrs, self.stack[-1])
-        self.stack[-1].children.append(node)
-        if tag.lower() not in self.VOID:
-            self.stack.append(node)
-
-    def handle_startendtag(self, tag, attrs):
-        self.stack[-1].children.append(_SmartyNode(tag.lower(), attrs, self.stack[-1]))
-
-    def handle_endtag(self, tag):
-        tag = tag.lower()
-        for i in range(len(self.stack) - 1, 0, -1):
-            if self.stack[i].tag == tag:
-                del self.stack[i:]
-                break
-
-    def handle_data(self, data):
-        if data:
-            self.stack[-1].children.append(data)
-
-
-def _smarty_descendants(node):
-    for child in node.children:
-        if isinstance(child, _SmartyNode):
-            yield child
-            yield from _smarty_descendants(child)
-
-
-def _smarty_text(node):
-    parts = []
-    def collect(n):
-        for child in n.children:
-            if isinstance(child, _SmartyNode):
-                collect(child)
-            else:
-                parts.append(child)
-    collect(node)
-    return clean(" ".join(parts))
-
-
-def _smarty_class(node):
-    return (node.attrs.get("class") or "").lower()
-
-
-def _smarty_jsonld(page, base):
-    """Načíta Product z JSON-LD bez predpokladu, že koreň musí byť ItemList."""
-    out = []
-    blocks = re.findall(r'<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script\s*>',
-                        page, re.I | re.S)
-
-    def walk(obj):
-        if isinstance(obj, list):
-            for value in obj:
-                walk(value)
-            return
-        if not isinstance(obj, dict):
-            return
-        typ = obj.get("@type", [])
-        types = {str(t).lower() for t in (typ if isinstance(typ, list) else [typ])}
-        if "product" in types:
-            name = clean(obj.get("name", ""))
-            offers = obj.get("offers") or obj.get("offer") or {}
-            offers = offers if isinstance(offers, list) else [offers]
-            offer = next((o for o in offers if isinstance(o, dict)), {})
-            spec = offer.get("priceSpecification") or {}
-            if isinstance(spec, list):
-                spec = next((x for x in spec if isinstance(x, dict)), {})
-            raw_price = offer.get("price") or offer.get("lowPrice")
-            if raw_price is None and isinstance(spec, dict):
-                raw_price = spec.get("price")
-            price = num(raw_price) if raw_price is not None else None
-            currency = offer.get("priceCurrency") or (spec.get("priceCurrency") if isinstance(spec, dict) else None) or "EUR"
-            avail = str(offer.get("availability") or "")
-            url = offer.get("url") or obj.get("url") or base
-            image = obj.get("image")
-            if isinstance(image, list):
-                image = next((x for x in image if isinstance(x, str)), None)
-            elif isinstance(image, dict):
-                image = image.get("url")
-            if name and re.search(r"one\s*[- ]?piece", name, re.I) and price is not None:
-                out.append({"id": str(obj.get("sku") or obj.get("productID") or url or name),
-                            "name": name, "url": absolute(base, str(url)), "price": float(price),
-                            "currency": str(currency), "img": absolute(base, image) if image else None,
-                            "inStock": bool(re.search(r"instock|in stock|skladom|skladem", avail, re.I)),
-                            "preorder": bool(re.search(r"preorder|pre-order|predobj|předobj", avail, re.I)),
-                            "availText": avail})
-        for value in obj.values():
-            if isinstance(value, (dict, list)):
-                walk(value)
-
-    for block in blocks:
-        try:
-            data = json.loads(html.unescape(block).strip())
-        except (ValueError, TypeError):
-            continue
-        walk(data)
-    return out
-
-
-def _smarty_html_cards(page, base):
-    """Fallback pre novšie HTML: nájde názov One Piece a cenu v najbližšom produktovom bloku."""
-    try:
-        parser = _SmartyTreeParser()
-        parser.feed(page)
-        parser.close()
-    except Exception:
-        return []
-
-    out = []
-    nodes = list(_smarty_descendants(parser.root))
-    for a in nodes:
-        if a.tag != "a":
-            continue
-        name = _smarty_text(a)
-        href = a.attrs.get("href", "").strip()
-        if not name or not re.search(r"one\s*[- ]?piece", name, re.I) or not href:
-            continue
-        if re.search(r"one-piece-karty|vyhledav|search", href, re.I):
-            continue
-
-        # Hľadaj najbližšieho predka, ktorý obsahuje cenový element.
-        card = a.parent
-        price = None
-        ptxt = ""
-        while card is not None:
-            descendants = list(_smarty_descendants(card))
-            product_links = [n for n in descendants if n.tag == "a" and
-                             re.search(r"one\s*[- ]?piece", _smarty_text(n), re.I)]
-            if len(product_links) > 1:
-                break  # nevyber cenu z nadradeného kontajnera s viacerými produktmi
-            price_nodes = [n for n in descendants
-                           if re.search(r"price|amount|cost|cena", _smarty_class(n))
-                           and re.search(r"\d[\d\s.,\u00a0]*\s*(?:€|Kč|CZK)", _smarty_text(n), re.I)]
-            if not price_nodes:
-                # CSS trieda ceny sa tiež mohla zmeniť; hľadaj krátky element s menou.
-                price_nodes = [n for n in descendants
-                               if len(_smarty_text(n)) <= 48
-                               and re.search(r"\d[\d\s.,\u00a0]*\s*(?:€|Kč|CZK)", _smarty_text(n), re.I)]
-            if price_nodes:
-                def score(n):
-                    c = _smarty_class(n)
-                    sc = 2
-                    if re.search(r"current|actual|final|selling|product-price|price-current", c):
-                        sc += 5
-                    if re.search(r"old|original|regular|without.?vat|bez.?dph|list-price", c):
-                        sc -= 8
-                    return sc
-                price_node = max(price_nodes, key=score)
-                ptxt = _smarty_text(price_node)
-                price = num(ptxt)
-                break
-            # Nedovoľ, aby jeden produkt nasával cenu zo susedných produktov v celom zozname.
-            if card.tag in {"article", "li"} or re.search(r"product|item|card", _smarty_class(card)):
-                # Ak je toto jasný samostatný blok, už vyššie cenu nehľadaj.
-                if card is not a.parent and len([x for x in descendants if x.tag == "a" and
-                                                  re.search(r"one\s*[- ]?piece", _smarty_text(x), re.I)]) > 1:
-                    break
-            card = card.parent
-
-        if price is None:
-            continue
-        card_text = _smarty_text(card) if card is not None else _smarty_text(a.parent or a)
-        avail_match = re.search(r"(?:na sklade[^\n.]{0,60}|skladom[^\n.]{0,60}|zost[aá]va[^\n.]{0,40}|predobjedn[aá]vka[^\n.]{0,60}|pre-?order[^\n.]{0,60})", card_text, re.I)
-        avail = avail_match.group(0) if avail_match else card_text
-        img = next((n.attrs.get("src") or n.attrs.get("data-src") or n.attrs.get("data-lazy-src")
-                    for n in (_smarty_descendants(card) if card is not None else [])
-                    if n.tag == "img" and (n.attrs.get("src") or n.attrs.get("data-src") or n.attrs.get("data-lazy-src"))), None)
-        currency = "CZK" if re.search(r"Kč|CZK", ptxt, re.I) else "EUR"
-        out.append({"id": href, "name": name, "url": absolute(base, href), "price": float(price),
-                    "currency": currency, "img": absolute(base, img) if img else None,
-                    "inStock": bool(re.search(r"na sklade|skladom|skladem|zost[aá]va\s+\d|in stock", avail, re.I)),
-                    "preorder": bool(PREORDER_RX.search(avail)), "availText": avail})
-    return out
-
-
 def parse_smarty(page, base):
-    """Smarty parser pre pôvodný HTML aj novšie karty/JSON-LD; funguje aj na uloženom HTML."""
     out = []
-
-    # Starý layout Smarty.cz/Smarty.sk, ak sa ešte objaví.
     for chunk in page.split('class="productList-item"')[1:]:
         chunk = chunk[:8000]
         ga = re.search(r'data-gaitem=(["\'])(.*?)\1', chunk, re.I | re.S)
-        url = re.search(r'data-url=["\']([^"\']+)["\']', chunk, re.I)
-        pr = re.search(r'class=["\'][^"\']*productList-item-price[^"\']*["\'][^>]*>(.*?)</div>', chunk, re.S | re.I)
+        url = re.search(r'data-url="([^"]+)"', chunk)
+        pr = re.search(r'class="productList-item-price"[^>]*>(.*?)</div>', chunk, re.S)
         info = {}
         if ga:
             try:
                 info = json.loads(html.unescape(ga.group(2)))
             except ValueError:
                 info = {}
-        title_match = re.search(r'class=["\'][^"\']*productList-item-title[^"\']*["\'][^>]*>(.*?)</a>', chunk, re.S | re.I)
-        name = info.get("name") or (clean(title_match.group(1)) if title_match else None)
-        raw_price = clean(pr.group(1)) if pr else (info.get("pocketPrice") or info.get("fullPrice") or info.get("price"))
-        price = num(raw_price) if raw_price is not None else None
+        name = info.get("name") or (clean(re.search(r'class="productList-item-title"[^>]*>(.*?)</a>', chunk, re.S).group(1))
+                                    if re.search(r'class="productList-item-title"', chunk) else None)
+        price = num(clean(pr.group(1))) if pr else info.get("pocketPrice") or info.get("fullPrice")
         if not name or price is None:
             continue
-        avail = str(info.get("available", ""))
-        img = re.search(r'<img[^>]+(?:data-src|src)=["\']([^"\']+\.(?:jpe?g|png|webp)[^"\']*)', chunk, re.I)
-        ptxt = str(raw_price or "")
-        currency = "CZK" if re.search(r"Kč|CZK", ptxt, re.I) or ("smarty.cz" in base and "€" not in ptxt) else "EUR"
-        out.append({"id": str(info.get("id") or (url.group(1) if url else name)), "name": name,
+        avail = info.get("available", "")
+        img = re.search(r'<img[^>]+(?:data-src|src)="([^"]+\.(?:jpe?g|png|webp)[^"]*)"', chunk, re.I)
+        ptxt = pr.group(1) if pr else ""
+        eur = "€" in ptxt or ("Kč" not in ptxt and "smarty.cz" not in base)
+        out.append({"id": info.get("id") or (url.group(1) if url else name), "name": name,
                     "url": absolute(base, url.group(1)) if url else base,
-                    "price": float(price), "currency": currency,
+                    "price": float(price), "currency": "EUR" if eur else "CZK",
                     "img": absolute(base, img.group(1)) if img and img.group(1).startswith(("http", "/")) else None,
-                    "inStock": bool(re.search(r"skladom|skladem|in stock", avail, re.I)),
-                    "preorder": bool(re.search(r"predobj|předobj|pripravujeme|připravujeme|pre-?order", avail, re.I)),
+                    "inStock": bool(re.search(r"skladom|skladem", avail, re.I)),
+                    "preorder": bool(re.search(r"predobj|předobj|pripravujeme|připravujeme", avail, re.I)),
                     "availText": avail})
-
-    # Novší stránka často zverejňuje produkty cez JSON-LD.
-    out.extend(_smarty_jsonld(page, base))
-    # Fallback na viditeľné produktové karty (pri zmene názvov CSS tried).
-    out.extend(_smarty_html_cards(page, base))
-
-    # Deduplikácia podľa normalizovaného názvu a ceny; starý a nový parser môžu
-    # ten istý produkt nájsť s odlišne odvodenou URL.
-    dedup = {}
-    for item in out:
-        if not item.get("name") or item.get("price") is None:
-            continue
-        if not re.search(r"one\s*[- ]?piece", item["name"], re.I):
-            continue
-        name_key = " ".join(item["name"].lower().split())
-        key = (name_key, round(float(item["price"]), 2), item.get("currency", "EUR"))
-        old = dedup.get(key)
-        def usefulness(row):
-            url = row.get("url") or ""
-            return (bool(row.get("img")) + bool(row.get("inStock")) +
-                    bool(url and url != base and not re.search(r"one-piece-karty|vyhledav", url, re.I)))
-        if old is None or usefulness(item) > usefulness(old):
-            dedup[key] = item
-    return list(dedup.values())
+    return out
 
 
 PARSERS = {"shoptet": parse_shoptet, "veselydrak": parse_veselydrak,
@@ -758,35 +535,18 @@ def crawl_saved(shop, key="smarty"):
 
 
 def crawl(shop):
-    if shop.get("label") == "Smarty.sk":
-        # Jedna bežná požiadavka; Cloudflare neobchádzame. Ak zlyhá request/feed/parser,
-        # použijeme čerstvo uloženú stránku, inak zachováme posledné známe ceny.
+    if shop["parser"] == "smarty":
+        # Žiadne obchádzanie ochrany: jedna bežná požiadavka. Ak Smarty odmietne, použije sa uložená
+        # stránka (Ctrl+S), inak ostanú posledné známe ceny.
         try:
-            rows = crawl_pages(shop)
-            if rows:
-                return rows
-            if shop.get("parser") == "smarty" and saved_is_new("smarty"):
-                saved = [r for r in crawl_saved(shop)
-                         if re.search(r"one\s*[- ]?piece", r["name"], re.I) and r.get("price") is not None]
-                if saved:
-                    say("  · Smarty: online HTML neobsahovalo rozpoznané produkty, používam uloženú stránku")
-                    return saved
-            if shop.get("parser") == "xmlfeed":
-                reason = "Smarty XML feed sa načítal, ale neobsahuje rozpoznané One Piece produkty/ceny."
-            else:
-                reason = ("Smarty stránka sa načítala, ale parser nenašiel žiadne One Piece produkty/ceny. "
-                          "Možno sa zmenilo HTML alebo stránku nahradil Cloudflare.")
-            raise RuntimeError(reason + " Posledné ceny ponechávam; ulož kategóriu cez prehliadač do priečinka import/ alebo nastav SMARTY_FEED_URL.")
+            return crawl_pages(shop)
         except (urllib.error.URLError, OSError) as e:
             code = getattr(e, "code", None)
             if saved_is_new("smarty"):
                 say(f"  · Smarty odmietol požiadavku ({code or e}) – načítavam uloženú stránku")
-                saved = [r for r in crawl_saved(shop)
-                         if re.search(r"one\s*[- ]?piece", r["name"], re.I) and r.get("price") is not None]
-                if saved:
-                    return saved
-            raise RuntimeError(f"Smarty odmietol požiadavku/feed ({code or e}) – ponechávam posledné ceny; "
-                               "ulož kategóriu cez Ctrl+S do priečinka import alebo nastav SMARTY_FEED_URL") from None
+                return [r for r in crawl_saved(shop) if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
+            raise RuntimeError(f"Smarty odmietol požiadavku ({code or e}) – ponechávam posledné ceny; "
+                               "aktuálne ich dostaneš uložením stránky cez Ctrl+S do priečinka import") from None
     return crawl_pages(shop)
 
 
