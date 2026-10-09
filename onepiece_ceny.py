@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09f"
+VERSION = "2026-10-09g"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -46,9 +46,9 @@ IN_CLOUD = os.environ.get("GITHUB_ACTIONS") == "true"
 def _enable_feeds():
     if feed_url():
         SHOPS["smarty"].update(enabled=True, parser="xmlfeed", cloud=True)
-    elif not IN_CLOUD and saved_pages("smarty"):
-        # Smarty: stránku si uložíš v prehliadači (Ctrl+S), skript ju načíta – bez obchádzania ochrany
-        SHOPS["smarty"].update(enabled=True, parser="saved", cloud=False)
+    else:
+        # Smarty z PC: bežná požiadavka; keď Smarty odmietne (403), použije sa stránka uložená cez Ctrl+S
+        SHOPS["smarty"].update(enabled=True, parser="smarty", cloud=False)
 HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -535,8 +535,22 @@ def crawl_saved(shop, key="smarty"):
 
 
 def crawl(shop):
-    if shop["parser"] == "saved":
-        return [r for r in crawl_saved(shop) if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
+    if shop["parser"] == "smarty":
+        # Žiadne obchádzanie ochrany: jedna bežná požiadavka. Ak Smarty odmietne, použije sa uložená
+        # stránka (Ctrl+S), inak ostanú posledné známe ceny.
+        try:
+            return crawl_pages(shop)
+        except (urllib.error.URLError, OSError) as e:
+            code = getattr(e, "code", None)
+            if saved_is_new("smarty"):
+                say(f"  · Smarty odmietol požiadavku ({code or e}) – načítavam uloženú stránku")
+                return [r for r in crawl_saved(shop) if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
+            raise RuntimeError(f"Smarty odmietol požiadavku ({code or e}) – ponechávam posledné ceny; "
+                               "aktuálne ich dostaneš uložením stránky cez Ctrl+S do priečinka import") from None
+    return crawl_pages(shop)
+
+
+def crawl_pages(shop):
     if shop["parser"] == "xmlfeed":
         return [r for r in crawl_xmlfeed(shop) if r["price"]]
     if shop["parser"] == "cernyrytir":
@@ -556,7 +570,7 @@ def crawl(shop):
                 except urllib.error.HTTPError as e:
                     if n > 1:                     # za poslednou stranou niektoré obchody vrátia 404/500
                         break
-                    if attempt == 1:
+                    if attempt == 1 or e.code in (403, 429):     # odmietnutie neopakuj
                         raise urllib.error.HTTPError(url, e.code, f"{e.reason} ({url})", e.headers, None)
                     time.sleep(3)
             if page is None:
@@ -705,10 +719,8 @@ def snapshot(only=None, force=True):
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     keys = [k for k in SHOPS if SHOPS[k].get("enabled", True) and (not only or k in only)
             and not (IN_CLOUD and SHOPS[k].get("cloud") is False)]
-    # uložené stránky (Smarty) spracuj len keď pribudla novšia – inak ostanú posledné dáta
-    keys = [k for k in keys if SHOPS[k]["parser"] != "saved" or saved_is_new(k)]
     if not force:
-        skip = [k for k in keys if recently_fetched(k) and SHOPS[k]["parser"] != "saved"]
+        skip = [k for k in keys if recently_fetched(k) and not (k == "smarty" and saved_is_new(k))]
         if skip:
             say("  ⏭ preskakujem (stiahnuté pred < %d min): %s" % (MIN_REFETCH_MIN, ", ".join(SHOPS[k]["label"] for k in skip)))
         keys = [k for k in keys if k not in skip]
