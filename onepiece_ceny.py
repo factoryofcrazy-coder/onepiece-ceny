@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09c"
+VERSION = "2026-10-09d"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -65,16 +65,22 @@ SHOPS = {
                    "urls": ["https://www.pikazard.eu/one-piece-tcg/"]},
     "veselydrak": {"label": "Veselý drak", "parser": "veselydrak", "currency": "EUR",
                    "urls": ["https://www.vesely-drak.sk/produkty/booster-box-one-piece/",
-                            "https://www.vesely-drak.sk/produkty/booster-one-piece/"]},
+                            "https://www.vesely-drak.sk/produkty/booster-one-piece/",
+                            "https://www.vesely-drak.sk/produkty/specialni-sety-one-piece/",
+                            "https://www.vesely-drak.sk/produkty/starter-deck-one-piece/"]},
     "ihrysko":    {"label": "iHRYsko", "parser": "jsonld", "currency": "EUR",
                    "urls": ["https://www.ihrysko.sk/one-piece-tcg-c100345"]},
     "najada":     {"label": "Najáda", "parser": "jsonld", "currency": "EUR",
                    "urls": [{"url": "https://www.najada.games/karetni-hry/one-piece/booster-boxy", "kind": "Box"},
                             {"url": "https://www.najada.games/karetni-hry/one-piece/boostery", "kind": "Pack"},
-                            "https://www.najada.games/karetni-hry/one-piece/asijske"]},
+                            "https://www.najada.games/karetni-hry/one-piece/asijske",
+                            "https://www.najada.games/karetni-hry/one-piece/sberatelske-produkty",
+                            "https://www.najada.games/karetni-hry/one-piece/starter-decky"]},
     "tolarie":    {"label": "Tolarie", "parser": "tolarie", "currency": "CZK",
                    "urls": [{"url": "https://www.tolarie.cz/koupit_produkty/katalog/70-one-piece/57-one-piece-booster-boxy/", "kind": "Box"},
-                            {"url": "https://www.tolarie.cz/koupit_produkty/katalog/70-one-piece/72-one-piece-boostery/", "kind": "Pack"}]},
+                            {"url": "https://www.tolarie.cz/koupit_produkty/katalog/70-one-piece/72-one-piece-boostery/", "kind": "Pack"},
+                            "https://www.tolarie.cz/koupit_produkty/katalog/70-one-piece/118-one-piece-kolekce/",
+                            "https://www.tolarie.cz/koupit_produkty/katalog/70-one-piece/74-one-piece-starter-decky/"]},
     "cernyrytir": {"label": "Černý rytíř", "parser": "cernyrytir", "currency": "CZK",
                    "urls": ["https://eshop-api.cernyrytir.eu/api/public/merch/list#677"]},
     "nekonecno":  {"label": "Nekonečno", "parser": "shoptet", "currency": "EUR", "cloud": False, "delay": 3,
@@ -83,7 +89,9 @@ SHOPS = {
                    "urls": ["https://www.pokemon4u.cz/one-piece-karty/"]},
     "hrananetu":  {"label": "Hra na netu", "parser": "upgates", "currency": "CZK",
                    "urls": [{"url": "https://www.hrananetu.cz/one-piece-booster-boxy", "kind": "Box"},
-                            {"url": "https://www.hrananetu.cz/one-piece-boostery", "kind": "Pack"}]},
+                            {"url": "https://www.hrananetu.cz/one-piece-boostery", "kind": "Pack"},
+                            "https://www.hrananetu.cz/one-piece-bundly",
+                            "https://www.hrananetu.cz/one-piece-balicky"]},
     # Smarty.sk blokuje automatické sťahovanie webu (Cloudflare). Legálna cesta je ich affiliate
     # XML feed (eHUB – „XML feed na vyžiadanie u affiliate managera“). Keď je URL feedu nastavená
     # (SMARTY_FEED_URL / smarty_feed.txt), obchod sa zapne automaticky; inak je na stránke len odkaz.
@@ -108,10 +116,22 @@ SET_NAMES = {
     "the best vol. 2": "PRB02", "the best vol.2": "PRB02", "the best 2": "PRB02", "the best": "PRB01",
 }
 PREORDER_RX = re.compile(r"(?:p[řr]edobjedn|pre-?order|presale|predpredaj)", re.I)
-CODE_RX = re.compile(r"\b(OP|EB|PRB|ST)\s?-?\s?(\d{1,2})\b", re.I)
+CODE_RX = re.compile(r"\b(OP|EB|PRB|ST|IB|SD)\s?-?\s?(\d{1,2})\b", re.I)
 
 
 def set_code(name):
+    low = name.lower()
+    m = re.search(r"illustration box\s*vol\.?\s*(\d+)", low)
+    if m:
+        return f"IB{int(m.group(1)):02d}"
+    m = re.search(r"best selection\s*vol\.?\s*(\d+)", low)
+    if m:
+        return f"BS{int(m.group(1)):02d}"
+    m = re.search(r"card games fest\s*(\d{2})", low)
+    if m:
+        return f"FEST{m.group(1)}"
+    if "set sail" in low:
+        return "SD01"
     m = CODE_RX.search(name)
     if m:
         return f"{m.group(1).upper()}{int(m.group(2)):02d}"
@@ -122,18 +142,30 @@ def set_code(name):
     return ""
 
 
+ACCESSORY_RX = re.compile(r"sleeve|obal|album|playmat|podložk|binder|deck box|storage|card case|acryl|akryl|krabičk|"
+                          r"krabick|protector|chránič|ochran|magnet|graded|trophy|holder|stojan|vitrín|display case|"
+                          r"toploader|pouzdr|puzdr|samolep|sticker|panini", re.I)
+KIND_GROUPS = {"Kolekcie": ("Premium", "Illustration", "Kolekcia"), "Ostatné": ("Doplnky", "Iné")}
+
+
 def kind_of(name):
     n = name.lower()
-    if re.search(r"illustration|premium card|collection set|gift|figúr|figur|sleeve|obal|album|playmat|"
-                 r"podložk|promo|jump|tin\b|binder|deck box|storage|token|don!! card|card case|"
-                 r"acryl|akryl|krabičk|krabick|protector|chránič|ochran|magnet|graded|trophy|holder|stojan|vitrín|display case|toploader|pouzdr|puzdr", n):
+    if ACCESSORY_RX.search(n):
+        return "Doplnky"
+    if re.search(r"figúr|figur|funko|promo|jump|tin\b|token|don!! card|trading cards", n):
         return "Iné"
-    if "starter" in n or "deck set" in n or "ultra deck" in n:
+    if "illustration" in n:
+        return "Illustration"
+    if re.search(r"premium card collection|best selection|card games fest", n):
+        return "Premium"
+    if "starter" in n or "deck set" in n or "ultra deck" in n or re.search(r"\bst[ -]?\d{1,2}\b", n):
         return "Starter"
     if re.search(r"\bcase\b", n):
         return "Case"
     if "double pack" in n:
         return "Double Pack"
+    if re.search(r"special set|anniversary set|gift|collection set|collection box|bundle|kolekc|premium collection", n):
+        return "Kolekcia"
     if re.search(r"booster box|display|\bbox\b|krabic", n):
         return "Box"
     if re.search(r"booster|pack|balíček|balicek|balík", n):
@@ -854,7 +886,7 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                     reasons.append(f"📉 zlacnené o {(1 - i['eur'] / p['eur']) * 100:.0f} % ({eur(p['eur'])} → {eur(i['eur'])})")
             # nový produkt / predobjednávka – len keď sa dá kúpiť alebo objednať
             if a.get("new_products", True) and not first_run and key in known_shops and i["url"] not in prev \
-                    and kind in ("Box", "Pack", "Double Pack", "Case") and (i["inStock"] or i.get("preorder")):
+                    and kind in kinds and (i["inStock"] or i.get("preorder")):
                 reasons.append("🆕 spustená predobjednávka" if i.get("preorder") and not i["inStock"] else "nový produkt skladom")
             p = prev.get(i["url"])
             if a.get("preorders", True) and not first_run and p and i.get("preorder") and not p.get("preorder") \
@@ -1382,7 +1414,7 @@ label.chk{display:flex;gap:5px;align-items:center;color:var(--mute);cursor:point
 <section id="dealsSec"><h2>🔥 Najlepšie ponuky skladom <small>booster boxy najbližšie k MSRP (EN aj JP podľa ich prahu)</small></h2><div class="deals" id="deals"></div></section>
 
 <div class="bar">
-  <div class="seg" id="kind"><button data-v="Box" class="on">Boxy</button><button data-v="Pack">Packy</button><button data-v="Double Pack">Double</button><button data-v="Case">Cases</button><button data-v="">Všetko</button></div>
+  <div class="seg" id="kind"><button data-v="Box" class="on">Boxy</button><button data-v="Pack">Packy</button><button data-v="Double Pack">Double</button><button data-v="Case">Cases</button><button data-v="Starter">Starter decky</button><button data-v="Kolekcie" title="Premium Card Collection, Illustration Box, špeciálne a darčekové sety">Kolekcie</button><button data-v="Ostatné" title="Obaly, albumy, figúrky…">Ostatné</button><button data-v="">Všetko</button></div>
   <div class="seg" id="lang"><button data-v="" class="on">Všetky</button><button data-v="EN">EN</button><button data-v="JP">JP</button><button data-v="CN">Ázia</button></div>
   <select id="set"><option value="">Všetky edície</option></select>
   <input type="number" id="maxp" placeholder="max €" min="0" step="5" title="Maximálna cena">
@@ -1458,7 +1490,8 @@ function spark(arr,msrp){const v=arr.map((x,i)=>[i,x]).filter(p=>p[1]!=null);if(
 const st=Object.assign({kind:"Box",lang:"",set:"",maxp:null,stock:true,under:false,pickup:false,starred:false,sort:"score",q:""},lsGet("op_filters",{}));
 const open=new Set();
 function rows(){const q=st.q.toLowerCase();
-  let r=Object.values(G).filter(g=>(!st.kind||g.kind===st.kind)&&(!st.lang||(st.lang==="CN"?["CN","KR","ASIA"].includes(g.lang):g.lang===st.lang))
+  const KG={Kolekcie:["Premium","Illustration","Kolekcia"],"Ostatné":["Doplnky","Iné"]};
+  let r=Object.values(G).filter(g=>(!st.kind||(KG[st.kind]?KG[st.kind].includes(g.kind):g.kind===st.kind))&&(!st.lang||(st.lang==="CN"?["CN","KR","ASIA"].includes(g.lang):g.lang===st.lang))
     &&(!st.set||g.code===st.set)&&(!st.stock||g.best)&&(!st.maxp||(g.best&&g.best[5]<=st.maxp))
     &&(!st.under||(g.pct!=null&&g.pct<=(TH[g.lang]??30)))&&(!st.pickup||g.pickup)&&(!st.starred||g.key in W)
     &&(!q||(g.code+" "+g.all.map(o=>o[1]).join(" ")).toLowerCase().includes(q)));
@@ -1481,7 +1514,7 @@ function card(g){const b=g.best,tgt=W[g.key],starred=g.key in W,hit=isHit(g);
   const tr=g.trend==null||Math.abs(g.trend)<1?"":`<span class="trend ${g.trend<0?"dn":"up"}" title="oproti pred 7 dňami">${g.trend<0?"▼":"▲"} ${Math.abs(g.trend).toFixed(0)} % / 7 dní</span>`;
   return `<article class="pc ${hit?"hit":""}" data-k="${esc(g.key)}">
   <div class="pc-head"><div class="thumb">${img}</div>
-    <div class="ttl"><div>${g.code?`<span class="tag">${esc(g.code)}</span>`:""}<span class="tag">${esc(g.lang)}</span><span class="tag">${esc(g.kind)}</span>${g.pre?'<span class="tag pre">predobjednávka</span>':""}${hit?'<span class="tag hit">🎯 pod cieľom</span>':""}</div>
+    <div class="ttl"><div>${g.code?`<span class="tag">${esc(g.code)}</span>`:""}<span class="tag">${esc(g.lang)}</span><span class="tag">${esc(({Premium:"Premium Collection",Illustration:"Illustration Box",Kolekcia:"Kolekcia / set",Doplnky:"Doplnok"})[g.kind]||g.kind)}</span>${g.pre?'<span class="tag pre">predobjednávka</span>':""}${hit?'<span class="tag hit">🎯 pod cieľom</span>':""}</div>
       <div class="nm" title="${esc(g.name)}">${esc(short(g.name))}</div>
       <div class="meta">MSRP ${g.msrp?eur(g.msrp):"—"}${g.msrp&&g.packs?` · ${eur(g.msrp/g.packs)}/bal.`:""}</div></div>
     <div class="best">${b?`<div class="pr">${eur(b[5])}</div><div>${pctHtml(g.pct,g.lang)}</div><div class="shop">${esc(SHOPS[b[0]]||b[0])}${g.packs?` · ${eur(b[5]/g.packs)}/bal.`:""}</div>`:'<div class="none">nie je skladom</div>'}</div>
