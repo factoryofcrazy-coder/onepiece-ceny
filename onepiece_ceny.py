@@ -31,6 +31,7 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+VERSION = "2026-10-09b"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -921,7 +922,7 @@ def page_data():
 
 
 def render():
-    return TEMPLATE.replace("__PAYLOAD__", json.dumps(page_data(), ensure_ascii=False, separators=(",", ":")))
+    return TEMPLATE.replace("__VERSION__", VERSION).replace("__PAYLOAD__", json.dumps(page_data(), ensure_ascii=False, separators=(",", ":")))
 
 
 def build_static():
@@ -1147,11 +1148,15 @@ class Handler(BaseHTTPRequestHandler):
         if path in ("/", "/index.html"):
             self._send(200, render(), "text/html; charset=utf-8")
         elif path == "/api/status":
-            self._send(200, json.dumps(STATE, ensure_ascii=False), "application/json")
+            self._send(200, json.dumps({**STATE, "version": VERSION}, ensure_ascii=False), "application/json")
         else:
             self._send(404, "nenájdené", "text/plain; charset=utf-8")
 
     def do_POST(self):
+        if self.path == "/api/shutdown":          # nová verzia programu prevezme port
+            self._send(200, "{}", "application/json")
+            threading.Thread(target=self.server.shutdown, daemon=True).start()
+            return
         if self.path == "/api/fetch":
             self._send(200, json.dumps({"started": start_fetch(self.only)}), "application/json")
         else:
@@ -1161,8 +1166,24 @@ class Handler(BaseHTTPRequestHandler):
         pass
 
 
+def stop_old_instance(port):
+    """Ak na porte beží staršia verzia programu, požiadaj ju o vypnutie (aby sa nezobrazoval starý vzhľad)."""
+    try:
+        st = json.loads(urllib.request.urlopen(f"http://127.0.0.1:{port}/api/status", timeout=2).read())
+    except Exception:  # noqa: BLE001
+        return
+    try:
+        urllib.request.urlopen(urllib.request.Request(f"http://127.0.0.1:{port}/api/shutdown", data=b"", method="POST"),
+                               timeout=2).read()
+        print(f"Vypínam staršie spustenie programu ({st.get('version', 'stará verzia')})…")
+        time.sleep(1.5)
+    except Exception:  # noqa: BLE001
+        print(f"! Na porte {port} beží staršia verzia programu – zavri jej okno, inak uvidíš starý vzhľad.")
+
+
 def serve(port, only=None, open_browser=True, watch=None, fetch_on_start=True):
     Handler.only = only
+    stop_old_instance(port)
     for p in range(port, port + 20):
         try:
             srv = ThreadingHTTPServer(("127.0.0.1", p), Handler)
@@ -1187,8 +1208,11 @@ def serve(port, only=None, open_browser=True, watch=None, fetch_on_start=True):
         threading.Timer(0.6, lambda: webbrowser.open(url)).start()
     try:
         srv.serve_forever()
+        print("Program bol nahradený novším spustením – toto okno môžeš zavrieť.")
     except KeyboardInterrupt:
         print("\nKoniec.")
+    finally:
+        srv.server_close()
 
 
 def setup_wizard():
@@ -1369,6 +1393,7 @@ label.chk{display:flex;gap:5px;align-items:center;color:var(--mute);cursor:point
 <div class="grid" id="grid"></div>
 </div>
 <div class="toast" id="toast"></div>
+<div style="text-align:center;color:var(--mute);font-size:11px;padding:0 0 24px">verzia __VERSION__</div>
 <script>
 const P=__PAYLOAD__;
 const SHOPS=P.shops, SK=Object.keys(SHOPS), TH=P.th||{EN:30,JP:150};
