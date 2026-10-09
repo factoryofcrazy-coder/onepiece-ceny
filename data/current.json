@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T19:22:26Z",
+ "updated": "2026-10-09T19:33:49Z",
  "fx": {
   "CZK": 24.369,
   "USD": 1.1206,
@@ -3775,7 +3775,7 @@
   "smarty": {
    "items": [],
    "ok": false,
-   "error": "Smarty odmietol požiadavku (403) – ponechávam posledné ceny; aktuálne ich dostaneš uložením stránky cez Ctrl+S do priečinka import"
+   "error": "Smarty odmietol požiadavku/feed (403) – ponechávam posledné ceny; ulož kategóriu cez Ctrl+S do priečinka import alebo nastav SMARTY_FEED_URL"
   }
  }
 }
