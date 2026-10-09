@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T10:42:36Z",
+ "updated": "2026-10-09T10:54:40Z",
  "fx": {
   "CZK": 24.403,
   "USD": 1.1186,
@@ -587,7 +587,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-09T10:37:45Z",
+   "ts": "2026-10-09T10:54:40Z",
    "ok": true,
    "items": [
     {
@@ -1313,7 +1313,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-09T10:37:45Z",
+   "ts": "2026-10-09T10:54:40Z",
    "ok": true,
    "items": [
     {
@@ -1666,6 +1666,405 @@
      "price": 29.99,
      "currency": "EUR",
      "eur": 29.99,
+     "inStock": true
+    }
+   ]
+  },
+  "najada": {
+   "ts": "2026-10-09T10:54:40Z",
+   "ok": true,
+   "items": [
+    {
+     "name": "One Piece: The Time of Battle Booster Box",
+     "url": "https://www.najada.games/produkt/one-piece-the-time-of-battle-booster-box-2U2RMX",
+     "price": 200.79,
+     "currency": "EUR",
+     "eur": 200.79,
+     "inStock": false,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece: Adventure on Kami’s Island Booster Box",
+     "url": "https://www.najada.games/produkt/one-piece-adventure-on-kamis-island-booster-box-OX1AAI",
+     "price": 221.19,
+     "currency": "EUR",
+     "eur": 221.19,
+     "inStock": false,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece Heroines Edition Booster Box",
+     "url": "https://www.najada.games/produkt/one-piece-heroines-edition-booster-box-CXH3L8",
+     "price": 303.19,
+     "currency": "EUR",
+     "eur": 303.19,
+     "inStock": false,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece: The Azure Sea's Seven Booster Box",
+     "url": "https://www.najada.games/produkt/one-piece-the-azure-seas-seven-booster-box-K9JGP7",
+     "price": 200.79,
+     "currency": "EUR",
+     "eur": 200.79,
+     "inStock": false,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece: Carrying on his Will Booster Box",
+     "url": "https://www.najada.games/produkt/one-piece-carrying-on-his-will-booster-box-XMHKCV",
+     "price": 405.59,
+     "currency": "EUR",
+     "eur": 405.59,
+     "inStock": true,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece: The Best Vol. 2 Booster Box",
+     "url": "https://www.najada.games/produkt/one-piece-the-best-vol-2-booster-box-CIQ2PG",
+     "price": 307.39,
+     "currency": "EUR",
+     "eur": 307.39,
+     "inStock": false,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece: Royal Blood Booster Box",
+     "url": "https://www.najada.games/produkt/one-piece-royal-blood-booster-box-F4CDT3",
+     "price": 204.79,
+     "currency": "EUR",
+     "eur": 204.79,
+     "inStock": false,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece: The Time of Battle Booster",
+     "url": "https://www.najada.games/produkt/one-piece-the-time-of-battle-booster-MFGU6G",
+     "price": 8.99,
+     "currency": "EUR",
+     "eur": 8.99,
+     "inStock": false,
+     "hint": "Pack"
+    },
+    {
+     "name": "One Piece Adventure on Kami’s Island Booster",
+     "url": "https://www.najada.games/produkt/one-piece-adventure-on-kamis-island-booster-8FIU1D",
+     "price": 9.79,
+     "currency": "EUR",
+     "eur": 9.79,
+     "inStock": true,
+     "hint": "Pack"
+    },
+    {
+     "name": "One Piece Heroines Edition Booster",
+     "url": "https://www.najada.games/produkt/one-piece-heroines-edition-booster-MIF2QC",
+     "price": 13.39,
+     "currency": "EUR",
+     "eur": 13.39,
+     "inStock": true,
+     "hint": "Pack"
+    },
+    {
+     "name": "One Piece: The Azure Sea's Seven Booster",
+     "url": "https://www.najada.games/produkt/one-piece-the-azure-seas-seven-booster-7AC75U",
+     "price": 8.99,
+     "currency": "EUR",
+     "eur": 8.99,
+     "inStock": true,
+     "hint": "Pack"
+    },
+    {
+     "name": "One Piece: Carrying on his Will Booster",
+     "url": "https://www.najada.games/produkt/one-piece-carrying-on-his-will-booster-FEZ3ZK",
+     "price": 17.99,
+     "currency": "EUR",
+     "eur": 17.99,
+     "inStock": true,
+     "hint": "Pack"
+    },
+    {
+     "name": "One Piece: The Best Vol. 2 Booster",
+     "url": "https://www.najada.games/produkt/one-piece-the-best-vol-2-booster-GQAIVD",
+     "price": 16.39,
+     "currency": "EUR",
+     "eur": 16.39,
+     "inStock": false,
+     "hint": "Pack"
+    },
+    {
+     "name": "One Piece Royal Blood Sleeved Booster",
+     "url": "https://www.najada.games/produkt/one-piece-royal-blood-sleeved-booster-FIJZA4",
+     "price": 10.19,
+     "currency": "EUR",
+     "eur": 10.19,
+     "inStock": false,
+     "hint": "Pack"
+    },
+    {
+     "name": "One Piece: Royal Blood Booster",
+     "url": "https://www.najada.games/produkt/one-piece-royal-blood-booster-GLSIQS",
+     "price": 9.39,
+     "currency": "EUR",
+     "eur": 9.39,
+     "inStock": true,
+     "hint": "Pack"
+    },
+    {
+     "name": "One Piece Wings of the Captain Booster Box (korejsky)",
+     "url": "https://www.najada.games/produkt/one-piece-wings-of-the-captain-booster-box-korejsky-IVRT25",
+     "price": 90.19,
+     "currency": "EUR",
+     "eur": 90.19,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Premium Booster – The Best (japonsky)",
+     "url": "https://www.najada.games/produkt/one-piece-premium-booster-the-best-japonsky-OBZYUF",
+     "price": 14.79,
+     "currency": "EUR",
+     "eur": 14.79,
+     "inStock": false
+    },
+    {
+     "name": "One Piece Anime 25th Collection Booster Box (asijsky)",
+     "url": "https://www.najada.games/produkt/one-piece-anime-25th-collection-booster-box-asijsky-SBSY23",
+     "price": 143.39,
+     "currency": "EUR",
+     "eur": 143.39,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Royal Blood Booster (japonsky)",
+     "url": "https://www.najada.games/produkt/one-piece-royal-blood-booster-japonsky-D896JM",
+     "price": 3.99,
+     "currency": "EUR",
+     "eur": 3.99,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Paramount War Booster Box (asijsky)",
+     "url": "https://www.najada.games/produkt/one-piece-paramount-war-booster-box-asijsky-KYW2OU",
+     "price": 65.59,
+     "currency": "EUR",
+     "eur": 65.59,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Romance Dawn Booster (asijsky)",
+     "url": "https://www.najada.games/produkt/one-piece-romance-dawn-booster-asijsky-FYZW28",
+     "price": 3.19,
+     "currency": "EUR",
+     "eur": 3.19,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Romance Dawn Booster Box (asijsky)",
+     "url": "https://www.najada.games/produkt/one-piece-romance-dawn-booster-box-asijsky-LWN4NA",
+     "price": 69.59,
+     "currency": "EUR",
+     "eur": 69.59,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Kingdoms of Intrigue Booster Box (asijsky)",
+     "url": "https://www.najada.games/produkt/one-piece-kingdoms-of-intrigue-booster-box-asijsky-9W2EIV",
+     "price": 69.59,
+     "currency": "EUR",
+     "eur": 69.59,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Pillars of Strength Booster (asijsky)",
+     "url": "https://www.najada.games/produkt/one-piece-pillars-of-strength-booster-asijsky-BI71KF",
+     "price": 2.39,
+     "currency": "EUR",
+     "eur": 2.39,
+     "inStock": false
+    },
+    {
+     "name": "One Piece Pillars of Strength Booster Box (asijsky)",
+     "url": "https://www.najada.games/produkt/one-piece-pillars-of-strength-booster-box-asijsky-YMJQ7X",
+     "price": 49.19,
+     "currency": "EUR",
+     "eur": 49.19,
+     "inStock": true
+    }
+   ]
+  },
+  "tolarie": {
+   "ts": "2026-10-09T10:54:40Z",
+   "ok": true,
+   "items": [
+    {
+     "name": "One Piece - Adventure on Kami’s Island Booster Box OP-15",
+     "url": "https://www.tolarie.cz/koupit_produkty/katalog/one-piece-adventure-on-kamis-island-booster-box",
+     "price": 4999.0,
+     "currency": "CZK",
+     "eur": 204.85,
+     "inStock": true,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece - Carrying on his Will Booster Box OP-13",
+     "url": "https://www.tolarie.cz/koupit_produkty/katalog/one-piece-carrying-on-his-will-booster-box",
+     "price": 9499.0,
+     "currency": "CZK",
+     "eur": 389.26,
+     "inStock": false,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece - Heroines Edition Booster Box - EB-03",
+     "url": "https://www.tolarie.cz/koupit_produkty/katalog/one-piece-heroines-edition-booster-box",
+     "price": 6499.0,
+     "currency": "CZK",
+     "eur": 266.32,
+     "inStock": true,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece - The Time of Battle Booster Box OP-16",
+     "url": "https://www.tolarie.cz/koupit_produkty/katalog/one-piece-the-time-of-battle-booster-box-op-16",
+     "price": 4199.0,
+     "currency": "CZK",
+     "eur": 172.07,
+     "inStock": false,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece - The World's Strongest Warriors OP-17",
+     "url": "https://www.tolarie.cz/koupit_produkty/katalog/one-piece-the-worlds-strongest-warriors-op-17",
+     "price": 6199.0,
+     "currency": "CZK",
+     "eur": 254.03,
+     "inStock": true,
+     "hint": "Box"
+    },
+    {
+     "name": "One Piece - The Time of Battle Booster OP-16",
+     "url": "https://www.tolarie.cz/koupit_produkty/katalog/one-piece-the-time-of-battle-booster-op-16",
+     "price": 149.0,
+     "currency": "CZK",
+     "eur": 6.11,
+     "inStock": false,
+     "hint": "Pack"
+    }
+   ]
+  },
+  "cernyrytir": {
+   "ts": "2026-10-09T10:54:40Z",
+   "ok": true,
+   "items": [
+    {
+     "name": "One Piece - Adventure on Kami's Island Booster",
+     "url": "https://cernyrytir.cz/merch/detail/f2e5d227-6acc-48ac-a4e1-17e242c17148",
+     "price": 225.0,
+     "currency": "CZK",
+     "eur": 9.22,
+     "inStock": true
+    },
+    {
+     "name": "One Piece - Adventure on Kami's Island Booster Box",
+     "url": "https://cernyrytir.cz/merch/detail/e4b80847-c963-4651-b9b3-cd3a23a85c5a",
+     "price": 5499.0,
+     "currency": "CZK",
+     "eur": 225.34,
+     "inStock": true
+    },
+    {
+     "name": "One Piece - Eustass Captain Kid Starter Deck (ST-36)",
+     "url": "https://cernyrytir.cz/merch/detail/861e475b-e7bd-4305-81d8-cea95d92cae8",
+     "price": 349.0,
+     "currency": "CZK",
+     "eur": 14.3,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Figure - Dracule Mihawk (Masterlise)",
+     "url": "https://cernyrytir.cz/merch/detail/23e46a23-fd25-4ff1-9536-4e8619d291f2",
+     "price": 1999.0,
+     "currency": "CZK",
+     "eur": 81.92,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Figure - Monkey.D.Luffy (Grandista Special Edition)",
+     "url": "https://cernyrytir.cz/merch/detail/8f1478ec-6abe-4380-aa7c-bd6b4ae8c20e",
+     "price": 1999.0,
+     "currency": "CZK",
+     "eur": 81.92,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Figure - Monkey.D.Luffy (Masterlise)",
+     "url": "https://cernyrytir.cz/merch/detail/8ec2c433-2be1-4426-9a55-955d7dafc770",
+     "price": 1999.0,
+     "currency": "CZK",
+     "eur": 81.92,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Figure - Nefeltari Vivi II",
+     "url": "https://cernyrytir.cz/merch/detail/12d3ee26-16e2-475c-afac-f3c7cc39ed1d",
+     "price": 999.0,
+     "currency": "CZK",
+     "eur": 40.94,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Figure - Roronoa Zoro",
+     "url": "https://cernyrytir.cz/merch/detail/a1db2f99-644a-4bb0-9e37-7d0c5c623d9e",
+     "price": 1999.0,
+     "currency": "CZK",
+     "eur": 81.92,
+     "inStock": true
+    },
+    {
+     "name": "One Piece Figure - Sanji",
+     "url": "https://cernyrytir.cz/merch/detail/48b23f3f-2a75-45b0-846b-c5587d4548b5",
+     "price": 1999.0,
+     "currency": "CZK",
+     "eur": 81.92,
+     "inStock": true
+    },
+    {
+     "name": "One Piece - Kuzan Starter Deck (ST-33)",
+     "url": "https://cernyrytir.cz/merch/detail/d570be5f-c8bd-4f8f-b615-fd5d8e8139fa",
+     "price": 349.0,
+     "currency": "CZK",
+     "eur": 14.3,
+     "inStock": true
+    },
+    {
+     "name": "One Piece - Monkey.D.Luffy Starter Deck (ST-31)",
+     "url": "https://cernyrytir.cz/merch/detail/f0b96b9c-3141-467e-9666-56a7179cc5c6",
+     "price": 499.0,
+     "currency": "CZK",
+     "eur": 20.45,
+     "inStock": true
+    },
+    {
+     "name": "One Piece - Premium Card Collection - Best Selection Vol. 6",
+     "url": "https://cernyrytir.cz/merch/detail/9acfbbb1-254e-42bc-ade4-7edc4dd6a5db",
+     "price": 1299.0,
+     "currency": "CZK",
+     "eur": 53.23,
+     "inStock": true
+    },
+    {
+     "name": "One Piece - Sabo Starter Deck (ST-35)",
+     "url": "https://cernyrytir.cz/merch/detail/a99f93d7-a833-4da7-9a45-25cf2c629716",
+     "price": 299.0,
+     "currency": "CZK",
+     "eur": 12.25,
+     "inStock": true
+    },
+    {
+     "name": "One Piece - Set Sail Deck Set",
+     "url": "https://cernyrytir.cz/merch/detail/ab940377-28b9-47da-9759-c767b1eefe58",
+     "price": 699.0,
+     "currency": "CZK",
+     "eur": 28.64,
      "inStock": true
     }
    ]
