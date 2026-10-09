@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T19:05:26Z",
+ "updated": "2026-10-09T19:22:26Z",
  "fx": {
   "CZK": 24.369,
   "USD": 1.1206,
@@ -658,7 +658,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-09T18:39:49Z",
+   "ts": "2026-10-09T19:22:26Z",
    "ok": true,
    "items": [
     {
@@ -1887,7 +1887,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-09T18:39:49Z",
+   "ts": "2026-10-09T19:22:26Z",
    "ok": true,
    "items": [
     {
@@ -2289,7 +2289,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-09T18:39:49Z",
+   "ts": "2026-10-09T19:22:26Z",
    "ok": true,
    "items": [
     {
@@ -2733,7 +2733,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-09T18:39:49Z",
+   "ts": "2026-10-09T19:22:26Z",
    "ok": true,
    "items": [
     {
@@ -2916,7 +2916,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-09T18:39:49Z",
+   "ts": "2026-10-09T19:22:26Z",
    "ok": true,
    "items": [
     {
@@ -3586,7 +3586,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-09T18:39:49Z",
+   "ts": "2026-10-09T19:22:26Z",
    "ok": true,
    "items": [
     {
@@ -3771,6 +3771,11 @@
      "img": "https://cdn.myshoptet.com/usr/www.pokemon4u.cz/user/shop/related/46762_skbnsxjjtohfdkb12vbqr05uovq1zrf3uz2qdugcnukw45ggnmkceclafenodwkbqyxymusdwsi3v9i9oxtlit28-i7azzzgbew7roqn5ezynd-yqtism7c4zk-jhh-fyphimytl-cjyqeorfmlotoepo-80m7xvbnkzlrzarbv-pby-qouqyhfoxksbmeb2.jpg?ff=1&x=100&y=100&q=85&ts=6a2b1fda&sg=8dda0505"
     }
    ]
+  },
+  "smarty": {
+   "items": [],
+   "ok": false,
+   "error": "Smarty odmietol požiadavku (403) – ponechávam posledné ceny; aktuálne ich dostaneš uložením stránky cez Ctrl+S do priečinka import"
   }
  }
 }
