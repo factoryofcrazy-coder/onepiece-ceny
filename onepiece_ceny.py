@@ -78,6 +78,11 @@ SHOPS = {
                    "urls": ["https://eshop-api.cernyrytir.eu/api/public/merch/list#677"]},
     "nekonecno":  {"label": "Nekonečno", "parser": "shoptet", "currency": "EUR", "cloud": False, "delay": 3,
                    "urls": ["https://www.nekonecno.sk/one-piece-karty/"]},
+    "pokemon4u":  {"label": "Pokemon4U", "parser": "shoptet", "currency": "CZK", "cloud": False, "delay": 3,
+                   "urls": ["https://www.pokemon4u.cz/one-piece-karty/"]},
+    "hrananetu":  {"label": "Hra na netu", "parser": "upgates", "currency": "CZK",
+                   "urls": [{"url": "https://www.hrananetu.cz/one-piece-booster-boxy", "kind": "Box"},
+                            {"url": "https://www.hrananetu.cz/one-piece-boostery", "kind": "Pack"}]},
     # Smarty.sk blokuje automatické sťahovanie webu (Cloudflare). Legálna cesta je ich affiliate
     # XML feed (eHUB – „XML feed na vyžiadanie u affiliate managera“). Keď je URL feedu nastavená
     # (SMARTY_FEED_URL / smarty_feed.txt), obchod sa zapne automaticky; inak je na stránke len odkaz.
@@ -300,6 +305,25 @@ def parse_tolarie(page, base):
     return out
 
 
+def parse_upgates(page, base):
+    """Upgates e-shopy (napr. Hra na netu): <article class="... card-item ...">."""
+    out = []
+    for chunk in re.split(r'<article[^>]*class="[^"]*card-item', page)[1:]:
+        chunk = chunk.split("</article>")[0]
+        a = re.search(r'<h4[^>]*>\s*<a href="([^"]+)"[^>]*>(.*?)</a>', chunk, re.S)
+        pr = re.search(r'class="p-i-price[^"]*"[^>]*>\s*<strong[^>]*>(.*?)</strong>', chunk, re.S)
+        st = re.search(r'class="in-stock([^"]*)"[^>]*>(.*?)</div>', chunk, re.S)
+        if not (a and pr):
+            continue
+        ptxt = clean(pr.group(1))
+        sttxt = clean(st.group(2)) if st else ""
+        out.append({"id": a.group(1), "name": clean(a.group(2)), "url": absolute(base, a.group(1)),
+                    "price": num(ptxt), "currency": "EUR" if "€" in ptxt else "CZK",
+                    "inStock": bool(st) and "in-stock--not" not in st.group(1) and not re.search(r"není|nie je", sttxt, re.I),
+                    "preorder": bool(PREORDER_RX.search(sttxt))})
+    return out
+
+
 def crawl_cernyrytir(shop):
     """Černý rytíř má verejné JSON API (rovnaké, aké používa ich web)."""
     out = []
@@ -356,7 +380,8 @@ def parse_smarty(page, base):
 
 
 PARSERS = {"shoptet": parse_shoptet, "veselydrak": parse_veselydrak,
-           "jsonld": parse_jsonld, "smarty": parse_smarty, "tolarie": parse_tolarie}
+           "jsonld": parse_jsonld, "smarty": parse_smarty, "tolarie": parse_tolarie,
+           "upgates": parse_upgates}
 
 
 def page_url(parser, url, n):

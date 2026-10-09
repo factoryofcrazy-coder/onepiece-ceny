@@ -1,18 +1,18 @@
 # One Piece TCG – ceny v SK obchodoch + MSRP + Discord upozornenia
 
 Sleduje ceny One Piece booster boxov a packov v obchodoch **Card Empire, Pikazard,
-Veselý drak, iHRYsko, Najáda, Tolarie, Černý rytíř a Nekonečno**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
+Veselý drak, iHRYsko, Najáda, Tolarie, Černý rytíř, Nekonečno, Pokemon4U a Hra na netu**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
 pošle upozornenie na **Discord**. Smarty.sk blokuje automatické sťahovanie
 (Cloudflare), preto je na stránke len odkaz naň.
 
 ## Ako to beží
 
 **Online (GitHub Actions + Pages)** – každé 2 hodiny automaticky stiahne **Veselý drak, iHRYsko,
-Najádu, Tolarie a Černého rytíře**,
+Najádu, Tolarie, Černého rytíře a Hru na netu**,
 pošle upozornenia na Discord a obnoví stránku **https://factoryofcrazy-coder.github.io/onepiece-ceny/**.
 Tlačidlo Fetch na online stránke otvorí GitHub Actions → *Run workflow*.
 
-**Card Empire, Pikazard a Nekonečno** (Shoptet) blokujú servery GitHubu, preto sa sťahujú z tvojho PC:
+**Card Empire, Pikazard, Nekonečno a Pokemon4U** (Shoptet) blokujú servery GitHubu, preto sa sťahujú z tvojho PC:
 dvojklik na **`spustit.bat`** → hneď stiahne všetky obchody, pošle upozornenia,
 **nahrá dáta na GitHub** (online stránka ich ukáže ako „z PC“) a otvorí lokálnu stránku.
 
