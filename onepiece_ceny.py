@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-09n"
+VERSION = "2026-10-11a"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -95,6 +95,12 @@ SHOPS = {
                             "https://www.hrananetu.cz/one-piece-balicky"]},
     "poring":     {"label": "Poring Cards", "parser": "shoptet", "currency": "EUR", "cloud": False, "delay": 3,
                    "urls": ["https://www.poringcards.eu/one-piece/"]},
+    "wombat":     {"label": "Wombat Games", "parser": "shoptet", "currency": "CZK", "cloud": False, "delay": 3,
+                   "urls": ["https://www.wombatgames-shop.cz/kategorie/one-piece-tcg/"]},
+    "blacklotus": {"label": "Black Lotus", "parser": "shoptet", "currency": "CZK", "cloud": False, "delay": 3,
+                   "urls": ["https://www.blacklotus.cz/booster-boxy-a-boostery/",
+                            "https://www.blacklotus.cz/starter-decky/",
+                            "https://www.blacklotus.cz/dalsi-produkty-4/"]},
     "cardstore":  {"label": "Cardstore", "parser": "shoptet", "currency": "CZK", "cloud": False, "delay": 3,
                    "urls": ["https://www.cardstore.cz/one-piece-tcg/"]},
     # Xzone: robots.txt zakazuje parametre ?s=/sort=/term= – sťahuje sa len čistá URL kategórie (Crawl-Delay 3)

@@ -2,7 +2,7 @@
 
 Sleduje ceny One Piece booster boxov a packov v obchodoch **Card Empire, Pikazard,
 Veselý drak, iHRYsko, Najáda, Tolarie, Černý rytíř, Nekonečno, Pokemon4U, Hra na netu,
-Poring Cards, Cardstore, Xzone.sk a Hry do ruky**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
+Poring Cards, Cardstore, Wombat Games, Black Lotus, Xzone.sk a Hry do ruky**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
 pošle upozornenie na **Discord**. Smarty.sk blokuje automatické sťahovanie
 (Cloudflare), preto je na stránke len odkaz naň.
 
@@ -13,7 +13,7 @@ Najádu, Tolarie, Černého rytíře, Hru na netu, Xzone.sk a Hry do ruky**,
 pošle upozornenia na Discord a obnoví stránku **https://factoryofcrazy-coder.github.io/onepiece-ceny/**.
 Tlačidlo Fetch na online stránke otvorí GitHub Actions → *Run workflow*.
 
-**Card Empire, Pikazard, Nekonečno, Pokemon4U, Poring Cards a Cardstore** (Shoptet) blokujú servery GitHubu, preto sa sťahujú z tvojho PC:
+**Card Empire, Pikazard, Nekonečno, Pokemon4U, Poring Cards, Cardstore, Wombat Games a Black Lotus** (Shoptet) blokujú servery GitHubu, preto sa sťahujú z tvojho PC:
 dvojklik na **`spustit.bat`** → hneď stiahne všetky obchody, pošle upozornenia,
 **nahrá dáta na GitHub** (online stránka ich ukáže ako „z PC“) a otvorí lokálnu stránku.
 
