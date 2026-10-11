@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-11c"
+VERSION = "2026-10-11d"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -106,6 +106,13 @@ SHOPS = {
                    "urls": ["https://cardcosmos.de/collections/one-piece-karten-kaufen"]},
     "yonko":      {"label": "Yonko TCG (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
                    "urls": ["https://yonko-tcg.de/collections/one-piece"]},
+    # Rakúske obchody – posielajú len v rámci AT (objednať na rakúsku adresu / výdajné miesto pri BA, ButtiCards osobne vo Viedni)
+    "funkelpappe": {"label": "Funkelpappe (AT)", "parser": "shopify", "currency": "EUR", "delay": 2,
+                    "urls": ["https://funkelpappe.at/collections/one-piece"]},
+    "mikis":      {"label": "Mikis Card Shop (AT)", "parser": "shopify", "currency": "EUR", "delay": 2,
+                   "urls": ["https://www.mikiscardshop.at/collections/one-pice"]},
+    "butticards": {"label": "ButtiCards (Wien)", "parser": "ecwid", "currency": "EUR", "delay": 2, "max_pages": 1,
+                   "urls": ["https://www.butticards.at/Shop/One-Piece-c163462755"]},
     "cardstore":  {"label": "Cardstore", "parser": "shoptet", "currency": "CZK", "cloud": False, "delay": 3,
                    "urls": ["https://www.cardstore.cz/one-piece-tcg/"]},
     # Xzone: robots.txt zakazuje parametre ?s=/sort=/term= – sťahuje sa len čistá URL kategórie (Crawl-Delay 3)
@@ -479,6 +486,25 @@ def parse_xzone(page, base):
     return out
 
 
+def parse_ecwid(page, base):
+    """Ecwid obchody (ButtiCards): serverom vyrenderovaná mriežka produktov."""
+    out = []
+    for chunk in page.split('class="grid-product grid-product--id-')[1:]:
+        cls = chunk.split('"', 1)[0]
+        a = re.search(r'href="([^"]+)"\s+class="grid-product__title"[^>]*title="([^"]+)"', chunk)
+        pr = re.search(r'class="grid-product__price-value[^"]*"[^>]*>(.*?)</div>', chunk, re.S)
+        if not (a and pr):
+            continue
+        ptxt = clean(pr.group(1))
+        img = re.search(r'<img src="([^"]+)"', chunk)
+        sold = "outOfStock" in cls or "Ausverkauft" in chunk
+        pre = bool(re.search(r'is-only-preorder-available="true"|vorbestell|pre-?order', chunk, re.I))
+        out.append({"id": a.group(1), "name": html.unescape(a.group(2)), "url": a.group(1), "price": num(ptxt),
+                    "currency": "EUR", "img": img.group(1) if img else None,
+                    "inStock": not sold and not pre, "preorder": pre and not sold})
+    return [o for o in out if o["price"] and not SHOPIFY_SKIP_TITLE.search(o["name"])]
+
+
 def parse_hrydoruky(page, base):
     """Zoznam produktov nopCommerce (bez dostupnosti – dopĺňa sa z detailu v crawl_hrydoruky)."""
     out = []
@@ -509,7 +535,7 @@ def hrydoruky_stock(page):
 
 
 SHOPIFY_SKIP_TYPE = re.compile(r"einzelkarte|single|zubeh|accessor|figur|funko|plüsch|plush|playmat|sleeve|binder", re.I)
-SHOPIFY_SKIP_TITLE = re.compile(r"\b(AOG|M3G|PSA|BGS|CGC|Beckett)\b|grading|gem mint|collect aura|\bmint\b|mystery|bundle|promo", re.I)
+SHOPIFY_SKIP_TITLE = re.compile(r"\b(AOG|M3G|PSA|BGS|CGC|Beckett)\b|grading|gem mint|collect aura|bewertet|\bmint\b|mystery|bundle|promo", re.I)
 
 
 def crawl_shopify(shop):
@@ -557,7 +583,7 @@ def crawl_hrydoruky(shop):
 
 PARSERS = {"shoptet": parse_shoptet, "veselydrak": parse_veselydrak,
            "jsonld": parse_jsonld, "smarty": parse_smarty, "tolarie": parse_tolarie,
-           "upgates": parse_upgates, "xzone": parse_xzone}
+           "upgates": parse_upgates, "xzone": parse_xzone, "ecwid": parse_ecwid}
 
 
 def page_url(parser, url, n):
