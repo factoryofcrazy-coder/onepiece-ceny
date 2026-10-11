@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-11f"
+VERSION = "2026-10-11g"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -931,6 +931,9 @@ def shipping_cost(key, price_eur):
     if sh.get("cost") is None:
         return None
     cost = float(sh["cost"])
+    if sh.get("cost_currency") and sh["cost_currency"] != "EUR":       # doprava zadaná v cudzej mene (napr. 9000 JPY)
+        fx = (load_json(CURRENT, {}) if CURRENT.exists() else {}).get("fx") or FX_FALLBACK
+        cost = cost / float(fx.get(sh["cost_currency"], 1))
     if sh.get("import_vat") is not None:
         landed = (price_eur + cost) * (1 + float(sh["import_vat"])) + float(sh.get("import_fee", 0))
         return round(landed - price_eur, 2)

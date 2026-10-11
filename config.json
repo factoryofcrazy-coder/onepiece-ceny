@@ -180,11 +180,12 @@
       "free_from": null
     },
     "samurai": {
-      "method": "FedEx z Japonska – odhad vrátane 23 % DPH a preclenia",
-      "cost": 25,
+      "method": "FedEx z Japonska 9000 ¥ + 23 % DPH a preclenie",
+      "cost": 9000,
       "free_from": null,
       "import_vat": 0.23,
-      "import_fee": 10
+      "import_fee": 10,
+      "cost_currency": "JPY"
     }
   }
 }
