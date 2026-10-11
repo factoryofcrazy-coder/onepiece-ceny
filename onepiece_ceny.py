@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-11b"
+VERSION = "2026-10-11c"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -873,9 +873,10 @@ def shipping_cost(key, price_eur):
 
 def with_shipping(key, price_eur, alerts_cfg=None):
     """Cena vrátane dopravy na SK; neznáma doprava = odhad (alerts.default_shipping, predvolene 3,50 €)."""
+    cfg = alerts_cfg or {}
     c = shipping_cost(key, price_eur)
     if c is None:
-        c = float((alerts_cfg or {}).get("default_shipping", 3.5))
+        c = float(cfg.get("default_shipping", 3.5))
     return price_eur + c
 
 
@@ -1017,7 +1018,7 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
             code, kind, lang = classify(i["name"], i.get("hint"))
             if code and kind not in ("Iné", "Doplnky"):
                 d = by_ident.setdefault(f"{code} {kind} {lang}".upper(), {})
-                d[key] = min(d.get(key, 1e9), with_shipping(key, i["eur"], a))
+                d[key] = min(d.get(key, 1e9), i["eur"])
     # najnižšia cena skladom za posledných 30 dní (z histórie, bez práve stiahnutých cien)
     low30, n_hist = {}, {}
     if a.get("low30", True):
@@ -1050,10 +1051,14 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                 if kind in kinds and code:
                     other = [v for k2, v in by_ident.get(ident, {}).items() if k2 != key]
                     if len(other) >= 2:
-                        med = statistics.median(other)           # ceny vrátane dopravy na SK
-                        mine = with_shipping(key, i["eur"], a)
+                        # pri drahších veciach (box, kolekcia) porovnávaj cenu vrátane dopravy na SK, pri packoch bez nej
+                        ship = statistics.median(other) >= float(a.get("shipping_compare_min", 40))
+                        other = [with_shipping(k2, v, a) if ship else v
+                                 for k2, v in by_ident.get(ident, {}).items() if k2 != key]
+                        med = statistics.median(other)
+                        mine = with_shipping(key, i["eur"], a) if ship else i["eur"]
                         if med * 0.4 <= mine <= med * (1 - cross_pct):
-                            reasons.append(f"💰 o {(1 - mine / med) * 100:.0f} % lacnejšie než inde aj s dopravou "
+                            reasons.append(f"💰 o {(1 - mine / med) * 100:.0f} % lacnejšie než inde" + (" aj s dopravou " if mine != i["eur"] else " ") +
                                            f"({eur(mine)} vs bežne {eur(med)}, {len(other)} obch.)")
                     lo = low30.get(ident)
                     if lo and n_hist.get(ident, 0) >= 3 and key in known_shops and lo * 0.4 <= i["eur"] < lo * 0.98:
@@ -1097,9 +1102,10 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
             fields.append({"name": "Sklad", "value": "✅ skladom" if i["inStock"] else "🕒 predobjednávka", "inline": True})
             fields.append({"name": "Cardmarket", "value": f"[porovnať]({cardmarket_url(i['name'])})", "inline": True})
             top_cross = float(a.get("top_cross_pct", 20))
-            top = (pct is not None and pct <= 0 and kind in ("Box", "Pack", "Double Pack")) \
+            top = kind != "Pack" and (pct is not None and pct <= 0 and kind in ("Box", "Double Pack")) \
                 or any("cieľovou" in r for r in reasons) \
-                or any(r.startswith("💰") and float(re.search(r"o (\d+) %", r).group(1)) >= top_cross for r in reasons)
+                or (kind != "Pack" and any(r.startswith("💰") and float(re.search(r"o (\d+) %", r).group(1)) >= top_cross
+                                           for r in reasons))
             embeds.append({"_top": top, "title": ("⭐ " if top else "") + i["name"][:248], "url": i["url"],
                            "description": "🔥 " + " · ".join(reasons),
                            "color": 0x2DA44E if (pct is not None and pct <= 0) or re.search(r"cieľovou|💰|📉 najnižšia", " ".join(reasons)) else 0x1F6FEB,
