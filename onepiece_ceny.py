@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-11h"
+VERSION = "2026-10-11i"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -152,7 +152,7 @@ SET_NAMES = {
     "heroines edition": "EB03", "egghead crisis": "EB04",
     "the best vol. 2": "PRB02", "the best vol.2": "PRB02", "the best 2": "PRB02", "the best": "PRB01",
 }
-PREORDER_RX = re.compile(r"(?:p[řr]edobjedn|pre-?order|presale|predpredaj|p[řr]edprodej)", re.I)
+PREORDER_RX = re.compile(r"(?:p[řr]edobjedn|pre-?order|presale|predpredaj|p[řr]edprodej|vorbestell|vorverkauf|el[őo]rendel)", re.I)
 CODE_RX = re.compile(r"\b(OP|EB|PRB|ST|IB|SD)\s?-?\s?(\d{1,2})\b", re.I)
 
 
@@ -562,7 +562,7 @@ def crawl_shopify(shop):
                 if not v or not float(v.get("price") or 0):
                     continue
                 tags = " ".join(p.get("tags") or []) if isinstance(p.get("tags"), list) else str(p.get("tags") or "")
-                pre = bool(re.search(r"pre-?order|vorbestell|\beta\b", title + " " + tags, re.I))
+                pre = bool(re.search(r"pre-?order|vorbestell|vorverkauf|\beta\b", title + " " + tags, re.I))
                 imgs = p.get("images") or []
                 rows.append({"id": str(p.get("id")), "name": title, "url": f"{base}/products/{p.get('handle')}",
                              "price": float(v["price"]), "currency": shop["currency"],
@@ -593,7 +593,7 @@ def crawl_wcstore(shop):
                              "currency": pr.get("currency_code") or shop["currency"],
                              "img": imgs[0].get("thumbnail") or imgs[0].get("src") if imgs else None,
                              "inStock": bool(p.get("is_in_stock")) and p.get("is_purchasable", True),
-                             "preorder": bool(re.search(r"pre-?order", name, re.I))})
+                             "preorder": bool(p.get("is_on_backorder")) or bool(re.search(r"pre-?order|予約", name, re.I))})
             if len(data) < 100:
                 break
             time.sleep(shop.get("delay", DELAY))
