@@ -20,7 +20,8 @@
     "mention_top: pri top ponukách (pod MSRP, pod cieľovou cenou, o top_cross_pct % lacnejšie než inde) pridá @here – zazvoní notifikácia.",
     "shipping: cena je doprava na SK v EUR; cost null = cenu ukáže až košík obchodu (doplň ručne), free_from = doprava zdarma od (EUR).",
     "default_shipping: odhad dopravy (EUR) pre obchody, kde cena dopravy nie je známa – používa sa pri porovnaní s inými obchodmi.",
-    "shipping_compare_min: dopravu pripočítaj pri porovnaní s inými obchodmi len pri produktoch od tejto ceny (packy sa porovnávajú bez dopravy). Packy nikdy nedostanú @here."
+    "shipping_compare_min: dopravu pripočítaj pri porovnaní s inými obchodmi len pri produktoch od tejto ceny (packy sa porovnávajú bez dopravy). Packy nikdy nedostanú @here.",
+    "import_vat / import_fee: obchod mimo EÚ – k cene sa pripočíta doprava (cost, odhad), 23 % DPH z tovaru aj dopravy a poplatok kuriéra za preclenie (import_fee). Clo na zberateľské karty je 0 %."
   ],
   "alerts": {
     "max_pct_vs_msrp": {
@@ -177,6 +178,13 @@
       "method": "do SK (DHL)",
       "cost": 15.5,
       "free_from": null
+    },
+    "samurai": {
+      "method": "FedEx z Japonska – odhad vrátane 23 % DPH a preclenia",
+      "cost": 25,
+      "free_from": null,
+      "import_vat": 0.23,
+      "import_fee": 10
     }
   }
 }

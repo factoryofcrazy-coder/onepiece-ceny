@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-11e"
+VERSION = "2026-10-11f"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -106,6 +106,9 @@ SHOPS = {
                    "urls": ["https://cardcosmos.de/collections/one-piece-karten-kaufen"]},
     "playmaniac": {"label": "Play-Maniac (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
                    "urls": ["https://www.play-maniac.de/collections/one-piece-card-game"]},
+    # Japonsko – cena na stránke a v porovnaní je vrátane odhadu dopravy FedEx, 23 % DPH pri dovoze a poplatku za preclenie
+    "samurai":    {"label": "Samurai Sword Tokyo (JP)", "parser": "wcstore", "currency": "JPY", "delay": 2,
+                   "urls": ["https://samuraiswordtokyo.com/wp-json/wc/store/v1/products?search=one%20piece%20booster%20box"]},
     "yonko":      {"label": "Yonko TCG (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
                    "urls": ["https://yonko-tcg.de/collections/one-piece"]},
     # Rakúske obchody – posielajú len v rámci AT (objednať na rakúsku adresu / výdajné miesto pri BA, ButtiCards osobne vo Viedni)
@@ -570,6 +573,34 @@ def crawl_shopify(shop):
     return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I)]
 
 
+def crawl_wcstore(shop):
+    """WooCommerce Store API (verejné JSON, napr. Samurai Sword Tokyo)."""
+    rows = []
+    for start in shop["urls"]:
+        for page in range(1, 4):
+            sep = "&" if "?" in start else "?"
+            data = json.loads(fetch(f"{start}{sep}per_page=100&page={page}"))
+            if not data:
+                break
+            for p in data:
+                name = html.unescape(p.get("name", "")).strip()
+                pr = p.get("prices") or {}
+                if not pr.get("price"):
+                    continue
+                price = int(pr["price"]) / 10 ** int(pr.get("currency_minor_unit", 0))
+                imgs = p.get("images") or []
+                rows.append({"id": str(p.get("id")), "name": name, "url": p.get("permalink"), "price": price,
+                             "currency": pr.get("currency_code") or shop["currency"],
+                             "img": imgs[0].get("thumbnail") or imgs[0].get("src") if imgs else None,
+                             "inStock": bool(p.get("is_in_stock")) and p.get("is_purchasable", True),
+                             "preorder": bool(re.search(r"pre-?order", name, re.I))})
+            if len(data) < 100:
+                break
+            time.sleep(shop.get("delay", DELAY))
+    return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I) and r["price"]
+            and not SHOPIFY_SKIP_TITLE.search(r["name"])]
+
+
 def crawl_hrydoruky(shop):
     rows = []
     for start in shop["urls"]:
@@ -635,6 +666,8 @@ def crawl(shop):
         return crawl_hrydoruky(shop)
     if shop["parser"] == "shopify":
         return crawl_shopify(shop)
+    if shop["parser"] == "wcstore":
+        return crawl_wcstore(shop)
     if shop["parser"] == "cernyrytir":
         rows = crawl_cernyrytir(shop)
         return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
@@ -820,7 +853,7 @@ def snapshot(only=None, force=True):
         out = []
         for i in items:
             cur = i.get("currency") or shop["currency"]
-            eur = i["price"] / fx["CZK"] if cur == "CZK" else i["price"]
+            eur = i["price"] / fx[cur] if cur in fx and cur != "EUR" else i["price"]
             item = {"name": i["name"], "url": i["url"], "price": round(i["price"], 2), "currency": cur,
                     "eur": round(eur, 2), "inStock": bool(i["inStock"])}
             if i.get("hint"):
@@ -891,12 +924,17 @@ def shipping_cfg(key):
 
 
 def shipping_cost(key, price_eur):
+    """Príplatok k cene na SK. Pri dovoze mimo EÚ (import_vat) aj DPH z tovaru + dopravy a poplatok kuriéra za preclenie."""
     sh = shipping_cfg(key)
     if sh.get("free_from") is not None and price_eur >= float(sh["free_from"]):
         return 0.0
     if sh.get("cost") is None:
         return None
-    return float(sh["cost"])
+    cost = float(sh["cost"])
+    if sh.get("import_vat") is not None:
+        landed = (price_eur + cost) * (1 + float(sh["import_vat"])) + float(sh.get("import_fee", 0))
+        return round(landed - price_eur, 2)
+    return cost
 
 
 def with_shipping(key, price_eur, alerts_cfg=None):
@@ -947,11 +985,12 @@ def build_digest(cur, msrp, cfg):
                 continue
             code, kind, lang = classify(i["name"], i.get("hint"))
             m = msrp_eur(code, kind, lang, msrp, fx)
-            if kind != "Box" or not m or i["eur"] < 0.4 * m:
+            real = i["eur"] + (shipping_cost(key, i["eur"]) or 0) if shipping_cfg(key).get("import_vat") is not None else i["eur"]
+            if kind != "Box" or not m or real < 0.4 * m:
                 continue
             g = f"{code} {lang}"
-            if g not in best or i["eur"] < best[g][0]:
-                best[g] = (i["eur"], m, key, i)
+            if g not in best or real < best[g][0]:
+                best[g] = (real, m, key, i)
     lines = {}
     for lang in ("EN", "JP"):
         rows = sorted(((v[0] / v[1] - 1) * 100, g, v) for g, v in best.items() if g.endswith(lang))[:5]
@@ -1069,7 +1108,9 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
             code, kind, lang = classify(i["name"], i.get("hint"))
             ident = f"{code} {kind} {lang}".upper()
             m = msrp_eur(code, kind, lang, msrp, fx)
-            pct = (i["eur"] / m - 1) * 100 if m else None
+            # dovoz mimo EÚ: porovnávaj s MSRP a cieľovou cenou až cenu po doprave, DPH a preclení
+            real = i["eur"] + (shipping_cost(key, i["eur"]) or 0) if shipping_cfg(key).get("import_vat") is not None else i["eur"]
+            pct = (real / m - 1) * 100 if m else None
             if pct is not None and pct < -60:
                 continue                      # podozrivo lacné – skoro určite doplnok/zlé rozpoznanie, nie box
             reasons = []
@@ -1091,7 +1132,7 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                     lo = low30.get(ident)
                     if lo and n_hist.get(ident, 0) >= 3 and key in known_shops and lo * 0.4 <= i["eur"] < lo * 0.98:
                         reasons.append(f"📉 najnižšia cena za 30 dní (doteraz {eur(lo)})")
-                if ident in watch and i["eur"] <= watch[ident]:
+                if ident in watch and real <= watch[ident]:
                     reasons.append(f"pod tvojou cieľovou cenou {eur(watch[ident])}")
                 p = prev.get(i["url"])
                 if a.get("back_in_stock_watchlist", True) and ident in watch and p and not p["inStock"]:
