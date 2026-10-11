@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-11i"
+VERSION = "2026-10-12a"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -973,6 +973,15 @@ def with_shipping(key, price_eur, alerts_cfg=None):
     return price_eur + c
 
 
+def is_import(key):
+    return shipping_cfg(key).get("import_vat") is not None
+
+
+def landed(key, price_eur):
+    """Cena, ktorú reálne zaplatíš pri dovoze mimo EÚ (tovar + poštovné + DPH + preclenie); inak cena v obchode."""
+    return price_eur + (shipping_cost(key, price_eur) or 0) if is_import(key) else price_eur
+
+
 def shipping_note(key, price_eur):
     sh = shipping_cfg(key)
     parts = []
@@ -1149,10 +1158,11 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                     if len(other) >= 2:
                         # pri drahších veciach (box, kolekcia) porovnávaj cenu vrátane dopravy na SK, pri packoch bez nej
                         ship = statistics.median(other) >= float(a.get("shipping_compare_min", 40))
-                        other = [with_shipping(k2, v, a) if ship else v
-                                 for k2, v in by_ident.get(ident, {}).items() if k2 != key]
+                        def eff(k2, v):
+                            return landed(k2, v) if is_import(k2) else (with_shipping(k2, v, a) if ship else v)
+                        other = [eff(k2, v) for k2, v in by_ident.get(ident, {}).items() if k2 != key]
                         med = statistics.median(other)
-                        mine = with_shipping(key, i["eur"], a) if ship else i["eur"]
+                        mine = eff(key, i["eur"])
                         if med * 0.4 <= mine <= med * (1 - cross_pct):
                             reasons.append(f"💰 o {(1 - mine / med) * 100:.0f} % lacnejšie než inde" + (" aj s dopravou " if mine != i["eur"] else " ") +
                                            f"({eur(mine)} vs bežne {eur(med)}, {len(other)} obch.)")
@@ -1221,11 +1231,12 @@ def page_data():
     for key, s in cur.get("shops", {}).items():
         for i in s.get("items", []):
             code, kind, lang = classify(i["name"], i.get("hint"))
-            offers.append([key, i["name"], code, kind, lang, i["eur"], i["inStock"], i["url"],
+            imp = is_import(key)                 # dovoz: hlavná cena = s poštovným, DPH a preclením
+            offers.append([key, i["name"], code, kind, lang, round(landed(key, i["eur"]), 2), i["inStock"], i["url"],
                            i["price"], i["currency"], msrp_eur(code, kind, lang, msrp, fx),
                            box_packs(code, lang, msrp, i["name"]) if kind == "Box" else None,
-                           bool(i.get("preorder")), shipping_cost(key, i["eur"]), cardmarket_url(i["name"]),
-                           i.get("img")])
+                           bool(i.get("preorder")), None if imp else shipping_cost(key, i["eur"]), cardmarket_url(i["name"]),
+                           i.get("img"), round(i["eur"], 2) if imp else None])
     hist = {}
     for r in load_history():
         hist.setdefault(r["url"], []).append([r["timestamp"], float(r["priceEUR"]), r["inStock"] == "1"])
@@ -1771,7 +1782,7 @@ label.chk{display:flex;gap:5px;align-items:center;color:var(--mute);cursor:point
 <script>
 const P=__PAYLOAD__;
 const SHOPS=P.shops, SK=Object.keys(SHOPS), TH=P.th||{EN:30,JP:150};
-// offer: [shop,name,code,kind,lang,eur,inStock,url,price,currency,msrp,packs,preorder,ship,cm,img]
+// offer: [shop,name,code,kind,lang,eur,inStock,url,price,currency,msrp,packs,preorder,ship,cm,img,shopEur(import)]
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const eur=v=>v==null?"—":v.toLocaleString("sk-SK",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
 const eur0=v=>v==null?"—":v.toLocaleString("sk-SK",{maximumFractionDigits:0})+" €";
@@ -1841,7 +1852,8 @@ function rows(){const q=st.q.toLowerCase();
 
 function offerLi(g,o,i){const p=pctOf(o[5],g.msrp),pk=P.pickup&&P.pickup[o[0]];
   const ship=o[6]&&o[13]!=null?(o[13]===0?"doprava zdarma":`s dopravou ${eur(o[5]+o[13])}`):"";
-  const extra=[o[9]!=="EUR"?`${Math.round(o[8]).toLocaleString("sk-SK")} Kč`:"",ship,pk?"📍 "+pk:"",o[12]&&!o[6]?"🕒 predobjednávka":""].filter(Boolean).join(" · ");
+  const cur9={CZK:"Kč",JPY:"¥",PLN:"zł",HUF:"Ft"}[o[9]]||o[9];
+  const extra=[o[16]!=null?`vrátane poštovného, DPH a preclenia · v obchode ${eur(o[16])} (${Math.round(o[8]).toLocaleString("sk-SK")} ${cur9})`:(o[9]!=="EUR"?`${Math.round(o[8]).toLocaleString("sk-SK")} ${cur9}`:""),ship,pk?"📍 "+pk:"",o[12]&&!o[6]?"🕒 predobjednávka":""].filter(Boolean).join(" · ");
   return `<li class="${o[6]?"":"out"} ${o[6]&&i===0?"top1":""}"><span class="s">${esc(SHOPS[o[0]]||o[0])} <small title="${esc(o[1])}">${o[6]?"":o[12]?"· predobjednávka":"· vypredané"}</small></span>
     <span class="p">${eur(o[5])} ${o[6]?pctHtml(p,g.lang):""}</span><a class="go" href="${esc(o[7])}" target="_blank" rel="noopener">Otvoriť ↗</a>${extra?`<span class="x">${esc(extra)}</span>`:""}</li>`;}
 
@@ -1855,7 +1867,7 @@ function card(g){const b=g.best,tgt=W[g.key],starred=g.key in W,hit=isHit(g);
     <div class="ttl"><div>${g.code?`<span class="tag">${esc(g.code)}</span>`:""}<span class="tag">${esc(g.lang)}</span><span class="tag">${esc(({Premium:"Premium Collection",Illustration:"Illustration Box",Kolekcia:"Kolekcia / set",Doplnky:"Doplnok"})[g.kind]||g.kind)}</span>${g.pre?'<span class="tag pre">predobjednávka</span>':""}${hit?'<span class="tag hit">🎯 pod cieľom</span>':""}</div>
       <div class="nm" title="${esc(g.name)}">${esc(short(g.name))}</div>
       ${g.msrp?`<div class="meta">MSRP ${eur(g.msrp)}${g.packs?` · ${eur(g.msrp/g.packs)}/bal.`:""}</div>`:""}</div>
-    <div class="best">${b?`<div class="pr">${eur(b[5])}</div><div>${pctHtml(g.pct,g.lang)}</div><div class="shop">${esc(SHOPS[b[0]]||b[0])}${g.packs?` · ${eur(b[5]/g.packs)}/bal.`:""}</div>`:'<div class="none">nie je skladom</div>'}</div>
+    <div class="best">${b?`<div class="pr">${eur(b[5])}</div><div>${pctHtml(g.pct,g.lang)}</div><div class="shop">${esc(SHOPS[b[0]]||b[0])}${b[16]!=null?" · ✈️ s poštovným a DPH":""}${g.packs?` · ${eur(b[5]/g.packs)}/bal.`:""}</div>`:'<div class="none">nie je skladom</div>'}</div>
     <button class="star ${starred?"on":""}" data-star="${esc(g.key)}" title="${starred?"Prestať sledovať":"Sledovať"}">${starred?"★":"☆"}</button></div>
   <div class="stats"><span>30 dní min <b>${eur(g.low30)}</b></span>${spark(g.series,g.msrp)}${tr}
     ${starred?`<span class="target">🎯 cieľ <input type="number" min="0" step="5" value="${tgt??""}" data-tgt="${esc(g.key)}" placeholder="€"></span>`:""}</div>
@@ -1869,7 +1881,7 @@ function deals(){const top=Object.values(G).filter(g=>g.kind==="Box"&&g.best&&g.
     <div class="im">${g.img?`<img src="${esc(g.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:""}</div>
     <div>${g.code?`<span class="tag">${esc(g.code)}</span>`:""}<span class="tag">${esc(g.lang)}</span><span class="tag">Box</span></div>
     <div class="pr">${eur0(g.best[5])} ${pctHtml(g.pct,g.lang)}</div>
-    <div class="shop">${esc(SHOPS[g.best[0]]||g.best[0])}${g.low30!=null&&g.best[5]<=g.low30?" · 🏷️ najnižšia za 30 dní":""}</div></a>`).join("");}
+    <div class="shop">${esc(SHOPS[g.best[0]]||g.best[0])}${g.best[16]!=null?" · ✈️ vrátane poštovného a DPH":""}${g.low30!=null&&g.best[5]<=g.low30?" · 🏷️ najnižšia za 30 dní":""}</div></a>`).join("");}
 
 function pres(){const now=P.updated?new Date(P.updated).getTime():Date.now();
   const L=Object.values(G).filter(g=>!["Iné","Doplnky"].includes(g.kind)).map(g=>{const po=g.all.filter(o=>o[12]&&!o[6]&&!(g.msrp&&o[5]<0.4*g.msrp)&&!(["Box","Case"].includes(g.kind)&&o[5]<20)).sort((a,b)=>a[5]-b[5]);
@@ -1883,7 +1895,7 @@ function pres(){const now=P.updated?new Date(P.updated).getTime():Date.now();
     <div class="im">${g.img?`<img src="${esc(g.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:""}</div>
     <div>${g.code?`<span class="tag">${esc(g.code)}</span>`:""}<span class="tag">${esc(g.lang)}</span><span class="tag">${esc(g.kind)}</span></div>
     <div class="pr">${eur0(po[0][5])} ${g.msrp?pctHtml(pctOf(po[0][5],g.msrp),g.lang):""}</div>
-    <div class="shop">${esc(SHOPS[po[0][0]]||po[0][0])}${po.length>1?` · +${po.length-1} ďalšie`:""}</div></a>`).join("");}
+    <div class="shop">${esc(SHOPS[po[0][0]]||po[0][0])}${po[0][16]!=null?" · ✈️ s poštovným a DPH":""}${po.length>1?` · +${po.length-1} ďalšie`:""}</div></a>`).join("");}
 
 function draw(){lsSet("op_filters",st);Object.keys(charts).forEach(k=>{try{charts[k].c.destroy()}catch(e){}delete charts[k]});const R=rows();
   document.getElementById("count").textContent=`${R.length} produktov · ${R.reduce((n,g)=>n+g.inst.length,0)} ponúk skladom`;
