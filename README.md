@@ -11,7 +11,7 @@ pošle upozornenie na **Discord**. Smarty.sk blokuje automatické sťahovanie
 
 **Online (GitHub Actions + Pages)** – každé 2 hodiny automaticky stiahne **Veselý drak, iHRYsko,
 Najádu, Tolarie, Černého rytíře, Hru na netu, Xzone.sk, Hry do ruky
-a nemecké Card Cosmos a Yonko TCG** (posielajú na SK, doprava 15,99 € / 14,99 €)
+a nemecké Card Cosmos, Yonko TCG a Play-Maniac** (posielajú na SK, doprava 15,99 € / 14,99 € / 15,50 €)
 a rakúske **Funkelpappe, Mikis Card Shop a ButtiCards (Wien)** – tie posielajú len v rámci Rakúska
 (objednať na rakúsku adresu / výdajné miesto, ButtiCards aj osobný odber vo Viedni),
 pošle upozornenia na Discord a obnoví stránku **https://factoryofcrazy-coder.github.io/onepiece-ceny/**.

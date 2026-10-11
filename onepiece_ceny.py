@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-11d"
+VERSION = "2026-10-11e"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -104,6 +104,8 @@ SHOPS = {
     # Zahraničné obchody, ktoré posielajú na SK (Shopify – verejný /products.json, ide aj z GitHubu)
     "cardcosmos": {"label": "Card Cosmos (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
                    "urls": ["https://cardcosmos.de/collections/one-piece-karten-kaufen"]},
+    "playmaniac": {"label": "Play-Maniac (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
+                   "urls": ["https://www.play-maniac.de/collections/one-piece-card-game"]},
     "yonko":      {"label": "Yonko TCG (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
                    "urls": ["https://yonko-tcg.de/collections/one-piece"]},
     # Rakúske obchody – posielajú len v rámci AT (objednať na rakúsku adresu / výdajné miesto pri BA, ButtiCards osobne vo Viedni)
