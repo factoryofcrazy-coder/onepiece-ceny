@@ -204,7 +204,7 @@ def kind_of(name):
         return "Premium"
     if "starter" in n or "deck set" in n or "ultra deck" in n or re.search(r"\bst[ -]?\d{1,2}\b", n):
         return "Starter"
-    if re.search(r"\bcase\b", n):
+    if re.search(r"\bcase\b|\bcarton\b", n):
         return "Case"
     if "double pack" in n:
         return "Double Pack"
