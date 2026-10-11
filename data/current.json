@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-11T06:42:50Z",
+ "updated": "2026-10-11T07:06:07Z",
  "fx": {
   "CZK": 24.369,
   "USD": 1.1206,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-10-10T19:40:14Z",
+   "ts": "2026-10-11T07:06:07Z",
    "ok": true,
    "items": [
     {
@@ -90,6 +90,15 @@
      "eur": 99.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/11961_untitled-design--50.png?ff=1&x=100&y=100&q=85&ts=693191d3&sg=8dda0505"
+    },
+    {
+     "name": "One Piece TCG - Illustration Box Vol.7",
+     "url": "https://www.cardempire.sk/one-piece-card-game--illustration-box-vol-7--ib-07-/",
+     "price": 45.0,
+     "currency": "EUR",
+     "eur": 45.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/20499_20-cards--49.png?ff=1&x=100&y=100&q=85&ts=6a62826b&sg=8dda0505"
     },
     {
      "name": "One Piece TCG - Set Sail Deck Set",
@@ -234,15 +243,6 @@
      "eur": 45.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/20502_20-cards--50.png?ff=1&x=423&y=318&q=85&ts=6a6283a6&sg=2175fb9d"
-    },
-    {
-     "name": "One Piece TCG - Illustration Box Vol.7",
-     "url": "https://www.cardempire.sk/one-piece-card-game--illustration-box-vol-7--ib-07-/",
-     "price": 45.0,
-     "currency": "EUR",
-     "eur": 45.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/20499_20-cards--49.png?ff=1&x=423&y=318&q=85&ts=6a62826b&sg=2175fb9d"
     },
     {
      "name": "One Piece TCG - Special Goods Set - Ace/Sabo/Luffy",
@@ -481,17 +481,17 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-10-10T19:40:14Z",
+   "ts": "2026-10-11T07:06:07Z",
    "ok": true,
    "items": [
     {
-     "name": "One Piece ST35 - Starter Deck - Sabo",
-     "url": "https://www.pikazard.eu/one-piece-st35-starter-deck-sabo/",
-     "price": 16.5,
+     "name": "One Piece OP17 - The World's Strongest Warriors - Booster Box",
+     "url": "https://www.pikazard.eu/one-piece-op17-the-world-s-strongest-warriors-booster-box/",
+     "price": 300.0,
      "currency": "EUR",
-     "eur": 16.5,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.pikazard.eu/user/shop/related/6923_img-item01-4.png?6a63562f"
+     "eur": 300.0,
+     "inStock": false,
+     "img": "https://cdn.myshoptet.com/usr/www.pikazard.eu/user/shop/related/7083-1_one-piece-op17-the-world-s-strongest-warriors-booster-box.png?6a914960"
     },
     {
      "name": "One Piece SD01 - Set Sail Deck Set",
@@ -521,22 +521,13 @@
      "img": "https://cdn.myshoptet.com/usr/www.pikazard.eu/user/shop/related/7086_one-piece-op17-the-world-s-strongest-warriors-balicek.png?6a914c8c"
     },
     {
-     "name": "One Piece OP17 - The World's Strongest Warriors - Booster Box",
-     "url": "https://www.pikazard.eu/one-piece-op17-the-world-s-strongest-warriors-booster-box/",
-     "price": 300.0,
-     "currency": "EUR",
-     "eur": 300.0,
-     "inStock": false,
-     "img": "https://cdn.myshoptet.com/usr/www.pikazard.eu/user/shop/related/7083-1_one-piece-op17-the-world-s-strongest-warriors-booster-box.png?6a914960"
-    },
-    {
      "name": "One Piece TCG: Illustration Box Vol.8",
      "url": "https://www.pikazard.eu/one-piece-tcg--illustration-box-vol-8/",
      "price": 39.5,
      "currency": "EUR",
      "eur": 39.5,
      "inStock": false,
-     "img": "https://cdn.myshoptet.com/usr/www.pikazard.eu/user/shop/detail/6935_ib08.jpg?6a6c63c4"
+     "img": "https://cdn.myshoptet.com/usr/www.pikazard.eu/user/shop/related/6935_ib08.jpg?6a6c63c4"
     },
     {
      "name": "One Piece TCG: Illustration Box Vol.7",
@@ -564,6 +555,15 @@
      "eur": 16.5,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.pikazard.eu/user/shop/detail/6926_img-item01-5.png?6a63569e"
+    },
+    {
+     "name": "One Piece ST35 - Starter Deck - Sabo",
+     "url": "https://www.pikazard.eu/one-piece-st35-starter-deck-sabo/",
+     "price": 16.5,
+     "currency": "EUR",
+     "eur": 16.5,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.pikazard.eu/user/shop/detail/6923_img-item01-4.png?6a63562f"
     },
     {
      "name": "One Piece ST34 - Starter Deck - Charlotte Katakuri",
@@ -3030,7 +3030,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-10-10T19:40:14Z",
+   "ts": "2026-10-11T07:06:07Z",
    "ok": true,
    "items": [
     {
@@ -3702,7 +3702,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-10-10T19:40:14Z",
+   "ts": "2026-10-11T07:06:07Z",
    "ok": true,
    "items": [
     {
@@ -3846,7 +3846,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-10-10T19:40:14Z",
+   "ts": "2026-10-11T07:06:07Z",
    "ok": true,
    "items": [
     {
@@ -3970,7 +3970,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-10-10T19:40:14Z",
+   "ts": "2026-10-11T07:06:07Z",
    "ok": true,
    "items": [
     {
