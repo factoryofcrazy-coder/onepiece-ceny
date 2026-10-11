@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-11T19:54:59Z",
+ "updated": "2026-10-11T19:59:30Z",
  "fx": {
   "CZK": 24.369,
   "USD": 1.1206,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-10-11T17:47:53Z",
+   "ts": "2026-10-11T19:59:30Z",
    "ok": true,
    "items": [
     {
@@ -481,7 +481,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-10-11T17:47:53Z",
+   "ts": "2026-10-11T19:59:30Z",
    "ok": true,
    "items": [
     {
@@ -3030,7 +3030,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-10-11T17:47:53Z",
+   "ts": "2026-10-11T19:59:30Z",
    "ok": true,
    "items": [
     {
@@ -3702,7 +3702,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-10-11T17:47:53Z",
+   "ts": "2026-10-11T19:59:30Z",
    "ok": true,
    "items": [
     {
@@ -3846,7 +3846,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-10-11T17:47:53Z",
+   "ts": "2026-10-11T19:59:30Z",
    "ok": true,
    "items": [
     {
@@ -3855,7 +3855,7 @@
      "price": 27.0,
      "currency": "EUR",
      "eur": 27.0,
-     "inStock": true,
+     "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.poringcards.eu/user/shop/related/735_2200608603a13f2847060084aa5c9c66.png?ff=1&x=100&y=100&q=85&ts=6ac736ea&sg=8dda0505"
     },
     {
@@ -3970,7 +3970,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-10-11T17:47:53Z",
+   "ts": "2026-10-11T19:59:30Z",
    "ok": true,
    "items": [
     {
@@ -5687,6 +5687,207 @@
      "eur": 69.9,
      "inStock": false,
      "img": "https://d2j6dbq0eux0bg.cloudfront.net/images/44059914/products/666614602/4358220179.jpg"
+    }
+   ]
+  },
+  "wombat": {
+   "ts": "2026-10-11T19:59:30Z",
+   "ok": true,
+   "items": [
+    {
+     "name": "One Piece Card Game – Adventure on KAMI's Island Booster Box (OP15-EB04) – EN",
+     "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game-adventure-on-kami-s-island-booster-box-op15-eb04-en/",
+     "price": 4399.0,
+     "currency": "CZK",
+     "eur": 180.52,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2721_one-piece-op15-eb04-adventure-on-kami-s-island-booster-box.webp?ff=1&x=100&y=100&q=85&ts=6ac75d7b&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game: Set Sail Deck Set [SD-01]",
+     "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game-set-sail-deck-set-sd-01/",
+     "price": 589.0,
+     "currency": "CZK",
+     "eur": 24.17,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2598-1_set-sail-deck-set--sd-01--box.webp?ff=1&x=100&y=100&q=85&ts=6aa2f44f&sg=8dda0505"
+    },
+    {
+     "name": "One Piece - Official Playmat Limited Edition Vol.5 - EN",
+     "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-official-playmat-limited-edition-vol-5/",
+     "price": 6799.0,
+     "currency": "CZK",
+     "eur": 279.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2310-2_official-playmat-limited-edition-vol-5.webp?ff=1&x=100&y=100&q=85&ts=6a79d991&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game: ST 35 Red Sabo",
+     "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game--st-35-red-sabo/",
+     "price": 349.0,
+     "currency": "CZK",
+     "eur": 14.32,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2274_one-piece-card-game-st-35-red-sabo.png?ff=1&x=100&y=100&q=85&ts=6a707bb7&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game: ST 36 Yellow Eustass \"Captain\" Kid",
+     "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game--st-36-yellow-eustass--captain--kid/",
+     "price": 349.0,
+     "currency": "CZK",
+     "eur": 14.32,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2268_one-piece-card-game-st-36-yellow-eustass-captain-kid.png?ff=1&x=100&y=100&q=85&ts=6a707b25&sg=8dda0505"
+    },
+    {
+     "name": "One Piece: BLUE Kuzan Starter Deck [ST-33]",
+     "url": "https://www.wombatgames-shop.cz/zbozi/one-piece--blue-kuzan-starter-deck--st-33-/",
+     "price": 449.0,
+     "currency": "CZK",
+     "eur": 18.43,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2265_4yzy5-medium.png?ff=1&x=100&y=100&q=85&ts=6a70761e&sg=8dda0505"
+    }
+   ]
+  },
+  "blacklotus": {
+   "ts": "2026-10-11T19:59:30Z",
+   "ok": true,
+   "items": [
+    {
+     "name": "One Piece Card Game - The World's Strongest Warriors Booster Pack - EN",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-the-world-s-strongest-warriors-booster-pack-en/",
+     "price": 349.0,
+     "currency": "CZK",
+     "eur": 14.32,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/453785_bez-nazvu.jpg?ff=1&x=100&y=100&q=85&ts=6a9170b9&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - The World's Strongest Warriors - EN",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-the-world-s-strongest-warriors-en/",
+     "price": 7999.0,
+     "currency": "CZK",
+     "eur": 328.24,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/453197_op17bb.png?ff=1&x=100&y=100&q=85&ts=6a881798&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Illustration Box Vol.8 - EN",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-illustration-box-vol-8-en/",
+     "price": 899.0,
+     "currency": "CZK",
+     "eur": 36.89,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451934_one-piece-card-game-illustration-box-vol-8-en.png?ff=1&x=100&y=100&q=85&ts=6a6c7e63&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Illustration Box Vol.7 - EN",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-illustration-box-vol-7-en/",
+     "price": 989.0,
+     "currency": "CZK",
+     "eur": 40.58,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451931_one-piece-card-game-illustration-box-vol-7-en.png?ff=1&x=100&y=100&q=85&ts=6a6c7e8c&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Premium Card Collection Best Selection Vol.6",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-premium-card-collection-best-selection-vol-6/",
+     "price": 1199.0,
+     "currency": "CZK",
+     "eur": 49.2,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451928_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a16b6&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Adventure on Kami's Island Booster - EN",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-adventure-on-kami--s-island-booster-en/",
+     "price": 179.0,
+     "currency": "CZK",
+     "eur": 7.35,
+     "inStock": false,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/438787_one-piece-tcg-adventure-on-kami-s-island-booster.png?ff=1&x=100&y=100&q=85&ts=69c5284e&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Set Sail Deck",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-set-sail-deck/",
+     "price": 799.0,
+     "currency": "CZK",
+     "eur": 32.79,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/453959_bcl2866723-1.jpg?ff=1&x=100&y=100&q=85&ts=6aab8e62&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Blue Starter Deck Kuzan (ST-33)",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-blue-starter-deck-kuzan/",
+     "price": 399.0,
+     "currency": "CZK",
+     "eur": 16.37,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451925-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a14cd&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Yellow Starter Deck Eustass \"Captain\" Kid (ST-36)",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-yellow-starter-deck-eustass--captain--kid/",
+     "price": 399.0,
+     "currency": "CZK",
+     "eur": 16.37,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451922-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a1400&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Green Starter Deck Roronoa Zoro (ST-32)",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-green-starter-deck-roronoa-zoro/",
+     "price": 499.0,
+     "currency": "CZK",
+     "eur": 20.48,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451919-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a135f&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Red Black Starter Deck Sabo (ST-35)",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-red-black-starter-deck-sabo/",
+     "price": 399.0,
+     "currency": "CZK",
+     "eur": 16.37,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451916-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a12fa&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Purple Starter Deck Charlotte Katakuri (ST-34)",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-purple-starter-deck-charlotte-katakuri/",
+     "price": 399.0,
+     "currency": "CZK",
+     "eur": 16.37,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451913-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a128e&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Red Starter Deck Monkey.D.Luffy (ST-31)",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-red-starter-deck-monkey-d-luffy/",
+     "price": 599.0,
+     "currency": "CZK",
+     "eur": 24.58,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451910_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a10fd&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game - Heroines Special Set - EN",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-heroines-special-set-en/",
+     "price": 4249.0,
+     "currency": "CZK",
+     "eur": 174.36,
+     "inStock": false,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/456938-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6abc0272&sg=8dda0505"
+    },
+    {
+     "name": "One Piece Card Game — English version 3rd Anniversary Set",
+     "url": "https://www.blacklotus.cz/one-piece-card-game---english-version-3rd-anniversary-set/",
+     "price": 18449.0,
+     "currency": "CZK",
+     "eur": 757.07,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/453782-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a8ee8cc&sg=8dda0505"
     }
    ]
   }
