@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-11a"
+VERSION = "2026-10-11b"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -101,6 +101,11 @@ SHOPS = {
                    "urls": ["https://www.blacklotus.cz/booster-boxy-a-boostery/",
                             "https://www.blacklotus.cz/starter-decky/",
                             "https://www.blacklotus.cz/dalsi-produkty-4/"]},
+    # Zahraničné obchody, ktoré posielajú na SK (Shopify – verejný /products.json, ide aj z GitHubu)
+    "cardcosmos": {"label": "Card Cosmos (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
+                   "urls": ["https://cardcosmos.de/collections/one-piece-karten-kaufen"]},
+    "yonko":      {"label": "Yonko TCG (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
+                   "urls": ["https://yonko-tcg.de/collections/one-piece"]},
     "cardstore":  {"label": "Cardstore", "parser": "shoptet", "currency": "CZK", "cloud": False, "delay": 3,
                    "urls": ["https://www.cardstore.cz/one-piece-tcg/"]},
     # Xzone: robots.txt zakazuje parametre ?s=/sort=/term= – sťahuje sa len čistá URL kategórie (Crawl-Delay 3)
@@ -201,13 +206,13 @@ def kind_of(name):
 
 
 def lang_of(name):
-    if re.search(r"čínsk|cinsk|chinese|\bcn\b|\bopc-?\d", name, re.I):
+    if re.search(r"čínsk|cinsk|chinese|chinesisch|\bcn\b|\bs?-?chn\b|\bopc-?\d", name, re.I):
         return "CN"
-    if re.search(r"kórej|korej|korean|\bkr\b", name, re.I):
+    if re.search(r"kórej|korej|korean|koreanisch|\bkr\b|\bkor\b", name, re.I):
         return "KR"
     if re.search(r"asijsk|ázijsk|azijsk|asian\b", name, re.I):
         return "ASIA"
-    if re.search(r"japon|japan|\bjp\b|\bjap\b", name, re.I):
+    if re.search(r"japon|japan|\bjp\b|\bjpn?\b|\bjap\b", name, re.I):
         return "JP"
     return "EN"
 
@@ -503,6 +508,40 @@ def hrydoruky_stock(page):
     return bool(ok) and not pre, pre, txt
 
 
+SHOPIFY_SKIP_TYPE = re.compile(r"einzelkarte|single|zubeh|accessor|figur|funko|plüsch|plush|playmat|sleeve|binder", re.I)
+SHOPIFY_SKIP_TITLE = re.compile(r"\b(AOG|M3G|PSA|BGS|CGC|Beckett)\b|grading|gem mint|collect aura|\bmint\b|mystery|bundle|promo", re.I)
+
+
+def crawl_shopify(shop):
+    """Shopify obchody: verejný JSON zoznam produktov kolekcie (/collections/<x>/products.json)."""
+    rows = []
+    for start in shop["urls"]:
+        base = re.match(r"https?://[^/]+", start).group(0)
+        for page in range(1, 6):
+            data = json.loads(fetch(f"{start.rstrip('/')}/products.json?limit=250&page={page}"))
+            prods = data.get("products", [])
+            if not prods:
+                break
+            for p in prods:
+                title = html.unescape(p.get("title", "")).strip()
+                if SHOPIFY_SKIP_TYPE.search(p.get("product_type") or "") or SHOPIFY_SKIP_TITLE.search(title):
+                    continue
+                vs = p.get("variants") or []
+                v = next((v for v in vs if not re.search(r"case|\d+\s*st(ü|u)ck", v.get("title", ""), re.I)), None)
+                if not v or not float(v.get("price") or 0):
+                    continue
+                tags = " ".join(p.get("tags") or []) if isinstance(p.get("tags"), list) else str(p.get("tags") or "")
+                pre = bool(re.search(r"pre-?order|vorbestell|\beta\b", title + " " + tags, re.I))
+                imgs = p.get("images") or []
+                rows.append({"id": str(p.get("id")), "name": title, "url": f"{base}/products/{p.get('handle')}",
+                             "price": float(v["price"]), "currency": shop["currency"],
+                             "img": imgs[0].get("src") if imgs else None,
+                             "inStock": bool(v.get("available")) and not pre,
+                             "preorder": pre and bool(v.get("available"))})
+            time.sleep(shop.get("delay", DELAY))
+    return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I)]
+
+
 def crawl_hrydoruky(shop):
     rows = []
     for start in shop["urls"]:
@@ -566,6 +605,8 @@ def crawl(shop):
         return [r for r in crawl_xmlfeed(shop) if r["price"]]
     if shop["parser"] == "hrydoruky":
         return crawl_hrydoruky(shop)
+    if shop["parser"] == "shopify":
+        return crawl_shopify(shop)
     if shop["parser"] == "cernyrytir":
         rows = crawl_cernyrytir(shop)
         return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]

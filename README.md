@@ -2,14 +2,16 @@
 
 Sleduje ceny One Piece booster boxov a packov v obchodoch **Card Empire, Pikazard,
 Veselý drak, iHRYsko, Najáda, Tolarie, Černý rytíř, Nekonečno, Pokemon4U, Hra na netu,
-Poring Cards, Cardstore, Wombat Games, Black Lotus, Xzone.sk a Hry do ruky**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
+Poring Cards, Cardstore, Wombat Games, Black Lotus, Xzone.sk, Hry do ruky,
+Card Cosmos (DE) a Yonko TCG (DE)**, porovnáva ich s **MSRP** a keď nájde výhodnú ponuku,
 pošle upozornenie na **Discord**. Smarty.sk blokuje automatické sťahovanie
 (Cloudflare), preto je na stránke len odkaz naň.
 
 ## Ako to beží
 
 **Online (GitHub Actions + Pages)** – každé 2 hodiny automaticky stiahne **Veselý drak, iHRYsko,
-Najádu, Tolarie, Černého rytíře, Hru na netu, Xzone.sk a Hry do ruky**,
+Najádu, Tolarie, Černého rytíře, Hru na netu, Xzone.sk, Hry do ruky
+a nemecké Card Cosmos a Yonko TCG** (posielajú na SK, doprava 15,99 € / 14,99 €),
 pošle upozornenia na Discord a obnoví stránku **https://factoryofcrazy-coder.github.io/onepiece-ceny/**.
 Tlačidlo Fetch na online stránke otvorí GitHub Actions → *Run workflow*.
 
