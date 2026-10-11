@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-11g"
+VERSION = "2026-10-11h"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -823,6 +823,30 @@ def append_changes(prev_cur, new_items_by_shop, ts):
     return len(rows)
 
 
+def mark_upcoming(cur):
+    """Produkt z ešte nevydanej edície, ktorý sa dá objednať, je predobjednávka (aj keď ho obchod tak neoznačí).
+    Edícia je vydaná, keď ju majú skladom aspoň 2 rôzne obchody (zvlášť pre EN a JP)."""
+    stock_shops = {}
+    for key, s in cur["shops"].items():
+        for i in s.get("items", []):
+            code, kind, lang = classify(i["name"], i.get("hint"))
+            m = re.match(r"(OP|EB|PRB)(\d+)$", code or "")
+            if m and i["inStock"] and not i.get("preorder") and kind not in ("Iné", "Doplnky"):
+                stock_shops.setdefault((m.group(1), lang, int(m.group(2))), set()).add(key)
+    released = {}
+    for (ser, lang, n), shops in stock_shops.items():
+        if len(shops) >= 2:
+            released[(ser, lang)] = max(released.get((ser, lang), 0), n)
+    for s in cur["shops"].values():
+        for i in s.get("items", []):
+            code, kind, lang = classify(i["name"], i.get("hint"))
+            m = re.match(r"(OP|EB|PRB)(\d+)$", code or "")
+            if not m or (m.group(1), lang) not in released or kind in ("Iné", "Doplnky"):
+                continue
+            if int(m.group(2)) > released[(m.group(1), lang)] and i["inStock"]:
+                i["inStock"], i["preorder"] = False, True
+
+
 def recently_fetched(key, minutes=MIN_REFETCH_MIN):
     s = load_json(CURRENT, {}).get("shops", {}).get(key) if CURRENT.exists() else None
     if not s or not s.get("ok") or not s.get("ts"):
@@ -1146,20 +1170,22 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                     reasons.append("znova skladom")
                 if ident in watch and p and p["inStock"] and i["eur"] <= p["eur"] * (1 - drop):
                     reasons.append(f"📉 zlacnené o {(1 - i['eur'] / p['eur']) * 100:.0f} % ({eur(p['eur'])} → {eur(i['eur'])})")
-            # nový produkt / predobjednávka – len keď sa dá kúpiť alebo objednať
-            if a.get("new_products", True) and not first_run and key in known_shops and i["url"] not in prev \
-                    and kind in kinds and (i["inStock"] or i.get("preorder")):
-                reasons.append("🆕 spustená predobjednávka" if i.get("preorder") and not i["inStock"] else "nový produkt skladom")
+            # predobjednávka – vždy, pre všetky sealed produkty (nielen typy z "kinds"), v každom známom obchode
             p = prev.get(i["url"])
-            if a.get("preorders", True) and not first_run and p and i.get("preorder") and not p.get("preorder") \
-                    and not i["inStock"] and (kind in kinds or kind == "Case"):
-                reasons.append("🆕 spustená predobjednávka")
+            is_pre = bool(i.get("preorder")) and not i["inStock"] and not (kind in ("Box", "Case") and i["eur"] < 20)
+            pre_ok = a.get("preorders", True) and not first_run and key in known_shops and kind not in ("Iné", "Doplnky")
+            if pre_ok and is_pre and (p is None or not p.get("preorder")):
+                reasons.append("🕒 spustená predobjednávka")
+            # nový produkt skladom
+            elif a.get("new_products", True) and not first_run and key in known_shops and i["url"] not in prev \
+                    and kind in kinds and i["inStock"]:
+                reasons.append("nový produkt skladom")
             if not reasons:
                 continue
             last = state.get(i["url"])
             new_state[i["url"]] = last if last is not None else i["eur"]
             if last is not None and i["eur"] > last * (1 - redrop) and "znova skladom" not in reasons \
-                    and not any(r.startswith("📉") for r in reasons):
+                    and not any(r.startswith(("📉", "🕒")) for r in reasons):
                 continue                                  # už upozornené, cena výrazne neklesla
             new_state[i["url"]] = i["eur"]
             fields = [{"name": "Cena", "value": eur(i["eur"]) + (f" ({i['price']:.0f} Kč)" if i["currency"] == "CZK" else ""), "inline": True},
@@ -1178,7 +1204,7 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
                 or any("cieľovou" in r for r in reasons) \
                 or (kind != "Pack" and any(r.startswith("💰") and float(re.search(r"o (\d+) %", r).group(1)) >= top_cross
                                            for r in reasons))
-            embeds.append({"_top": top, "title": ("⭐ " if top else "") + i["name"][:248], "url": i["url"],
+            embeds.append({"_top": top, "_pre": any(r.startswith("🕒") for r in reasons), "_kind": kind, "title": ("⭐ " if top else "") + i["name"][:248], "url": i["url"],
                            "description": "🔥 " + " · ".join(reasons),
                            "color": 0x2DA44E if (pct is not None and pct <= 0) or re.search(r"cieľovou|💰|📉 najnižšia", " ".join(reasons)) else 0x1F6FEB,
                            "fields": fields})
@@ -1395,6 +1421,7 @@ def run_once(only=None, notify=True, force=True):
             if fails or warned:
                 cur["shops"][key].update(fails=fails, warned=warned)
             fresh[key] = items
+    mark_upcoming(cur)                                      # nevydaná edícia, ktorá sa dá objednať = predobjednávka
     # vypnuté obchody (napr. Smarty len ako odkaz) bez dát z obchodu nezobrazuj – inak by tam visela stará chyba
     for key in [k for k, v in cur["shops"].items()
                 if SHOPS.get(k, {}).get("enabled", True) is False and not v.get("items")]:
@@ -1404,6 +1431,20 @@ def run_once(only=None, notify=True, force=True):
     CURRENT.write_text(json.dumps(cur, ensure_ascii=False, indent=1), encoding="utf-8")
     if notify:
         embeds = evaluate_alerts(prev, cur, load_json(MSRP_FILE, {}), load_json(CONFIG_FILE, {}), first_run)
+        a_cfg = load_json(CONFIG_FILE, {}).get("alerts", {})
+        # predobjednávky idú vždy samostatnou správou
+        pre = [e for e in embeds if e.get("_pre")]
+        embeds = [e for e in embeds if not e.get("_pre")]
+        if pre and webhook_url():
+            ping = "@here " if a_cfg.get("mention_preorders", True) and any(e.get("_kind") in ("Box", "Case") for e in pre) else ""
+            for e in pre:
+                e.pop("_pre", None); e.pop("_top", None); e.pop("_kind", None); e["color"] = 0x8250DF
+            discord_send(compact_alerts(pre) if len(pre) > 4 else pre,
+                         content=ping + f"🕒 **{len(pre)}** {'nová predobjednávka' if len(pre) == 1 else 'nových predobjednávok'}"
+                         + (f" · <{site_url()}#preSec>" if site_url() else ""))
+            say(f"  🕒 odoslaných {len(pre)} predobjednávok na Discord")
+        for e in embeds:
+            e.pop("_pre", None); e.pop("_kind", None)
         n_top = sum(1 for e in embeds if e.pop("_top", False))
         if embeds and webhook_url():
             ping = "@here " if n_top and load_json(CONFIG_FILE, {}).get("alerts", {}).get("mention_top", True) else ""
@@ -1707,6 +1748,7 @@ label.chk{display:flex;gap:5px;align-items:center;color:var(--mute);cursor:point
 <div id="log"></div>
 
 <section id="dealsSec"><h2>🔥 Najlepšie ponuky skladom <small>booster boxy najbližšie k MSRP (EN aj JP podľa ich prahu)</small></h2><div class="deals" id="deals"></div></section>
+<section id="preSec"><h2>🕒 Predobjednávky <small>všetky otvorené predobjednávky, najnovšie hore · najlacnejší obchod</small></h2><div class="deals" id="pres"></div></section>
 
 <div class="bar">
   <div class="seg" id="kind"><button data-v="Box" class="on">Boxy</button><button data-v="Pack">Packy</button><button data-v="Double Pack">Double</button><button data-v="Case">Cases</button><button data-v="Starter">Starter decky</button><button data-v="Kolekcie" title="Premium Card Collection, Illustration Box, špeciálne a darčekové sety">Kolekcie</button><button data-v="Ostatné" title="Obaly, albumy, figúrky…">Ostatné</button><button data-v="">Všetko</button></div>
@@ -1829,6 +1871,20 @@ function deals(){const top=Object.values(G).filter(g=>g.kind==="Box"&&g.best&&g.
     <div class="pr">${eur0(g.best[5])} ${pctHtml(g.pct,g.lang)}</div>
     <div class="shop">${esc(SHOPS[g.best[0]]||g.best[0])}${g.low30!=null&&g.best[5]<=g.low30?" · 🏷️ najnižšia za 30 dní":""}</div></a>`).join("");}
 
+function pres(){const now=P.updated?new Date(P.updated).getTime():Date.now();
+  const L=Object.values(G).filter(g=>!["Iné","Doplnky"].includes(g.kind)).map(g=>{const po=g.all.filter(o=>o[12]&&!o[6]&&!(g.msrp&&o[5]<0.4*g.msrp)&&!(["Box","Case"].includes(g.kind)&&o[5]<20)).sort((a,b)=>a[5]-b[5]);
+      if(!g.code&&g.kind==="Pack")return null;
+      if(!po.length)return null;
+      const first=Math.min(...po.map(o=>{const h=P.hist[o[7]]||[];return h.length?Math.min(...h.map(x=>new Date(x[0]).getTime())):now;}));
+      return {g,po,fresh:(now-first)<3*864e5,num:+((g.code||"").match(/\d+/)||[0])[0]};}).filter(Boolean)
+    .sort((a,b)=>(b.fresh-a.fresh)||(b.num-a.num)||(a.po[0][5]-b.po[0][5])).slice(0,24);
+  document.getElementById("preSec").style.display=L.length?"":"none";
+  document.getElementById("pres").innerHTML=L.map(({g,po,fresh})=>`<a class="deal" href="${esc(po[0][7])}" target="_blank" rel="noopener">${fresh?'<span class="rank">NOVÉ</span>':""}
+    <div class="im">${g.img?`<img src="${esc(g.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:""}</div>
+    <div>${g.code?`<span class="tag">${esc(g.code)}</span>`:""}<span class="tag">${esc(g.lang)}</span><span class="tag">${esc(g.kind)}</span></div>
+    <div class="pr">${eur0(po[0][5])} ${g.msrp?pctHtml(pctOf(po[0][5],g.msrp),g.lang):""}</div>
+    <div class="shop">${esc(SHOPS[po[0][0]]||po[0][0])}${po.length>1?` · +${po.length-1} ďalšie`:""}</div></a>`).join("");}
+
 function draw(){lsSet("op_filters",st);Object.keys(charts).forEach(k=>{try{charts[k].c.destroy()}catch(e){}delete charts[k]});const R=rows();
   document.getElementById("count").textContent=`${R.length} produktov · ${R.reduce((n,g)=>n+g.inst.length,0)} ponúk skladom`;
   document.getElementById("grid").innerHTML=R.map(card).join("")||`<div class="empty">${P.offers.length?"Nič nevyhovuje filtru.":"Zatiaľ žiadne dáta – klikni Fetch nové ceny."}</div>`;}
@@ -1900,7 +1956,7 @@ async function poll(){try{const s=await fetch("/api/status",{cache:"no-store"}).
 btn.onclick=async e=>{if(mode==="gh")return;e.preventDefault();if(mode!=="local")return;
   btn.setAttribute("disabled","");lbl.textContent="Sťahujem…";logEl.classList.add("on");logEl.textContent="Spúšťam…";
   try{await fetch("/api/fetch",{method:"POST"});}catch(e){} poll();};
-deals();draw();
+deals();pres();draw();
 </script></body></html>"""
 
 if __name__ == "__main__":

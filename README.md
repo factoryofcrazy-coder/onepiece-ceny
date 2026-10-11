@@ -56,6 +56,10 @@ python onepiece_ceny.py --no-fetch      # len otvorí stránku, nesťahuje
 - **Lacnejšie než inde** (💰): produkt skladom je aspoň o 15 % lacnejší ako bežná cena (medián) v ostatných
   obchodoch, porovnáva sa cena vrátane dopravy na SK (neznáma doprava = odhad 3,50 €) – funguje aj pre double packy a kolekcie bez MSRP (`cross_shop_pct`, `default_shipping`).
 - **Najnižšia cena za 30 dní** (📉): z histórie cien (`low30`).
+- **🕒 Predobjednávky**: každá nová predobjednávka (boxy, packy, double packy, kolekcie, starter decky…)
+  príde vždy samostatnou správou na Discord (pri boxoch s @here) a na stránke majú vlastnú sekciu
+  „🕒 Predobjednávky“ (najnovšie hore, najlacnejší obchod). Ak obchod predobjednávku neoznačí, rozpozná sa
+  podľa toho, že edíciu ešte nemajú skladom aspoň 2 obchody.
 - **@here pri top ponukách** (⭐): pod MSRP, pod cieľovou cenou z watchlistu alebo aspoň o 20 % lacnejšie
   než inde → správa so zmienkou @here (zazvoní na mobile). Ostatné upozornenia chodia potichu (`mention_top`).
 - **Stav obchodov**: keď obchod 2× po sebe zlyhá alebo vráti 0 produktov, príde varovanie na Discord
