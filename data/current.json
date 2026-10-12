@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-12T13:29:02Z",
+ "updated": "2026-10-12T13:54:56Z",
  "fx": {
   "CZK": 24.369,
   "USD": 1.1206,
@@ -658,7 +658,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -1887,7 +1887,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -2289,7 +2289,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -2398,7 +2398,7 @@
      "price": 8.99,
      "currency": "EUR",
      "eur": 8.99,
-     "inStock": false,
+     "inStock": true,
      "hint": "Pack",
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/One_Piece_The_Azure_Seas_Seven_Booster.webp"
     },
@@ -2408,7 +2408,7 @@
      "price": 17.99,
      "currency": "EUR",
      "eur": 17.99,
-     "inStock": false,
+     "inStock": true,
      "hint": "Pack",
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/One_Piece_Carrying_on_his_Will_Booster_1.webp"
     },
@@ -2559,15 +2559,6 @@
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/One_Piece__Premium_Card_Collection__Best_Selection_Vol._6_0.webp"
     },
     {
-     "name": "One Piece: Illustration Box Vol. 8",
-     "url": "https://www.najada.games/produkt/one-piece-illustration-box-vol-8-GGBL1W",
-     "price": 45.19,
-     "currency": "EUR",
-     "eur": 45.19,
-     "inStock": false,
-     "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/One_Piece__Illustration_Box_Vol.8_0.webp"
-    },
-    {
      "name": "One Piece: Illustration Box Vol. 7",
      "url": "https://www.najada.games/produkt/one-piece-illustration-box-vol-7-Q8VU1N",
      "price": 49.19,
@@ -2714,7 +2705,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -2897,7 +2888,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -3567,7 +3558,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -3726,7 +3717,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -3786,7 +3777,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -4210,7 +4201,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -4711,7 +4702,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -5266,7 +5257,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -5344,7 +5335,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -5494,7 +5485,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -5901,7 +5892,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-12T13:03:50Z",
+   "ts": "2026-10-12T13:54:56Z",
    "ok": true,
    "items": [
     {
@@ -6232,7 +6223,7 @@
   },
   "samurai": {
    "ts": "2026-10-12T13:03:50Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "OP-17 The World’s Strongest Warriors Japanese One Piece Booster Box – Carton",
@@ -6666,7 +6657,10 @@
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1758-037930df5454/eb01box_sst-thumb-320.webp"
     }
-   ]
+   ],
+   "error": "The read operation timed out",
+   "fails": 1,
+   "warned": false
   }
  }
 }
