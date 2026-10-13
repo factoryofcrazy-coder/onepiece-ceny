@@ -1041,7 +1041,7 @@ def build_digest(cur, msrp, cfg):
     for r in hist:
         t = datetime.strptime(r["timestamp"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).timestamp()
         code, kind, lang = classify(r["name"])
-        if kind not in ("Box", "Case"):
+        if kind not in ("Box", "Case") or is_import(r["shop"]) or r["shop"] in cfg.get("alerts", {}).get("exclude_shops", []):
             continue
         if t < since:
             last_before[r["url"]] = r
