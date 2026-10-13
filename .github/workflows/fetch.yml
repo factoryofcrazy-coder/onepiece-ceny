@@ -9,6 +9,10 @@ on:
         description: "Len poslať skúšobnú správu na Discord"
         type: boolean
         default: false
+      message:
+        description: "Len poslať túto správu na Discord (nechaj prázdne pre bežný fetch)"
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -31,14 +35,20 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: python onepiece_ceny.py --test-discord
+      - name: Správa na Discord
+        if: ${{ inputs.message != '' && inputs.message != null }}
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          MSG: ${{ inputs.message }}
+        run: python onepiece_ceny.py --discord-message "$MSG"
       - name: Stiahnuť ceny, poslať upozornenia, vytvoriť stránku
-        if: ${{ !inputs.test_discord }}
+        if: ${{ !inputs.test_discord && (inputs.message == '' || inputs.message == null) }}
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           SMARTY_FEED_URL: ${{ secrets.SMARTY_FEED_URL }}
         run: python onepiece_ceny.py --once --no-browser
       - name: Uložiť dáta a stránku
-        if: ${{ !inputs.test_discord }}
+        if: ${{ !inputs.test_discord && (inputs.message == '' || inputs.message == null) }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

@@ -22,7 +22,8 @@
     "default_shipping: odhad dopravy (EUR) pre obchody, kde cena dopravy nie je známa – používa sa pri porovnaní s inými obchodmi.",
     "shipping_compare_min: dopravu pripočítaj pri porovnaní s inými obchodmi len pri produktoch od tejto ceny (packy sa porovnávajú bez dopravy). Packy nikdy nedostanú @here.",
     "import_vat / import_fee: obchod mimo EÚ – k cene sa pripočíta doprava (cost, odhad), 23 % DPH z tovaru aj dopravy a poplatok kuriéra za preclenie (import_fee). Clo na zberateľské karty je 0 %.",
-    "preorders: každá nová predobjednávka (všetky sealed typy, vo všetkých sledovaných obchodoch) príde samostatnou správou; mention_preorders: @here pri predobjednávke boxu/casu. Produkt z nevydanej edície, ktorý sa dá objednať, sa berie ako predobjednávka."
+    "preorders: každá nová predobjednávka (všetky sealed typy, vo všetkých sledovaných obchodoch) príde samostatnou správou; mention_preorders: @here pri predobjednávke boxu/casu. Produkt z nevydanej edície, ktorý sa dá objednať, sa berie ako predobjednávka.",
+    "exclude_shops: obchody, z ktorých nechodia upozornenia na Discord (len na stránke). Dovoz z Japonska (Samurai Sword Tokyo) sa na Discord neposiela nikdy."
   ],
   "alerts": {
     "max_pct_vs_msrp": {
@@ -50,7 +51,8 @@
     "top_cross_pct": 20,
     "default_shipping": 3.5,
     "shipping_compare_min": 40,
-    "mention_preorders": true
+    "mention_preorders": true,
+    "exclude_shops": []
   },
   "watchlist": [
     {

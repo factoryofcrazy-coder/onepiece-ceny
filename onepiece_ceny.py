@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-12a"
+VERSION = "2026-10-13a"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -1021,7 +1021,9 @@ def build_digest(cur, msrp, cfg):
                 continue
             code, kind, lang = classify(i["name"], i.get("hint"))
             m = msrp_eur(code, kind, lang, msrp, fx)
-            real = i["eur"] + (shipping_cost(key, i["eur"]) or 0) if shipping_cfg(key).get("import_vat") is not None else i["eur"]
+            if is_import(key) or key in cfg.get("alerts", {}).get("exclude_shops", []):
+                continue
+            real = i["eur"]
             if kind != "Box" or not m or real < 0.4 * m:
                 continue
             g = f"{code} {lang}"
@@ -1138,8 +1140,11 @@ def evaluate_alerts(prev_cur, cur, msrp, cfg, first_run):
             low30[ident] = min(low30.get(ident, 1e9), float(r["priceEUR"]))
             n_hist[ident] = n_hist.get(ident, 0) + 1
 
+    skip_shops = set(a.get("exclude_shops", []))
     for key, s in cur["shops"].items():
         label = SHOPS.get(key, {}).get("label", key)
+        if key in skip_shops or is_import(key):      # dovoz z Japonska: len na stránke, na Discord nie
+            continue
         for i in s.get("items", []):
             code, kind, lang = classify(i["name"], i.get("hint"))
             ident = f"{code} {kind} {lang}".upper()
@@ -1636,6 +1641,7 @@ def main():
     ap.add_argument("--no-fetch", action="store_true", help="po spustení stránky nesťahovať hneď ceny")
     ap.add_argument("--rebuild", action="store_true", help="len prerobiť docs/index.html z uložených dát")
     ap.add_argument("--test-discord", action="store_true", help="poslať skúšobnú správu na Discord")
+    ap.add_argument("--discord-message", metavar="TEXT", help="poslať vlastnú správu na Discord")
     ap.add_argument("--setup", action="store_true", help="sprievodca: uložiť Discord webhook a GitHub token")
     ap.add_argument("--only", help="čiarkou oddelené obchody: " + ",".join(SHOPS))
     a = ap.parse_args()
@@ -1644,6 +1650,11 @@ def main():
     if a.setup:
         setup_wizard()
         return
+    if a.discord_message:
+        if not webhook_url():
+            sys.exit("Webhook nie je nastavený (DISCORD_WEBHOOK_URL alebo discord_webhook.txt).")
+        ok = discord_send([{"title": "Oznam", "color": 0x8250DF, "description": a.discord_message[:4000]}])
+        sys.exit(0 if ok else 1)
     if a.test_discord:
         if not webhook_url():
             sys.exit("Webhook nie je nastavený (DISCORD_WEBHOOK_URL alebo discord_webhook.txt).")
