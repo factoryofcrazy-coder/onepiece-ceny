@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-14T19:00:42Z",
+ "updated": "2026-10-14T20:51:27Z",
  "fx": {
   "CZK": 24.357,
   "USD": 1.1195,
@@ -376,8 +376,9 @@
      "price": 4.0,
      "currency": "EUR",
      "eur": 4.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/14642_untitled-design--10.png?ff=1&x=423&y=318&q=85&ts=69690f26&sg=2175fb9d"
+     "inStock": false,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/14642_untitled-design--10.png?ff=1&x=423&y=318&q=85&ts=69690f26&sg=2175fb9d",
+     "preorder": true
     },
     {
      "name": "One Piece TCG – OPC-02 Paramount War – Booster Box - Čínsky",
@@ -385,8 +386,9 @@
      "price": 80.0,
      "currency": "EUR",
      "eur": 80.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/14639_untitled-design--11.png?ff=1&x=423&y=318&q=85&ts=69690dc0&sg=2175fb9d"
+     "inStock": false,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/14639_untitled-design--11.png?ff=1&x=423&y=318&q=85&ts=69690dc0&sg=2175fb9d",
+     "preorder": true
     },
     {
      "name": "One Piece TCG – OPC-01 Romance Of Dawn – Booster Pack Čínsky",
@@ -667,9 +669,27 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
+    {
+     "name": "One Piece TCG – Romance Dawn OPC-01 Booster Box – čínsky",
+     "url": "https://www.vesely-drak.sk/produkty/booster-box-one-piece/19642-one-piece-tcg-romance-dawn-opc-01-booster-box-cinsky/",
+     "price": 79.96,
+     "currency": "EUR",
+     "eur": 79.96,
+     "inStock": true,
+     "img": "https://www.vesely-drak.sk/obrazek/6aabb2e241299/cinske-karty-one-piece-tcg-romance-dawn-booster-box-op0c1-chi-6aabb4cf9d856.jpg"
+    },
+    {
+     "name": "One Piece TCG – Romance Dawn OPC-01 Booster Balíček – čínsky",
+     "url": "https://www.vesely-drak.sk/produkty/booster-box-one-piece/19643-one-piece-tcg-romance-dawn-opc-01-booster-balicek-cinsky/",
+     "price": 3.4,
+     "currency": "EUR",
+     "eur": 3.4,
+     "inStock": true,
+     "img": "https://www.vesely-drak.sk/obrazek/6aabb2e241299/cinske-karty-one-piece-tcg-romance-dawn-op0c1-chi-i-6aabc2785ed93.jpg"
+    },
     {
      "name": "One Piece TCG - The Time of Battle Booster Box (OP-16) - JP",
      "url": "https://www.vesely-drak.sk/produkty/booster-box-one-piece/18937-one-piece-tcg-the-time-of-battle-booster-box-op-16-jp/",
@@ -750,24 +770,6 @@
      "eur": 359.96,
      "inStock": false,
      "img": "https://www.vesely-drak.sk/obrazek/6a8feb51e86a7/karty-one-piece-the-worlds-strongest-warriors-booster-box-op-17-en-6a8fec0041659.jpg"
-    },
-    {
-     "name": "One Piece TCG – Romance Dawn OPC-01 Booster Box – čínsky",
-     "url": "https://www.vesely-drak.sk/produkty/booster-box-one-piece/19642-one-piece-tcg-romance-dawn-opc-01-booster-box-cinsky/",
-     "price": 67.96,
-     "currency": "EUR",
-     "eur": 67.96,
-     "inStock": false,
-     "img": "https://www.vesely-drak.sk/obrazek/6aabb2e241299/cinske-karty-one-piece-tcg-romance-dawn-booster-box-op0c1-chi-6aabb4cf9d856.jpg"
-    },
-    {
-     "name": "One Piece TCG – Romance Dawn OPC-01 Booster Balíček – čínsky",
-     "url": "https://www.vesely-drak.sk/produkty/booster-box-one-piece/19643-one-piece-tcg-romance-dawn-opc-01-booster-balicek-cinsky/",
-     "price": 3.16,
-     "currency": "EUR",
-     "eur": 3.16,
-     "inStock": false,
-     "img": "https://www.vesely-drak.sk/obrazek/6aabb2e241299/cinske-karty-one-piece-tcg-romance-dawn-op0c1-chi-i-6aabc2785ed93.jpg"
     },
     {
      "name": "One Piece TCG - The Time of Battle Booster Box (OP-16) - EN",
@@ -1896,7 +1898,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -2298,7 +2300,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -2705,7 +2707,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -2908,7 +2910,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -3605,7 +3607,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -3774,7 +3776,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -3834,7 +3836,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -3849,9 +3851,9 @@
     {
      "name": "Bandai One Piece TCG Starter Deck - PURPLE Charlotte Katakuri",
      "url": "https://hrydoruky.cz/one-piece-cg-starter-deck-st-34",
-     "price": 396.0,
+     "price": 425.0,
      "currency": "CZK",
-     "eur": 16.26,
+     "eur": 17.45,
      "inStock": true,
      "img": "https://hrydoruky.cz/images/thumbs/0166582_bandai-one-piece-tcg-starter-deck-purple-charlotte-katakuri_360.webp"
     },
@@ -4258,7 +4260,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -4759,7 +4761,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -5314,7 +5316,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -5392,7 +5394,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -5542,7 +5544,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -5949,7 +5951,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
@@ -6279,7 +6281,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-14T19:00:42Z",
+   "ts": "2026-10-14T20:51:27Z",
    "ok": true,
    "items": [
     {
