@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-17T08:48:19Z",
+ "updated": "2026-10-17T08:51:13Z",
  "fx": {
   "CZK": 24.323,
   "USD": 1.1253,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-10-16T17:18:46Z",
+   "ts": "2026-10-17T08:51:13Z",
    "ok": true,
    "items": [
     {
@@ -56,15 +56,6 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/20499_20-cards--49.png?ff=1&x=100&y=100&q=85&ts=6a62826b&sg=8dda0505"
     },
     {
-     "name": "One Piece TCG - Illustration Box Vol.8",
-     "url": "https://www.cardempire.sk/one-piece-tcg-illustration-box-vol-8/",
-     "price": 45.0,
-     "currency": "EUR",
-     "eur": 45.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/20502_20-cards--50.png?ff=1&x=100&y=100&q=85&ts=6a6283a6&sg=8dda0505"
-    },
-    {
      "name": "One Piece TCG - Emperors In The New World - Booster Pack - Japonský",
      "url": "https://www.cardempire.sk/one-piece-tcg-emperors-in-the-new-world-booster-pack-japonsky/",
      "price": 7.0,
@@ -83,6 +74,15 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/11250_op13japbox.png?ff=1&x=100&y=100&q=85&ts=6901190e&sg=8dda0505"
     },
     {
+     "name": "One Piece TCG - Illustration Box Vol.8",
+     "url": "https://www.cardempire.sk/one-piece-tcg-illustration-box-vol-8/",
+     "price": 45.0,
+     "currency": "EUR",
+     "eur": 45.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/20502_20-cards--50.png?ff=1&x=100&y=100&q=85&ts=6a6283a6&sg=8dda0505"
+    },
+    {
      "name": "One Piece TCG - OP15 Adventure of the God’s Island – Booster Pack - Japonský",
      "url": "https://www.cardempire.sk/one-piece-tcg-op15-adventure-of-the-god-s-island---booster-pack-japonsky/",
      "price": 4.5,
@@ -90,15 +90,6 @@
      "eur": 4.5,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/17004_untitled-design-2026-03-09t125623-339.png?ff=1&x=100&y=100&q=85&ts=69aeb9f8&sg=8dda0505"
-    },
-    {
-     "name": "One piece - Jump Promo Pack - Ultimate Warriors",
-     "url": "https://www.cardempire.sk/one-piece-jump-promo-pack-ultimate-warriors/",
-     "price": 48.0,
-     "currency": "EUR",
-     "eur": 48.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/21350_untitled-design--82.png?ff=1&x=100&y=100&q=85&ts=6a9acb4b&sg=8dda0505"
     },
     {
      "name": "One Piece TCG - Set Sail Deck Set",
@@ -126,6 +117,15 @@
      "eur": 48.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/21353_untitled-design--83.png?ff=1&x=423&y=318&q=85&ts=6a9ad6e8&sg=2175fb9d"
+    },
+    {
+     "name": "One piece - Jump Promo Pack - Ultimate Warriors",
+     "url": "https://www.cardempire.sk/one-piece-jump-promo-pack-ultimate-warriors/",
+     "price": 48.0,
+     "currency": "EUR",
+     "eur": 48.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/21350_untitled-design--82.png?ff=1&x=423&y=318&q=85&ts=6a9acb4b&sg=2175fb9d"
     },
     {
      "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Box (Japonsky)",
@@ -483,7 +483,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-10-16T17:18:46Z",
+   "ts": "2026-10-17T08:51:13Z",
    "ok": true,
    "items": [
     {
@@ -2935,7 +2935,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-10-16T17:18:46Z",
+   "ts": "2026-10-17T08:51:13Z",
    "ok": true,
    "items": [
     {
@@ -3617,7 +3617,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-10-16T17:18:46Z",
+   "ts": "2026-10-17T08:51:13Z",
    "ok": true,
    "items": [
     {
@@ -3752,7 +3752,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-10-16T17:18:46Z",
+   "ts": "2026-10-17T08:51:13Z",
    "ok": true,
    "items": [
     {
@@ -3876,7 +3876,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-10-16T17:18:46Z",
+   "ts": "2026-10-17T08:51:13Z",
    "ok": true,
    "items": [
     {
@@ -5660,9 +5660,18 @@
    ]
   },
   "wombat": {
-   "ts": "2026-10-16T17:18:46Z",
+   "ts": "2026-10-17T08:51:13Z",
    "ok": true,
    "items": [
+    {
+     "name": "One Piece Card Game – Adventure on KAMI's Island Booster Box (OP15-EB04) – EN",
+     "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game-adventure-on-kami-s-island-booster-box-op15-eb04-en/",
+     "price": 4399.0,
+     "currency": "CZK",
+     "eur": 180.86,
+     "inStock": false,
+     "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2721_one-piece-op15-eb04-adventure-on-kami-s-island-booster-box.webp?ff=1&x=100&y=100&q=85&ts=6ac75d7b&sg=8dda0505"
+    },
     {
      "name": "One Piece Card Game – Official Playmat Limited Edition Vol. 1",
      "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game-official-playmat-limited-edition-vol-1/",
@@ -5680,15 +5689,6 @@
      "eur": 616.66,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2739-1_one-piece-english-version-3rd-anniversary-set.jpg?ff=1&x=100&y=100&q=85&ts=6accbbfb&sg=8dda0505"
-    },
-    {
-     "name": "One Piece Card Game – Adventure on KAMI's Island Booster Box (OP15-EB04) – EN",
-     "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game-adventure-on-kami-s-island-booster-box-op15-eb04-en/",
-     "price": 4399.0,
-     "currency": "CZK",
-     "eur": 180.86,
-     "inStock": false,
-     "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2721_one-piece-op15-eb04-adventure-on-kami-s-island-booster-box.webp?ff=1&x=100&y=100&q=85&ts=6ac75d7b&sg=8dda0505"
     },
     {
      "name": "One Piece Card Game: Set Sail Deck Set [SD-01]",
@@ -5738,7 +5738,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-10-16T17:18:46Z",
+   "ts": "2026-10-17T08:51:13Z",
    "ok": true,
    "items": [
     {
