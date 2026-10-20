@@ -192,7 +192,7 @@ export default function Collection() {
                 <span className="vname">
                   <b>{i.card.name}</b>
                   <span className="small muted">
-                    {i.card.id} · {setKind(i.card.set) === "other" ? "Promo" : i.card.set}
+                    {i.card.id} · {setKind(i.card.set) === "other" ? "Promo" : setKind(i.card.set) === "don" ? "DON!!" : i.card.set}
                     {i.card.v && <span className="tag tiny">{i.card.v}</span>}
                   </span>
                 </span>

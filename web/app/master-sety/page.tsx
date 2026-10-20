@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Bar, DataError, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { eur, setKind, sortSets, useCards, usePrices } from "@/lib/data";
+import { eur, SET_KINDS, SetKind, setKind, sortSets, useCards, usePrices } from "@/lib/data";
 
 type Row = {
   id: string;
@@ -26,7 +26,7 @@ export default function MasterSets() {
   const viewing = owner ?? user?.id ?? null;
   const { qty } = useCollection(viewing, false);
   const [mode, setMode] = useState<"base" | "master">("base");
-  const [kind, setKindF] = useState<"booster" | "starter" | "other">("booster");
+  const [kind, setKindF] = useState<SetKind>("booster");
   const usd = prices?.fx?.USD ?? 1.12;
 
   const rows = useMemo(() => {
@@ -75,9 +75,9 @@ export default function MasterSets() {
         </div>
         <div className="row gap">
           <div className="seg">
-            {(["booster", "starter", "other"] as const).map((k) => (
+            {SET_KINDS.map((k) => (
               <button key={k} className={kind === k ? "on" : ""} onClick={() => setKindF(k)}>
-                {k === "booster" ? "Boostery" : k === "starter" ? "Starter decky" : "Promo"} (
+                {{ booster: "Boostery", starter: "Starter decky", other: "Promo", don: "DON!!" }[k]} (
                 {rows.filter((r) => setKind(r.id) === k).length})
               </button>
             ))}

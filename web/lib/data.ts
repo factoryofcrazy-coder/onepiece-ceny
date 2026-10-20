@@ -39,7 +39,7 @@ export type PricesDb = {
 };
 
 // zvýš pri zmene formátu dát z /api/* → obíde sa stará CDN cache
-const DATA_VERSION = "3";
+const DATA_VERSION = "4";
 const cache: Record<string, Promise<any>> = {};
 
 function load<T>(file: string, prep?: (d: any) => T): Promise<T> {
@@ -93,7 +93,7 @@ export const COLORS = ["Red", "Green", "Blue", "Purple", "Black", "Yellow"];
 export const COLOR_SK: Record<string, string> = {
   Red: "Červená", Green: "Zelená", Blue: "Modrá", Purple: "Fialová", Black: "Čierna", Yellow: "Žltá",
 };
-export const TYPE_SK: Record<string, string> = { Leader: "Leader", Character: "Postava", Event: "Event", Stage: "Stage" };
+export const TYPE_SK: Record<string, string> = { Leader: "Leader", Character: "Postava", Event: "Event", Stage: "Stage", DON: "DON!!" };
 
 export function eur(v: number | null | undefined, digits = 2) {
   if (v == null || isNaN(v)) return "–";
@@ -113,13 +113,16 @@ export function setOrder(id: string) {
   const rank: Record<string, number> = { OP: 0, EB: 1, PRB: 2, ST: 3, P: 4 };
   return [rank[pre] ?? 5, -n] as const;
 }
-/** booster = OP, EB, PRB; starter = ST; ostatné = promo a pod. */
-export function setKind(id: string): "booster" | "starter" | "other" {
+/** booster = OP, EB, PRB; starter = ST; don = DON!! karty; ostatné = promo. */
+export type SetKind = "booster" | "starter" | "other" | "don";
+export const SET_KINDS: SetKind[] = ["booster", "starter", "other", "don"];
+export function setKind(id: string): SetKind {
   if (/^(OP|EB|PRB)/.test(id)) return "booster";
   if (/^ST/.test(id)) return "starter";
+  if (id === "DON") return "don";
   return "other";
 }
-export const SET_KIND_SK = { booster: "Booster sety", starter: "Starter decky", other: "Promo karty" } as const;
+export const SET_KIND_SK = { booster: "Booster sety", starter: "Starter decky", other: "Promo karty", don: "DON!! karty" } as const;
 
 export function sortSets<T extends { id: string }>(sets: T[]) {
   return [...sets].sort((a, b) => {

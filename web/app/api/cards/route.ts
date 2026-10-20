@@ -117,8 +117,38 @@ async function getPromos(): Promise<Raw[]> {
   return out;
 }
 
+// DON!! karty majú vlastný zoznam a iné polia (don_id, optcg_don_name) → vlastný set „DON“.
+function normalizeDon(c: Raw) {
+  const n = parseInt(String(c.don_id ?? str(c.card_image_id).replace(/\D/g, "")), 10);
+  if (!n) return null;
+  const id = `DON-${String(n).padStart(3, "0")}`;
+  const raw = str(c.card_name) || str(c.optcg_don_name) || "DON!! Card";
+  const theme = raw.replace(/^DON!!\s*Card\s*/i, "").replace(/^\/\/\s*/, "").replace(/^\((.*)\)$/, "$1").trim();
+  return {
+    id,
+    code: id,
+    name: theme ? `DON!! ${theme}` : "DON!!",
+    v: "",
+    set: "DON",
+    setName: "DON!! karty",
+    rarity: str(c.rarity),
+    type: "DON",
+    colors: [] as string[],
+    cost: null,
+    power: null,
+    counter: null,
+    life: null,
+    attr: "",
+    traits: [str(c.set_id), str(c.set_name)].filter(Boolean).join(" "), // z akého produktu je
+    text: str(c.card_text),
+    img: str(c.card_image),
+    usd: money(c.market_price),
+  };
+}
+
 export async function GET() {
-  const lists = await Promise.all([...SOURCES.map(get), getPromos()]);
+  const [setCards, stCards, promos, dons] = await Promise.all([...SOURCES.map(get), getPromos(), get("allDonCards/")]);
+  const lists = [setCards, stCards, promos];
   const cards = new Map<string, ReturnType<typeof normalize>>();
   const sets = new Map<string, string>();
   for (const list of lists)
@@ -128,6 +158,12 @@ export async function GET() {
       cards.set(c.id, c);
       if (c.set && !sets.has(c.set)) sets.set(c.set, c.setName || c.set);
     }
+  for (const raw of dons) {
+    const d = normalizeDon(raw);
+    if (!d || cards.has(d.id)) continue;
+    cards.set(d.id, d as any);
+    if (!sets.has("DON")) sets.set("DON", "DON!! karty");
+  }
   if (cards.size < 300)
     return Response.json(
       { error: `OPTCG API vrátilo len ${cards.size} kariet` },
