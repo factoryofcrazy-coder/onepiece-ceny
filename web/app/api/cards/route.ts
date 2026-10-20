@@ -19,10 +19,16 @@ const money = (v: any) => {
 const str = (v: any) => (typeof v === "string" ? v.trim() : v == null ? "" : String(v));
 
 function splitName(raw: string) {
-  // "Roronoa Zoro (001) (Parallel)" -> ["Roronoa Zoro", "Parallel"]
-  const m = raw.match(/^(.*?)\s*\((\d{3})\)\s*(.*)$/);
-  if (!m) return [raw.trim(), ""];
-  return [m[1].trim(), m[3].replace(/[()]/g, " ").replace(/\s+/g, " ").trim()];
+  // "Roronoa Zoro (001)" -> ["Roronoa Zoro", ""]; "Kouzuki Oden (Alternate Art)" -> ["Kouzuki Oden", "Alternate Art"]
+  const labels: string[] = [];
+  const name = raw
+    .replace(/\s*\(([^()]*)\)/g, (_, inner: string) => {
+      if (!/^\d{1,3}$/.test(inner.trim())) labels.push(inner.trim());
+      return "";
+    })
+    .replace(/\s+/g, " ")
+    .trim();
+  return [name || raw.trim(), labels.join(" · ")];
 }
 
 function normalize(c: Raw) {
