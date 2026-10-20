@@ -45,7 +45,7 @@ code { background: var(--sea); padding: 1px 6px; border-radius: 5px; }
 
 .wrap { max-width: 1320px; margin: 0 auto; padding: 0 16px; }
 main.wrap { animation: page-in .35s var(--ease) both; }
-@keyframes page-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes page-in { from { opacity: 0; } } /* bez transform – inak by sa rozbili fixed okná (detail karty) */
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
 .tiny { font-size: 11px; }
