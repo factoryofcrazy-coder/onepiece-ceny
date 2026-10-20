@@ -14,7 +14,7 @@ const num = (v: any) => {
 };
 const money = (v: any) => {
   const n = parseFloat(v);
-  return isNaN(n) ? null : Math.round(n * 100) / 100;
+  return isNaN(n) || n <= 0 ? null : Math.round(n * 100) / 100; // 0 = cena neznáma
 };
 const str = (v: any) => (typeof v === "string" ? v.trim() : v == null ? "" : String(v));
 
