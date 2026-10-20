@@ -77,9 +77,13 @@ export function Qty({ n, onSet, disabled }: { n: number; onSet?: (n: number) => 
   );
 }
 
+// Oficiálne obrázky Bandai (bez vodotlače), záloha OPTCG API.
+const bandaiImg = (id: string) => `/api/img/${encodeURIComponent(id)}`;
+
 export function CardImg({ card, className = "" }: { card: Card; className?: string }) {
-  const [bad, setBad] = useState(false);
-  if (!card.img || bad)
+  const sources = [bandaiImg(card.id), card.img].filter(Boolean);
+  const [i, setI] = useState(0);
+  if (i >= sources.length)
     return (
       <div className={`cimg ph ${className}`}>
         <b>{card.code}</b>
@@ -88,11 +92,12 @@ export function CardImg({ card, className = "" }: { card: Card; className?: stri
     );
   return (
     <img
+      key={sources[i]}
       className={`cimg ${className}`}
-      src={card.img}
+      src={sources[i]}
       alt={`${card.name} ${card.code}`}
       loading="lazy"
-      onError={() => setBad(true)}
+      onError={() => setI(i + 1)}
     />
   );
 }

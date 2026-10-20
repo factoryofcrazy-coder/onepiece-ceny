@@ -23,7 +23,8 @@ function splitName(raw: string) {
   const labels: string[] = [];
   const name = raw
     .replace(/\s*\(([^()]*)\)/g, (_, inner: string) => {
-      if (!/^\d{1,3}$/.test(inner.trim())) labels.push(inner.trim());
+      const t = inner.trim();
+      if (!/^\d{1,3}$/.test(t) && !/^[A-Z]{1,4}\d{0,2}-\d{3}$/.test(t)) labels.push(t);
       return "";
     })
     .replace(/\s+/g, " ")
@@ -35,7 +36,7 @@ function splitName(raw: string) {
 function setOf(rawSet: string, code: string, rawName: string): [string, string] {
   if (!/^OP\d+-EB\d+$/.test(rawSet)) return [rawSet, rawName];
   const m = code.match(/^(OP|EB)(\d+)-/);
-  if (!m) return [rawSet, rawName];
+  if (!m) return [rawSet.replace(/^OP(\d+)-.*$/, "OP-$1"), rawName]; // reprinty (ST/P…) → hlavný OP set
   const id = `${m[1]}-${m[2]}`;
   return [id, m[1] === "EB" ? `Extra Booster ${id}` : rawName];
 }
@@ -102,8 +103,10 @@ export async function GET() {
       { error: `OPTCG API vrátilo len ${cards.size} kariet` },
       { status: 502, headers: { "Cache-Control": "no-store" } },
     );
-  const out = [...cards.values()].sort((a, b) =>
-    a!.set === b!.set ? (a!.code === b!.code ? a!.id.localeCompare(b!.id) : a!.code.localeCompare(b!.code)) : a!.set.localeCompare(b!.set),
+  const native = (c: any) => (c.code.replace(/-\d+$/, "").replace(/^([A-Z]+)(\d+)$/, "$1-$2") === c.set ? 0 : 1);
+  const out = [...cards.values()].sort(
+    (a: any, b: any) =>
+      a.set.localeCompare(b.set) || native(a) - native(b) || a.code.localeCompare(b.code) || a.id.localeCompare(b.id),
   );
   return Response.json(
     {
