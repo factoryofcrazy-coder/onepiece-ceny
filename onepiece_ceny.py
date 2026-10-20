@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-13a"
+VERSION = "2026-10-20a"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
@@ -1259,7 +1259,7 @@ def page_data():
     return {"offers": offers, "hist": hist, "shops": shops, "status": status, "links": links,
             "updated": cur.get("updated"), "repo": repo or gh_repo() or "", "pickup": pickup,
             "th": th if isinstance(th, dict) else {"EN": th, "JP": th},
-            "watch": cfg.get("watchlist", [])}
+            "watch": cfg.get("watchlist", []), "fx": fx}
 
 
 def render():
@@ -1270,11 +1270,14 @@ def build_static():
     DOCS.mkdir(exist_ok=True)
     (DOCS / "index.html").write_text(render(), encoding="utf-8")
     (DOCS / ".nojekyll").write_text("", encoding="utf-8")
+    (DOCS / "data").mkdir(exist_ok=True)               # dáta pre web (Vercel appka)
+    (DOCS / "data" / "prices.json").write_text(
+        json.dumps(page_data(), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
 
 # ------------------------------------------------- synchronizácia s GitHubom
 SYNC_FILES = ["data/current.json", "data/history.csv", "data/alerts_state.json", "data/digest_state.json",
-              "docs/index.html", "docs/.nojekyll"]
+              "docs/index.html", "docs/.nojekyll", "docs/data/prices.json"]
 
 
 def gh_token():

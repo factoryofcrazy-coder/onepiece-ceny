@@ -1,0 +1,101 @@
+// Databáza kariet z OPTCG API (zadarmo, bez kľúča). Vercel CDN odpoveď drží 24 h.
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+
+const API = "https://optcgapi.com/api/";
+const SOURCES = ["allSetCards/", "allSTCards/", "allPromoCards/"];
+
+type Raw = Record<string, any>;
+
+const num = (v: any) => {
+  if (v === null || v === undefined || v === "" || v === "-" || v === "NULL") return null;
+  const n = parseInt(String(v).replace(/,/g, ""), 10);
+  return isNaN(n) ? null : n;
+};
+const money = (v: any) => {
+  const n = parseFloat(v);
+  return isNaN(n) ? null : Math.round(n * 100) / 100;
+};
+const str = (v: any) => (typeof v === "string" ? v.trim() : v == null ? "" : String(v));
+
+function splitName(raw: string) {
+  // "Roronoa Zoro (001) (Parallel)" -> ["Roronoa Zoro", "Parallel"]
+  const m = raw.match(/^(.*?)\s*\((\d{3})\)\s*(.*)$/);
+  if (!m) return [raw.trim(), ""];
+  return [m[1].trim(), m[3].replace(/[()]/g, " ").replace(/\s+/g, " ").trim()];
+}
+
+function normalize(c: Raw) {
+  const id = str(c.card_image_id) || str(c.card_set_id);
+  if (!id) return null;
+  const code = str(c.card_set_id) || id.split("_")[0];
+  const [name, label] = splitName(str(c.card_name));
+  const variant = id !== code;
+  return {
+    id,
+    code,
+    name,
+    v: variant ? label || "Parallel" : "",
+    set: str(c.set_id),
+    setName: str(c.set_name),
+    rarity: str(c.rarity),
+    type: str(c.card_type),
+    colors: str(c.card_color).split(/[\s/,]+/).filter(Boolean),
+    cost: num(c.card_cost),
+    power: num(c.card_power),
+    counter: num(c.counter_amount),
+    life: num(c.life),
+    attr: str(c.attribute),
+    traits: str(c.sub_types),
+    text: str(c.card_text),
+    img: str(c.card_image),
+    usd: money(c.market_price),
+  };
+}
+
+async function get(path: string): Promise<Raw[]> {
+  for (let i = 0; i < 2; i++) {
+    try {
+      const r = await fetch(API + path, {
+        headers: { Accept: "application/json", "User-Agent": "grand-line-tracker/1.0" },
+        cache: "no-store",
+        signal: AbortSignal.timeout(25000),
+      });
+      if (r.ok) {
+        const d = await r.json();
+        if (Array.isArray(d)) return d;
+      }
+    } catch {}
+  }
+  return [];
+}
+
+export async function GET() {
+  const lists = await Promise.all(SOURCES.map(get));
+  const cards = new Map<string, ReturnType<typeof normalize>>();
+  const sets = new Map<string, string>();
+  for (const list of lists)
+    for (const raw of list) {
+      const c = normalize(raw);
+      if (!c || cards.has(c.id)) continue;
+      cards.set(c.id, c);
+      if (c.set && !sets.has(c.set)) sets.set(c.set, c.setName || c.set);
+    }
+  if (cards.size < 300)
+    return Response.json(
+      { error: `OPTCG API vrátilo len ${cards.size} kariet` },
+      { status: 502, headers: { "Cache-Control": "no-store" } },
+    );
+  const out = [...cards.values()].sort((a, b) =>
+    a!.set === b!.set ? (a!.code === b!.code ? a!.id.localeCompare(b!.id) : a!.code.localeCompare(b!.code)) : a!.set.localeCompare(b!.set),
+  );
+  return Response.json(
+    {
+      updated: new Date().toISOString(),
+      source: "optcgapi.com",
+      sets: [...sets].map(([id, name]) => ({ id, name })),
+      cards: out,
+    },
+    { headers: { "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=172800" } },
+  );
+}
