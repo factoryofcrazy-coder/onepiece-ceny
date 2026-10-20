@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Bar, DataError, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { eur, sortSets, useCards, usePrices } from "@/lib/data";
+import { eur, SET_KIND_SK, setKind, sortSets, useCards, usePrices } from "@/lib/data";
 
 type Row = {
   id: string;
@@ -26,6 +26,7 @@ export default function MasterSets() {
   const viewing = owner ?? user?.id ?? null;
   const { qty } = useCollection(viewing, false);
   const [mode, setMode] = useState<"base" | "master">("base");
+  const [kind, setKindF] = useState<"booster" | "starter" | "other">("booster");
   const usd = prices?.fx?.USD ?? 1.12;
 
   const rows = useMemo(() => {
@@ -52,12 +53,13 @@ export default function MasterSets() {
     }
     return sortSets([...m.values()]);
   }, [data, qty, usd]);
+  const shown = rows.filter((r) => setKind(r.id) === kind);
 
   if (error) return <DataError error={error} file="cards" />;
   if (!data || loading) return <Loading />;
   if (!user) return <NeedLogin what="Master sety" />;
 
-  const tot = rows.reduce(
+  const tot = shown.reduce(
     (a, r) => ({ have: a.have + (mode === "base" ? r.baseHave : r.allHave), all: a.all + (mode === "base" ? r.base : r.all), value: a.value + r.value }),
     { have: 0, all: 0, value: 0 },
   );
@@ -73,6 +75,13 @@ export default function MasterSets() {
         </div>
         <div className="row gap">
           <div className="seg">
+            {(["booster", "starter"] as const).map((k) => (
+              <button key={k} className={kind === k ? "on" : ""} onClick={() => setKindF(k)}>
+                {SET_KIND_SK[k]} ({rows.filter((r) => setKind(r.id) === k).length})
+              </button>
+            ))}
+          </div>
+          <div className="seg">
             <button className={mode === "base" ? "on" : ""} onClick={() => setMode("base")}>
               Základný set
             </button>
@@ -85,7 +94,7 @@ export default function MasterSets() {
       </div>
 
       <div className="setlist">
-        {rows.map((r) => {
+        {shown.map((r) => {
           const have = mode === "base" ? r.baseHave : r.allHave;
           const all = mode === "base" ? r.base : r.all;
           const miss = mode === "base" ? r.missingBaseCost : r.missingCost;

@@ -31,19 +31,29 @@ function splitName(raw: string) {
   return [name || raw.trim(), labels.join(" · ")];
 }
 
+// OPTCG API spája niektoré sety ("OP14-EB04") → rozdelí sa podľa kódu karty: OP14-001 → OP-14, EB04-001 → EB-04
+function setOf(rawSet: string, code: string, rawName: string): [string, string] {
+  if (!/^OP\d+-EB\d+$/.test(rawSet)) return [rawSet, rawName];
+  const m = code.match(/^(OP|EB)(\d+)-/);
+  if (!m) return [rawSet, rawName];
+  const id = `${m[1]}-${m[2]}`;
+  return [id, m[1] === "EB" ? `Extra Booster ${id}` : rawName];
+}
+
 function normalize(c: Raw) {
   const id = str(c.card_image_id) || str(c.card_set_id);
   if (!id) return null;
   const code = str(c.card_set_id) || id.split("_")[0];
   const [name, label] = splitName(str(c.card_name));
   const variant = id !== code;
+  const [set, setName] = setOf(str(c.set_id), code, str(c.set_name));
   return {
     id,
     code,
     name,
     v: variant ? label || "Parallel" : "",
-    set: str(c.set_id),
-    setName: str(c.set_name),
+    set,
+    setName,
     rarity: str(c.rarity),
     type: str(c.card_type),
     colors: str(c.card_color).split(/[\s/,]+/).filter(Boolean),

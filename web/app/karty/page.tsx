@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CardImg, CardModal, DataError, Loading, OwnerPicker, Qty } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { Card, COLOR_SK, COLORS, eur, sortSets, TYPE_SK, useCards, usePrices } from "@/lib/data";
+import { Card, COLOR_SK, COLORS, eur, SET_KIND_SK, setKind, sortSets, TYPE_SK, useCards, usePrices } from "@/lib/data";
 
 const PAGE = 120;
 
@@ -95,12 +95,18 @@ export default function CardsPage() {
           <span>Set</span>
           <select value={set} onChange={(e) => setSet(e.target.value)}>
             <option value="">Všetky sety</option>
-            {sets.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.id} – {s.name}
-              </option>
-            ))}
-          </select>
+            {(["booster", "starter", "other"] as const).map((k) => {
+              const g = sets.filter((x) => setKind(x.id) === k);
+              return g.length ? (
+                <optgroup key={k} label={`${SET_KIND_SK[k]} (${g.length})`}>
+                  {g.map((x) => (
+                    <option key={x.id} value={x.id}>
+                      {x.id} – {x.name}
+                    </option>
+                  ))}
+                </optgroup>
+              ) : null;
+            })}          </select>
         </label>
         <label className="field grow">
           <span>Hľadať</span>

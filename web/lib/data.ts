@@ -97,6 +97,14 @@ export function setOrder(id: string) {
   const rank: Record<string, number> = { OP: 0, EB: 1, PRB: 2, ST: 3, P: 4 };
   return [rank[pre] ?? 5, -n] as const;
 }
+/** booster = OP, EB, PRB; starter = ST; ostatné = promo a pod. */
+export function setKind(id: string): "booster" | "starter" | "other" {
+  if (/^(OP|EB|PRB)/.test(id)) return "booster";
+  if (/^ST/.test(id)) return "starter";
+  return "other";
+}
+export const SET_KIND_SK = { booster: "Booster sety", starter: "Starter decky", other: "Ostatné" } as const;
+
 export function sortSets<T extends { id: string }>(sets: T[]) {
   return [...sets].sort((a, b) => {
     const x = setOrder(a.id), y = setOrder(b.id);
