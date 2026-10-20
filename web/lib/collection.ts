@@ -46,9 +46,13 @@ export function useCollection(userId: string | null | undefined, editable: boole
       });
       clearTimeout(timers.current[cardId]);
       timers.current[cardId] = setTimeout(async () => {
+        // pri 0 kusoch riadok ostane, ak pochádza z HoloDex importu (aby ďalší import kartu znova nepridal)
+        if (n === 0) {
+          await sb().from("collection").update({ qty: 0 }).eq("user_id", userId).eq("card_id", cardId);
+        }
         const res =
           n === 0
-            ? await sb().from("collection").delete().eq("user_id", userId).eq("card_id", cardId)
+            ? await sb().from("collection").delete().eq("user_id", userId).eq("card_id", cardId).eq("holodex_qty", 0)
             : await sb()
                 .from("collection")
                 .upsert({ user_id: userId, card_id: cardId, qty: n, updated_at: new Date().toISOString() });

@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { CardImg, CardModal, DataError, Foil, Loading, OwnerPicker, Qty } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
@@ -87,7 +88,14 @@ export default function CardsPage() {
             {!user && " · prihlás sa, aby si si mohol značiť kolekciu"}
           </p>
         </div>
-        <OwnerPicker value={viewing} onChange={setOwner} />
+        <div className="row gap wrapr">
+          {user && (
+            <Link className="btn ghost sm" href="/import">
+              Import z HoloDex
+            </Link>
+          )}
+          <OwnerPicker value={viewing} onChange={setOwner} />
+        </div>
       </div>
 
       <div className="filters">

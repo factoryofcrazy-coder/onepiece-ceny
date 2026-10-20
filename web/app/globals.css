@@ -294,6 +294,39 @@ textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, monospace; fo
 .login form { margin: 16px 0; }
 .login .btn { justify-content: center; padding: 12px; }
 
+/* ------------------------------------------------------------- import */
+.drop { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 150px; padding: 24px; border: 2px dashed #2a5172; border-radius: 18px; background: rgba(12, 34, 54, .5); cursor: pointer; text-align: center; transition: border-color .2s, background .2s; }
+.drop:hover { border-color: var(--foam); background: rgba(94, 200, 200, .06); }
+.drop.has { border-style: solid; border-color: var(--foam); }
+.drop b { font: 700 18px var(--display); }
+.drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.paste { margin: 10px 0 18px; }
+.paste summary { cursor: pointer; color: var(--muted); }
+.paste textarea { margin-top: 8px; }
+.istats { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 12px; }
+.istats button { background: rgba(12, 34, 54, .7); border: 1px solid var(--line); color: var(--muted); border-radius: 12px; padding: 8px 12px; cursor: pointer; font: 600 13px var(--body); transition: border-color .2s, color .2s; }
+.istats button b { font: 800 18px var(--display); color: var(--text); margin-right: 4px; }
+.istats button.on { border-color: var(--foam); color: var(--text); }
+.warnbox { border: 1px solid rgba(242, 184, 75, .4); background: rgba(242, 184, 75, .06); border-radius: 14px; padding: 4px 14px 12px; margin-bottom: 14px; }
+.wrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid rgba(242, 184, 75, .18); flex-wrap: wrap; }
+.wrow select { max-width: 100%; }
+.itable { display: flex; flex-direction: column; gap: 6px; margin-bottom: 90px; }
+.irow { display: grid; grid-template-columns: 44px 1fr auto 90px; gap: 14px; align-items: center; background: rgba(12, 34, 54, .6); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; animation: fade .25s both; }
+.irow .cimg { width: 44px; border-radius: 4px; }
+.iname { display: flex; flex-direction: column; min-width: 0; }
+.iname b { font-family: var(--display); }
+.iqty { text-align: right; font-size: 15px; }
+.iqty b { font: 800 18px var(--display); }
+.ist { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+.ist-new { background: rgba(94, 200, 200, .16); color: var(--foam); }
+.ist-have { background: rgba(242, 184, 75, .16); color: var(--gold); }
+.ist-same { background: rgba(138, 160, 184, .12); color: var(--muted); }
+.ist-changed { background: rgba(120, 160, 255, .16); color: #a9c1ff; }
+.ist-removed { background: rgba(230, 57, 70, .16); color: #ffb3b9; }
+.irow.s-same { opacity: .6; }
+@media (max-width: 560px) { .irow { grid-template-columns: 40px 1fr auto; } .iqty { grid-column: 2 / -1; text-align: left; } }
+.applybar { position: sticky; bottom: 14px; z-index: 10; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 14px 12px 18px; border-radius: 16px; background: rgba(17, 48, 74, .92); backdrop-filter: blur(10px); border: 1px solid #2a5172; box-shadow: 0 20px 40px -20px #000; animation: pop .35s var(--ease) both; }
+
 /* ----------------------------------------------------- kostry načítania */
 .skel { margin-top: 28px; }
 .skel-head { height: 44px; width: min(420px, 70%); border-radius: 12px; margin-bottom: 22px; }
@@ -311,3 +344,4 @@ textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, monospace; fo
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
   .foil { transform: none !important; }
 }
+
