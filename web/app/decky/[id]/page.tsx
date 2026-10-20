@@ -31,6 +31,7 @@ export default function DeckEditor() {
   const [onlyOwned, setOnlyOwned] = useState(false);
   const [open, setOpen] = useState<Card | null>(null);
   const [txt, setTxt] = useState<string | null>(null);
+  const [confirmDel, setConfirmDel] = useState(false);
   const saveT = useRef<any>(null);
 
   useEffect(() => {
@@ -177,8 +178,8 @@ export default function DeckEditor() {
   };
 
   const remove = async () => {
-    if (!confirm(`Zmazať deck „${deck.name}“?`)) return;
-    await sb().from("decks").delete().eq("id", deck.id);
+    const { error } = await sb().from("decks").delete().eq("id", deck.id);
+    if (error) return setStatus(`chyba: ${error.message}`);
     router.push("/decky");
   };
 
@@ -207,11 +208,21 @@ export default function DeckEditor() {
               Skopírovať do mojich
             </button>
           )}
-          {editable && (
-            <button className="btn ghost sm danger" onClick={remove}>
-              Zmazať
-            </button>
-          )}
+          {editable &&
+            (confirmDel ? (
+              <>
+                <button className="btn sm" onClick={remove}>
+                  Áno, zmazať deck
+                </button>
+                <button className="btn ghost sm" onClick={() => setConfirmDel(false)}>
+                  Nie
+                </button>
+              </>
+            ) : (
+              <button className="btn ghost sm danger" onClick={() => setConfirmDel(true)}>
+                Zmazať
+              </button>
+            ))}
         </div>
       </div>
 
@@ -229,7 +240,7 @@ export default function DeckEditor() {
                     {leader.power ?? "?"}
                   </div>
                   {editable && (
-                    <button className="link small" onClick={() => update({ leader_id: null })}>
+                    <button className="link small" onClick={() => (update({ leader_id: null }), setQ(""), setColor(""))}>
                       zmeniť leadera
                     </button>
                   )}
@@ -387,7 +398,7 @@ export default function DeckEditor() {
                   key={c.code}
                   className={`ccell pick ${inDeck ? "indeck" : ""}`}
                   onClick={() =>
-                    editable && (leader ? setCount(c.code, inDeck + 1) : update({ leader_id: c.code }))
+                    editable && (leader ? setCount(c.code, inDeck + 1) : (update({ leader_id: c.code }), setQ(""), setColor("")))
                   }
                   onContextMenu={(e) => {
                     e.preventDefault();
