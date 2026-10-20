@@ -38,11 +38,13 @@ export type PricesDb = {
   fx?: { USD?: number; CZK?: number; JPY?: number };
 };
 
+// zvýš pri zmene formátu dát z /api/* → obíde sa stará CDN cache
+const DATA_VERSION = "3";
 const cache: Record<string, Promise<any>> = {};
 
 function load<T>(file: string, prep?: (d: any) => T): Promise<T> {
   if (!cache[file])
-    cache[file] = fetch(`/api/${file}`).then(async (r) => {
+    cache[file] = fetch(`/api/${file}?v=${DATA_VERSION}`).then(async (r) => {
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(d.error || `HTTP ${r.status}`);
       return prep ? prep(d) : d;
@@ -117,7 +119,7 @@ export function setKind(id: string): "booster" | "starter" | "other" {
   if (/^ST/.test(id)) return "starter";
   return "other";
 }
-export const SET_KIND_SK = { booster: "Booster sety", starter: "Starter decky", other: "Ostatné" } as const;
+export const SET_KIND_SK = { booster: "Booster sety", starter: "Starter decky", other: "Promo karty" } as const;
 
 export function sortSets<T extends { id: string }>(sets: T[]) {
   return [...sets].sort((a, b) => {

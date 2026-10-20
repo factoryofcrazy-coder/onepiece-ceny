@@ -49,7 +49,7 @@ export default function CardsPage() {
     const s = q.trim().toLowerCase();
     const out = data.cards.filter(
       (c) =>
-        (!set || c.set === set) &&
+        (!set || !!s || c.set === set) && // pri hľadaní sa ide cez všetky sety
         (!color || c.colors.includes(color)) &&
         (!type || c.type === type) &&
         (!rarity || c.rarity === rarity) &&
@@ -99,8 +99,8 @@ export default function CardsPage() {
       </div>
 
       <div className="filters">
-        <label className="field">
-          <span>Set</span>
+        <label className={`field ${q.trim() ? "dimmed" : ""}`}>
+          <span>{q.trim() ? "Set (hľadá sa vo všetkých)" : "Set"}</span>
           <select value={set} onChange={(e) => setSet(e.target.value)}>
             <option value="">Všetky sety</option>
             {(["booster", "starter", "other"] as const).map((k) => {
@@ -118,7 +118,7 @@ export default function CardsPage() {
         </label>
         <label className="field grow">
           <span>Hľadať</span>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Luffy, OP01-001, Straw Hat…" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Hľadá vo všetkých setoch: Luffy, OP01-001, Straw Hat…" />
         </label>
         <label className="field">
           <span>Farba</span>

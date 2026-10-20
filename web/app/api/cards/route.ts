@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 const API = "https://optcgapi.com/api/";
-const SOURCES = ["allSetCards/", "allSTCards/", "allPromoCards/"];
+const SOURCES = ["allSetCards/", "allSTCards/"];
 
 type Raw = Record<string, any>;
 
@@ -27,6 +27,7 @@ function splitName(raw: string) {
       if (!/^\d{1,3}$/.test(t) && !/^[A-Z]{1,4}\d{0,2}-\d{3}$/.test(t)) labels.push(t);
       return "";
     })
+    .replace(/\s*\[([^\[\]]*)\]/g, (_, inner: string) => (labels.push(inner.trim()), "")) // promo: [Winner], [Finalist]
     .replace(/\s+-\s+[A-Z]{1,4}\d{0,2}-\d{3}$/, "") // "Jinbe - EB04-015" → "Jinbe"
     .replace(/\s+/g, " ")
     .trim();
@@ -88,8 +89,36 @@ async function get(path: string): Promise<Raw[]> {
   return [];
 }
 
+// Promo karty: hromadný zoznam (allPromoCards) na OPTCG API občas padá → záloha karta po karte (P-001, P-002…).
+async function getPromos(): Promise<Raw[]> {
+  const all = await get("allPromoCards/");
+  if (all.length > 50) return all;
+  const out: Raw[] = [];
+  const one = async (n: number) => {
+    try {
+      const r = await fetch(`${API}promos/card/P-${String(n).padStart(3, "0")}/`, {
+        headers: { Accept: "application/json", "User-Agent": "grand-line-tracker/1.0" },
+        cache: "no-store",
+        signal: AbortSignal.timeout(9000),
+      });
+      if (!r.ok) return [];
+      const d = await r.json();
+      return Array.isArray(d) ? (d as Raw[]) : [];
+    } catch {
+      return [];
+    }
+  };
+  for (let start = 1; start <= 400; start += 25) {
+    const batch = await Promise.all(Array.from({ length: 25 }, (_, i) => one(start + i)));
+    const found = batch.flat();
+    out.push(...found);
+    if (!found.length) break; // celá dávka prázdna → koniec promo čísel
+  }
+  return out;
+}
+
 export async function GET() {
-  const lists = await Promise.all(SOURCES.map(get));
+  const lists = await Promise.all([...SOURCES.map(get), getPromos()]);
   const cards = new Map<string, ReturnType<typeof normalize>>();
   const sets = new Map<string, string>();
   for (const list of lists)

@@ -75,9 +75,10 @@ export default function MasterSets() {
         </div>
         <div className="row gap">
           <div className="seg">
-            {(["booster", "starter"] as const).map((k) => (
+            {(["booster", "starter", "other"] as const).map((k) => (
               <button key={k} className={kind === k ? "on" : ""} onClick={() => setKindF(k)}>
-                {k === "booster" ? "Boostery" : "Starter decky"} ({rows.filter((r) => setKind(r.id) === k).length})
+                {k === "booster" ? "Boostery" : k === "starter" ? "Starter decky" : "Promo"} (
+                {rows.filter((r) => setKind(r.id) === k).length})
               </button>
             ))}
           </div>
