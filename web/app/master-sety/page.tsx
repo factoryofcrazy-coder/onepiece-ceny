@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Bar, DataError, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { eur, SET_KIND_SK, setKind, sortSets, useCards, usePrices } from "@/lib/data";
+import { eur, setKind, sortSets, useCards, usePrices } from "@/lib/data";
 
 type Row = {
   id: string;
@@ -77,16 +77,16 @@ export default function MasterSets() {
           <div className="seg">
             {(["booster", "starter"] as const).map((k) => (
               <button key={k} className={kind === k ? "on" : ""} onClick={() => setKindF(k)}>
-                {SET_KIND_SK[k]} ({rows.filter((r) => setKind(r.id) === k).length})
+                {k === "booster" ? "Boostery" : "Starter decky"} ({rows.filter((r) => setKind(r.id) === k).length})
               </button>
             ))}
           </div>
           <div className="seg">
             <button className={mode === "base" ? "on" : ""} onClick={() => setMode("base")}>
-              Základný set
+              Základný
             </button>
             <button className={mode === "master" ? "on" : ""} onClick={() => setMode("master")}>
-              Master set (+ parallely)
+              Master s parallelmi
             </button>
           </div>
           <OwnerPicker value={viewing} onChange={setOwner} />
