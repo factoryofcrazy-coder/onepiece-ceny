@@ -27,6 +27,7 @@ function splitName(raw: string) {
       if (!/^\d{1,3}$/.test(t) && !/^[A-Z]{1,4}\d{0,2}-\d{3}$/.test(t)) labels.push(t);
       return "";
     })
+    .replace(/\s+-\s+[A-Z]{1,4}\d{0,2}-\d{3}$/, "") // "Jinbe - EB04-015" → "Jinbe"
     .replace(/\s+/g, " ")
     .trim();
   return [name || raw.trim(), labels.join(" · ")];

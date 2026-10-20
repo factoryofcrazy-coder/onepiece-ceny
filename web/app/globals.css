@@ -325,6 +325,8 @@ textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, monospace; fo
 .ist-removed { background: rgba(230, 57, 70, .16); color: #ffb3b9; }
 .irow.s-same { opacity: .6; }
 @media (max-width: 560px) { .irow { grid-template-columns: 40px 1fr auto; } .iqty { grid-column: 2 / -1; text-align: left; } }
+.removebox { flex-direction: row; align-items: flex-start; gap: 10px; white-space: normal; margin-bottom: 12px; border-color: rgba(230, 57, 70, .35); }
+.removebox input { margin-top: 3px; flex: none; }
 .applybar { position: sticky; bottom: 14px; z-index: 10; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 14px 12px 18px; border-radius: 16px; background: rgba(17, 48, 74, .92); backdrop-filter: blur(10px); border: 1px solid #2a5172; box-shadow: 0 20px 40px -20px #000; animation: pop .35s var(--ease) both; }
 
 /* ----------------------------------------------------- kostry načítania */

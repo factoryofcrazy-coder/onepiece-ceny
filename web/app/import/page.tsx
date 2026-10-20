@@ -16,7 +16,7 @@ const STATUS: Record<Status, string> = {
   have: "Už ju máš",
   same: "Bez zmeny",
   changed: "Zmenený počet",
-  removed: "Už nie je v HoloDex",
+  removed: "Chýba v CSV",
 };
 
 export default function ImportPage() {
@@ -29,6 +29,7 @@ export default function ImportPage() {
   const [existing, setExisting] = useState<Existing | null>(null);
   const [override, setOverride] = useState<Record<number, string>>({});
   const [manual, setManual] = useState<"max" | "add">("max");
+  const [removeMissing, setRemoveMissing] = useState(false);
   const [filter, setFilter] = useState<Status | "warn" | "all">("all");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<string | null>(null);
@@ -79,14 +80,16 @@ export default function ImportPage() {
       let after: number, status: Status;
       if (oldHd === 0 && cur === 0) (after = nw), (status = "new");
       else if (oldHd === 0) (after = manual === "max" ? Math.max(cur, nw) : cur + nw), (status = "have");
-      else if (nw === 0) (after = Math.max(0, cur - oldHd)), (status = "removed");
+      else if (nw === 0) (after = removeMissing ? Math.max(0, cur - oldHd) : cur), (status = "removed");
       else if (oldHd === nw) (after = cur), (status = "same");
       else (after = Math.max(0, cur - oldHd + nw)), (status = "changed");
-      rows.push({ id, card: data.byId.get(id), before: cur, after, oldHd, newHd: nw, status, rows: newHd[id]?.rows ?? [] });
+      // karta chýba v CSV, ale odstraňovanie je vypnuté → nechaj ju aj s pamäťou importu
+      const keepHd = status === "removed" && !removeMissing ? oldHd : nw;
+      rows.push({ id, card: data.byId.get(id), before: cur, after, oldHd, newHd: keepHd, status, rows: newHd[id]?.rows ?? [] });
     });
     rows.sort((a, b) => a.id.localeCompare(b.id));
     return rows;
-  }, [existing, data, matches, override, manual]);
+  }, [existing, data, matches, override, manual, removeMissing]);
 
   if (loading) return <Loading shape="rows" />;
   if (!user) return <NeedLogin what="Import kolekcie" />;
@@ -188,6 +191,18 @@ export default function ImportPage() {
               <b className={unmatched.length + guesses.length ? "badc" : ""}>{unmatched.length + guesses.length}</b> na kontrolu
             </button>
           </div>
+
+          {count("removed") > 0 && (
+            <label className="panel check removebox">
+              <input type="checkbox" checked={removeMissing} onChange={(e) => setRemoveMissing(e.target.checked)} />
+              <span>
+                Odstrániť z kolekcie {count("removed")} kariet, ktoré v tomto CSV chýbajú.{" "}
+                <span className="muted small">
+                  Zapni, len ak je to export celej kolekcie – inak by si prišiel o karty z iných portfólií.
+                </span>
+              </span>
+            </label>
+          )}
 
           {count("have") > 0 && (
             <div className="panel row gap wrapr">
