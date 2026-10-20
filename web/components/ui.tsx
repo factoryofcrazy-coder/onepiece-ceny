@@ -1,12 +1,72 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { loadProfiles, Profile, useAuth } from "@/lib/auth";
 import type { Card } from "@/lib/data";
 import { COLOR_SK, eur } from "@/lib/data";
 
-export function Loading({ what = "Načítavam" }: { what?: string }) {
-  return <div className="empty">{what}…</div>;
+/** Kostra namiesto „Načítavam…“ – tvar zodpovedá obsahu, ktorý príde. */
+export function Loading({ what = "Načítavam", shape = "cards" }: { what?: string; shape?: "cards" | "rows" | "tiles" }) {
+  const n = shape === "rows" ? 8 : 12;
+  return (
+    <div className={`skel skel-${shape}`} role="status" aria-label={what}>
+      <div className="skel-head" />
+      <div className="skel-grid">
+        {Array.from({ length: n }, (_, i) => (
+          <div key={i} className="skel-item" style={{ animationDelay: `${i * 60}ms` }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Karta, ktorá sa nakláňa za kurzorom; parallely/alt arty dostanú holografický lesk. */
+export function Foil({ children, holo, className = "" }: { children: ReactNode; holo?: boolean; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const move = (e: React.PointerEvent) => {
+    const el = ref.current;
+    if (!el || e.pointerType === "touch") return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    el.style.setProperty("--mx", `${x * 100}%`);
+    el.style.setProperty("--my", `${y * 100}%`);
+    el.style.setProperty("--rx", `${(0.5 - y) * 16}deg`);
+    el.style.setProperty("--ry", `${(x - 0.5) * 20}deg`);
+    el.classList.add("on");
+  };
+  const leave = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.classList.remove("on");
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
+  };
+  return (
+    <div ref={ref} className={`foil ${holo ? "holo" : ""} ${className}`} onPointerMove={move} onPointerLeave={leave}>
+      {children}
+      <i className="shine" aria-hidden />
+    </div>
+  );
+}
+
+/** Číslo, ktoré sa pri prvom zobrazení napočíta (odmena na plagáte). */
+export function CountUp({ value, format }: { value: number; format: (v: number) => string }) {
+  const [v, setV] = useState(value);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return setV(value);
+    let raf = 0;
+    const t0 = performance.now();
+    const dur = 1100;
+    const tick = (t: number) => {
+      const k = Math.min(1, (t - t0) / dur);
+      setV(value * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [value]);
+  return <>{format(v)}</>;
 }
 
 export function DataError({ error, file }: { error: string; file: string }) {
@@ -123,7 +183,9 @@ export function CardModal({
         <button className="x" onClick={onClose} aria-label="zavrieť">
           ×
         </button>
-        <CardImg card={card} className="big" />
+        <Foil holo={!!card.v} className="big">
+          <CardImg card={card} />
+        </Foil>
         <div className="mtext">
           <h2>
             {card.name} {card.v && <span className="tag">{card.v}</span>}

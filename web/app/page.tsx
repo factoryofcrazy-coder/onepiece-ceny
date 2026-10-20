@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { DataError, Loading } from "@/components/ui";
+import { CountUp, DataError, Loading } from "@/components/ui";
 import { OLD_SITE } from "@/lib/config";
 import { eur, Offer, usePrices } from "@/lib/data";
 
@@ -82,23 +82,24 @@ export default function PricesPage() {
   }, [products, kind, lang, q, stock, ba, sort, data]);
 
   if (error) return <DataError error={error} file="prices" />;
-  if (!data) return <Loading what="Načítavam ceny" />;
+  if (!data) return <Loading what="Načítavam ceny" shape="tiles" />;
 
   const failing = Object.entries(data.status).filter(([, s]) => !s.ok);
 
   return (
     <>
-      <div className="head">
-        <div>
-          <h1>Ceny sealed produktov</h1>
-          <p className="muted small">
-            {Object.keys(data.shops).length} obchodov · aktualizované {ago(data.updated)} ·{" "}
+      <section className="hero">
+        <div className="hero-copy">
+          <h1>Kde kúpiť box čo najbližšie k MSRP</h1>
+          <p className="muted">
+            {Object.keys(data.shops).length} obchodov v SK, CZ, DE, AT a JP, aktualizované {ago(data.updated)}.{" "}
             <a href={OLD_SITE} target="_blank" rel="noreferrer">
-              pôvodná stránka s grafmi ↗
+              Grafy vývoja cien
             </a>
           </p>
         </div>
-      </div>
+        <WantedBoard products={products} shops={data.shops} />
+      </section>
 
       <div className="filters">
         <label className="field">
@@ -224,5 +225,42 @@ function ProductCard({
         )}
       </div>
     </article>
+  );
+}
+
+function WantedBoard({ products, shops }: { products: Product[]; shops: Record<string, string> }) {
+  const pick = (lang: string) =>
+    products
+      .filter((p) => p.kind === "Box" && p.lang === lang && p.best && p.pct != null)
+      .sort((a, b) => a.pct! - b.pct!);
+  const top = [...pick("EN"), ...pick("JP")].slice(0, 3);
+  if (!top.length) return null;
+  return (
+    <div className="wanted-board" aria-label="Najlepšie ponuky boxov">
+      {top.map((p, i) => (
+        <a
+          key={p.key}
+          className="wanted"
+          href={p.best![7]}
+          target="_blank"
+          rel="noreferrer"
+          style={{ ["--i" as any]: i, ["--tilt" as any]: `${[-2.5, 1.5, -1][i]}deg` }}
+        >
+          <span className="w-title">WANTED</span>
+          <span className="w-frame">{p.img ? <img src={p.img} alt="" /> : <b>{p.code}</b>}</span>
+          <span className="w-name">
+            {p.code} {p.kind} {p.lang}
+          </span>
+          <span className="w-bounty">
+            <CountUp value={p.best![5]} format={(v) => v.toLocaleString("sk-SK", { maximumFractionDigits: 0 })} />
+            <small>€</small>
+          </span>
+          <span className="w-foot">
+            {shops[p.best![0]] ?? p.best![0]} · {p.pct! > 0 ? "+" : ""}
+            {p.pct!.toFixed(0)} % voči MSRP
+          </span>
+        </a>
+      ))}
+    </div>
   );
 }

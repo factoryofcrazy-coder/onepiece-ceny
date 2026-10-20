@@ -17,7 +17,14 @@ export default function Nav() {
     <header className="nav">
       <div className="wrap navin">
         <Link href="/" className="brand">
-          <span className="logo">☠</span> Grand Line <b>Tracker</b>
+          <span className="logo" aria-hidden>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9.5" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M12 4.5 14.2 12 12 19.5 9.8 12Z" fill="currentColor" />
+              <circle cx="12" cy="12" r="1.6" fill="#f2b84b" />
+            </svg>
+          </span>
+          Grand Line <b>Tracker</b>
         </Link>
         <nav className="links">
           {LINKS.map((l) => (

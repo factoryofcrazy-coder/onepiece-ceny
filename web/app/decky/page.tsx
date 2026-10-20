@@ -38,7 +38,7 @@ export default function DecksPage() {
   if (loading) return <Loading />;
   if (!user) return <NeedLogin what="Deckbuilder" />;
   if (error) return <DataError error={error} file="cards" />;
-  if (!data || !decks) return <Loading what="Načítavam decky" />;
+  if (!data || !decks) return <Loading what="Načítavam decky" shape="tiles" />;
 
   const create = async () => {
     setBusy(true);

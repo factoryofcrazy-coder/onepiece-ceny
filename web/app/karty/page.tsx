@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { CardImg, CardModal, DataError, Loading, OwnerPicker, Qty } from "@/components/ui";
+import { CardImg, CardModal, DataError, Foil, Loading, OwnerPicker, Qty } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
 import { Card, COLOR_SK, COLORS, eur, SET_KIND_SK, setKind, sortSets, TYPE_SK, useCards, usePrices } from "@/lib/data";
@@ -66,7 +66,7 @@ export default function CardsPage() {
   }, [data, set, q, color, type, rarity, variant, own, qty, sort]);
 
   if (error) return <DataError error={error} file="cards" />;
-  if (!data) return <Loading what="Načítavam karty" />;
+  if (!data) return <Loading what="Načítavam karty" shape="cards" />;
 
   const owned = list.filter((c) => qty[c.id] > 0);
   const value = owned.reduce((s, c) => s + (c.usd ?? 0) * qty[c.id], 0) / usd;
@@ -176,7 +176,9 @@ export default function CardsPage() {
           const n = qty[c.id] ?? 0;
           return (
             <div key={c.id} className={`ccell ${viewing && !n ? "missing" : ""}`} onClick={() => setOpen(c)}>
-              <CardImg card={c} />
+              <Foil holo={!!c.v}>
+                <CardImg card={c} />
+              </Foil>
               <div className="cmeta">
                 <span className="small">
                   {c.code}

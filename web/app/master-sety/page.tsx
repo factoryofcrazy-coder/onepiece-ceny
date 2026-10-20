@@ -56,7 +56,7 @@ export default function MasterSets() {
   const shown = rows.filter((r) => setKind(r.id) === kind);
 
   if (error) return <DataError error={error} file="cards" />;
-  if (!data || loading) return <Loading />;
+  if (!data || loading) return <Loading shape="rows" />;
   if (!user) return <NeedLogin what="Master sety" />;
 
   const tot = shown.reduce(
