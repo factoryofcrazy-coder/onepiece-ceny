@@ -294,6 +294,23 @@ textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, monospace; fo
 .login form { margin: 16px 0; }
 .login .btn { justify-content: center; padding: 12px; }
 
+/* ----------------------------------------------- odporúčanie deckov */
+.recs { display: flex; flex-direction: column; gap: 12px; }
+.rec { background: linear-gradient(180deg, rgba(17, 48, 74, .75), rgba(12, 34, 54, .9)); border: 1px solid var(--line); border-radius: 18px; padding: 16px; animation: fade .4s both; animation-delay: var(--d, 0ms); }
+.rec.top { border-color: rgba(242, 184, 75, .55); box-shadow: 0 0 0 1px rgba(242, 184, 75, .15), 0 24px 50px -30px rgba(242, 184, 75, .6); }
+.rec-main { display: grid; grid-template-columns: 112px 1fr; gap: 18px; align-items: center; }
+.rec-leader { width: 112px; }
+.rec-body h2 { margin: 0; }
+.rec-meta { margin: 4px 0 10px; }
+.rec-progress { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; max-width: 560px; }
+.rec-progress > b { font: 800 26px/1 var(--display); color: var(--gold); min-width: 66px; }
+.rec.top .rec-progress > b { color: var(--foam); }
+.rec-missing { margin: 10px 0 12px; }
+.rec-missing b { color: var(--gold); }
+.rec-list { list-style: none; margin: 14px 0 0; padding: 12px 0 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 4px 18px; }
+.rec-list li { display: flex; align-items: center; gap: 10px; padding: 4px 0; font-size: 14px; animation: fade .25s both; }
+@media (max-width: 560px) { .rec-main { grid-template-columns: 78px 1fr; gap: 12px; } .rec-leader { width: 78px; } .rec-progress { grid-template-columns: auto 1fr; } .rec-progress > span { grid-column: 1 / -1; } }
+
 /* ------------------------------------------------------------- import */
 .drop { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 150px; padding: 24px; border: 2px dashed #2a5172; border-radius: 18px; background: rgba(12, 34, 54, .5); cursor: pointer; text-align: center; transition: border-color .2s, background .2s; }
 .drop:hover { border-color: var(--foam); background: rgba(94, 200, 200, .06); }

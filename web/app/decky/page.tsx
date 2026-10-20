@@ -82,9 +82,14 @@ export default function DecksPage() {
           <h1>Decky</h1>
           <p className="muted small">1 leader + 50 kariet, max. 4 kópie, farby podľa leadera</p>
         </div>
-        <button className="btn" onClick={create} disabled={busy}>
-          + Nový deck
-        </button>
+        <div className="row gap wrapr">
+          <Link className="btn ghost" href="/decky/odporucanie">
+            Čo si viem postaviť
+          </Link>
+          <button className="btn" onClick={create} disabled={busy}>
+            + Nový deck
+          </button>
+        </div>
       </div>
       <h2 className="sub">Moje decky</h2>
       {mine.length ? (

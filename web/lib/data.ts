@@ -73,6 +73,20 @@ export const useCards = () =>
   useData<CardsDb>("cards", (d) => ({ ...d, byId: new Map((d.cards as Card[]).map((c) => [c.id, c])) }));
 export const usePrices = () => useData<PricesDb>("prices");
 
+export type MetaDeck = {
+  leader: string;
+  leaderName: string;
+  player: string;
+  placing: number;
+  tournament: string;
+  tournamentId: string;
+  date: string;
+  players: number;
+  cards: Record<string, number>;
+};
+export type MetaDb = { updated: string; tournaments: number; decks: MetaDeck[] };
+export const useMeta = () => useData<MetaDb>("meta");
+
 export const COLORS = ["Red", "Green", "Blue", "Purple", "Black", "Yellow"];
 export const COLOR_SK: Record<string, string> = {
   Red: "Červená", Green: "Zelená", Blue: "Modrá", Purple: "Fialová", Black: "Čierna", Yellow: "Žltá",
