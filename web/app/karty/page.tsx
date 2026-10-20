@@ -180,11 +180,9 @@ export default function CardsPage() {
                 <CardImg card={c} />
               </Foil>
               <div className="cmeta">
-                <span className="small">
-                  {c.code}
-                  {c.v && <span className="tag tiny">{c.v}</span>}
-                </span>
-                <span className="small muted">{c.usd != null ? eur(c.usd / usd) : ""}</span>
+                <span className="small">{c.code}</span>
+                <span className="small muted cprice">{c.usd != null ? eur(c.usd / usd) : ""}</span>
+                {c.v && <span className="tag tiny">{c.v}</span>}
               </div>
               {viewing && <Qty n={n} onSet={mine ? (v) => setQty(c.id, v) : undefined} disabled={!mine} />}
             </div>
