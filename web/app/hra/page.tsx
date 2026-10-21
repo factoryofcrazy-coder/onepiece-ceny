@@ -34,7 +34,7 @@ export default function GamePage() {
       .then(({ data }) =>
         setMyDecks(
           (data ?? [])
-            .filter((d: any) => d.leader_id)
+            .filter((d: any) => d.leader_id && Object.values(d.cards as Record<string, number>).reduce((a, b) => a + b, 0) >= 40) // len hrateľné decky
             .map((d: any) => ({ id: d.id, name: d.name, leader: d.leader_id, cards: Object.entries(d.cards as Record<string, number>).flatMap(([c, n]) => Array(n).fill(c)) })),
         ),
       );
