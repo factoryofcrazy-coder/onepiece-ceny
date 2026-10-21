@@ -7,6 +7,7 @@ import type { Card } from "@/lib/data";
 import { basePower, blockersFor, counterOf, counterOptions, def, donOnField, fieldOf, handCost, hasKw, mainActions, power } from "@/lib/engine/engine";
 import type { Action, AnswerChoice, GameEvent, GameState, P } from "@/lib/engine/types";
 import "./game.css";
+import ReportButton, { type ActionLog } from "./ReportButton";
 
 export type BoardProps = {
   s: GameState;
@@ -20,6 +21,7 @@ export type BoardProps = {
   onExit: () => void;
   onResign?: () => void;
   result?: ReactNode; // doplnok do obrazovky konca hry (napr. zmena ELO)
+  gameId?: string; // online hra – pre hlásenie problémov
 };
 
 const HEART = (
@@ -28,7 +30,8 @@ const HEART = (
   </svg>
 );
 
-export default function Board({ s, me, byCode, mode, onAction, busy, error, elo, onExit, onResign, result }: BoardProps) {
+export default function Board({ s, me, byCode, mode, onAction, busy, error, elo, onExit, onResign, result, gameId }: BoardProps) {
+  const actionLog = useRef<ActionLog>([]);
   const opp: P = me === 0 ? 1 : 0;
   const [sel, setSel] = useState<string | null>(null);
   const [attacking, setAttacking] = useState<string | null>(null);
@@ -90,6 +93,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
   const send = (a: Action) => {
     if (busy) return;
     setLocalErr(null);
+    actionLog.current = [...actionLog.current.slice(-29), { a, turn: s.turn, at: new Date().toISOString(), prompt: s.prompt?.kind }];
     onAction(a);
   };
   const answer = (choice: AnswerChoice) => pr && send({ type: "answer", p: me, choice });
@@ -703,6 +707,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
           </span>
           <span className="phase">{s.battle ? "Súboj" : s.phase === "main" ? "Main fáza" : s.phase === "setup" ? "Mulligan" : ""}</span>
           <span className="sp" />
+          <ReportButton s={s} mode={mode} gameId={gameId} actions={actionLog.current} byCode={byCode} peek={peek} />
           {onResign && s.winner == null && (
             <button
               className={`btn sm ${confirmResign ? "" : "ghost danger"}`}

@@ -126,3 +126,23 @@ alter publication supabase_realtime add table public.games, public.game_views;
 -- game_commit(p_id, p_version, p_patch, p_state, p_views): atomický zápis ťahu s optimistickým zámkom (version),
 -- pri konci hodnotenej hry zavolá game_rate (ELO, K = 32). Obe funkcie: security definer, execute len service_role.
 -- Plné znenie: migrácie online_games a online_games_functions v Supabase.
+
+-- =========================================================== hlásenia problémov z hry
+-- Hráč v hre klikne „⚑ Nahlásiť“: uloží sa text, karty, posledné ťahy a stav hry (na zopakovanie chyby).
+create table if not exists public.game_reports (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  user_id uuid not null default auth.uid() references auth.users on delete cascade,
+  game_id uuid references public.games on delete set null,
+  mode text not null check (mode in ('bot','local','online')),
+  message text not null check (char_length(message) between 3 and 4000),
+  cards text[] not null default '{}',
+  turn int,
+  actions jsonb not null default '[]'::jsonb,
+  state jsonb,
+  status text not null default 'new' check (status in ('new','fixed','wontfix','duplicate')),
+  answer text
+);
+alter table public.game_reports enable row level security;
+create policy "insert own report" on public.game_reports for insert to authenticated with check (user_id = (select auth.uid()));
+create policy "read own reports" on public.game_reports for select to authenticated using (user_id = (select auth.uid()));

@@ -221,6 +221,7 @@ export default function OnlineGamePage() {
       me={v.seat}
       byCode={byCode}
       mode="online"
+      gameId={id}
       onAction={act}
       busy={busy}
       error={err}

@@ -448,3 +448,9 @@
 .pcard:hover { transform: translateY(-4px); }
 .pcard.on .cimg { box-shadow: 0 0 0 3px var(--gold), 0 0 20px rgba(242, 184, 75, .7); }
 @media (max-width: 720px) { .pcard { width: 70px; } }
+.mbox.report { display: block; max-width: 620px; }
+.mbox.report textarea { font-family: var(--body); font-size: 14px; padding: 10px 12px; border-radius: 12px; background: var(--ink); color: var(--text); border: 1px solid var(--line); resize: vertical; }
+.report-cards { display: flex; gap: 8px; flex-wrap: wrap; }
+.report-cards .pcard { width: 76px; display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--muted); }
+.report-done { text-align: center; padding: 10px 0; }
+@media (max-width: 720px) { .gtop .btn.ghost.sm { padding: 7px 9px; font-size: 12px; } }
