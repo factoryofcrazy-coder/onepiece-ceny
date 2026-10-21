@@ -137,7 +137,7 @@ export function Qty({ n, onSet, disabled }: { n: number; onSet?: (n: number) => 
   );
 }
 
-export function CardImg({ card, className = "" }: { card: Card; className?: string }) {
+export function CardImg({ card, className = "", eager = false }: { card: Card; className?: string; eager?: boolean }) {
   const sources = [card.img].filter(Boolean);
   const [i, setI] = useState(0);
   if (i >= sources.length)
@@ -153,7 +153,7 @@ export function CardImg({ card, className = "" }: { card: Card; className?: stri
       className={`cimg ${className}`}
       src={sources[i]}
       alt={`${card.name} ${card.code}`}
-      loading="lazy"
+      loading={eager ? "eager" : "lazy"}
       onError={() => setI(i + 1)}
     />
   );

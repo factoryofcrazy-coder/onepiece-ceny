@@ -312,7 +312,7 @@ function Board({ initial, mode, byCode, onExit }: { initial: GameState; mode: "b
           const playable = canPlay(iid) || (s.prompt?.kind === "counter" && s.prompt.p === me && counterOptions(s, me).includes(iid));
           return (
             <button key={iid} className={`hcard ${playable ? "ok" : ""}`} onClick={() => clickCard(iid)} title={c?.name}>
-              {c && <CardImg card={c} />}
+              {c && <CardImg card={c} eager />}
               <span className="hcost">{handCost(s, iid)}</span>
               {!def(s, iid).scripted && <span className="unscripted" title="Efekt zatiaľ nie je naprogramovaný">!</span>}
             </button>
@@ -346,7 +346,7 @@ function Side({
         onClick={() => onCard(iid)}
         title={d.name}
       >
-        {card && <CardImg card={card} />}
+        {card && <CardImg card={card} eager />}
         {d.type !== "Stage" && <span className="bpow">{power(s, iid)}</span>}
         {c.don > 0 && <span className="bdon">+{c.don}</span>}
         {hasKw(s, iid, "blocker") && <span className="bkw">B</span>}
