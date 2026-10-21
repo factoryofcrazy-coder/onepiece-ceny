@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T08:56:39Z",
+ "updated": "2026-10-21T10:43:45Z",
  "fx": {
   "CZK": 24.329,
   "USD": 1.1215,
@@ -7,18 +7,9 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-10-20T15:05:11Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
-    {
-     "name": "One Piece TCG - The Time of Battle Booster Pack (OP16) - EN",
-     "url": "https://www.cardempire.sk/one-piece-tcg-the-time-of-battle-booster-pack--op16-en/",
-     "price": 8.0,
-     "currency": "EUR",
-     "eur": 8.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/19326_op16booster.png?ff=1&x=100&y=100&q=85&ts=6a2a8bdc&sg=8dda0505"
-    },
     {
      "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Pack (Japonsky)",
      "url": "https://www.cardempire.sk/one-piece-tcg-op17-the-world--s-strongest-warriors-booster-pack--japonsky-/",
@@ -27,6 +18,15 @@
      "eur": 8.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/21260_upper-deck-premier-2024-25-hockey-hobby-box--19.png?ff=1&x=100&y=100&q=85&ts=6a8e9f13&sg=8dda0505"
+    },
+    {
+     "name": "One Piece TCG - The Time of Battle Booster Pack (OP16) - EN",
+     "url": "https://www.cardempire.sk/one-piece-tcg-the-time-of-battle-booster-pack--op16-en/",
+     "price": 8.0,
+     "currency": "EUR",
+     "eur": 8.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/19326_op16booster.png?ff=1&x=100&y=100&q=85&ts=6a2a8bdc&sg=8dda0505"
     },
     {
      "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Pack",
@@ -99,6 +99,16 @@
      "eur": 175.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/11250_op13japbox.png?ff=1&x=100&y=100&q=85&ts=6901190e&sg=8dda0505"
+    },
+    {
+     "name": "One Piece TCG - Heroines Edition vol.2 - Booster Box - Sealed Case",
+     "url": "https://www.cardempire.sk/one-piece-tcg-heroines-edition-vol-2-booster-box-sealed-case/",
+     "price": 3200.0,
+     "currency": "EUR",
+     "eur": 3200.0,
+     "inStock": false,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/22595_slab--3.png?ff=1&x=423&y=318&q=85&ts=6ad79474&sg=2175fb9d",
+     "preorder": true
     },
     {
      "name": "One Piece TCG - Awakening of the New Era - Double Pack Set Vol. 2 - Display",
@@ -564,7 +574,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-10-20T15:05:11Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -615,7 +625,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -1844,7 +1854,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -2210,7 +2220,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -2608,7 +2618,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -2833,7 +2843,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -2992,7 +3002,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-10-20T15:05:11Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -3529,7 +3539,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -3665,7 +3675,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-10-20T15:05:11Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -3689,7 +3699,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -3740,7 +3750,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -3791,7 +3801,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-10-20T15:05:11Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -3915,18 +3925,9 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-10-20T15:05:11Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
-    {
-     "name": "One Piece TCG: Kid/Killer Vol.8 - Illustration Box",
-     "url": "https://www.cardstore.cz/one-piece-tcg--kid-killer-vol-8-illustration-box/",
-     "price": 899.0,
-     "currency": "CZK",
-     "eur": 36.95,
-     "inStock": false,
-     "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/related/2059_one-piece-tcg--kid-killer-vol-8-illustration-box.png?ff=1&x=100&y=100&q=85&ts=6a89b04e&sg=8dda0505"
-    },
     {
      "name": "One Piece TCG: Rayleigh/Shakuyaku Vol. 7 - Illustration Box",
      "url": "https://www.cardstore.cz/one-piece-tcg--rayleigh-shakuyaku-vol--7-illustration-box/",
@@ -3944,6 +3945,15 @@
      "eur": 110.94,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/related/4522_one-piece-tcg-the-world-s-strongest-warriors-op-17---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=100&y=100&q=85&ts=6acd2d23&sg=8dda0505"
+    },
+    {
+     "name": "One Piece TCG: Kid/Killer Vol.8 - Illustration Box",
+     "url": "https://www.cardstore.cz/one-piece-tcg--kid-killer-vol-8-illustration-box/",
+     "price": 899.0,
+     "currency": "CZK",
+     "eur": 36.95,
+     "inStock": false,
+     "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/related/2059_one-piece-tcg--kid-killer-vol-8-illustration-box.png?ff=1&x=100&y=100&q=85&ts=6a89b04e&sg=8dda0505"
     },
     {
      "name": "One Piece TCG: Two Legends Booster Box OP-08 (Japonský)",
@@ -4218,7 +4228,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -4719,7 +4729,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -5284,7 +5294,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -5362,7 +5372,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -5512,7 +5522,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -5700,7 +5710,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-10-20T15:05:11Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -5778,9 +5788,18 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-10-20T15:05:11Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
+    {
+     "name": "One Piece Card Game - Illustration Box Vol.8 - EN",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-illustration-box-vol-8-en/",
+     "price": 899.0,
+     "currency": "CZK",
+     "eur": 36.95,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451934_one-piece-card-game-illustration-box-vol-8-en.png?ff=1&x=100&y=100&q=85&ts=6a6c7e63&sg=8dda0505"
+    },
     {
      "name": "One Piece Card Game - The World's Strongest Warriors Booster Pack - EN",
      "url": "https://www.blacklotus.cz/one-piece-card-game-the-world-s-strongest-warriors-booster-pack-en/",
@@ -5798,15 +5817,6 @@
      "eur": 328.78,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/453197_op17bb.png?ff=1&x=100&y=100&q=85&ts=6a881798&sg=8dda0505"
-    },
-    {
-     "name": "One Piece Card Game - Illustration Box Vol.8 - EN",
-     "url": "https://www.blacklotus.cz/one-piece-card-game-illustration-box-vol-8-en/",
-     "price": 899.0,
-     "currency": "CZK",
-     "eur": 36.95,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451934_one-piece-card-game-illustration-box-vol-8-en.png?ff=1&x=100&y=100&q=85&ts=6a6c7e63&sg=8dda0505"
     },
     {
      "name": "One Piece Card Game - Illustration Box Vol.7 - EN",
@@ -5910,7 +5920,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
@@ -6231,7 +6241,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-21T08:56:39Z",
+   "ts": "2026-10-21T10:43:45Z",
    "ok": true,
    "items": [
     {
