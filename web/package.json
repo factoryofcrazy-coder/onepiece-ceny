@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:fn": "esbuild supabase/functions/game/index.ts --bundle --format=esm --platform=neutral --target=es2022 --outfile=supabase/functions/game/dist/index.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",

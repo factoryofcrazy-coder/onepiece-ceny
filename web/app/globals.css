@@ -295,55 +295,6 @@ textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, monospace; fo
 .login form { margin: 16px 0; }
 .login .btn { justify-content: center; padding: 12px; }
 
-/* ------------------------------------------------------------------ hra */
-.lobby { max-width: 680px; margin: 36px auto; display: flex; flex-direction: column; gap: 16px; }
-.lobby-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-@media (max-width: 600px) { .lobby-grid { grid-template-columns: 1fr; } }
-.board { position: relative; display: flex; flex-direction: column; gap: 10px; margin: 14px 0 30px; padding: 14px; border-radius: 22px; border: 1px solid var(--line);
-  background: radial-gradient(ellipse at 50% 50%, rgba(94, 200, 200, .10), transparent 65%), linear-gradient(180deg, #0a1d31, #071423 50%, #0a1d31); }
-.gbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-.side { display: grid; grid-template-columns: 150px 1fr; grid-template-rows: auto auto; gap: 8px 14px; align-items: start; }
-.side .pinfo { grid-column: 1; grid-row: 1 / 3; display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); padding: 10px; border-radius: 12px; background: rgba(6, 18, 31, .5); border: 1px solid var(--line); }
-.side .pinfo b { color: var(--text); font-family: var(--display); font-size: 15px; }
-.side .pinfo .don b { color: var(--gold); font-size: 18px; margin: 0 4px; }
-.side .lead { display: flex; gap: 12px; align-items: flex-end; }
-.side .chars { display: flex; gap: 10px; flex-wrap: wrap; min-height: 112px; padding: 8px; border-radius: 12px; border: 1px dashed rgba(94, 200, 200, .18); }
-.side.top { grid-template-rows: auto auto; }
-.side.top .chars { grid-row: 1; grid-column: 2; }
-.side.top .lead { grid-row: 2; grid-column: 2; }
-@media (max-width: 720px) { .side { grid-template-columns: 1fr; } .side .pinfo { grid-row: auto; flex-direction: row; flex-wrap: wrap; gap: 10px; } .side.top .chars, .side.top .lead { grid-column: 1; } }
-.bcard { position: relative; width: 78px; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .25s var(--ease), box-shadow .2s; border-radius: 6px; }
-.bcard.lead { width: 96px; }
-.bcard .cimg { border-radius: 6px; }
-.bcard.rested { transform: rotate(90deg) scale(.9); margin: 0 14px; }
-.bcard.hl { box-shadow: 0 0 0 3px var(--gold), 0 0 22px rgba(242, 184, 75, .6); animation: pulse 1.2s ease-in-out infinite; }
-.bcard.picked { box-shadow: 0 0 0 3px var(--foam), 0 0 22px rgba(94, 200, 200, .7); animation: none; }
-.bcard.sel { box-shadow: 0 0 0 3px #fff; }
-.bcard.atk { box-shadow: 0 0 0 3px var(--red), 0 0 24px rgba(230, 57, 70, .7); }
-.bcard.tgt { box-shadow: 0 0 0 3px var(--red); }
-@keyframes pulse { 50% { box-shadow: 0 0 0 3px var(--gold), 0 0 8px rgba(242, 184, 75, .3); } }
-.bpow { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); background: rgba(6, 18, 31, .88); color: #fff; font: 800 12px var(--display); padding: 1px 7px; border-radius: 99px; }
-.bdon { position: absolute; top: 4px; right: 4px; background: var(--gold); color: var(--ink); font: 800 11px var(--display); padding: 1px 6px; border-radius: 99px; }
-.bkw { position: absolute; top: 4px; left: 4px; background: #3a7be5; color: #fff; font: 800 10px var(--display); width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; }
-.unscripted { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; font: 800 11px var(--display); width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; }
-.lifestack { position: relative; width: 56px; height: 78px; }
-.lifestack i { position: absolute; left: calc(var(--i) * 3px); top: calc(var(--i) * -3px); width: 52px; height: 72px; border-radius: 5px; background: linear-gradient(135deg, #8b1520, var(--red)); border: 2px solid #f1d9a0; box-shadow: 0 2px 4px rgba(0, 0, 0, .5); }
-.midline { min-height: 54px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; border-top: 1px solid rgba(94, 200, 200, .15); border-bottom: 1px solid rgba(94, 200, 200, .15); padding: 8px 0; }
-.prompt { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; padding: 10px 14px; border-radius: 14px; background: rgba(17, 48, 74, .95); border: 1px solid var(--gold); animation: pop .3s var(--ease) both; }
-.prompt .btn.on { border-color: var(--foam); color: var(--foam); }
-.donpick { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; background: rgba(6, 18, 31, .6); border-radius: 10px; padding: 3px 8px; }
-.donpick button { background: none; border: 1px solid var(--line); color: var(--text); width: 24px; height: 24px; border-radius: 6px; cursor: pointer; }
-.actmenu { display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; animation: pop .25s var(--ease) both; }
-.hint { text-align: center; color: var(--gold); margin: 0; }
-.hand { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding-top: 6px; }
-.hcard { position: relative; width: 92px; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .2s var(--ease); }
-.hcard:hover { transform: translateY(-10px) scale(1.05); z-index: 2; }
-.hcard.ok .cimg { box-shadow: 0 0 0 2px var(--foam), 0 8px 18px -8px rgba(94, 200, 200, .8); }
-.hcost { position: absolute; top: 4px; left: 4px; background: var(--ink); color: var(--gold); font: 800 12px var(--display); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--gold); }
-.glog { list-style: none; margin: 0; padding: 8px 12px; font-size: 12px; color: var(--muted); max-height: 140px; overflow: auto; border-radius: 12px; background: rgba(6, 18, 31, .5); }
-.glog li:first-child { color: var(--text); }
-.cover, .winner { position: absolute; inset: 0; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(4, 12, 22, .94); border-radius: 22px; text-align: center; animation: fade .3s both; }
-.winner h2 { font-size: 40px; color: var(--gold); }
 
 /* --------------------------------------------------------------- zbierka */
 .vault { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: center; margin: 30px 0 26px; }

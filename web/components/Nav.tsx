@@ -10,6 +10,7 @@ const LINKS = [
   { href: "/master-sety", label: "Master sety" },
   { href: "/decky", label: "Decky" },
   { href: "/hra", label: "Hra" },
+  { href: "/rebricek", label: "Rebríček" },
 ];
 
 export default function Nav() {

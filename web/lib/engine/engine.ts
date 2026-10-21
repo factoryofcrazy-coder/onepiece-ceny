@@ -779,11 +779,20 @@ function answer(s: GameState, ch: AnswerChoice) {
 export function viewFor(s: GameState, p: P) {
   const o = other(p);
   const v = clone(s);
+  // skryté zóny: identitu kariet nepozná ani klient (aj v mape `cards` a `defs`) → nedá sa podvádzať cez DevTools
+  const hidden = new Set([...s.players[o].hand, ...s.players[o].deck, ...s.players[p].deck, ...s.players[0].life, ...s.players[1].life]);
+  if (s.prompt?.kind === "trigger") hidden.delete(s.prompt.iid); // odhalená Life karta s [Trigger]
   v.players[o].hand = v.players[o].hand.map(() => "hidden");
   v.players[o].deck = v.players[o].deck.map(() => "hidden");
   v.players[p].deck = v.players[p].deck.map(() => "hidden");
   v.players[0].life = v.players[0].life.map(() => "hidden");
   v.players[1].life = v.players[1].life.map(() => "hidden");
+  const cards: GameState["cards"] = {};
+  for (const [iid, c] of Object.entries(v.cards)) if (!hidden.has(iid)) cards[iid] = c;
+  v.cards = cards;
+  const codes = new Set(Object.values(cards).map((c) => c.code));
+  v.defs = Object.fromEntries(Object.entries(s.defs).filter(([k]) => codes.has(k)));
+  v.seed = 0; // seed by prezradil budúce miešanie
   return v;
 }
 

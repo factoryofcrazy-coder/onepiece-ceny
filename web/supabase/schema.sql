@@ -78,3 +78,51 @@ create policy "watchlist_all_own" on public.watchlist for all to authenticated
 -- keepalive (Vercel cron /api/ping) -----------------------------------------
 create or replace function public.ping() returns text language sql stable set search_path = '' as $$ select 'pong'::text $$;
 grant execute on function public.ping() to anon, authenticated;
+
+-- =========================================================== online hra + rebríček
+-- Stav hry drží a mení len edge function `game` (service role). Hráč číta len svoj pohľad (game_views)
+-- a verejné metadáta hry (games). Celý stav so skrytými kartami je v game_private (bez prístupu z klienta).
+create table if not exists public.games (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  status text not null default 'open' check (status in ('open','playing','done','cancelled')),
+  host uuid not null references auth.users on delete cascade,
+  guest uuid references auth.users on delete set null,
+  host_name text not null, guest_name text,
+  host_leader text not null, guest_leader text,
+  host_deck_name text not null, guest_deck_name text,
+  turn int not null default 0,
+  to_move uuid, winner uuid, end_reason text,
+  rated boolean not null default true,
+  version int not null default 0,
+  elo_delta int
+);
+create table if not exists public.game_private (
+  game_id uuid primary key references public.games on delete cascade,
+  host_deck jsonb not null, guest_deck jsonb, state jsonb
+);
+create table if not exists public.game_views (
+  game_id uuid not null references public.games on delete cascade,
+  player uuid not null references auth.users on delete cascade,
+  seat smallint not null, version int not null, view jsonb not null,
+  primary key (game_id, player)
+);
+create table if not exists public.ratings (
+  user_id uuid primary key references auth.users on delete cascade,
+  elo int not null default 1000, wins int not null default 0, losses int not null default 0, games int not null default 0,
+  streak int not null default 0, best_elo int not null default 1000, updated_at timestamptz not null default now()
+);
+alter table public.games enable row level security;
+alter table public.game_private enable row level security;
+alter table public.game_views enable row level security;
+alter table public.ratings enable row level security;
+create policy "games readable by signed-in" on public.games for select to authenticated using (true);
+create policy "own view" on public.game_views for select to authenticated using (player = (select auth.uid()));
+create policy "ratings readable by signed-in" on public.ratings for select to authenticated using (true);
+revoke all on public.game_private from anon, authenticated;
+revoke insert, update, delete on public.games, public.game_views, public.ratings from anon, authenticated;
+alter publication supabase_realtime add table public.games, public.game_views;
+-- game_commit(p_id, p_version, p_patch, p_state, p_views): atomický zápis ťahu s optimistickým zámkom (version),
+-- pri konci hodnotenej hry zavolá game_rate (ELO, K = 32). Obe funkcie: security definer, execute len service_role.
+-- Plné znenie: migrácie online_games a online_games_functions v Supabase.

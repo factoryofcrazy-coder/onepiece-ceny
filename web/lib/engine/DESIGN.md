@@ -92,3 +92,16 @@ Leader Luffy OP09-061 [Your Turn][Once Per Turn] keď sa 2+ DON!! vrátia: +1 ak
 3. skripty kariet z vašich a turnajových deckov
 4. AI prevod textov kariet do DSL + automatické testy pre všetky karty
 5. „sprievodcovský režim“ pre karty bez overeného skriptu
+
+## Online hra (server drží stav)
+
+- **Edge function `game`** (`web/supabase/functions/game/index.ts`, bundle `npm run build:fn` → `dist/index.js`)
+  beží na Supabase. Operácie: `create` (výzva), `join`, `act` (akcia hráča), `resign`, `cancel`.
+- Server overí prihlásenie (`/auth/v1/user`), že akcia patrí hráčovi na rade, a vykoná ju **tým istým enginom**.
+  Miešanie robí server (`crypto.getRandomValues`), seed sa klientom neposiela.
+- `game_private.state` = celý stav (nikto z klienta). `game_views` = `viewFor(state, hráč)` pre každého hráča
+  (RLS: vidíš len svoj riadok). Skryté karty nie sú ani v `cards`/`defs`, takže sa nedajú vyčítať cez DevTools.
+- Zápis cez `game_commit` je atomický a má optimistický zámok `version` → dvojklik ani súbeh nepokazí stav (409).
+- Klient počúva Supabase Realtime (`game_views`, `games`) + poistka polling 6 s.
+- Koniec hodnotenej hry → `game_rate` (ELO, K = 32) → `/rebricek`.
+- Testy: `supabase/functions/game/game.test.ts` (falošný PostgREST, dvaja hráči dohrajú hry len zo svojich pohľadov).

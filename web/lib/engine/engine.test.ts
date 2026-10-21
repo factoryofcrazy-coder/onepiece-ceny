@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  applyAction, cardCount, cost, counterOptions, donOnField, fieldOf, IllegalAction, mainActions, newGame, power,
+  applyAction, blockersFor, cardCount, cost, counterOptions, donOnField, fieldOf, IllegalAction, mainActions, newGame, power, viewFor,
 } from "./engine";
 import { DECK_ST01, DECK_ST26, DEFS } from "./fixtures";
 import { nextRand } from "./rng";
@@ -406,6 +406,45 @@ describe("náhodné hry – invarianty", () => {
 });
 
 // ------------------------------------------------------------------ bot
+describe("online pohľad (viewFor)", () => {
+  it("neprezradí skryté karty a klient z neho vypočíta rovnaké legálne akcie ako server", () => {
+    for (let g = 0; g < 40; g++) {
+      let seed = 5000 + g;
+      const r = () => {
+        const [v, ns] = nextRand(seed);
+        seed = ns;
+        return v;
+      };
+      let s = newGame([DECK_ST26, DECK_ST01], DEFS, seed, (g % 2) as P);
+      for (let step = 0; step < 1500 && s.winner == null; step++) {
+        for (const p of [0, 1] as P[]) {
+          const v = viewFor(s, p);
+          const o = (1 - p) as P;
+          expect(v.seed).toBe(0);
+          for (const iid of [...s.players[o].hand, ...s.players[p].deck, ...s.players[o].deck, ...s.players[0].life, ...s.players[1].life])
+            if (!(s.prompt?.kind === "trigger" && s.prompt.iid === iid)) expect(v.cards[iid]).toBeUndefined();
+          expect(v.players[o].hand.length).toBe(s.players[o].hand.length);
+          const actor = s.prompt ? s.prompt.p : s.active;
+          if (p === actor) {
+            expect(JSON.stringify(mainActions(v))).toBe(JSON.stringify(mainActions(s)));
+            if (s.prompt?.kind === "counter") expect(counterOptions(v, p)).toEqual(counterOptions(s, p));
+            if (s.prompt?.kind === "blocker") expect(blockersFor(v)).toEqual(blockersFor(s));
+            for (const i of fieldOf(s, p)) expect(power(v, i)).toBe(power(s, i));
+          }
+        }
+        let a: Action;
+        if (s.prompt) a = randomAnswer(s, r);
+        else {
+          const acts = mainActions(s);
+          const pick = acts.filter((x) => x.type !== "endTurn");
+          a = pick.length && r() < 0.75 ? pick[Math.floor(r() * pick.length)] : { type: "endTurn", p: s.active };
+        }
+        s = applyAction(s, a);
+      }
+    }
+  }, 120000);
+});
+
 import { botAction } from "./bot";
 describe("bot", () => {
   it("bot proti botovi dohrá 50 hier len legálnymi ťahmi", () => {
