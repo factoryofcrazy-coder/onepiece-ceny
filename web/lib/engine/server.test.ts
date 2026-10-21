@@ -1,9 +1,9 @@
-// Test edge function „game“ bez siete: falošný PostgREST + Auth, dvaja hráči odohrajú celé hry
+// Test serverovej logiky online hry (lib/engine/server.ts) bez siete: falošný PostgREST + Auth, dvaja hráči odohrajú celé hry
 // len z vlastných pohľadov (presne tak, ako to robí prehliadač).
 import { beforeAll, describe, expect, it } from "vitest";
-import { botAction } from "../../../lib/engine/bot";
-import { FIXTURE_CARDS } from "../../../lib/engine/fixtures";
-import type { Action, GameState } from "../../../lib/engine/types";
+import { botAction } from "./bot";
+import { FIXTURE_CARDS } from "./fixtures";
+import type { Action, GameState } from "./types";
 
 type Row = Record<string, any>;
 const T: Record<string, Row[]> = { games: [], game_private: [], game_views: [], ratings: [], profiles: [], decks: [] };
@@ -72,9 +72,9 @@ async function fakeFetch(input: string, init: RequestInit = {}): Promise<Respons
 
 let handler: (r: Request) => Promise<Response>;
 beforeAll(async () => {
-  (globalThis as any).Deno = { env: { get: (k: string) => ({ SUPABASE_URL: "https://db.test", SUPABASE_SERVICE_ROLE_KEY: "eyService", SUPABASE_ANON_KEY: "anon" })[k] }, serve: (h: any) => (handler = h) };
   (globalThis as any).fetch = fakeFetch;
-  await import("./index");
+  const { createHandler } = await import("./server");
+  handler = createHandler({ URL: "https://db.test", SERVICE: "eyService", ANON: "anon", SITE: "https://grand-line-tracker-gilt.vercel.app" });
 });
 
 async function call(tok: string | null, body: unknown) {

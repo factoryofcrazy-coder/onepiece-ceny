@@ -1,215 +1,46 @@
-// Supabase Edge Function „game“ – server drží celý stav online hry.
-// Klient posiela len akcie; server overí ťah enginom, zamieša a uloží každému hráčovi jeho pohľad (viewFor).
-// Build: npm run build:fn  → supabase/functions/game/dist/index.js (nasadzuje sa cez Supabase MCP / CLI)
-import { buildDef } from "../../../lib/engine/cards";
-import { applyAction, IllegalAction, newGame, viewFor } from "../../../lib/engine/engine";
-import { DECK_ST01, DECK_ST26 } from "../../../lib/engine/fixtures";
-import type { Action, CardDef, GameState, P } from "../../../lib/engine/types";
-
+// Supabase Edge Function „game“ – tenký nakladač. Celá logika (engine, skripty kariet, pravidlá servera)
+// je v module /engine/server.js na webe, ktorý sa zostavuje spolu s webom (npm run build:engine).
+// Funkcia ho načíta, overí si ETag každú minútu a zavolá createHandler. Zdroj modulu: web/lib/engine/server.ts
 declare const Deno: { env: { get(k: string): string | undefined }; serve(h: (r: Request) => Promise<Response>): void };
 
-const URL_ = Deno.env.get("SUPABASE_URL")!;
-const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const ANON = Deno.env.get("SUPABASE_ANON_KEY") ?? "sb_publishable_E2xvBPHdCd4b76kzGJ89bw_8-5R4ee6";
 const SITE = "https://grand-line-tracker-gilt.vercel.app";
-
-const PRESETS: Record<string, { name: string; leader: string; cards: string[] }> = {
-  st26: { ...DECK_ST26, name: "Starter: Fialový Luffy (ST-26)" },
-  st01: { ...DECK_ST01, name: "Starter: Červený Luffy (ST-01)" },
+const env = {
+  URL: Deno.env.get("SUPABASE_URL")!,
+  SERVICE: Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  ANON: Deno.env.get("SUPABASE_ANON_KEY") ?? "sb_publishable_E2xvBPHdCd4b76kzGJ89bw_8-5R4ee6",
+  SITE,
 };
-
 const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
-const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
-class HttpError extends Error {
-  constructor(public status: number, msg: string) {
-    super(msg);
+
+let cached: { at: number; etag: string | null; handler: (r: Request) => Promise<Response> } | null = null;
+
+async function handler() {
+  if (cached && Date.now() - cached.at < 60_000) return cached.handler;
+  const r = await fetch(`${SITE}/engine/server.js`, { headers: cached?.etag ? { "If-None-Match": cached.etag } : {} });
+  if (r.status === 304 && cached) {
+    cached.at = Date.now();
+    return cached.handler;
   }
-}
-
-async function db(path: string, init: RequestInit = {}) {
-  const r = await fetch(`${URL_}/rest/v1/${path}`, {
-    ...init,
-    headers: {
-      apikey: SERVICE,
-      ...(SERVICE.startsWith("ey") ? { Authorization: `Bearer ${SERVICE}` } : {}),
-      "Content-Type": "application/json",
-      Prefer: "return=representation",
-      ...(init.headers ?? {}),
-    },
-  });
-  const text = await r.text();
-  if (!r.ok) throw new HttpError(500, `DB ${r.status}: ${text.slice(0, 300)}`);
-  return text ? JSON.parse(text) : null;
-}
-const one = async (path: string) => ((await db(path)) as any[])[0] ?? null;
-
-async function userOf(req: Request): Promise<{ id: string; name: string }> {
-  const auth = req.headers.get("Authorization");
-  if (!auth) throw new HttpError(401, "Nie si prihlásený.");
-  const r = await fetch(`${URL_}/auth/v1/user`, { headers: { apikey: ANON, Authorization: auth } });
-  if (!r.ok) throw new HttpError(401, "Nie si prihlásený.");
-  const u = await r.json();
-  const prof = await one(`profiles?id=eq.${u.id}&select=username`);
-  return { id: u.id, name: prof?.username || (u.email ?? "hráč").split("@")[0] };
-}
-
-type Deck = { name: string; leader: string; cards: string[] };
-async function deckOf(uid: string, d: { preset?: string; id?: string }): Promise<Deck> {
-  if (d?.preset && PRESETS[d.preset]) return PRESETS[d.preset];
-  if (!d?.id || !/^[0-9a-f-]{36}$/.test(d.id)) throw new HttpError(400, "Vyber deck.");
-  const row = await one(`decks?id=eq.${d.id}&user_id=eq.${uid}&select=name,leader_id,cards`);
-  if (!row) throw new HttpError(404, "Deck sa nenašiel.");
-  const cards = Object.entries((row.cards ?? {}) as Record<string, number>).flatMap(([c, n]) => Array(Math.max(0, Math.min(4, n | 0))).fill(c));
-  if (!row.leader_id) throw new HttpError(400, "Deck nemá leadera.");
-  if (cards.length < 40 || cards.length > 50) throw new HttpError(400, `Deck má ${cards.length} kariet (treba 40–50).`);
-  return { name: row.name, leader: row.leader_id, cards };
-}
-
-let cardCache: { at: number; byCode: Map<string, any> } | null = null;
-async function defsFor(codes: string[]): Promise<Record<string, CardDef>> {
-  if (!cardCache || Date.now() - cardCache.at > 3600_000) {
-    const r = await fetch(`${SITE}/api/cards?v=4`);
-    if (!r.ok) throw new HttpError(502, "Nepodarilo sa načítať databázu kariet.");
-    const data = await r.json();
-    const m = new Map<string, any>();
-    for (const c of data.cards) {
-      const cur = m.get(c.code);
-      if (!cur || (cur.v && !c.v)) m.set(c.code, c);
-    }
-    cardCache = { at: Date.now(), byCode: m };
+  if (!r.ok) {
+    if (cached) return cached.handler;
+    throw new Error(`engine ${r.status}`);
   }
-  const out: Record<string, CardDef> = {};
-  const missing: string[] = [];
-  for (const code of new Set(codes)) {
-    const c = cardCache.byCode.get(code);
-    if (!c) missing.push(code);
-    else out[code] = buildDef(c);
-  }
-  if (missing.length) throw new HttpError(400, `V databáze chýbajú karty: ${missing.join(", ")}`);
-  return out;
-}
-
-function randInt() {
-  const a = new Uint32Array(1);
-  crypto.getRandomValues(a);
-  return a[0];
-}
-
-/** pohľady oboch hráčov + metadáta pre zoznam hier */
-function snapshot(g: any, s: GameState) {
-  const seat = [g.host, g.guest];
-  const actor: P = s.prompt ? s.prompt.p : s.active;
-  const patch: Record<string, unknown> = { turn: s.turn, to_move: s.winner == null ? seat[actor] : null };
-  if (s.winner != null) Object.assign(patch, { status: "done", winner: seat[s.winner], end_reason: g.end_reason ?? "game" });
-  const views = [0, 1].map((p) => ({ player: seat[p], seat: p, view: viewFor(s, p as P) }));
-  return { patch, views };
-}
-
-async function commit(id: string, version: number, patch: unknown, state: unknown, views: unknown) {
-  const ok = await db("rpc/game_commit", {
-    method: "POST",
-    body: JSON.stringify({ p_id: id, p_version: version, p_patch: patch, p_state: state, p_views: views }),
-  });
-  if (ok !== true) throw new HttpError(409, "Medzitým sa stav hry zmenil – skús znova.");
-}
-
-async function handle(req: Request) {
-  const me = await userOf(req);
-  const body = await req.json().catch(() => ({}));
-  const op = body.op as string;
-
-  if (op === "create") {
-    const deck = await deckOf(me.id, body.deck);
-    const open = await db(`games?host=eq.${me.id}&status=eq.open&select=id`);
-    if (open.length >= 3) throw new HttpError(400, "Máš už 3 otvorené výzvy.");
-    const [g] = await db("games", {
-      method: "POST",
-      body: JSON.stringify({ host: me.id, host_name: me.name, host_leader: deck.leader, host_deck_name: deck.name, rated: body.rated !== false }),
-    });
-    await db("game_private", { method: "POST", body: JSON.stringify({ game_id: g.id, host_deck: deck }) });
-    return { id: g.id };
-  }
-
-  const id = String(body.id ?? "");
-  if (!/^[0-9a-f-]{36}$/.test(id)) throw new HttpError(400, "Chýba hra.");
-  const g = await one(`games?id=eq.${id}&select=*`);
-  if (!g) throw new HttpError(404, "Hra neexistuje.");
-
-  if (op === "cancel") {
-    if (g.host !== me.id || g.status !== "open") throw new HttpError(400, "Výzvu už nejde zrušiť.");
-    await commit(id, g.version, { status: "cancelled", end_reason: "cancel" }, null, []);
-    return { ok: true };
-  }
-
-  if (op === "join") {
-    if (g.status !== "open" || g.guest) throw new HttpError(400, "Do tejto hry sa už nedá pridať.");
-    if (g.host === me.id) throw new HttpError(400, "Nemôžeš hrať sám proti sebe – pošli výzvu kamošovi.");
-    const deck = await deckOf(me.id, body.deck);
-    const priv = await one(`game_private?game_id=eq.${id}&select=host_deck`);
-    const hd = priv.host_deck as Deck;
-    const defs = await defsFor([hd.leader, ...hd.cards, deck.leader, ...deck.cards]);
-    const s = newGame(
-      [
-        { name: g.host_name, leader: hd.leader, cards: hd.cards },
-        { name: me.name, leader: deck.leader, cards: deck.cards },
-      ],
-      defs,
-      randInt() % 2147483646 + 1,
-      (randInt() % 2) as P,
-    );
-    const g2 = { ...g, guest: me.id };
-    const { patch, views } = snapshot(g2, s);
-    Object.assign(patch, { status: "playing", guest: me.id, guest_name: me.name, guest_leader: deck.leader, guest_deck_name: deck.name, guest_deck: deck });
-    await commit(id, g.version, patch, s, views);
-    return { ok: true };
-  }
-
-  const seat: P | -1 = g.host === me.id ? 0 : g.guest === me.id ? 1 : -1;
-  if (seat === -1) throw new HttpError(403, "Nie si hráčom tejto hry.");
-  if (g.status !== "playing") throw new HttpError(400, "Hra už skončila.");
-  const priv = await one(`game_private?game_id=eq.${id}&select=state`);
-  let s = priv.state as GameState;
-
-  if (op === "resign") {
-    s = structuredClone(s);
-    s.winner = (1 - seat) as P;
-    s.phase = "over";
-    s.prompt = null;
-    s.log.push({ t: "Info", msg: `${s.players[seat].name} sa vzdal.` });
-    const { patch, views } = snapshot({ ...g, end_reason: "resign" }, s);
-    await commit(id, g.version, patch, s, views);
-    return { ok: true };
-  }
-
-  if (op === "act") {
-    if (body.version != null && body.version !== g.version) throw new HttpError(409, "Medzitým sa stav hry zmenil – obnovujem.");
-    const a = body.action as Action;
-    if (!a || typeof a !== "object" || a.p !== seat) throw new HttpError(400, "Teraz nie si na rade.");
-    try {
-      s = applyAction(s, a);
-    } catch (e) {
-      if (e instanceof IllegalAction) throw new HttpError(400, e.message);
-      throw e;
-    }
-    const { patch, views } = snapshot(g, s);
-    await commit(id, g.version, patch, s, views);
-    return { ok: true, version: g.version + 1 };
-  }
-
-  throw new HttpError(400, "Neznáma operácia.");
+  const code = await r.text();
+  const mod = new Function(`${code}\n;return OPServer;`)();
+  cached = { at: Date.now(), etag: r.headers.get("etag"), handler: mod.createHandler(env) };
+  return cached.handler;
 }
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   try {
-    return json(await handle(req));
+    return await (await handler())(req);
   } catch (e) {
-    if (e instanceof HttpError) return json({ error: e.message }, e.status);
     console.error(e);
-    return json({ error: "Chyba servera." }, 500);
+    return new Response(JSON.stringify({ error: "Server hry je dočasne nedostupný." }), { status: 503, headers: { ...cors, "Content-Type": "application/json" } });
   }
 });

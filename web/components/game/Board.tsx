@@ -4,7 +4,7 @@
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { CardImg } from "@/components/ui";
 import type { Card } from "@/lib/data";
-import { basePower, blockersFor, counterOptions, def, donOnField, fieldOf, handCost, hasKw, mainActions, power } from "@/lib/engine/engine";
+import { basePower, blockersFor, counterOf, counterOptions, def, donOnField, fieldOf, handCost, hasKw, mainActions, power } from "@/lib/engine/engine";
 import type { Action, AnswerChoice, GameEvent, GameState, P } from "@/lib/engine/types";
 import "./game.css";
 
@@ -124,7 +124,16 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
     }
     showDetail(iid);
   };
+  const togglePick = (iid: string) => {
+    if (!pr || pr.kind !== "choose") return;
+    const max = pr.max;
+    setPicked((p) => (p.includes(iid) ? p.filter((x) => x !== iid) : max === 1 ? [iid] : p.length < max ? [...p, iid] : p));
+  };
   const clickHand = (iid: string) => {
+    if (pr?.kind === "choose") {
+      if (pr.options.includes(iid)) return togglePick(iid);
+      return showDetail(iid);
+    }
     if (pr?.kind === "counter") {
       if (!counterOpts.includes(iid)) return showDetail(iid);
       setPicked((p) => (p.includes(iid) ? p.filter((x) => x !== iid) : [...p, iid]));
@@ -418,7 +427,25 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
 
   const PromptView = () => {
     const p = pr!;
+    // karty, ktoré nie sú na stole ani v mojej ruke (trash, pozreté karty, Life…) – ukážu sa priamo vo výzve
+    const visible = new Set([...fieldOf(s, 0), ...fieldOf(s, 1), ...s.players[me].hand]);
+    const offBoard = p.kind === "choose" ? p.options.filter((i) => i !== "don" && !visible.has(i) && s.cards[i]) : [];
     switch (p.kind) {
+      case "oneOf":
+        return (
+          <div className="gprompt">
+            <h4>
+              <span className="ic">?</span> {p.label}
+            </h4>
+            <div className="opts">
+              {p.options.map((o, k) => (
+                <button key={k} className="btn ghost sm" onClick={() => answer({ option: k })}>
+                  {o}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
       case "mulligan":
         return (
           <div className="gprompt">
@@ -443,9 +470,23 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
               <span className="ic">✦</span> {p.label}
             </h4>
             <p>
-              Klikni na zvýraznené karty – vyber {p.min === p.max ? p.max : `${p.min}–${p.max}`}.{" "}
+              {offBoard.length ? "Klikni na karty nižšie" : "Klikni na zvýraznené karty"} – vyber {p.min === p.max ? p.max : `${p.min}–${p.max}`}
+              {p.maxTotalCost != null ? ` (spolu cost ≤ ${p.maxTotalCost})` : ""}
+              {p.distinctNames ? " (rôzne mená)" : ""}.{" "}
               {picked.length > 0 && <b style={{ color: "var(--text)" }}>Vybraté: {picked.map(name).join(", ")}</b>}
             </p>
+            {offBoard.length > 0 && (
+              <div className="pcards">
+                {offBoard.map((i) => {
+                  const c = card(i);
+                  return (
+                    <button key={i} className={`pcard ${picked.includes(i) ? "on" : ""}`} onClick={() => togglePick(i)} onMouseEnter={() => setPeek(i)} title={name(i)}>
+                      {c ? <CardImg card={c} eager /> : <span className="cimg ph">{name(i)}</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
             <div className="acts">
               {p.options.includes("don") && (
                 <button className={`btn ghost sm ${picked.includes("don") ? "on" : ""}`} onClick={() => setPicked(picked.includes("don") ? [] : ["don"])}>
@@ -519,7 +560,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         const b = s.battle!;
         const atk = power(s, b.attacker);
         const tgt = power(s, b.target);
-        const bonus = picked.reduce((a, i) => a + (def(s, i).type === "Character" ? def(s, i).counter : 0), 0);
+        const bonus = picked.reduce((a, i) => a + (def(s, i).type === "Character" ? counterOf(s, i) : 0), 0);
         const events = picked.filter((i) => def(s, i).type === "Event");
         const evCost = events.reduce((a, i) => a + def(s, i).cost, 0);
         const ok = tgt + bonus > atk;
@@ -704,7 +745,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
             const d = s.cards[iid] ? def(s, iid) : null;
             const c = card(iid);
             const playable = canPlay(iid);
-            const isCounter = counterOpts.includes(iid);
+            const isCounter = counterOpts.includes(iid) || (pr?.kind === "choose" && pr.options.includes(iid));
             const hc = d ? handCost(s, iid) : 0;
             const rot = hand.length > 1 ? (i - mid) * Math.min(4, 26 / hand.length) : 0;
             const arc = ((i - mid) * (i - mid) - mid * mid) * (hand.length > 6 ? 1.3 : 2.2);
@@ -721,7 +762,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
                 {c ? <CardImg card={c} eager /> : <i className="back" style={{ display: "block", aspectRatio: "600/838", borderRadius: 8 }} />}
                 {d && d.type !== "Leader" && <span className={`hcost ${hc < d.cost ? "cheap" : ""}`}>{hc}</span>}
                 {pr?.kind === "counter" && isCounter && d && (
-                  <span className="hctr">{d.type === "Character" ? `+${d.counter}` : `event ${d.cost} DON!!`}</span>
+                  <span className="hctr">{d.type === "Character" ? `+${counterOf(s, iid)}` : `event ${handCost(s, iid)} DON!!`}</span>
                 )}
                 {d && !d.scripted && <span className="warn">!</span>}
               </button>

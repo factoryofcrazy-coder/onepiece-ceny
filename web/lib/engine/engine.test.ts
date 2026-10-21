@@ -31,6 +31,7 @@ function toHand(s: GameState, p: P, code: string): string {
 function setTurn(s: GameState, p: P, turn: number, active: number, rested = 0) {
   s.active = p;
   s.turn = turn;
+  s.turnCount = [Math.max(2, Math.ceil(turn / 2)), Math.max(2, Math.ceil(turn / 2))];
   s.phase = "main";
   const x = s.players[p];
   x.donDeck = 10 - active - rested;
@@ -84,7 +85,7 @@ describe("setup a ťahy", () => {
 });
 
 describe("prepočty – hodnoty sa nepamätajú", () => {
-  it("[DON!! x1] Zoro ST01-013: +1000 len kým má DON!! a len v mojom ťahu", () => {
+  it("[DON!! x1] Zoro ST01-013: +1000 len kým má DON!! (aj v súperovom ťahu), +1000 za DON!! len v mojom ťahu", () => {
     let s = start();
     setTurn(s, 1, 3, 5);
     const zoro = toHand(s, 1, "ST01-013");
@@ -94,7 +95,7 @@ describe("prepočty – hodnoty sa nepamätajú", () => {
     expect(power(s, zoro)).toBe(5000 + 1000 + 1000); // DON + static
     s = applyAction(s, { type: "endTurn", p: 1 }); // súperov ťah – DON!! odišli pri refresh? nie, refresh je až v mojom ťahu
     expect(s.cards[zoro].don).toBe(1);
-    expect(power(s, zoro)).toBe(5000); // v súperovom ťahu DON!! ani [DON!! x1] neplatí
+    expect(power(s, zoro)).toBe(6000); // v súperovom ťahu +1000 za DON!! neplatí, ale [DON!! x1] áno (DON!! ostáva pripojený)
   });
 
   it("leader OP09-061 [DON!! x1]: všetky moje postavy +1 cost", () => {

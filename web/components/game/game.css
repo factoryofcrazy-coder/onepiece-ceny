@@ -442,3 +442,9 @@
   .chars { padding: 6px 8px; min-height: calc(var(--ch) + 12px); }
   .hand { padding-top: 12px; padding-bottom: 8px; min-height: calc(var(--cw) * 1.18 * 1.4 + 20px); }
 }
+.pcards { display: flex; gap: 8px; flex-wrap: wrap; max-height: 300px; overflow: auto; padding: 4px; }
+.pcard { width: 96px; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; transition: transform .2s var(--ease); animation: deal .35s var(--ease) both; }
+.pcard .cimg { width: 100%; border-radius: 8px; display: block; box-shadow: 0 8px 16px -10px #000; }
+.pcard:hover { transform: translateY(-4px); }
+.pcard.on .cimg { box-shadow: 0 0 0 3px var(--gold), 0 0 20px rgba(242, 184, 75, .7); }
+@media (max-width: 720px) { .pcard { width: 70px; } }

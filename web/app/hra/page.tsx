@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/game/Board";
+import DeckSelect from "@/components/game/DeckSelect";
 import "@/components/game/game.css";
 import { CardImg, DataError, Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
@@ -19,8 +20,8 @@ type Tab = "online" | "training";
 export default function GamePage() {
   const { data: cards, error } = useCards();
   const { user, loading } = useAuth();
-  const decks = useMyDecks(user?.id);
   const byCode = useMemo(() => byCodeOf(cards?.cards), [cards]);
+  const decks = useMyDecks(user?.id, cards ? byCode : undefined);
   const [tab, setTab] = useState<Tab>("online");
   const [local, setLocal] = useState<{ s: GameState; mode: "bot" | "local" } | null>(null);
 
@@ -59,7 +60,7 @@ export default function GamePage() {
         <Training decks={decks} byCode={byCode} onStart={(s, mode) => setLocal({ s, mode })} />
       )}
       <p className="small muted" style={{ marginTop: 18 }}>
-        Plne naprogramované efekty majú zatiaľ starter decky ST-01 a ST-26. Ostatné karty sa hrajú bez efektu a sú označené výkričníkom. Decky si
+        Efekty sú naprogramované pre všetky karty z turnajových top deckov (Limitless, posledných 30 dní) a starter decky ST-01/ST-26. Ostatné karty sa hrajú bez efektu a sú označené výkričníkom. Decky si
         postavíš v <Link href="/decky">Deckoch</Link> (leader + 40–50 kariet).
       </p>
     </div>
@@ -174,13 +175,7 @@ function OnlineLobby({ userId, decks, byCode }: { userId: string; decks: DeckOpt
           <h3>Vyzvi kamoša</h3>
           <label className="field">
             <span>Tvoj deck</span>
-            <select value={deck?.id} onChange={(e) => setDeckId(e.target.value)}>
-              {decks.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </select>
+            <DeckSelect decks={decks} value={deck?.id} onChange={(id) => setDeckId(id)} />
             <span className="small muted">{deckStat(deck, byCode)}</span>
           </label>
           <label className="check">
@@ -360,24 +355,12 @@ function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<st
       <div className="lobby-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
         <label className="field">
           <span>{mode === "bot" ? "Tvoj deck" : "Hráč 1"}</span>
-          <select value={da.id} onChange={(e) => setA(e.target.value)}>
-            {decks.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.name}
-              </option>
-            ))}
-          </select>
+          <DeckSelect decks={decks} value={da.id} onChange={(id) => setA(id)} />
           <span className="small muted">{deckStat(da, byCode)}</span>
         </label>
         <label className="field">
           <span>{mode === "bot" ? "Deck bota" : "Hráč 2"}</span>
-          <select value={db.id} onChange={(e) => setB(e.target.value)}>
-            {decks.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.name}
-              </option>
-            ))}
-          </select>
+          <DeckSelect decks={decks} value={db.id} onChange={(id) => setB(id)} />
           <span className="small muted">{deckStat(db, byCode)}</span>
         </label>
       </div>

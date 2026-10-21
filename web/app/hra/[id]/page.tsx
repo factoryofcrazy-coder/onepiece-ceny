@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/game/Board";
+import DeckSelect from "@/components/game/DeckSelect";
 import "@/components/game/game.css";
 import { CardImg, DataError, Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
@@ -19,7 +20,7 @@ export default function OnlineGamePage() {
   const { user, loading } = useAuth();
   const { data: cards, error: cardsErr } = useCards();
   const byCode = useMemo(() => byCodeOf(cards?.cards), [cards]);
-  const decks = useMyDecks(user?.id);
+  const decks = useMyDecks(user?.id, cards ? byCode : undefined);
   const [g, setG] = useState<GameRow | null | undefined>(undefined);
   const [v, setV] = useState<ViewRow | null>(null);
   const [ratings, setRatings] = useState<Map<string, Rating>>(new Map());
@@ -175,13 +176,7 @@ export default function OnlineGamePage() {
             <>
               <label className="field">
                 <span>Tvoj deck</span>
-                <select value={deck?.id} onChange={(e) => setDeckId(e.target.value)}>
-                  {decks.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {d.name}
-                    </option>
-                  ))}
-                </select>
+                <DeckSelect decks={decks} value={deck?.id} onChange={(id) => setDeckId(id)} />
               </label>
               <button className="btn" disabled={busy} onClick={() => simple("join", { deck: deckRef(deck) })}>
                 {busy ? "Pripájam…" : "Prijať výzvu a hrať"}

@@ -1,6 +1,7 @@
 // Klient online hry: volania edge function „game“ a typy riadkov z DB.
-import { useEffect, useState } from "react";
-import type { Card } from "./data";
+import { useEffect, useMemo, useState } from "react";
+import { type Card, useMeta } from "./data";
+import { metaId } from "./engine/server";
 import { DECK_ST01, DECK_ST26 } from "./engine/fixtures";
 import { sb } from "./supabase";
 
@@ -27,12 +28,12 @@ export type GameRow = {
 };
 export type Rating = { user_id: string; elo: number; wins: number; losses: number; games: number; streak: number; best_elo: number };
 
-export type DeckOpt = { id: string; name: string; leader: string; cards: string[]; preset?: boolean };
+export type DeckOpt = { id: string; name: string; leader: string; cards: string[]; preset?: boolean; meta?: string; group: "mine" | "meta" | "preset" };
 export const PRESETS: DeckOpt[] = [
-  { id: "st26", ...DECK_ST26, name: "Starter: Fialový Luffy (ST-26)", preset: true },
-  { id: "st01", ...DECK_ST01, name: "Starter: Červený Luffy (ST-01)", preset: true },
+  { id: "st26", ...DECK_ST26, name: "Starter: Fialový Luffy (ST-26)", preset: true, group: "preset" },
+  { id: "st01", ...DECK_ST01, name: "Starter: Červený Luffy (ST-01)", preset: true, group: "preset" },
 ];
-export const deckRef = (d: DeckOpt) => (d.preset ? { preset: d.id } : { id: d.id });
+export const deckRef = (d: DeckOpt) => (d.preset ? { preset: d.id } : d.meta ? { meta: d.meta } : { id: d.id });
 
 /** zavolá server; pri chybe vyhodí Error so slovenskou správou zo servera */
 export async function gameCall<T = any>(body: Record<string, unknown>): Promise<T> {
@@ -55,11 +56,28 @@ export async function gameCall<T = any>(body: Record<string, unknown>): Promise<
   return data as T;
 }
 
-/** moje hrateľné decky (leader + 40–50 kariet) + starter decky */
-export function useMyDecks(userId: string | undefined) {
-  const [decks, setDecks] = useState<DeckOpt[]>(PRESETS);
+/** moje hrateľné decky (leader + 40–50 kariet) + turnajové top decky + starter decky */
+export function useMyDecks(userId: string | undefined, byCode?: Map<string, Card>) {
+  const [mineDecks, setMine] = useState<DeckOpt[]>([]);
+  const { data: meta } = useMeta();
+  const metaDecks: DeckOpt[] = useMemo(
+    () =>
+      (meta?.decks ?? [])
+        .map((d) => ({
+          id: `meta:${metaId(d)}`,
+          meta: metaId(d),
+          name: `${d.leaderName} – ${d.player} (#${d.placing}, ${d.players} hráčov)`,
+          leader: d.leader,
+          cards: Object.entries(d.cards).flatMap(([c, n]) => Array(n).fill(c)) as string[],
+          group: "meta" as const,
+        }))
+        .filter((d) => !byCode || (byCode.has(d.leader) && d.cards.every((c) => byCode.has(c)))),
+    [meta, byCode],
+  );
+  const decks = useMemo(() => [...mineDecks, ...metaDecks, ...PRESETS], [mineDecks, metaDecks]);
   useEffect(() => {
-    if (!userId) return setDecks(PRESETS);
+    const setDecks = (d: DeckOpt[]) => setMine(d.filter((x) => x.group === "mine"));
+    if (!userId) return setDecks([]);
     sb()
       .from("decks")
       .select("id,name,leader_id,cards")
@@ -72,9 +90,10 @@ export function useMyDecks(userId: string | undefined) {
             name: d.name as string,
             leader: d.leader_id as string,
             cards: Object.entries((d.cards ?? {}) as Record<string, number>).flatMap(([c, n]) => Array(n).fill(c)),
+            group: "mine" as const,
           }))
           .filter((d) => d.leader && d.cards.length >= 40 && d.cards.length <= 50);
-        setDecks([...mine, ...PRESETS]);
+        setDecks(mine);
       });
   }, [userId]);
   return decks;

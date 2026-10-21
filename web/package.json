@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest run",
-    "build:fn": "esbuild supabase/functions/game/index.ts --bundle --format=esm --platform=neutral --target=es2022 --outfile=supabase/functions/game/dist/index.js"
+    "build:fn": "esbuild supabase/functions/game/index.ts --bundle --format=esm --platform=neutral --target=es2022 --outfile=supabase/functions/game/dist/index.js",
+    "build:engine": "esbuild lib/engine/server.ts --bundle --format=iife --global-name=OPServer --platform=neutral --target=es2022 --minify --outfile=public/engine/server.js",
+    "prebuild": "npm run build:engine"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",
@@ -18,6 +20,7 @@
   "devDependencies": {
     "@types/node": "22.20.5",
     "@types/react": "19.3.0",
+    "esbuild": "0.28.2",
     "typescript": "5.9.3",
     "vitest": "3.2.7"
   },
