@@ -1,0 +1,28 @@
+name: Meta karty pre engine
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "tools/meta_cards.py"
+      - ".github/workflows/meta-cards.yml"
+  schedule:
+    - cron: "17 4 * * 1"   # každý pondelok
+
+permissions:
+  contents: write
+
+jobs:
+  meta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/meta_cards.py
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add web/lib/engine/meta-data.json
+          git diff --cached --quiet || git commit -m "meta karty pre engine [skip ci]"
+          git pull --rebase -q && git push
