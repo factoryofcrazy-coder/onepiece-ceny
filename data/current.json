@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T10:53:01Z",
+ "updated": "2026-10-22T13:00:43Z",
  "fx": {
   "CZK": 24.262,
   "USD": 1.1234,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-10-21T15:44:59Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -56,15 +56,6 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/20502_20-cards--50.png?ff=1&x=100&y=100&q=85&ts=6a6283a6&sg=8dda0505"
     },
     {
-     "name": "One Piece TCG - Emperors In The New World - Booster Pack - Japonský",
-     "url": "https://www.cardempire.sk/one-piece-tcg-emperors-in-the-new-world-booster-pack-japonsky/",
-     "price": 7.0,
-     "currency": "EUR",
-     "eur": 7.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/16454_op09-booster.png?ff=1&x=100&y=100&q=85&ts=698731b6&sg=8dda0505"
-    },
-    {
      "name": "One Piece TCG - Illustration Box Vol.7",
      "url": "https://www.cardempire.sk/one-piece-card-game--illustration-box-vol-7--ib-07-/",
      "price": 45.0,
@@ -72,6 +63,15 @@
      "eur": 45.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/20499_20-cards--49.png?ff=1&x=100&y=100&q=85&ts=6a62826b&sg=8dda0505"
+    },
+    {
+     "name": "One Piece TCG - Emperors In The New World - Booster Pack - Japonský",
+     "url": "https://www.cardempire.sk/one-piece-tcg-emperors-in-the-new-world-booster-pack-japonsky/",
+     "price": 7.0,
+     "currency": "EUR",
+     "eur": 7.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/16454_op09-booster.png?ff=1&x=100&y=100&q=85&ts=698731b6&sg=8dda0505"
     },
     {
      "name": "One Piece TCG - OP15 Adventure of the God’s Island – Booster Pack - Japonský",
@@ -565,7 +565,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-10-21T15:44:59Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -616,7 +616,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -1845,7 +1845,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -2211,7 +2211,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -2300,7 +2300,7 @@
      "price": 9.79,
      "currency": "EUR",
      "eur": 9.79,
-     "inStock": true,
+     "inStock": false,
      "hint": "Pack",
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/Adventure_on_Kamis_Island_Booster.webp"
     },
@@ -2609,7 +2609,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -2834,7 +2834,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -2993,7 +2993,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-10-21T15:44:59Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -3530,7 +3530,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -3666,7 +3666,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-10-21T15:44:59Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -3690,7 +3690,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -3741,7 +3741,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -3792,7 +3792,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-10-21T15:44:59Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -3916,7 +3916,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-10-21T15:44:59Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -3938,13 +3938,13 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/related/4522_one-piece-tcg-the-world-s-strongest-warriors-op-17---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=100&y=100&q=85&ts=6acd2d23&sg=8dda0505"
     },
     {
-     "name": "One Piece TCG: Kid/Killer Vol.8 - Illustration Box",
-     "url": "https://www.cardstore.cz/one-piece-tcg--kid-killer-vol-8-illustration-box/",
-     "price": 899.0,
+     "name": "One Piece TCG: Carrying on His Will Booster Box (OP-13) - japonský",
+     "url": "https://www.cardstore.cz/one-piece-tcg--carrying-on-his-will-booster-box--op-13-japonsky/",
+     "price": 3399.0,
      "currency": "CZK",
-     "eur": 37.05,
+     "eur": 140.1,
      "inStock": false,
-     "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/related/2059_one-piece-tcg--kid-killer-vol-8-illustration-box.png?ff=1&x=100&y=100&q=85&ts=6a89b04e&sg=8dda0505"
+     "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/related/4528_one-piece-tcg-carrying-on-his-will-op-13---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=100&y=100&q=85&ts=6acd3c16&sg=8dda0505"
     },
     {
      "name": "One Piece TCG: Two Legends Booster Box OP-08 (Japonský)",
@@ -3974,15 +3974,6 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/4519_one-piece-tcg-adventure-on-kami-s-island-op-15---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=423&y=318&q=85&ts=6acd26d7&sg=2175fb9d"
     },
     {
-     "name": "One Piece TCG: Carrying on His Will Booster Box (OP-13) - japonský",
-     "url": "https://www.cardstore.cz/one-piece-tcg--carrying-on-his-will-booster-box--op-13-japonsky/",
-     "price": 3399.0,
-     "currency": "CZK",
-     "eur": 140.1,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/4528_one-piece-tcg-carrying-on-his-will-op-13---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=423&y=318&q=85&ts=6acd3c16&sg=2175fb9d"
-    },
-    {
      "name": "One Piece TCG: The Azure Sea's Seven Booster Box (OP-14) - japonský",
      "url": "https://www.cardstore.cz/one-piece-tcg--the-azure-sea-s-seven-booster-box--op-14-japonsky/",
      "price": 1999.0,
@@ -4008,6 +3999,15 @@
      "eur": 226.65,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/1720_one-piece-the-best-vol--2-booster-box.png?ff=1&x=423&y=318&q=85&ts=6a790db3&sg=2175fb9d"
+    },
+    {
+     "name": "One Piece TCG: Kid/Killer Vol.8 - Illustration Box",
+     "url": "https://www.cardstore.cz/one-piece-tcg--kid-killer-vol-8-illustration-box/",
+     "price": 899.0,
+     "currency": "CZK",
+     "eur": 37.05,
+     "inStock": false,
+     "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/2059_one-piece-tcg--kid-killer-vol-8-illustration-box.png?ff=1&x=423&y=318&q=85&ts=6a89b04e&sg=2175fb9d"
     },
     {
      "name": "One Piece Kingdoms of Intrigue Booster Box OP-04 (Japonský)",
@@ -4219,7 +4219,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -4720,7 +4720,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -5276,7 +5276,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -5354,7 +5354,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -5504,7 +5504,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -5692,7 +5692,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-10-21T15:44:59Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -5770,7 +5770,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-10-21T15:44:59Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -5902,7 +5902,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
@@ -6223,7 +6223,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-22T10:53:01Z",
+   "ts": "2026-10-22T13:00:43Z",
    "ok": true,
    "items": [
     {
