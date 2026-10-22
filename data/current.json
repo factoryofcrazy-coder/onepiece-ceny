@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T16:54:28Z",
+ "updated": "2026-10-22T19:02:09Z",
  "fx": {
   "CZK": 24.26,
   "USD": 1.1205,
@@ -616,7 +616,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -1845,7 +1845,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -2211,7 +2211,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -2300,7 +2300,7 @@
      "price": 9.79,
      "currency": "EUR",
      "eur": 9.79,
-     "inStock": false,
+     "inStock": true,
      "hint": "Pack",
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/Adventure_on_Kamis_Island_Booster.webp"
     },
@@ -2609,7 +2609,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -2834,8 +2834,8 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-22T14:54:16Z",
-   "ok": false,
+   "ts": "2026-10-22T19:02:09Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece - Adventure on Kami's Island Booster",
@@ -2990,10 +2990,7 @@
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=32af00b8-66b2-4f62-9b32-547627bd49ca&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     }
-   ],
-   "error": "<urlopen error timed out>",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "nekonecno": {
    "ts": "2026-10-22T13:00:43Z",
@@ -3533,7 +3530,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -3693,7 +3690,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -3744,7 +3741,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -4222,7 +4219,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -4723,7 +4720,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -5279,7 +5276,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -5357,7 +5354,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -5507,8 +5504,8 @@
    ]
   },
   "butticards": {
-   "ts": "2026-10-22T14:54:16Z",
-   "ok": false,
+   "ts": "2026-10-22T19:02:09Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece - OP17 -  The World’s Strongest Warriors - Display - Japanisch",
@@ -5692,10 +5689,7 @@
      "inStock": false,
      "img": "https://d2j6dbq0eux0bg.cloudfront.net/images/44059914/products/666614602/4358220179.jpg"
     }
-   ],
-   "error": "HTTP Error 403: Forbidden (https://www.butticards.at/Shop/One-Piece-c163462755)",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "wombat": {
    "ts": "2026-10-22T13:00:43Z",
@@ -5908,7 +5902,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
@@ -6229,7 +6223,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-22T16:54:28Z",
+   "ts": "2026-10-22T19:02:09Z",
    "ok": true,
    "items": [
     {
