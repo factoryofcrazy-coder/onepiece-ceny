@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-24T18:52:34Z",
+ "updated": "2026-10-24T20:03:23Z",
  "fx": {
   "CZK": 24.327,
   "USD": 1.1193,
@@ -7,18 +7,9 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-10-23T11:43:57Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
-    {
-     "name": "One Piece TCG - The Time of Battle Booster Pack (OP16) - EN",
-     "url": "https://www.cardempire.sk/one-piece-tcg-the-time-of-battle-booster-pack--op16-en/",
-     "price": 8.0,
-     "currency": "EUR",
-     "eur": 8.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/19326_op16booster.png?ff=1&x=100&y=100&q=85&ts=6a2a8bdc&sg=8dda0505"
-    },
     {
      "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Pack",
      "url": "https://www.cardempire.sk/one-piece-tcg-op17-the-world--s-strongest-warriors-booster-pack/",
@@ -38,6 +29,15 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/21260_upper-deck-premier-2024-25-hockey-hobby-box--19.png?ff=1&x=100&y=100&q=85&ts=6a8e9f13&sg=8dda0505"
     },
     {
+     "name": "One Piece TCG - The Time of Battle Booster Pack (OP16) - EN",
+     "url": "https://www.cardempire.sk/one-piece-tcg-the-time-of-battle-booster-pack--op16-en/",
+     "price": 8.0,
+     "currency": "EUR",
+     "eur": 8.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/19326_op16booster.png?ff=1&x=100&y=100&q=85&ts=6a2a8bdc&sg=8dda0505"
+    },
+    {
      "name": "One Piece TCG - Illustration Box Vol.8",
      "url": "https://www.cardempire.sk/one-piece-tcg-illustration-box-vol-8/",
      "price": 45.0,
@@ -47,15 +47,6 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/20502_20-cards--50.png?ff=1&x=100&y=100&q=85&ts=6a6283a6&sg=8dda0505"
     },
     {
-     "name": "One Piece TCG - Illustration Box Vol.7",
-     "url": "https://www.cardempire.sk/one-piece-card-game--illustration-box-vol-7--ib-07-/",
-     "price": 45.0,
-     "currency": "EUR",
-     "eur": 45.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/20499_20-cards--49.png?ff=1&x=100&y=100&q=85&ts=6a62826b&sg=8dda0505"
-    },
-    {
      "name": "One Piece TCG - OP13 - Carrying On His Will - Booster Pack - (Japonský)",
      "url": "https://www.cardempire.sk/one-piece-tcg-op13-carrying-on-his-will-booster-pack-japonsky-/",
      "price": 7.5,
@@ -63,6 +54,15 @@
      "eur": 7.5,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/11253_op13japbooster.png?ff=1&x=100&y=100&q=85&ts=69011e9c&sg=8dda0505"
+    },
+    {
+     "name": "One Piece TCG - Illustration Box Vol.7",
+     "url": "https://www.cardempire.sk/one-piece-card-game--illustration-box-vol-7--ib-07-/",
+     "price": 45.0,
+     "currency": "EUR",
+     "eur": 45.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/20499_20-cards--49.png?ff=1&x=100&y=100&q=85&ts=6a62826b&sg=8dda0505"
     },
     {
      "name": "One Piece TCG - OP15 Adventure of the God’s Island – Booster Pack - Japonský",
@@ -83,6 +83,15 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/11346_untitled-design--31.png?ff=1&x=100&y=100&q=85&ts=690865b3&sg=8dda0505"
     },
     {
+     "name": "One Piece TCG - Learn Together Deck Set",
+     "url": "https://www.cardempire.sk/one-piece-tcg-learn-together-deck-set/",
+     "price": 45.0,
+     "currency": "EUR",
+     "eur": 45.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/12264_untitled-design-2025-12-20t150846-233.png?ff=1&x=100&y=100&q=85&ts=6946ae01&sg=8dda0505"
+    },
+    {
      "name": "One Piece TCG - OP13 - Carrying On His Will - Booster Box - (Japonský)",
      "url": "https://www.cardempire.sk/one-piece-tcg-op13-carrying-on-his-will-booster-box-japonsky-/",
      "price": 175.0,
@@ -92,13 +101,13 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/11250_op13japbox.png?ff=1&x=100&y=100&q=85&ts=6901190e&sg=8dda0505"
     },
     {
-     "name": "One Piece TCG - Learn Together Deck Set",
-     "url": "https://www.cardempire.sk/one-piece-tcg-learn-together-deck-set/",
-     "price": 45.0,
+     "name": "One Piece TCG - OP 11 - A Fist of Divine Speed",
+     "url": "https://www.cardempire.sk/oneidealna-volba-pre-zberatelov-sealed-produktov--fanusikov-one-piece-a-hracov--ktori-chcu-rozsirit-svoju-zbierku-o-karty-zo-serie-op-11-piece-tcg-op-11-a-fist-of-divine-speed/",
+     "price": 850.0,
      "currency": "EUR",
-     "eur": 45.0,
+     "eur": 850.0,
      "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/12264_untitled-design-2025-12-20t150846-233.png?ff=1&x=100&y=100&q=85&ts=6946ae01&sg=8dda0505"
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/23216_untitled-design-2026-10-24t155146-132.png?ff=1&x=423&y=318&q=85&ts=6adcb972&sg=2175fb9d"
     },
     {
      "name": "One Piece TCG - Heroines Edition vol.2 - Booster Box - Sealed Case",
@@ -565,7 +574,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-10-23T11:43:57Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -616,7 +625,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -1845,7 +1854,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -2211,7 +2220,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -2350,7 +2359,7 @@
      "price": 9.39,
      "currency": "EUR",
      "eur": 9.39,
-     "inStock": false,
+     "inStock": true,
      "hint": "Pack",
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/One_Piece_Royal_Blood_Booster_g4ElbN4.webp"
     },
@@ -2609,7 +2618,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -2834,7 +2843,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -2993,7 +3002,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-10-23T11:43:57Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -3530,7 +3539,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -3677,7 +3686,7 @@
   },
   "pokemon4u": {
    "ts": "2026-10-23T11:43:57Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece TCG: OP-16 The Time of Battle Booster",
@@ -3697,10 +3706,13 @@
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.pokemon4u.cz/user/shop/related/46762_skbnsxjjtohfdkb12vbqr05uovq1zrf3uz2qdugcnukw45ggnmkceclafenodwkbqyxymusdwsi3v9i9oxtlit28-i7azzzgbew7roqn5ezynd-yqtism7c4zk-jhh-fyphimytl-cjyqeorfmlotoepo-80m7xvbnkzlrzarbv-pby-qouqyhfoxksbmeb2.jpg?ff=1&x=100&y=100&q=85&ts=6a2b1fda&sg=8dda0505"
     }
-   ]
+   ],
+   "error": "The read operation timed out",
+   "fails": 1,
+   "warned": false
   },
   "xzone": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -3751,7 +3763,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -3802,7 +3814,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-10-23T11:43:57Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -3936,7 +3948,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-10-23T11:43:57Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -3944,7 +3956,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--rayleigh-shakuyaku-vol--7-illustration-box/",
      "price": 899.0,
      "currency": "CZK",
-     "eur": 37.06,
+     "eur": 36.95,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/related/2062_one-piece-tcg--rayleigh-shakuyaku-vol--7-illustration-box.png?ff=1&x=100&y=100&q=85&ts=6a89b586&sg=8dda0505"
     },
@@ -3953,7 +3965,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--the-worlds-strongest-warriors-booster-box--op-17-japonsky/",
      "price": 2699.0,
      "currency": "CZK",
-     "eur": 111.25,
+     "eur": 110.95,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/related/4522_one-piece-tcg-the-world-s-strongest-warriors-op-17---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=100&y=100&q=85&ts=6acd2d23&sg=8dda0505"
     },
@@ -3962,7 +3974,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--carrying-on-his-will-booster-box--op-13-japonsky/",
      "price": 3399.0,
      "currency": "CZK",
-     "eur": 140.11,
+     "eur": 139.72,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/related/4528_one-piece-tcg-carrying-on-his-will-op-13---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=100&y=100&q=85&ts=6acd3c16&sg=8dda0505"
     },
@@ -3971,7 +3983,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--two-legends-booster-box-op-08/",
      "price": 2099.0,
      "currency": "CZK",
-     "eur": 86.52,
+     "eur": 86.28,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/1279_op08jpbb-1024x1024-2x.png?ff=1&x=423&y=318&q=85&ts=668ffca1&sg=2175fb9d"
     },
@@ -3980,7 +3992,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--heroines-edition-booster-box--eb-03-japonsky/",
      "price": 3599.0,
      "currency": "CZK",
-     "eur": 148.35,
+     "eur": 147.94,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/4531_one-piece-tcg-heroines-edition-eb-03---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=423&y=318&q=85&ts=6acd3ddf&sg=2175fb9d"
     },
@@ -3989,7 +4001,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--adventure-on-kami-s-island-booster-box--op-15-japonsky/",
      "price": 1899.0,
      "currency": "CZK",
-     "eur": 78.28,
+     "eur": 78.06,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/4519_one-piece-tcg-adventure-on-kami-s-island-op-15---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=423&y=318&q=85&ts=6acd26d7&sg=2175fb9d"
     },
@@ -3998,7 +4010,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--the-azure-sea-s-seven-booster-box--op-14-japonsky/",
      "price": 1999.0,
      "currency": "CZK",
-     "eur": 82.4,
+     "eur": 82.17,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/4525-1_one-piece-tcg-the-azure-sea-s-seven-op-14---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=423&y=318&q=85&ts=6ad0f6fb&sg=2175fb9d"
     },
@@ -4007,7 +4019,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--the-time-of-battle-booster-box--op-16--japonsky/",
      "price": 1999.0,
      "currency": "CZK",
-     "eur": 82.4,
+     "eur": 82.17,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/4516_one-piece-tcg-the-time-of-battle-op-16---japonsky-booster-box-s-24-balicky-po-6-kartach.png?ff=1&x=423&y=318&q=85&ts=6acd1b6a&sg=2175fb9d"
     },
@@ -4016,7 +4028,7 @@
      "url": "https://www.cardstore.cz/one-piece-the-best-vol--2-booster-box/",
      "price": 5499.0,
      "currency": "CZK",
-     "eur": 226.67,
+     "eur": 226.05,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/1720_one-piece-the-best-vol--2-booster-box.png?ff=1&x=423&y=318&q=85&ts=6a790db3&sg=2175fb9d"
     },
@@ -4025,7 +4037,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--kid-killer-vol-8-illustration-box/",
      "price": 899.0,
      "currency": "CZK",
-     "eur": 37.06,
+     "eur": 36.95,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/2059_one-piece-tcg--kid-killer-vol-8-illustration-box.png?ff=1&x=423&y=318&q=85&ts=6a89b04e&sg=2175fb9d"
     },
@@ -4034,7 +4046,7 @@
      "url": "https://www.cardstore.cz/one-piece-kingdoms-of-intrigue-booster-box-op-04--japonsky-/",
      "price": 1899.0,
      "currency": "CZK",
-     "eur": 78.28,
+     "eur": 78.06,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/762_onepiece-op-04-japonsky-booster-box.jpg?ff=1&x=423&y=318&q=85&ts=65943845&sg=2175fb9d"
     },
@@ -4043,7 +4055,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--op-16-the-time-of-battle-booster/",
      "price": 179.0,
      "currency": "CZK",
-     "eur": 7.38,
+     "eur": 7.36,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/1973-1_one-piece-tcg--op-16-the-time-of-battle-booster.png?ff=1&x=423&y=318&q=85&ts=6a301122&sg=2175fb9d"
     },
@@ -4052,7 +4064,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--op-16-the-time-of-battle-booster-box--case-/",
      "price": 49999.0,
      "currency": "CZK",
-     "eur": 2060.96,
+     "eur": 2055.29,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/1976-1_produktovky-jp--9.png?ff=1&x=423&y=318&q=85&ts=6a30116a&sg=2175fb9d"
     },
@@ -4061,7 +4073,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg--op-16-the-time-of-battle-booster-box/",
      "price": 3899.0,
      "currency": "CZK",
-     "eur": 160.72,
+     "eur": 160.27,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/1970-3_one-piece-tcg--op-16-the-time-of-battle-booster-box.png?ff=1&x=423&y=318&q=85&ts=6a30110a&sg=2175fb9d"
     },
@@ -4070,7 +4082,7 @@
      "url": "https://www.cardstore.cz/one-piece-card-the-best-prb-01-booster--japonsky-/",
      "price": 159.0,
      "currency": "CZK",
-     "eur": 6.55,
+     "eur": 6.54,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/1372_back-ezgif-com-webp-to-jpg-converter.jpg?ff=1&x=423&y=318&q=85&ts=66bfba1e&sg=2175fb9d"
     },
@@ -4079,7 +4091,7 @@
      "url": "https://www.cardstore.cz/one-piece-awakening-of-the-new-era-booster-op-05--japonsky-/",
      "price": 99.0,
      "currency": "CZK",
-     "eur": 4.08,
+     "eur": 4.07,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/771_op-05-japonsky-booster.jpg?ff=1&x=423&y=318&q=85&ts=65943956&sg=2175fb9d"
     },
@@ -4088,7 +4100,7 @@
      "url": "https://www.cardstore.cz/one-piece-pillars-of-strength-booster-box-op-03--japonsky-/",
      "price": 1599.0,
      "currency": "CZK",
-     "eur": 65.91,
+     "eur": 65.73,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/756_onepiece-op-03-japonsky.jpg?ff=1&x=423&y=318&q=85&ts=6594371f&sg=2175fb9d"
     },
@@ -4097,7 +4109,7 @@
      "url": "https://www.cardstore.cz/one-piece-card-the-best-prb-01--japonsky-/",
      "price": 1549.0,
      "currency": "CZK",
-     "eur": 63.85,
+     "eur": 63.67,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/1369-1_one-piece-card-game-prb01-the-best-japanese-display-ezgif-com-webp-to-jpg-converter.jpg?ff=1&x=423&y=318&q=85&ts=66bfb990&sg=2175fb9d"
     },
@@ -4106,7 +4118,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg-heroines-edition--eb-03--booster-box/",
      "price": 5899.0,
      "currency": "CZK",
-     "eur": 243.16,
+     "eur": 242.49,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/2039_one-piece-tcg-heroines-edition--eb-03--booster-box.png?ff=1&x=423&y=318&q=85&ts=6a7a5910&sg=2175fb9d"
     },
@@ -4115,7 +4127,7 @@
      "url": "https://www.cardstore.cz/one-piece-kingdoms-of-intrigue-booster-op-04--japonsky-/",
      "price": 65.0,
      "currency": "CZK",
-     "eur": 2.68,
+     "eur": 2.67,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/765_onepece-booster-op-04.jpg?ff=1&x=423&y=318&q=85&ts=65943882&sg=2175fb9d"
     },
@@ -4124,7 +4136,7 @@
      "url": "https://www.cardstore.cz/one-piece-memorial-collection-booster-eb-01--japonsky-/",
      "price": 55.0,
      "currency": "CZK",
-     "eur": 2.27,
+     "eur": 2.26,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/949_one-piece-memorial-collection-booster.jpg?ff=1&x=423&y=318&q=85&ts=65d69f15&sg=2175fb9d"
     },
@@ -4142,7 +4154,7 @@
      "url": "https://www.cardstore.cz/one-piece-pillars-of-strength-booster-box-op-03--japonsky--2/",
      "price": 79.0,
      "currency": "CZK",
-     "eur": 3.26,
+     "eur": 3.25,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/759_op-03-japonsky-one-piece-cad-game-mighty-enemies.jpg?ff=1&x=423&y=318&q=85&ts=65943792&sg=2175fb9d"
     },
@@ -4151,7 +4163,7 @@
      "url": "https://www.cardstore.cz/one-piece-romance-dawn-booster-op-01--japonsky-/",
      "price": 85.0,
      "currency": "CZK",
-     "eur": 3.5,
+     "eur": 3.49,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/747_japonsky-onepiece-game-ramonace-dawn.jpg?ff=1&x=423&y=318&q=85&ts=659435a1&sg=2175fb9d"
     },
@@ -4160,7 +4172,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg-the-future-500-years-from-now-op-07-booster--japonsky-/",
      "price": 65.0,
      "currency": "CZK",
-     "eur": 2.68,
+     "eur": 2.67,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/1168_a2-46d080bf-cb03-42e9-94e4-e914971017fc-348x700-ezgif-com-webp-to-jpg-converter.jpg?ff=1&x=423&y=318&q=85&ts=6654ee9f&sg=2175fb9d"
     },
@@ -4169,7 +4181,7 @@
      "url": "https://www.cardstore.cz/one-piece-wings-of-the-captain-display-booster-op-06--japonsky-/",
      "price": 65.0,
      "currency": "CZK",
-     "eur": 2.68,
+     "eur": 2.67,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/777_booster-japonsky-op-06.jpg?ff=1&x=423&y=318&q=85&ts=65943a0c&sg=2175fb9d"
     },
@@ -4178,7 +4190,7 @@
      "url": "https://www.cardstore.cz/one-piece-paramount-war-booster-op-02--japonsky-/",
      "price": 75.0,
      "currency": "CZK",
-     "eur": 3.09,
+     "eur": 3.08,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/753_onepiece-op-02-booster-japonsky.jpg?ff=1&x=423&y=318&q=85&ts=6594368d&sg=2175fb9d"
     },
@@ -4187,7 +4199,7 @@
      "url": "https://www.cardstore.cz/one-piece-awakening-of-the-new-era-booster-box-op-05--japonsky-/",
      "price": 2399.0,
      "currency": "CZK",
-     "eur": 98.89,
+     "eur": 98.61,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/768_op-05-japonsky-booster-box.jpg?ff=1&x=423&y=318&q=85&ts=65943921&sg=2175fb9d"
     },
@@ -4196,7 +4208,7 @@
      "url": "https://www.cardstore.cz/one-piece-memorial-collection-booster-box-eb-01--japonsky-/",
      "price": 1299.0,
      "currency": "CZK",
-     "eur": 53.54,
+     "eur": 53.4,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/946_one-piece-memorial-collection-booster-box.jpg?ff=1&x=423&y=318&q=85&ts=65d69e29&sg=2175fb9d"
     },
@@ -4205,7 +4217,7 @@
      "url": "https://www.cardstore.cz/one-piece-paramount-war-booster-box-op-02--japonsky-/",
      "price": 2399.0,
      "currency": "CZK",
-     "eur": 98.89,
+     "eur": 98.61,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/750_onepiece-op-02-booster-box.jpg?ff=1&x=423&y=318&q=85&ts=6594363a&sg=2175fb9d"
     },
@@ -4214,7 +4226,7 @@
      "url": "https://www.cardstore.cz/one-piece-romance-dawn-booster-box--op-01-jp-/",
      "price": 1999.0,
      "currency": "CZK",
-     "eur": 82.4,
+     "eur": 82.17,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/744_one-piece-japonsky-op01.jpg?ff=1&x=423&y=318&q=85&ts=659434e5&sg=2175fb9d"
     },
@@ -4223,7 +4235,7 @@
      "url": "https://www.cardstore.cz/one-piece-tcg-the-future-500-years-from-now-op-07--japonsky-/",
      "price": 1500.0,
      "currency": "CZK",
-     "eur": 61.83,
+     "eur": 61.66,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/1165_a1-3618ae3b-bfde-4658-99ee-eab9825303c6-700x700-ezgif-com-webp-to-jpg-converter.jpg?ff=1&x=423&y=318&q=85&ts=6654eddb&sg=2175fb9d"
     },
@@ -4232,14 +4244,14 @@
      "url": "https://www.cardstore.cz/one-piece-wings-of-the-captain-display-booster-box-op-06--japonsky-/",
      "price": 1499.0,
      "currency": "CZK",
-     "eur": 61.79,
+     "eur": 61.62,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.cardstore.cz/user/shop/detail/774_booster-box-japonsky-op-06.jpg?ff=1&x=423&y=318&q=85&ts=659439f0&sg=2175fb9d"
     }
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -4740,7 +4752,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -5296,7 +5308,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -5374,7 +5386,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -5524,7 +5536,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -5711,7 +5723,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-10-23T11:43:57Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -5719,7 +5731,7 @@
      "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game-official-playmat-limited-edition-vol-1/",
      "price": 699.0,
      "currency": "CZK",
-     "eur": 28.81,
+     "eur": 28.73,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2742_one-piece-official-playmat-limited-edition-vol-1.jpg?ff=1&x=100&y=100&q=85&ts=6accbe09&sg=8dda0505"
     },
@@ -5728,7 +5740,7 @@
      "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game-english-version-3rd-anniversary-set/",
      "price": 14499.0,
      "currency": "CZK",
-     "eur": 597.65,
+     "eur": 596.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2739-1_one-piece-english-version-3rd-anniversary-set.jpg?ff=1&x=100&y=100&q=85&ts=6accbbfb&sg=8dda0505"
     },
@@ -5737,7 +5749,7 @@
      "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game-adventure-on-kami-s-island-booster-box-op15-eb04-en/",
      "price": 4399.0,
      "currency": "CZK",
-     "eur": 181.33,
+     "eur": 180.83,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2721_one-piece-op15-eb04-adventure-on-kami-s-island-booster-box.webp?ff=1&x=100&y=100&q=85&ts=6ac75d7b&sg=8dda0505"
     },
@@ -5746,7 +5758,7 @@
      "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game-set-sail-deck-set-sd-01/",
      "price": 589.0,
      "currency": "CZK",
-     "eur": 24.28,
+     "eur": 24.21,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2598-1_set-sail-deck-set--sd-01--box.webp?ff=1&x=100&y=100&q=85&ts=6aa2f44f&sg=8dda0505"
     },
@@ -5755,7 +5767,7 @@
      "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-official-playmat-limited-edition-vol-5/",
      "price": 5999.0,
      "currency": "CZK",
-     "eur": 247.28,
+     "eur": 246.6,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2310-2_official-playmat-limited-edition-vol-5.webp?ff=1&x=100&y=100&q=85&ts=6a79d991&sg=8dda0505"
     },
@@ -5764,7 +5776,7 @@
      "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game--st-35-red-sabo/",
      "price": 349.0,
      "currency": "CZK",
-     "eur": 14.39,
+     "eur": 14.35,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2274_one-piece-card-game-st-35-red-sabo.png?ff=1&x=100&y=100&q=85&ts=6a707bb7&sg=8dda0505"
     },
@@ -5773,7 +5785,7 @@
      "url": "https://www.wombatgames-shop.cz/zbozi/one-piece-card-game--st-36-yellow-eustass--captain--kid/",
      "price": 349.0,
      "currency": "CZK",
-     "eur": 14.39,
+     "eur": 14.35,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2268_one-piece-card-game-st-36-yellow-eustass-captain-kid.png?ff=1&x=100&y=100&q=85&ts=6a707b25&sg=8dda0505"
     },
@@ -5782,14 +5794,14 @@
      "url": "https://www.wombatgames-shop.cz/zbozi/one-piece--blue-kuzan-starter-deck--st-33-/",
      "price": 449.0,
      "currency": "CZK",
-     "eur": 18.51,
+     "eur": 18.46,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.wombatgames-shop.cz/user/shop/related/2265_4yzy5-medium.png?ff=1&x=100&y=100&q=85&ts=6a70761e&sg=8dda0505"
     }
    ]
   },
   "blacklotus": {
-   "ts": "2026-10-23T11:43:57Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -5797,7 +5809,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-the-world-s-strongest-warriors-booster-pack-en/",
      "price": 349.0,
      "currency": "CZK",
-     "eur": 14.39,
+     "eur": 14.35,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/453785_bez-nazvu.jpg?ff=1&x=100&y=100&q=85&ts=6a9170b9&sg=8dda0505"
     },
@@ -5806,7 +5818,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-the-world-s-strongest-warriors-en/",
      "price": 7999.0,
      "currency": "CZK",
-     "eur": 329.72,
+     "eur": 328.81,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/453197_op17bb.png?ff=1&x=100&y=100&q=85&ts=6a881798&sg=8dda0505"
     },
@@ -5815,7 +5827,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-illustration-box-vol-8-en/",
      "price": 899.0,
      "currency": "CZK",
-     "eur": 37.06,
+     "eur": 36.95,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451934_one-piece-card-game-illustration-box-vol-8-en.png?ff=1&x=100&y=100&q=85&ts=6a6c7e63&sg=8dda0505"
     },
@@ -5824,7 +5836,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-illustration-box-vol-7-en/",
      "price": 989.0,
      "currency": "CZK",
-     "eur": 40.77,
+     "eur": 40.65,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451931_one-piece-card-game-illustration-box-vol-7-en.png?ff=1&x=100&y=100&q=85&ts=6a6c7e8c&sg=8dda0505"
     },
@@ -5833,7 +5845,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-premium-card-collection-best-selection-vol-6/",
      "price": 1199.0,
      "currency": "CZK",
-     "eur": 49.42,
+     "eur": 49.29,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451928_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a16b6&sg=8dda0505"
     },
@@ -5842,7 +5854,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-adventure-on-kami--s-island-booster-en/",
      "price": 179.0,
      "currency": "CZK",
-     "eur": 7.38,
+     "eur": 7.36,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/438787_one-piece-tcg-adventure-on-kami-s-island-booster.png?ff=1&x=100&y=100&q=85&ts=69c5284e&sg=8dda0505"
     },
@@ -5851,7 +5863,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-set-sail-deck/",
      "price": 799.0,
      "currency": "CZK",
-     "eur": 32.93,
+     "eur": 32.84,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/453959_bcl2866723-1.jpg?ff=1&x=100&y=100&q=85&ts=6aab8e62&sg=8dda0505"
     },
@@ -5860,7 +5872,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-blue-starter-deck-kuzan/",
      "price": 399.0,
      "currency": "CZK",
-     "eur": 16.45,
+     "eur": 16.4,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451925-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a14cd&sg=8dda0505"
     },
@@ -5869,7 +5881,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-yellow-starter-deck-eustass--captain--kid/",
      "price": 399.0,
      "currency": "CZK",
-     "eur": 16.45,
+     "eur": 16.4,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451922-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a1400&sg=8dda0505"
     },
@@ -5878,7 +5890,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-green-starter-deck-roronoa-zoro/",
      "price": 499.0,
      "currency": "CZK",
-     "eur": 20.57,
+     "eur": 20.51,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451919-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a135f&sg=8dda0505"
     },
@@ -5887,7 +5899,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-red-black-starter-deck-sabo/",
      "price": 399.0,
      "currency": "CZK",
-     "eur": 16.45,
+     "eur": 16.4,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451916-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a12fa&sg=8dda0505"
     },
@@ -5896,7 +5908,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-purple-starter-deck-charlotte-katakuri/",
      "price": 399.0,
      "currency": "CZK",
-     "eur": 16.45,
+     "eur": 16.4,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451913-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a128e&sg=8dda0505"
     },
@@ -5905,7 +5917,7 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game-red-starter-deck-monkey-d-luffy/",
      "price": 599.0,
      "currency": "CZK",
-     "eur": 24.69,
+     "eur": 24.62,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451910_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a10fd&sg=8dda0505"
     },
@@ -5914,14 +5926,14 @@
      "url": "https://www.blacklotus.cz/one-piece-card-game---english-version-3rd-anniversary-set/",
      "price": 15999.0,
      "currency": "CZK",
-     "eur": 659.48,
+     "eur": 657.66,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/453782-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a8ee8cc&sg=8dda0505"
     }
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
@@ -6233,7 +6245,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-24T18:52:34Z",
+   "ts": "2026-10-24T20:03:23Z",
    "ok": true,
    "items": [
     {
