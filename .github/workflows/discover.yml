@@ -2,7 +2,7 @@ name: Discover
 on:
   push:
     branches: [pokemon-discover]
-    paths: [tools/candidates.txt, tools/discover.py, .github/workflows/discover.yml]
+    paths: [tools/probe.txt, .github/workflows/discover.yml]
 permissions:
   contents: write
 jobs:
@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - run: python tools/discover.py tools/candidates.txt > tools/disc.jsonl
+      - run: python tools/probe.py tools/probe.txt
       - run: |
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tools/disc.jsonl; git commit -m "výsledok prieskumu"; git push
+          git add tools/probe; git commit -m "výsledok prieskumu"; git push
