@@ -41,7 +41,7 @@ export default function GameTeaser() {
         </div>
 
         <div className="peek" aria-hidden>
-          <div className="peek-row opp">
+          <div className="peek-row peek-opp">
             {pick.opp && <CardImg card={pick.opp} className="peek-card leader" />}
             <div className="peek-life">
               {[0, 1, 2, 3].map((i) => (
@@ -49,12 +49,12 @@ export default function GameTeaser() {
               ))}
             </div>
           </div>
-          <div className="peek-row field">
+          <div className="peek-row peek-field">
             {pick.field.map((c, i) => (
               <CardImg key={c.code} card={c} className={`peek-card${i === 1 ? " rested" : ""}`} />
             ))}
           </div>
-          <div className="peek-row me">
+          <div className="peek-row peek-me">
             {pick.leader && <CardImg card={pick.leader} className="peek-card leader glow" eager />}
             <div className="peek-don">
               {[0, 1, 2, 3, 4].map((i) => (

@@ -487,7 +487,7 @@
 .peek .peek-card.leader { width: calc(var(--pw) * 1.12); }
 .peek .peek-card.glow { box-shadow: 0 0 0 2px var(--gold), 0 0 26px rgba(242, 184, 75, .45); }
 .peek .peek-card.rested { transform: rotate(90deg); margin: 0 calc(var(--pw) * .2); }
-.peek-row.opp { opacity: .75; }
+.peek-row.peek-opp { opacity: .75; }
 .peek-life { display: flex; }
 .peek-life span { width: calc(var(--pw) * .6); aspect-ratio: 5 / 7; border-radius: 5px; margin-left: -28px; border: 1px solid #2a5172; background: linear-gradient(135deg, #7a1f2a, #3b0f17); }
 .peek-don { display: grid; grid-template-columns: repeat(5, auto); gap: 5px; }
