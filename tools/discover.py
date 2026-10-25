@@ -21,7 +21,7 @@ def one(d):
             res.update(url=fu, plat=plat(t), ld="application/ld+json" in t)
             links = []
             for h in re.findall(r'href="([^"#]+)"', t):
-                if re.search(r"pok[eé]mon", h, re.I) and h not in links: links.append(h)
+                if re.search(r"pok[eé]mon|tcg", h, re.I) and h not in links: links.append(h)
             res["links"] = links[:25]
             break
         except Exception as e:
