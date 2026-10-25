@@ -1390,7 +1390,7 @@ def gh_repo():
     return load_json(CONFIG_FILE, {}).get("github_repo")
 
 
-def gh_api(method, path, body=None, raw=False):
+def gh_api(method, path, body=None, raw=False, timeout=40):
     req = urllib.request.Request(
         f"https://api.github.com/repos/{gh_repo()}/{path}", method=method,
         data=json.dumps(body).encode("utf-8") if body is not None else None,
@@ -1398,9 +1398,23 @@ def gh_api(method, path, body=None, raw=False):
                  "X-GitHub-Api-Version": "2022-11-28",
                  "Content-Type": "application/json",
                  "Accept": "application/vnd.github.raw" if raw else "application/vnd.github+json"})
-    with urllib.request.urlopen(req, timeout=40) as r:
+    with urllib.request.urlopen(req, timeout=timeout) as r:
         data = r.read()
     return data if raw else json.loads(data or b"{}")
+
+
+def gh_blob(path):
+    """Nahrá súbor ako blob. Pokémon dáta majú niekoľko MB → dlhší čas a 3 pokusy (pomalší upload z PC)."""
+    import base64
+    body = {"content": base64.b64encode(path.read_bytes()).decode(), "encoding": "base64"}
+    for attempt in range(3):
+        try:
+            return gh_api("POST", "git/blobs", body, timeout=300)["sha"]
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            if isinstance(e, urllib.error.HTTPError) and e.code < 500 or attempt == 2:
+                raise
+            say(f"  … upload {path.name} zlyhal ({e}), skúšam znova")
+            time.sleep(5)
 
 
 def merge_history(remote_text):
@@ -1473,9 +1487,7 @@ def sync_push(message):
         for rel in SYNC_FILES:
             f = HERE / rel
             if f.exists():
-                blob = gh_api("POST", "git/blobs", {"content": base64.b64encode(f.read_bytes()).decode(),
-                                                     "encoding": "base64"})
-                tree.append({"path": rel, "mode": "100644", "type": "blob", "sha": blob["sha"]})
+                tree.append({"path": rel, "mode": "100644", "type": "blob", "sha": gh_blob(f)})
         new_tree = gh_api("POST", "git/trees", {"base_tree": base_tree, "tree": tree})
         if new_tree["sha"] == base_tree:
             return "bez zmien"
