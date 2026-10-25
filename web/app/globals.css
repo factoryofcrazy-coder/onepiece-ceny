@@ -407,3 +407,52 @@ textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, monospace; fo
   .foil { transform: none !important; }
 }
 
+
+/* ---------------------------------------------------------- prepínač hry */
+.tcg-switch { position: relative; display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px; background: rgba(6, 18, 31, .7); border: 1px solid var(--line); flex-shrink: 0; }
+.tcg-switch button { display: inline-flex; align-items: center; gap: 7px; border: 0; background: transparent; color: var(--muted); padding: 6px 12px 6px 7px; border-radius: 999px; cursor: pointer; font: 700 13px var(--display); letter-spacing: -.01em; transition: background .25s var(--ease), color .25s, box-shadow .25s; }
+.tcg-switch button:hover { color: var(--text); }
+.tcg-switch button.on { color: var(--ink); }
+.tcg-switch .tcg-onepiece.on { background: linear-gradient(135deg, #ffd98a, #f2b84b); box-shadow: 0 2px 10px rgba(242, 184, 75, .3); }
+.tcg-switch .tcg-pokemon.on { background: linear-gradient(135deg, #ffe46b, #ffcb05); box-shadow: 0 2px 10px rgba(255, 203, 5, .3); }
+.tcg-switch i { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; position: relative; transition: transform .5s var(--ease); }
+.tcg-switch button.on i { transform: rotate(-360deg); }
+/* slamený klobúk: zlatý kruh s červenou páskou */
+.tcg-onepiece i { background: radial-gradient(circle at 50% 50%, #f7d27a 0 38%, #e63946 39% 52%, #f7d27a 53%); box-shadow: inset 0 0 0 1.5px #7a4e12; }
+/* pokéball: červená a biela polovica, čierny pás a stredné tlačidlo */
+.tcg-pokemon i { background: linear-gradient(#ee1515 0 45%, #1b1b1b 45% 55%, #f4f4f4 55%); box-shadow: inset 0 0 0 1.5px #1b1b1b; }
+.tcg-pokemon i::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: #f4f4f4; box-shadow: 0 0 0 1.5px #1b1b1b; }
+.tcg-short { display: none; }
+@media (max-width: 1000px) { .tcg-label { display: none; } .tcg-short { display: inline; } }
+@media (max-width: 720px) { .brand-name { display: none; } .brand { flex: 0 0 auto; } .tcg-switch { margin-right: auto; } }
+
+/* Pokémon téma: žltá namiesto zlata, pokéball červená, modrejšie nočné nebo */
+html[data-tcg="pokemon"] {
+  --gold: #ffcb05;
+  --red: #ee1515;
+  --foam: #6fd3ff;
+  --line: #203a5c;
+}
+html[data-tcg="pokemon"] body {
+  background:
+    radial-gradient(900px 500px at 85% -120px, rgba(59, 130, 246, .16), transparent 60%),
+    radial-gradient(700px 500px at -10% 30%, rgba(255, 203, 5, .06), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(111, 211, 255, .03) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(90deg, rgba(111, 211, 255, .03) 0 1px, transparent 1px 96px),
+    var(--ink);
+  background-attachment: fixed;
+}
+html[data-tcg="pokemon"] .logo { background: linear-gradient(#ee1515 0 46%, #1b1b1b 46% 54%, #f4f4f4 54%); box-shadow: 0 0 0 3px rgba(255, 203, 5, .2); }
+html[data-tcg="pokemon"] .logo svg { opacity: 0; }
+html[data-tcg="pokemon"] .logo::after { content: ""; width: 11px; height: 11px; border-radius: 50%; background: #f4f4f4; box-shadow: 0 0 0 2.5px #1b1b1b; grid-area: 1 / 1; }
+html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
+
+/* Pokémon karty – pomer 63 × 88 mm, set loga */
+.pk-setlogo { height: 34px; max-width: 120px; object-fit: contain; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .5)); }
+.pk-sethead { display: flex; align-items: center; gap: 14px; margin: 4px 0 14px; }
+.pk-sethead h2 { margin: 0; }
+.setrow .pk-logo { width: 64px; height: 28px; object-fit: contain; flex-shrink: 0; }
+.sname.pk { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.pk-num { font-variant-numeric: tabular-nums; }
+.pk-vars { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.pk-vars .vchip { display: inline-flex; align-items: center; gap: 8px; padding: 4px 6px 4px 10px; border-radius: 10px; background: var(--sea-2); border: 1px solid var(--line); font-size: 13px; }

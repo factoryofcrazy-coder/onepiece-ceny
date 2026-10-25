@@ -35,6 +35,7 @@ from pathlib import Path
 VERSION = "2026-10-20a"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
+DATA_REL = "data"                       # Pokémon: data/pokemon
 HISTORY = DATA / "history.csv"          # len zmeny cien/dostupnosti (+ prvé výskyty)
 CURRENT = DATA / "current.json"         # posledný stav každého obchodu
 ALERT_STATE = DATA / "alerts_state.json"
@@ -42,6 +43,19 @@ DOCS = HERE / "docs"                    # statická stránka pre GitHub Pages
 MSRP_FILE = HERE / "msrp.json"
 CONFIG_FILE = HERE / "config.json"
 IN_CLOUD = os.environ.get("GITHUB_ACTIONS") == "true"
+# hra – One Piece je predvolená; --game pokemon prepne obchody, rozpoznávanie a súbory (pozri set_game, tcg_pokemon.py)
+GAME = "onepiece"
+GAME_LABEL = "One Piece"
+GAME_RX = re.compile(r"one\s*piece", re.I)
+UPCOMING_RX = re.compile(r"(OP|EB|PRB)(\d+)$")
+PAGE_DIR = DOCS                         # docs/index.html (Pokémon: docs/pokemon/)
+PRICES_JSON = "prices.json"               # docs/data/prices.json (Pokémon: pokemon.json)
+WEBHOOK_ENV = "DISCORD_WEBHOOK_URL"
+
+
+def game_ok(name, shop=None):
+    """Produkt patrí k hre: kategória len s touto hrou (all) alebo názov obsahuje hru."""
+    return bool((shop or {}).get("all")) or bool(GAME_RX.search(name or ""))
 
 
 def _enable_feeds():
@@ -271,6 +285,8 @@ def num(s):
     s = re.sub(r"[^\d,.]", "", s)
     if "," in s and "." in s:
         s = s.replace(".", "").replace(",", ".") if s.rfind(",") > s.rfind(".") else s.replace(",", "")
+    elif re.fullmatch(r"\d{1,3}(\.\d{3})+", s):        # 1.299 = tisícky (CZ/DE zápis)
+        s = s.replace(".", "")
     else:
         s = s.replace(",", ".")
     return float(s) if s else None
@@ -542,6 +558,75 @@ def hrydoruky_stock(page):
     return bool(ok) and not pre, pre, txt
 
 
+BLOCK_IN_RX = re.compile(r"auf lager|sofort (?:verfügbar|lieferbar)|knapper lagerbestand|lagernd|\bverfügbar\b|na sklad|skladom|skladem|"
+                         r"in stock|na prodejn|na predajn|ihneď k odberu|ihned k odběru|odosielame|expedujeme|in den warenkorb|do košíka|do košíku|add to cart", re.I)
+BLOCK_OUT_RX = re.compile(r"nicht (?:mehr )?verfügbar|ausverkauft|vergriffen|nie je (?:na )?sklad|není (?:na )?sklad|vypredan|vyprodan|"
+                          r"out of stock|u dodávateľa|u dodavatele|nedostupn|na objednávku|sold out|nicht auf lager|beim lieferanten|"
+                          r"dodanie môže trvať|benachrichtig|hlídat dostupnost|stráži[tť]|upozorniť", re.I)
+BLOCK_PRE_RX = re.compile(PREORDER_RX.pattern + r"|verfügbar ab|versand am|erscheint am|vorbestellbar|datum vydání|dátum vydania", re.I)
+
+
+def _attr(chunk, *pats):
+    for p in pats:
+        m = re.search(p, chunk, re.S | re.I)
+        if m and _txt(m.group(1)):
+            return m.group(1)
+    return None
+
+
+def _txt(s):
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", s or ""))).strip()
+
+
+def parse_blocks(page, base, cfg):
+    """Všeobecný zoznam produktov: HTML sa rozdelí regexom cfg["split"], v každom kúsku sa nájde názov, odkaz, cena,
+    obrázok a dostupnosť (microdata, Shopware JSON, nadpisy, text s €/Kč). cfg môže prepísať name/url/price/stock regexom."""
+    out = []
+    for chunk in re.split(cfg["split"], page)[1:]:
+        chunk = chunk[:cfg.get("size", 20000)]
+        info = {}
+        m = re.search(r'data-product-information="([^"]+)"', chunk)
+        if m:
+            try:
+                info = json.loads(html.unescape(m.group(1)))
+            except ValueError:
+                pass
+        name = (cfg.get("name") and _attr(chunk, cfg["name"])) or info.get("name") or _attr(
+            chunk, r'itemprop="name"[^>]*content="([^"]+)"', r'itemprop="name"[^>]*>(.*?)</',
+            r'class="[^"]*product-?name[^"]*"[^>]*title="([^"]+)"', r'class="[^"]*(?:product-?(?:name|title)|title)[^"]*"[^>]*>(.*?)</(?:a|h\d|p|span|div)>',
+            r'<h[1-4][^>]*>(.*?)</h[1-4]>', r'<a[^>]+title="([^"]+)"', r'<img[^>]+alt="([^"]+)"')
+        href = (cfg.get("url") and _attr(chunk, cfg["url"])) or _attr(
+            chunk, r'itemprop="url"[^>]*(?:href|content)="([^"]+)"', r'<a[^>]+href="([^"#][^"]*)"[^>]*class="[^"]*product-?name',
+            r'class="[^"]*product-?name[^"]*"[^>]*href="([^"#][^"]*)"', r'<a[^>]+href="([^"#][^"]*)"')
+        body = re.sub(r"<(del|s|strike)\b.*?</\1>", " ", chunk, flags=re.S | re.I)
+        body = re.sub(r'<[^>]+class="[^"]*(?:strike|old|before|original|regular|crossed|rrp|uvp)[^"]*"[^>]*>[^<]*<', "<", body, flags=re.I)
+        ptxt = (cfg.get("price") and _attr(body, cfg["price"])) or _attr(
+            body, r'itemprop="price"[^>]*content="([\d.,]+)"', r'content="([\d.,]+)"[^>]*itemprop="price"', r'data-price-amount="([\d.]+)"')
+        cur = None
+        if not ptxt:
+            m = re.search(r'(\d[\d\s.\xa0]*(?:,\d{1,2})?)\s*(?:&nbsp;|\xa0)?\s*(€|EUR|Kč|CZK)|(€)\s*(\d[\d.]*,?\d*)', _txt(body))
+            if m:
+                ptxt = m.group(1) or m.group(4)
+                cur = "CZK" if (m.group(2) or "") in ("Kč", "CZK") else "EUR"
+        if not name or not ptxt:
+            continue
+        price = num(ptxt)
+        txt = _txt(chunk)
+        stock_txt = _txt(_attr(chunk, cfg["stock"]) or "") if cfg.get("stock") else txt
+        pre = bool(BLOCK_PRE_RX.search(stock_txt))
+        ins = bool(BLOCK_IN_RX.search(stock_txt)) and not BLOCK_OUT_RX.search(stock_txt)
+        if cfg.get("assume_stock"):                     # obchod v zozname dostupnosť neukazuje (vypredané skrýva)
+            ins = not BLOCK_OUT_RX.search(stock_txt)
+        if cfg.get("in_rx"):
+            ins = bool(re.search(cfg["in_rx"], chunk, re.I))
+        img = _attr(chunk, r'<img[^>]+(?:data-src|data-lazy|src)="([^"]+\.(?:jpe?g|png|webp)[^"]*)"', r'srcset="([^" ]+)')
+        if price:
+            out.append({"id": href or _txt(name), "name": _txt(name), "url": absolute(base, href or base),
+                        "price": price, "currency": cur, "img": absolute(base, img) if img else None,
+                        "inStock": ins and not pre, "preorder": pre})
+    return out
+
+
 SHOPIFY_SKIP_TYPE = re.compile(r"einzelkarte|single|zubeh|accessor|figur|funko|plüsch|plush|playmat|sleeve|binder", re.I)
 SHOPIFY_SKIP_TITLE = re.compile(r"\b(AOG|M3G|PSA|BGS|CGC|Beckett)\b|grading|gem mint|collect aura|bewertet|\bmint\b|mystery|bundle|promo", re.I)
 
@@ -573,7 +658,7 @@ def crawl_shopify(shop):
                              "inStock": bool(v.get("available")) and not pre,
                              "preorder": pre and bool(v.get("available"))})
             time.sleep(shop.get("delay", DELAY))
-    return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I)]
+    return [r for r in rows if game_ok(r["name"], shop)]
 
 
 def crawl_wcstore(shop):
@@ -600,14 +685,14 @@ def crawl_wcstore(shop):
             if len(data) < 100:
                 break
             time.sleep(shop.get("delay", DELAY))
-    return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I) and r["price"]
+    return [r for r in rows if game_ok(r["name"]) and r["price"]
             and not SHOPIFY_SKIP_TITLE.search(r["name"])]
 
 
 def crawl_hrydoruky(shop):
     rows = []
     for start in shop["urls"]:
-        rows += [i for i in parse_hrydoruky(fetch(start), start) if re.search(r"one\s*piece", i["name"], re.I)]
+        rows += [i for i in parse_hrydoruky(fetch(start), start) if game_ok(i["name"], shop)]
     for i in rows:
         time.sleep(shop.get("delay", DELAY))
         try:
@@ -619,7 +704,8 @@ def crawl_hrydoruky(shop):
 
 PARSERS = {"shoptet": parse_shoptet, "veselydrak": parse_veselydrak,
            "jsonld": parse_jsonld, "smarty": parse_smarty, "tolarie": parse_tolarie,
-           "upgates": parse_upgates, "xzone": parse_xzone, "ecwid": parse_ecwid}
+           "upgates": parse_upgates, "xzone": parse_xzone, "ecwid": parse_ecwid,
+           "blocks": None}
 
 
 def page_url(parser, url, n):
@@ -650,7 +736,7 @@ def crawl_xmlfeed(shop):
                 continue
             f = {c.tag.split("}")[-1].upper(): (c.text or "").strip() for c in el}
             name = f.get("PRODUCTNAME") or f.get("PRODUCT") or f.get("TITLE") or ""
-            if re.search(r"one\s*piece", name, re.I) and re.search(r"booster|box|display|pack|deck", name, re.I):
+            if game_ok(name) and re.search(r"booster|box|display|pack|deck|tin|bundle|collection", name, re.I):
                 price = num(f.get("PRICE_VAT") or f.get("PRICE") or f.get("SALE_PRICE") or "")
                 av = (f.get("DELIVERY_DATE") or f.get("AVAILABILITY") or "").lower()
                 out.append({"id": f.get("ITEM_ID") or f.get("ID") or f.get("URL") or name, "name": name,
@@ -673,7 +759,7 @@ def crawl(shop):
         return crawl_wcstore(shop)
     if shop["parser"] == "cernyrytir":
         rows = crawl_cernyrytir(shop)
-        return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
+        return [r for r in rows if game_ok(r["name"], shop) and r["price"]]
     parse = PARSERS[shop["parser"]]
     seen_ids, seen_urls, rows = set(), set(), []
     for entry in shop["urls"]:
@@ -694,7 +780,7 @@ def crawl(shop):
             if page is None:
                 break
             new = []
-            for i in parse(page, url):
+            for i in (parse_blocks(page, url, shop["blocks"]) if shop["parser"] == "blocks" else parse(page, url)):
                 if i["id"] in seen_ids or i["url"] in seen_urls:
                     continue
                 seen_ids.add(i["id"])
@@ -706,7 +792,7 @@ def crawl(shop):
             time.sleep(shop.get("delay", DELAY))
             if not new or shop["parser"] == "smarty":
                 break
-    return [r for r in rows if re.search(r"one\s*piece", r["name"], re.I) and r["price"]]
+    return [r for r in rows if game_ok(r["name"], shop) and r["price"]]
 
 
 # ---------------------------------------------------------------- MSRP ------
@@ -816,7 +902,7 @@ def append_changes(prev_cur, new_items_by_shop, ts):
                          "lang": lang, "price": i["price"], "currency": i["currency"],
                          "priceEUR": i["eur"], "inStock": int(i["inStock"]), "url": i["url"]})
     if rows:
-        DATA.mkdir(exist_ok=True)
+        DATA.mkdir(parents=True, exist_ok=True)
         new = not HISTORY.exists()
         with HISTORY.open("a", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=FIELDS)
@@ -833,7 +919,7 @@ def mark_upcoming(cur):
     for key, s in cur["shops"].items():
         for i in s.get("items", []):
             code, kind, lang = classify(i["name"], i.get("hint"))
-            m = re.match(r"(OP|EB|PRB)(\d+)$", code or "")
+            m = UPCOMING_RX.match(code or "")
             if m and i["inStock"] and not i.get("preorder") and kind not in ("Iné", "Doplnky"):
                 stock_shops.setdefault((m.group(1), lang, int(m.group(2))), set()).add(key)
     released = {}
@@ -843,7 +929,7 @@ def mark_upcoming(cur):
     for s in cur["shops"].values():
         for i in s.get("items", []):
             code, kind, lang = classify(i["name"], i.get("hint"))
-            m = re.match(r"(OP|EB|PRB)(\d+)$", code or "")
+            m = UPCOMING_RX.match(code or "")
             if not m or (m.group(1), lang) not in released or kind in ("Iné", "Doplnky"):
                 continue
             if int(m.group(2)) > released[(m.group(1), lang)] and i["inStock"]:
@@ -902,8 +988,8 @@ def snapshot(only=None, force=True):
 
 # ------------------------------------------------------------- upozornenia --
 def webhook_url():
-    url = os.environ.get("DISCORD_WEBHOOK_URL", "").strip()
-    f = HERE / "discord_webhook.txt"
+    url = os.environ.get(WEBHOOK_ENV, "").strip()
+    f = HERE / ("discord_webhook.txt" if GAME == "onepiece" else f"discord_webhook_{GAME}.txt")
     if not url and f.exists():
         url = f.read_text(encoding="utf-8").strip()
     return url or None
@@ -914,7 +1000,7 @@ def discord_send(embeds, content=None):
     if not url:
         return False
     for i in range(0, max(len(embeds), 1), 10):          # Discord: max 10 embedov na správu
-        body = {"username": "One Piece ceny", "embeds": embeds[i:i + 10]}
+        body = {"username": f"{GAME_LABEL} ceny", "embeds": embeds[i:i + 10]}
         if content and i == 0:
             body["content"] = content
         target = url + ("&" if "?" in url else "?") + "wait=true"     # Discord potvrdí doručenie
@@ -1061,7 +1147,7 @@ def build_digest(cur, msrp, cfg):
     repo = os.environ.get("GITHUB_REPOSITORY") or gh_repo() or ""
     owner, _, name = repo.partition("/")
     url = f"https://{owner}.github.io/{name}/" if owner else None
-    return {"title": "☀️ Denný súhrn One Piece cien", "url": url, "color": 0xD29922, "fields": fields,
+    return {"title": f"☀️ Denný súhrn {GAME_LABEL} cien", "url": url, "color": 0xD29922, "fields": fields,
             "footer": {"text": "% = rozdiel oproti MSRP (s 23 % DPH)"}}
 
 
@@ -1240,9 +1326,13 @@ def page_data():
         for i in s.get("items", []):
             code, kind, lang = classify(i["name"], i.get("hint"))
             imp = is_import(key)                 # dovoz: hlavná cena = s poštovným, DPH a preclením
+            m_eur = msrp_eur(code, kind, lang, msrp, fx)
+            packs = box_packs(code, lang, msrp, i["name"]) if kind == "Box" else None
+            if GAME != "onepiece" and kind == "Box" and packs:      # Pokémon: aj 18er / 30er displeje
+                per = msrp_eur(code, "Pack", lang, msrp, fx)
+                m_eur = round(per * packs, 2) if per else m_eur
             offers.append([key, i["name"], code, kind, lang, round(landed(key, i["eur"]), 2), i["inStock"], i["url"],
-                           i["price"], i["currency"], msrp_eur(code, kind, lang, msrp, fx),
-                           box_packs(code, lang, msrp, i["name"]) if kind == "Box" else None,
+                           i["price"], i["currency"], m_eur, packs,
                            bool(i.get("preorder")), None if imp else shipping_cost(key, i["eur"]), cardmarket_url(i["name"]),
                            i.get("img"), round(i["eur"], 2) if imp else None])
     hist = {}
@@ -1257,7 +1347,7 @@ def page_data():
              if not v.get("enabled", True) and v.get("link")]
     pickup = {k: shipping_cfg(k).get("pickup") for k in SHOPS if shipping_cfg(k).get("pickup")}
     repo = os.environ.get("GITHUB_REPOSITORY", "")
-    cfg = load_json(CONFIG_FILE, {})
+    cfg = game_cfg()
     th = cfg.get("alerts", {}).get("max_pct_vs_msrp", {"EN": 30, "JP": 150})
     return {"offers": offers, "hist": hist, "shops": shops, "status": status, "links": links,
             "updated": cur.get("updated"), "repo": repo or gh_repo() or "", "pickup": pickup,
@@ -1266,15 +1356,20 @@ def page_data():
 
 
 def render():
-    return TEMPLATE.replace("__VERSION__", VERSION).replace("__PAYLOAD__", json.dumps(page_data(), ensure_ascii=False, separators=(",", ":")))
+    tpl = TEMPLATE
+    if GAME == "pokemon":
+        for a, b in POKEMON_TEMPLATE:
+            tpl = tpl.replace(a, b)
+    return tpl.replace("__VERSION__", VERSION).replace("__PAYLOAD__", json.dumps(page_data(), ensure_ascii=False, separators=(",", ":")))
 
 
 def build_static():
     DOCS.mkdir(exist_ok=True)
-    (DOCS / "index.html").write_text(render(), encoding="utf-8")
+    PAGE_DIR.mkdir(exist_ok=True)
+    (PAGE_DIR / "index.html").write_text(render(), encoding="utf-8")
     (DOCS / ".nojekyll").write_text("", encoding="utf-8")
     (DOCS / "data").mkdir(exist_ok=True)               # dáta pre web (Vercel appka)
-    (DOCS / "data" / "prices.json").write_text(
+    (DOCS / "data" / PRICES_JSON).write_text(
         json.dumps(page_data(), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
 
@@ -1339,27 +1434,27 @@ def merge_current(remote):
 def sync_pull():
     """Stiahne zdieľané dáta z GitHubu a zlúči ich s lokálnymi."""
     head = gh_api("GET", "git/ref/heads/main")["object"]["sha"]
-    DATA.mkdir(exist_ok=True)
+    DATA.mkdir(parents=True, exist_ok=True)
     try:
-        remote_cur = json.loads(gh_api("GET", f"contents/data/current.json?ref={head}", raw=True))
+        remote_cur = json.loads(gh_api("GET", f"contents/{DATA_REL}/current.json?ref={head}", raw=True))
         CURRENT.write_text(json.dumps(merge_current(remote_cur), ensure_ascii=False, indent=1), encoding="utf-8")
     except urllib.error.HTTPError as e:
         if e.code != 404:
             raise
     try:
-        merge_history(gh_api("GET", f"contents/data/history.csv?ref={head}", raw=True).decode("utf-8"))
+        merge_history(gh_api("GET", f"contents/{DATA_REL}/history.csv?ref={head}", raw=True).decode("utf-8"))
     except urllib.error.HTTPError as e:
         if e.code != 404:
             raise
     try:
-        remote_state = json.loads(gh_api("GET", f"contents/data/alerts_state.json?ref={head}", raw=True))
+        remote_state = json.loads(gh_api("GET", f"contents/{DATA_REL}/alerts_state.json?ref={head}", raw=True))
         local_state = load_json(ALERT_STATE, {})
         ALERT_STATE.write_text(json.dumps({**local_state, **remote_state}, ensure_ascii=False, indent=0), encoding="utf-8")
     except urllib.error.HTTPError as e:
         if e.code != 404:
             raise
     try:
-        remote_d = json.loads(gh_api("GET", f"contents/data/digest_state.json?ref={head}", raw=True))
+        remote_d = json.loads(gh_api("GET", f"contents/{DATA_REL}/digest_state.json?ref={head}", raw=True))
         if (remote_d.get("last") or "") > (load_json(DIGEST_STATE, {}).get("last") or ""):
             DIGEST_STATE.write_text(json.dumps(remote_d), encoding="utf-8")
     except urllib.error.HTTPError as e:
@@ -1448,12 +1543,12 @@ def run_once(only=None, notify=True, force=True):
     for key in [k for k, v in cur["shops"].items()
                 if SHOPS.get(k, {}).get("enabled", True) is False and not v.get("items")]:
         del cur["shops"][key]
-    DATA.mkdir(exist_ok=True)
+    DATA.mkdir(parents=True, exist_ok=True)
     n_changes = append_changes(prev, fresh, ts)
     CURRENT.write_text(json.dumps(cur, ensure_ascii=False, indent=1), encoding="utf-8")
     if notify:
-        embeds = evaluate_alerts(prev, cur, load_json(MSRP_FILE, {}), load_json(CONFIG_FILE, {}), first_run)
-        a_cfg = load_json(CONFIG_FILE, {}).get("alerts", {})
+        embeds = evaluate_alerts(prev, cur, load_json(MSRP_FILE, {}), game_cfg(), first_run)
+        a_cfg = game_cfg().get("alerts", {})
         # predobjednávky idú vždy samostatnou správou
         pre = [e for e in embeds if e.get("_pre")]
         embeds = [e for e in embeds if not e.get("_pre")]
@@ -1469,7 +1564,7 @@ def run_once(only=None, notify=True, force=True):
             e.pop("_pre", None); e.pop("_kind", None)
         n_top = sum(1 for e in embeds if e.pop("_top", False))
         if embeds and webhook_url():
-            ping = "@here " if n_top and load_json(CONFIG_FILE, {}).get("alerts", {}).get("mention_top", True) else ""
+            ping = "@here " if n_top and game_cfg().get("alerts", {}).get("mention_top", True) else ""
             discord_send(compact_alerts(embeds) if len(embeds) > 4 else embeds,
                          content=ping + f"**{len(embeds)}** zaujímavých ponúk" + (f" ({n_top} ⭐ top)" if n_top else "")
                          + (f" · <{site_url()}>" if site_url() else ""))
@@ -1480,7 +1575,7 @@ def run_once(only=None, notify=True, force=True):
             discord_send(health)
             say(f"  🔧 odoslané {len(health)} hlásení o stave obchodov")
         try:
-            maybe_send_digest(cur, load_json(MSRP_FILE, {}), load_json(CONFIG_FILE, {}))
+            maybe_send_digest(cur, load_json(MSRP_FILE, {}), game_cfg())
         except Exception as e:  # noqa: BLE001
             say(f"  ! denný súhrn zlyhal: {e}")
     build_static()
@@ -1516,11 +1611,30 @@ def start_fetch(only=None, force=True):
             run_once(only, force=force)
         except Exception as e:  # noqa: BLE001
             say(f"✖ chyba: {e}")
+        try:
+            if GAME == "onepiece" and not only:
+                run_other_game("pokemon", force)
         finally:
             STATE["running"] = False
             STATE["finished"] = time.time()
     threading.Thread(target=job, daemon=True).start()
     return True
+
+
+def run_other_game(game, force=True):
+    """Na PC sa po One Piece stiahnu aj Pokémon ceny (samostatný proces – iné obchody a súbory)."""
+    import subprocess
+    say(f"— {game}: sťahujem ceny —")
+    cmd = [sys.executable, str(Path(__file__).resolve()), "--game", game, "--once", "--no-browser"]
+    try:
+        p = subprocess.Popen(cmd, cwd=str(HERE), stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                             text=True, encoding="utf-8", errors="replace",
+                             env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+        for line in p.stdout:
+            say("  " + line.rstrip())
+        p.wait()
+    except Exception as e:  # noqa: BLE001
+        say(f"✖ {game}: {e}")
 
 
 LOG_SINKS.append(lambda m: STATE["log"].append(m) if STATE["running"] else None)
@@ -1636,7 +1750,59 @@ def setup_wizard():
     print("\nHotovo. Spusti spustit.bat.")
 
 
+POKEMON_TEMPLATE = [
+    ("<title>One Piece ceny</title>", "<title>Pokémon ceny</title>"),
+    ("<h1>One Piece TCG – ceny v obchodoch</h1>", "<h1>Pokémon TCG – ceny v obchodoch</h1>"),
+    ('<button data-v="Double Pack">Double</button>', '<button data-v="ETB">ETB</button><button data-v="Bundle">Bundle</button>'
+     '<button data-v="Tin">Tiny</button><button data-v="Blister">Blistre</button>'),
+    ('<button data-v="EN">EN</button><button data-v="JP">JP</button>', '<button data-v="EN">EN</button><button data-v="DE">DE</button><button data-v="JP">JP</button>'),
+    ("Hľadať (OP09, Emperors…)", "Hľadať (ME05, Pitch Black…)"),
+    ('lsGet("op_filters"', 'lsGet("pk_filters"'),
+    ('"op_filters"', '"pk_filters"'),
+    ("'${esc(g.code||\"OP\")}'", "'${esc(g.code||\"PK\")}'"),
+]
+
+
+def game_cfg():
+    """Nastavenia upozornení pre aktuálnu hru: Pokémon má vlastnú sekciu "pokemon" v config.json (alerts, watchlist, digest)."""
+    cfg = load_json(CONFIG_FILE, {})
+    if GAME == "onepiece":
+        return cfg
+    sub = cfg.get(GAME, {})
+    return {**cfg, "alerts": {**cfg.get("alerts", {}), "max_pct_vs_msrp": {"EN": 30, "DE": 30, "JP": 150},
+                              **sub.get("alerts", {})},
+            "watchlist": sub.get("watchlist", []), "digest": sub.get("digest", {"enabled": False})}
+
+
+def set_game(game):
+    """Prepne program na inú hru (obchody, rozpoznanie produktov, MSRP, súbory s dátami a stránku)."""
+    global GAME, GAME_LABEL, GAME_RX, UPCOMING_RX, SHOPS, DATA, DATA_REL, HISTORY, CURRENT, ALERT_STATE, DIGEST_STATE
+    global MSRP_FILE, PAGE_DIR, PRICES_JSON, SYNC_FILES, WEBHOOK_ENV, set_code, kind_of, lang_of, msrp_eur, box_packs
+    global cardmarket_url
+    if game in (None, "", "onepiece"):
+        return
+    if game != "pokemon":
+        sys.exit(f"Neznáma hra: {game} (onepiece, pokemon)")
+    import tcg_pokemon as pk
+    GAME, GAME_LABEL, GAME_RX, UPCOMING_RX = "pokemon", pk.LABEL, pk.GAME_RX, pk.UPCOMING_RX
+    SHOPS = pk.SHOPS
+    set_code, kind_of, lang_of = pk.set_code, pk.kind_of, pk.lang_of
+    msrp_eur, box_packs, cardmarket_url = pk.msrp_eur, pk.box_packs, pk.cardmarket_url
+    DATA_REL = "data/pokemon"
+    DATA = HERE / "data" / "pokemon"
+    HISTORY, CURRENT = DATA / "history.csv", DATA / "current.json"
+    ALERT_STATE, DIGEST_STATE = DATA / "alerts_state.json", DATA / "digest_state.json"
+    MSRP_FILE = HERE / "msrp_pokemon.json"
+    PAGE_DIR, PRICES_JSON = DOCS / "pokemon", "pokemon.json"
+    WEBHOOK_ENV = "DISCORD_WEBHOOK_URL_POKEMON"         # bez neho sa Pokémon upozornenia neposielajú
+    SYNC_FILES = [f"{DATA_REL}/current.json", f"{DATA_REL}/history.csv", f"{DATA_REL}/alerts_state.json",
+                  f"{DATA_REL}/digest_state.json", "docs/pokemon/index.html", "docs/data/pokemon.json"]
+
+
 def main():
+    if "--game" in sys.argv:                     # musí byť skôr ako argparse – mení zoznam obchodov v pomocníkovi
+        i = sys.argv.index("--game")
+        set_game(sys.argv[i + 1] if i + 1 < len(sys.argv) else "")
     _enable_feeds()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--once", action="store_true", help="raz stiahnuť ceny, poslať upozornenia, vytvoriť docs/index.html")
@@ -1649,6 +1815,7 @@ def main():
     ap.add_argument("--test-discord", action="store_true", help="poslať skúšobnú správu na Discord")
     ap.add_argument("--discord-message", metavar="TEXT", help="poslať vlastnú správu na Discord")
     ap.add_argument("--setup", action="store_true", help="sprievodca: uložiť Discord webhook a GitHub token")
+    ap.add_argument("--game", choices=["onepiece", "pokemon"], default="onepiece", help="hra (predvolene One Piece)")
     ap.add_argument("--only", help="čiarkou oddelené obchody: " + ",".join(SHOPS))
     a = ap.parse_args()
     only = set(a.only.split(",")) if a.only else None

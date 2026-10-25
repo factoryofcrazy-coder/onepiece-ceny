@@ -1,8 +1,9 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CountUp, DataError, Loading } from "@/components/ui";
 import { OLD_SITE } from "@/lib/config";
 import { eur, Offer, usePrices } from "@/lib/data";
+import { Tcg, useTcg } from "@/lib/tcg";
 
 type Product = {
   key: string;
@@ -17,7 +18,13 @@ type Product = {
   pct: number | null;
 };
 
-const KINDS = ["Box", "Pack", "Double Pack", "Starter", "Premium", "Illustration", "Kolekcia", "Case", "Doplnky", "Iné"];
+const KINDS: Record<Tcg, string[]> = {
+  onepiece: ["Box", "Pack", "Double Pack", "Starter", "Premium", "Illustration", "Kolekcia", "Case", "Doplnky", "Iné"],
+  pokemon: ["Box", "ETB", "Bundle", "Pack", "Blister", "Tin", "Kolekcia", "Starter", "Case", "Doplnky", "Iné"],
+};
+const KIND_SK: Record<string, string> = { ETB: "Elite Trainer Box", Bundle: "Booster Bundle", Tin: "Tin", Blister: "Blister" };
+const LANGS: Record<Tcg, string[]> = { onepiece: ["EN", "JP", "CN", "KR"], pokemon: ["EN", "DE", "JP", "CN", "KR"] };
+const HINT: Record<Tcg, string> = { onepiece: "OP16, Azure Sea…", pokemon: "ME05, Pitch Black, Dunkelnacht…" };
 
 function ago(ts?: string) {
   if (!ts) return "";
@@ -28,9 +35,15 @@ function ago(ts?: string) {
 }
 
 export default function PricesPage() {
-  const { data, error } = usePrices();
+  const { tcg } = useTcg();
+  const { data, error } = usePrices(tcg);
   const [kind, setKind] = useState("Box");
   const [lang, setLang] = useState("EN");
+  useEffect(() => {
+    if (!KINDS[tcg].includes(kind)) setKind("Box");
+    if (lang !== "*" && !LANGS[tcg].includes(lang)) setLang("EN");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tcg]);
   const [q, setQ] = useState("");
   const [stock, setStock] = useState(true);
   const [ba, setBa] = useState(false);
@@ -90,15 +103,15 @@ export default function PricesPage() {
     <>
       <section className="hero">
         <div className="hero-copy">
-          <h1>Kde kúpiť box čo najbližšie k MSRP</h1>
+          <h1>{tcg === "pokemon" ? "Pokémon boxy čo najbližšie k MSRP" : "Kde kúpiť box čo najbližšie k MSRP"}</h1>
           <p className="muted">
             {Object.keys(data.shops).length} obchodov v SK, CZ, DE, AT a JP, aktualizované {ago(data.updated)}.{" "}
-            <a href={OLD_SITE} target="_blank" rel="noreferrer">
+            <a href={tcg === "pokemon" ? OLD_SITE + "pokemon/" : OLD_SITE} target="_blank" rel="noreferrer">
               Grafy vývoja cien
             </a>
           </p>
         </div>
-        <WantedBoard products={products} shops={data.shops} />
+        <WantedBoard products={products} shops={data.shops} langs={tcg === "pokemon" ? ["EN", "DE", "JP"] : ["EN", "JP"]} />
       </section>
 
       <div className="filters">
@@ -106,8 +119,10 @@ export default function PricesPage() {
           <span>Typ</span>
           <select value={kind} onChange={(e) => setKind(e.target.value)}>
             <option value="*">Všetko</option>
-            {KINDS.map((k) => (
-              <option key={k}>{k}</option>
+            {KINDS[tcg].map((k) => (
+              <option key={k} value={k}>
+                {KIND_SK[k] ?? k}
+              </option>
             ))}
           </select>
         </label>
@@ -115,15 +130,14 @@ export default function PricesPage() {
           <span>Jazyk</span>
           <select value={lang} onChange={(e) => setLang(e.target.value)}>
             <option value="*">Všetky</option>
-            <option>EN</option>
-            <option>JP</option>
-            <option>CN</option>
-            <option>KR</option>
+            {LANGS[tcg].map((l) => (
+              <option key={l}>{l}</option>
+            ))}
           </select>
         </label>
         <label className="field grow">
           <span>Hľadať</span>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="OP16, Azure Sea…" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={HINT[tcg]} />
         </label>
         <label className="field">
           <span>Zoradiť</span>
@@ -178,7 +192,7 @@ function ProductCard({
         <div>
           <div className="row gap wrapr">
             {p.code && <span className="tag">{p.code}</span>}
-            <span className="tag dim">{p.kind}</span>
+            <span className="tag dim">{KIND_SK[p.kind] ?? p.kind}</span>
             <span className="tag dim">{p.lang}</span>
           </div>
           <h3 title={p.title}>{p.title}</h3>
@@ -228,12 +242,15 @@ function ProductCard({
   );
 }
 
-function WantedBoard({ products, shops }: { products: Product[]; shops: Record<string, string> }) {
+function WantedBoard({ products, shops, langs }: { products: Product[]; shops: Record<string, string>; langs: string[] }) {
   const pick = (lang: string) =>
     products
       .filter((p) => p.kind === "Box" && p.lang === lang && p.best && p.pct != null)
       .sort((a, b) => a.pct! - b.pct!);
-  const top = [...pick("EN"), ...pick("JP")].slice(0, 3);
+  const top = langs
+    .flatMap(pick)
+    .sort((a, b) => a.pct! - b.pct!)
+    .slice(0, 3);
   if (!top.length) return null;
   return (
     <div className="wanted-board" aria-label="Najlepšie ponuky boxov">
