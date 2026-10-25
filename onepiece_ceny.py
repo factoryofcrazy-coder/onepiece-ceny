@@ -1626,6 +1626,7 @@ def run_other_game(game, force=True):
     import subprocess
     say(f"— {game}: sťahujem ceny —")
     cmd = [sys.executable, str(Path(__file__).resolve()), "--game", game, "--once", "--no-browser"]
+    os.environ["OPC_NO_UPDATE"] = "1"
     try:
         p = subprocess.Popen(cmd, cwd=str(HERE), stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                              text=True, encoding="utf-8", errors="replace",
@@ -1799,7 +1800,34 @@ def set_game(game):
                   f"{DATA_REL}/digest_state.json", "docs/pokemon/index.html", "docs/data/pokemon.json"]
 
 
+CODE_FILES = ["onepiece_ceny.py", "tcg_pokemon.py"]
+MISSING_FILES = ["msrp_pokemon.json"]      # stiahne sa len keď chýba (môžeš si ho upravovať)
+
+
+def self_update():
+    """Na PC: stiahne z GitHubu najnovší kód (scraper, Pokémon obchody) a ak sa zmenil, spustí sa znova.
+    config.json, msrp*.json a spustit.bat sa neprepisujú (upravuješ si ich sám, .bat beží počas aktualizácie)."""
+    if IN_CLOUD or os.environ.get("OPC_NO_UPDATE") or not gh_token() or not gh_repo():
+        return
+    changed = []
+    for name in CODE_FILES + [m for m in MISSING_FILES if not (HERE / m).exists()]:
+        try:
+            new = gh_api("GET", f"contents/{name}?ref=main", raw=True)
+        except Exception:  # noqa: BLE001  (offline, súbor ešte nie je na GitHube…)
+            continue
+        f = HERE / name
+        if new and (not f.exists() or f.read_bytes().replace(b"\r\n", b"\n") != new.replace(b"\r\n", b"\n")):
+            f.write_bytes(new)
+            changed.append(name)
+    if changed:
+        print("⇣ aktualizované z GitHubu: " + ", ".join(changed) + " – spúšťam novú verziu…", flush=True)
+        os.environ["OPC_NO_UPDATE"] = "1"
+        import subprocess
+        sys.exit(subprocess.call([sys.executable, str(HERE / "onepiece_ceny.py")] + sys.argv[1:]))
+
+
 def main():
+    self_update()
     if "--game" in sys.argv:                     # musí byť skôr ako argparse – mení zoznam obchodov v pomocníkovi
         i = sys.argv.index("--game")
         set_game(sys.argv[i + 1] if i + 1 < len(sys.argv) else "")
@@ -1841,6 +1869,8 @@ def main():
         return
     if a.once:
         run_once(only, notify=not a.no_notify)
+        if GAME == "onepiece" and not only and not IN_CLOUD:      # PC: po One Piece aj Pokémon (Shoptet obchody)
+            run_other_game("pokemon")
         if not a.no_browser:
             webbrowser.open((DOCS / "index.html").as_uri())
         return
