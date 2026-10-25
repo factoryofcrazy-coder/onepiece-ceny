@@ -1,11 +1,9 @@
-set -x
 mkdir -p tools/api
-curl -s -m 30 https://api.tcgdex.net/v2/en/sets | head -c 3000 > tools/api/tcgdex_sets.txt
-curl -s -m 30 https://api.tcgdex.net/v2/en/sets/me02 | head -c 4000 > tools/api/tcgdex_set_me02.txt
-curl -s -m 30 https://api.tcgdex.net/v2/en/cards/me02-001 > tools/api/tcgdex_card.txt
-curl -s -m 30 -X POST https://api.tcgdex.net/v2/graphql -H 'content-type: application/json' -d '{"query":"{ cards(filters:{}, pagination:{page:1,itemsPerPage:2}) { id name image rarity set { id name } pricing { cardmarket { avg trend unit } } } }"}' > tools/api/tcgdex_gql.txt
-curl -s -m 30 -X POST https://api.tcgdex.net/v2/graphql -H 'content-type: application/json' -d '{"query":"{ __type(name:\"Card\") { fields { name } } }"}' > tools/api/tcgdex_gql_fields.txt
-curl -s -m 30 'https://api.tcgdex.net/v2/en/cards?set.id=eq:me02&pagination:itemsPerPage=3' | head -c 3000 > tools/api/tcgdex_cards_filter.txt
-curl -s -m 30 -o /dev/null -w '%{http_code} %{size_download}\n' 'https://api.pokemontcg.io/v2/cards?q=set.id:sv8&pageSize=250' > tools/api/ptcgio.txt
-curl -s -m 30 'https://api.pokemontcg.io/v2/cards?q=set.id:sv8&pageSize=2' | head -c 3000 >> tools/api/ptcgio.txt
-ls -la tools/api
+q() { curl -s -m 60 -X POST https://api.tcgdex.net/v2/graphql -H 'content-type: application/json' -d "$1"; }
+q '{"query":"{ __type(name:\"VariantDetailed\") { fields { name type { name kind ofType { name } } } } }"}' > tools/api/g1.txt
+q '{"query":"{ set(id:\"me02\") { id name releaseDate cardCount { total official } cards { id localId name image rarity category variants_detailed { type } } } }"}' | head -c 2500 > tools/api/g2.txt
+q '{"query":"{ cards(filters:{set:\"me02\"}, pagination:{page:1,itemsPerPage:3}) { id name variants_detailed { type pricing { cardmarket { trend avg } } } } }"}' | head -c 3000 > tools/api/g3.txt
+q '{"query":"{ sets { id name releaseDate serie { id name } cardCount { total official } } }"}' | head -c 1500 > tools/api/g4.txt
+curl -s -m 60 -w '\nTIME %{time_total} SIZE %{size_download}\n' -X POST https://api.tcgdex.net/v2/graphql -H 'content-type: application/json' -d '{"query":"{ set(id:\"sv08\") { cards { id localId name image rarity variants_detailed { type pricing { cardmarket { trend avg low } tcgplayer { unit } } } } } }"}' | tail -c 600 > tools/api/g5.txt
+curl -s -m 60 'https://api.tcgdex.net/v2/en/series' | head -c 1500 > tools/api/g6.txt
+curl -s -m 60 'https://api.tcgdex.net/v2/en/sets/sv08' | python3 -c "import json,sys;d=json.load(sys.stdin);print({k:v for k,v in d.items() if k!='cards'})" > tools/api/g7.txt
