@@ -3,7 +3,8 @@ import type { Metadata, Viewport } from "next";
 import { AuthProvider } from "@/lib/auth";
 import Nav from "@/components/Nav";
 import { cookies } from "next/headers";
-import { parseTcg, TCG_COOKIE, TcgProvider } from "@/lib/tcg";
+import { TcgProvider } from "@/lib/tcg";
+import { parseTcg, TCG_COOKIE } from "@/lib/tcg-shared";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
