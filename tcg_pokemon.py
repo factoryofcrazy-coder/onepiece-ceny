@@ -18,7 +18,9 @@ SHOPS = {
     "pikazard":   {"label": "Pikazard", "parser": "shoptet", "currency": "EUR", "cloud": False, "delay": 3,
                    "urls": ["https://www.pikazard.eu/pokemon-produkty/"]},
     "veselydrak": {"label": "Veselý drak", "parser": "veselydrak", "currency": "EUR",
-                   "urls": ["https://www.vesely-drak.sk/produkty/pokemon-karty/"]},
+                   "urls": [{"url": "https://www.vesely-drak.sk/produkty/booster-boxy/", "kind": "Box"},
+                            {"url": "https://www.vesely-drak.sk/produkty/boostery/", "kind": "Pack"},
+                            "https://www.vesely-drak.sk/produkty/pokemon-karty/"]},
     "nekonecno":  {"label": "Nekonečno", "parser": "shoptet", "currency": "EUR", "cloud": False, "delay": 3,
                    "urls": ["https://www.nekonecno.sk/pokemon-tcg/"]},
     "poring":     {"label": "Poring Cards", "parser": "shoptet", "currency": "EUR", "cloud": False, "delay": 3,
@@ -118,8 +120,6 @@ SHOPS = {
                    "urls": ["https://www.mikiscardshop.at/collections/pokemon"]},
     "rays":       {"label": "Rays Kartenhaus (AT)", "parser": "shopify", "currency": "EUR", "delay": 2, "all": True,
                    "urls": ["https://rays-kartenhaus.at/collections/pokemon-displays"]},
-    "dilaras":    {"label": "Dilaras (AT)", "parser": "shopify", "currency": "EUR", "delay": 2,
-                   "urls": ["https://dilaras.at/collections/all"]},
     "sammelmania": {"label": "Sammelmania (AT)", "parser": "blocks", "currency": "EUR", "delay": 2, "max_pages": 3, "all": True,
                     "blocks": {"split": r'class="card product-box'}, "urls": ["https://sammelmania.at/Shop/pokemon-karten"]},
     # --- Japonsko (cena s poštovným, DPH a preclením) ---
@@ -197,6 +197,11 @@ SET_LABELS = {
     "ME01": "Mega Evolution", "ME02": "Phantasmal Flames", "ME02.5": "Ascended Heroes", "ME03": "Perfect Order",
     "ME04": "Chaos Rising", "ME05": "Pitch Black", "ME06": "Delta Reign", "30TH": "30th Celebration",
 }
+# nemecké názvy edícií a produktov → nemecký produkt, aj keď to obchod nepíše
+DE_RX = re.compile(r"karmesin|entwicklung|reisegefährten|reisegefaehrten|ewige rivalen|stürmische|stellarkrone|gewalten der zeit|"
+                   r"maskerade|obsidianflammen|paradoxrift|schicksale|nebel der sagen|schwarze blitze|weiße flamme|weisse flamme|"
+                   r"fatale flammen|optimale ordnung|wachsendes chaos|dunkelnacht|delta herrschaft|erhabene helden|"
+                   r"top-trainer|\b\d{2}er[- ]display|sammelkarten|kollektion", re.I)
 CODE_RX = re.compile(r"\b(SV|ME|SWSH)\s?-?(\d{1,2})(?:[.,](\d))?\b", re.I)
 UPCOMING_RX = re.compile(r"(SV|ME)(\d+)$")      # nevydaná edícia → predobjednávka (rovnako ako OP)
 
@@ -254,13 +259,13 @@ def kind_of(name):
 
 
 def lang_of(name):
-    if re.search(r"čínsk|cinsk|chinese|chinesisch|\bcn\b|\bs?-?chn\b|simplified|traditional", name, re.I):
+    if re.search(r"čínsk|cinsk|čínšt|cinst|chinese|chinesisch|\bcn\b|\bs?-?chn\b|simplified|traditional|\bc?sv?\d+(\.\d)?c\b|\bcbb\d", name, re.I):
         return "CN"
     if re.search(r"kórej|korej|korean|koreanisch|\bkr\b|\bkor\b", name, re.I):
         return "KR"
     if re.search(r"japon|japan|\bjp\b|\bjpn?\b|\bjap\b", name, re.I):
         return "JP"
-    if re.search(r"deutsch|\bdeu?\b|\(de\)|nemeck|německ|nemčin|german", name, re.I):
+    if re.search(r"deutsch|\bdeu?\b|\(de\)|nemeck|německ|nemčin|german", name, re.I) or DE_RX.search(name):
         return "DE"
     if re.search(r"französ|francúz|francouz|french|\bfr\b|italien|talian|\bit\b|spanisch|španiel|španěl|spanish", name, re.I):
         return "Iný"
@@ -314,7 +319,7 @@ def msrp_eur(code, kind, lang, msrp, fx):
 
 
 def box_packs(code, lang, msrp, name=""):
-    m = re.search(r"(\d{2})\s*(?:x\s*)?(?:booster|balíč|balic|packs?\b|bal\.)", name, re.I)
+    m = re.search(r"(\d{2})\s*(?:x|er|-?pack)?\s*(?:booster|balíč|balic|packs?\b|bal\.|display)", name, re.I)
     if m and 10 <= int(m.group(1)) <= 36:
         return int(m.group(1))
     if lang in ("EN", "DE") and code and code not in msrp.get("en", {}).get("no_box", []):

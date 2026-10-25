@@ -1326,9 +1326,13 @@ def page_data():
         for i in s.get("items", []):
             code, kind, lang = classify(i["name"], i.get("hint"))
             imp = is_import(key)                 # dovoz: hlavná cena = s poštovným, DPH a preclením
+            m_eur = msrp_eur(code, kind, lang, msrp, fx)
+            packs = box_packs(code, lang, msrp, i["name"]) if kind == "Box" else None
+            if GAME != "onepiece" and kind == "Box" and packs:      # Pokémon: aj 18er / 30er displeje
+                per = msrp_eur(code, "Pack", lang, msrp, fx)
+                m_eur = round(per * packs, 2) if per else m_eur
             offers.append([key, i["name"], code, kind, lang, round(landed(key, i["eur"]), 2), i["inStock"], i["url"],
-                           i["price"], i["currency"], msrp_eur(code, kind, lang, msrp, fx),
-                           box_packs(code, lang, msrp, i["name"]) if kind == "Box" else None,
+                           i["price"], i["currency"], m_eur, packs,
                            bool(i.get("preorder")), None if imp else shipping_cost(key, i["eur"]), cardmarket_url(i["name"]),
                            i.get("img"), round(i["eur"], 2) if imp else None])
     hist = {}
