@@ -483,10 +483,10 @@
   transform: perspective(1100px) rotateX(9deg);
 }
 .peek-row { display: flex; align-items: center; gap: 12px; }
-.peek-card { width: var(--pw); aspect-ratio: 5 / 7; border-radius: 6px; box-shadow: 0 8px 18px -8px #000; }
-.peek-card.leader { width: calc(var(--pw) * 1.12); }
-.peek-card.glow { box-shadow: 0 0 0 2px var(--gold), 0 0 26px rgba(242, 184, 75, .45); }
-.peek-card.rested { transform: rotate(90deg); margin: 0 calc(var(--pw) * .2); }
+.peek .peek-card { flex: none; width: var(--pw); aspect-ratio: 600 / 838; border-radius: 6px; box-shadow: 0 8px 18px -8px #000; }
+.peek .peek-card.leader { width: calc(var(--pw) * 1.12); }
+.peek .peek-card.glow { box-shadow: 0 0 0 2px var(--gold), 0 0 26px rgba(242, 184, 75, .45); }
+.peek .peek-card.rested { transform: rotate(90deg); margin: 0 calc(var(--pw) * .2); }
 .peek-row.opp { opacity: .75; }
 .peek-life { display: flex; }
 .peek-life span { width: calc(var(--pw) * .6); aspect-ratio: 5 / 7; border-radius: 5px; margin-left: -28px; border: 1px solid #2a5172; background: linear-gradient(135deg, #7a1f2a, #3b0f17); }
@@ -500,7 +500,7 @@
 .peek-don span:nth-child(2) { --n: 1 } .peek-don span:nth-child(3) { --n: 2 } .peek-don span:nth-child(4) { --n: 3 } .peek-don span:nth-child(5) { --n: 4 }
 @keyframes teaser-don { 0%, 70%, 100% { transform: translateY(0); } 80% { transform: translateY(-5px); } }
 .peek-hand { display: flex; justify-content: center; margin-top: 4px; height: calc(var(--pw) * .9); }
-.peek-fan { margin: 0 calc(var(--pw) * -.18); transform: rotate(calc(var(--i) * 7deg)) translateY(calc(var(--i) * var(--i) * 3px)); transform-origin: 50% 160%; transition: transform .25s var(--ease); }
+.peek-fan { flex: none; margin: 0 calc(var(--pw) * -.18); transform: rotate(calc(var(--i) * 7deg)) translateY(calc(var(--i) * var(--i) * 3px)); transform-origin: 50% 160%; transition: transform .25s var(--ease); }
 .peek-veil {
   position: absolute; inset: auto 0 0 0; height: 46%; display: grid; place-items: end center; padding-bottom: 14px;
   background: linear-gradient(transparent, rgba(6, 18, 31, .92));
