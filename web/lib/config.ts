@@ -4,3 +4,5 @@ export const SUPABASE_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "sb_publishable_E2xvBPHdCd4b76kzGJ89bw_8-5R4ee6";
 export const OLD_SITE = "https://factoryofcrazy-coder.github.io/onepiece-ceny/";
 export const GH_REPO = "factoryofcrazy-coder/onepiece-ceny";
+// Hra je zatiaľ len pre nás – verejne sa ukazuje teaser „Pripravujeme“. Prepni na true, keď ju spustíme.
+export const GAME_PUBLIC = false;

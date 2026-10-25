@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth";
+import { GAME_PUBLIC } from "@/lib/config";
 
 const LINKS = [
   { href: "/", label: "Ceny" },
@@ -9,8 +10,12 @@ const LINKS = [
   { href: "/zbierka", label: "Zbierka" },
   { href: "/master-sety", label: "Master sety" },
   { href: "/decky", label: "Decky" },
-  { href: "/hra", label: "Hra" },
-  { href: "/rebricek", label: "Rebríček" },
+  ...(GAME_PUBLIC
+    ? [
+        { href: "/hra", label: "Hra" },
+        { href: "/rebricek", label: "Rebríček" },
+      ]
+    : []),
 ];
 
 export default function Nav() {

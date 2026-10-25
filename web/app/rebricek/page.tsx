@@ -2,13 +2,15 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import "@/components/game/game.css";
+import GameTeaser from "@/components/game/Teaser";
+import { GAME_PUBLIC } from "@/lib/config";
 import { CardImg, Loading } from "@/components/ui";
 import { loadProfiles, useAuth } from "@/lib/auth";
 import { useCards } from "@/lib/data";
 import { ago, byCodeOf, GameRow, Rating } from "@/lib/game";
 import { sb } from "@/lib/supabase";
 
-export default function RankingPage() {
+function RankingPage() {
   const { user, loading } = useAuth();
   const { data: cards } = useCards();
   const byCode = useMemo(() => byCodeOf(cards?.cards), [cards]);
@@ -153,4 +155,8 @@ export default function RankingPage() {
       )}
     </div>
   );
+}
+
+export default function Page() {
+  return GAME_PUBLIC ? <RankingPage /> : <GameTeaser />;
 }

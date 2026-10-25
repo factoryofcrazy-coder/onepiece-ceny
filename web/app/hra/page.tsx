@@ -5,6 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/game/Board";
 import DeckSelect from "@/components/game/DeckSelect";
 import "@/components/game/game.css";
+import GameTeaser from "@/components/game/Teaser";
+import { GAME_PUBLIC } from "@/lib/config";
 import { CardImg, DataError, Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { Card, useCards } from "@/lib/data";
@@ -17,7 +19,7 @@ import { sb } from "@/lib/supabase";
 
 type Tab = "online" | "training";
 
-export default function GamePage() {
+function GamePage() {
   const { data: cards, error } = useCards();
   const { user, loading } = useAuth();
   const byCode = useMemo(() => byCodeOf(cards?.cards), [cards]);
@@ -436,4 +438,8 @@ function LocalGame({ initial, mode, byCode, onExit }: { initial: GameState; mode
       )}
     </div>
   );
+}
+
+export default function Page() {
+  return GAME_PUBLIC ? <GamePage /> : <GameTeaser />;
 }

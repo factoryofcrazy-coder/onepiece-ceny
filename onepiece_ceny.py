@@ -126,6 +126,9 @@ SHOPS = {
     # Hry do ruky (nopCommerce): zoznam nemá dostupnosť, preto sa načíta aj detail každého produktu
     "hrydoruky":  {"label": "Hry do ruky", "parser": "hrydoruky", "currency": "CZK", "delay": 2,
                    "urls": ["https://hrydoruky.cz/one-piece"]},
+    # Najlacnejšie knihy: Cloudflare kontrola „Verifying you are human“ – automaticky sa stiahnuť nedá, len odkaz
+    "najlacnejsie": {"label": "Najlacnejšie knihy", "parser": "jsonld", "currency": "EUR", "enabled": False,
+                     "link": "https://www.najlacnejsie-knihy.sk/", "urls": []},
     # PGS.sk je na rovnakej platforme ako Smarty (Cloudflare) – len odkaz
     "pgs":        {"label": "PGS.sk", "parser": "shoptet", "currency": "EUR", "enabled": False,
                    "link": "https://www.pgs.sk/", "urls": []},
