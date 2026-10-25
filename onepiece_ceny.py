@@ -615,6 +615,8 @@ def parse_blocks(page, base, cfg):
         stock_txt = _txt(_attr(chunk, cfg["stock"]) or "") if cfg.get("stock") else txt
         pre = bool(BLOCK_PRE_RX.search(stock_txt))
         ins = bool(BLOCK_IN_RX.search(stock_txt)) and not BLOCK_OUT_RX.search(stock_txt)
+        if cfg.get("assume_stock"):                     # obchod v zozname dostupnosť neukazuje (vypredané skrýva)
+            ins = not BLOCK_OUT_RX.search(stock_txt)
         if cfg.get("in_rx"):
             ins = bool(re.search(cfg["in_rx"], chunk, re.I))
         img = _attr(chunk, r'<img[^>]+(?:data-src|data-lazy|src)="([^"]+\.(?:jpe?g|png|webp)[^"]*)"', r'srcset="([^" ]+)')
