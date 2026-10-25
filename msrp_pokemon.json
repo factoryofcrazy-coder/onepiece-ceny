@@ -1,0 +1,21 @@
+{
+  "_info": [
+    "MSRP Pokémon TCG. EN a DE produkty sa počítajú z amerických cien (USD bez dane) + DPH, JP z japonskej domácej ceny (s 10 % JP daňou).",
+    "pack_usd: booster pack, box_packs: koľko packov má booster box (display), etb_usd: Elite Trainer Box, bundle_usd: Booster Bundle (6 packov).",
+    "Kľúč môže byť kód edície (SV08) alebo séria (SV, ME) alebo default. no_box: edície, ktoré booster box nemajú (špeciálne sety).",
+    "override_eur: presná cena pre 'KÓD TYP JAZYK', napr. 'ME05 Box DE': 189.90."
+  ],
+  "vat": 0.23,
+  "en": {
+    "pack_usd": {"default": 4.49},
+    "box_packs": {"default": 36},
+    "etb_usd": {"default": 49.99, "SV03.5": 54.99, "SV08.5": 54.99, "SV10.5": 54.99, "ME02.5": 54.99, "30TH": 54.99},
+    "bundle_usd": {"default": 26.94},
+    "no_box": ["SV03.5", "SV04.5", "SV06.5", "SV08.5", "SV10.5", "ME02.5", "30TH", "SWSH12.5", "SWSH10.5", "SWSH04.5", "SWSH03.5", "CEL25", "SM11.5"]
+  },
+  "jp": {
+    "pack_jpy": {"default": 180},
+    "box_packs": {"default": 30}
+  },
+  "override_eur": {}
+}
