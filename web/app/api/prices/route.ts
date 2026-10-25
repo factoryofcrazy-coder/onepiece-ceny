@@ -1,10 +1,11 @@
 // Ceny zo scrapera (GitHub Pages). Najprv docs/data/prices.json, inak vytiahne dáta zo stránky (const P={...}).
+// ?game=pokemon → docs/data/pokemon.json
 import { OLD_SITE } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
 
-async function tryJson() {
-  const r = await fetch(OLD_SITE + "data/prices.json", { cache: "no-store", signal: AbortSignal.timeout(15000) });
+async function tryJson(file: string) {
+  const r = await fetch(OLD_SITE + "data/" + file, { cache: "no-store", signal: AbortSignal.timeout(15000) });
   if (!r.ok) return null;
   return r.json();
 }
@@ -18,9 +19,15 @@ async function fromHtml() {
   return JSON.parse(line.trim().slice("const P=".length).replace(/;\s*$/, ""));
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const pokemon = new URL(req.url).searchParams.get("game") === "pokemon";
   try {
-    const data = (await tryJson().catch(() => null)) ?? (await fromHtml());
+    const data = pokemon
+      ? await tryJson("pokemon.json").then((d) => {
+          if (!d) throw new Error("Pokémon ceny ešte nie sú stiahnuté");
+          return d;
+        })
+      : ((await tryJson("prices.json").catch(() => null)) ?? (await fromHtml()));
     data.hist = undefined; // história je veľká, nová stránka ju zatiaľ nepotrebuje
     return Response.json(data, {
       headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600" },

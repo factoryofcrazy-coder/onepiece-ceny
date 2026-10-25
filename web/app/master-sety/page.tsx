@@ -1,4 +1,6 @@
 "use client";
+import PkMasterSets from "@/components/pk/PkMasterSets";
+import { useTcg } from "@/lib/tcg";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Bar, DataError, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
@@ -18,7 +20,7 @@ type Row = {
   missingBaseCost: number;
 };
 
-export default function MasterSets() {
+function OpMasterSets() {
   const { data, error } = useCards();
   const { data: prices } = usePrices();
   const { user, loading } = useAuth();
@@ -122,4 +124,10 @@ export default function MasterSets() {
       </div>
     </>
   );
+}
+
+/** Prepínač hry v menu: One Piece alebo Pokémon verzia stránky. */
+export default function Page() {
+  const { tcg } = useTcg();
+  return tcg === "pokemon" ? <PkMasterSets /> : <OpMasterSets />;
 }

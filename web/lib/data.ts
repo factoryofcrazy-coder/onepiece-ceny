@@ -39,28 +39,34 @@ export type PricesDb = {
 };
 
 // zvýš pri zmene formátu dát z /api/* → obíde sa stará CDN cache
-const DATA_VERSION = "4";
+const DATA_VERSION = "5";
 const cache: Record<string, Promise<any>> = {};
 
-function load<T>(file: string, prep?: (d: any) => T): Promise<T> {
+export function load<T>(file: string, prep?: (d: any) => T): Promise<T> {
   if (!cache[file])
-    cache[file] = fetch(`/api/${file}?v=${DATA_VERSION}`).then(async (r) => {
+    cache[file] = fetch(`/api/${file}${file.includes("?") ? "&" : "?"}v=${DATA_VERSION}`).then(async (r) => {
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(d.error || `HTTP ${r.status}`);
       return prep ? prep(d) : d;
+    }).catch((e) => {
+      delete cache[file]; // pri ďalšom pokuse skús znova
+      throw e;
     });
   return cache[file];
 }
 
-function useData<T>(file: string, prep?: (d: any) => T) {
+export function useData<T>(file: string | null, prep?: (d: any) => T) {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
+    setData(null);
+    setError(null);
+    if (!file) return;
     let live = true;
     load<T>(file, prep).then(
       (d) => live && setData(d),
       (e) => {
-        delete cache[file];
+        delete cache[file!];
         live && setError(String(e.message || e));
       },
     );
@@ -73,7 +79,8 @@ function useData<T>(file: string, prep?: (d: any) => T) {
 
 export const useCards = () =>
   useData<CardsDb>("cards", (d) => ({ ...d, byId: new Map((d.cards as Card[]).map((c) => [c.id, c])) }));
-export const usePrices = () => useData<PricesDb>("prices");
+export const usePrices = (game: "onepiece" | "pokemon" = "onepiece") =>
+  useData<PricesDb>(game === "pokemon" ? "prices?game=pokemon" : "prices");
 
 export type MetaDeck = {
   leader: string;

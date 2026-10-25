@@ -1,4 +1,6 @@
 "use client";
+import PkCollection from "@/components/pk/PkCollection";
+import { useTcg } from "@/lib/tcg";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
@@ -10,7 +12,7 @@ type Item = { card: Card; n: number; unit: number | null; total: number };
 
 const SORTS = { total: "Celková hodnota", unit: "Cena za kus", qty: "Počet kusov", name: "Meno" } as const;
 
-export default function Collection() {
+function OpCollection() {
   const { user, loading } = useAuth();
   const { data, error } = useCards();
   const { data: prices } = usePrices();
@@ -216,4 +218,10 @@ export default function Collection() {
       )}
     </>
   );
+}
+
+/** Prepínač hry v menu: One Piece alebo Pokémon verzia stránky. */
+export default function Page() {
+  const { tcg } = useTcg();
+  return tcg === "pokemon" ? <PkCollection /> : <OpCollection />;
 }

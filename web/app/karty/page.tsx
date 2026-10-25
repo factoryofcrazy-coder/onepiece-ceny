@@ -1,4 +1,6 @@
 "use client";
+import PkCards from "@/components/pk/PkCards";
+import { useTcg } from "@/lib/tcg";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { CardImg, CardModal, DataError, Foil, Loading, OwnerPicker, Qty } from "@/components/ui";
@@ -8,7 +10,7 @@ import { Card, COLOR_SK, COLORS, eur, SET_KIND_SK, SET_KINDS, setKind, sortSets,
 
 const PAGE = 120;
 
-export default function CardsPage() {
+function OpCardsPage() {
   const { data, error } = useCards();
   const { data: prices } = usePrices();
   const { user } = useAuth();
@@ -215,4 +217,10 @@ export default function CardsPage() {
       )}
     </>
   );
+}
+
+/** Prepínač hry v menu: One Piece alebo Pokémon verzia stránky. */
+export default function Page() {
+  const { tcg } = useTcg();
+  return tcg === "pokemon" ? <PkCards /> : <OpCardsPage />;
 }

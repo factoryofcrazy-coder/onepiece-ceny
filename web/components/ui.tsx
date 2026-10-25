@@ -137,7 +137,15 @@ export function Qty({ n, onSet, disabled }: { n: number; onSet?: (n: number) => 
   );
 }
 
-export function CardImg({ card, className = "", eager = false }: { card: Card; className?: string; eager?: boolean }) {
+export function CardImg({
+  card,
+  className = "",
+  eager = false,
+}: {
+  card: { img: string; name: string; code: string };
+  className?: string;
+  eager?: boolean;
+}) {
   const sources = [card.img].filter(Boolean);
   const [i, setI] = useState(0);
   if (i >= sources.length)
