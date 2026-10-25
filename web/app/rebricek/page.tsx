@@ -143,7 +143,7 @@ function RankingPage() {
                       <span style={{ color: "#7ff0b8" }}>{winHost ? g.host_name : g.guest_name}</span> porazil {winHost ? g.guest_name : g.host_name}
                     </div>
                     <div className="s">
-                      {g.end_reason === "resign" ? "súper sa vzdal" : `${g.turn} ťahov`} · {g.rated ? "hodnotená" : "priateľská"} · {ago(g.updated_at)}
+                      {g.end_reason === "resign" ? "súper sa vzdal" : g.end_reason === "time" ? "vypršal čas" : `${g.turn} ťahov`} · {g.rated ? "hodnotená" : "priateľská"} · {ago(g.updated_at)}
                     </div>
                   </span>
                   {g.rated && g.elo_delta != null && <span className="streak">±{g.elo_delta}</span>}

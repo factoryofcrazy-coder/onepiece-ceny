@@ -5,7 +5,19 @@ import { applyAction, IllegalAction, newGame, viewFor } from "./engine";
 import { DECK_ST01, DECK_ST26 } from "./fixtures";
 import type { Action, CardDef, GameState, P } from "./types";
 
-export const VERSION = "2026-10-21-meta";
+export const VERSION = "2026-10-25-clock";
+
+/** každý hráč má na celú online hru 20 minút; čas plynie tomu, kto má práve konať (ťah, counter, voľba) */
+export const CLOCK_MS = 20 * 60 * 1000;
+
+/** kto má teraz konať a koľko mu zostáva (ms) – aj bez zápisu, pre klienta aj server */
+export function clockNow(s: GameState, now = Date.now()): { actor: P; left: number; ms: [number, number] } | null {
+  if (!s.clock || s.winner != null) return null;
+  const actor: P = s.prompt ? s.prompt.p : s.active;
+  const ms: [number, number] = [s.clock.ms[0], s.clock.ms[1]];
+  ms[actor] = Math.max(0, ms[actor] - Math.max(0, now - s.clock.at));
+  return { actor, left: ms[actor], ms };
+}
 
 export type Env = { URL: string; SERVICE: string; ANON: string; SITE: string };
 
@@ -181,6 +193,7 @@ export function createHandler(env: Env) {
         randInt() % 2147483646 + 1,
         (randInt() % 2) as P,
       );
+      s.clock = { ms: [CLOCK_MS, CLOCK_MS], at: Date.now() };
       const g2 = { ...g, guest: me.id };
       const { patch, views } = snapshot(g2, s);
       Object.assign(patch, { status: "playing", guest: me.id, guest_name: me.name, guest_leader: deck.leader, guest_deck_name: deck.name, guest_deck: deck });
@@ -193,6 +206,25 @@ export function createHandler(env: Env) {
     if (g.status !== "playing") throw new HttpError(400, "Hra už skončila.");
     const priv = await one(`game_private?game_id=eq.${id}&select=state`);
     let s = priv.state as GameState;
+
+    /** hráčovi na rade vypršal čas → prehráva */
+    const timeUp = async (actor: P) => {
+      s = structuredClone(s);
+      s.clock = { ms: clockNow(s)!.ms, at: Date.now() };
+      s.winner = (1 - actor) as P;
+      s.phase = "over";
+      s.prompt = null;
+      s.log.push({ t: "Info", msg: `${s.players[actor].name}: vypršal čas – prehráva.` });
+      const { patch, views } = snapshot({ ...g, end_reason: "time" }, s);
+      await commit(id, g.version, patch, s, views);
+    };
+
+    if (op === "timeout") {
+      const c = clockNow(s);
+      if (!c || c.left > 0) return { ok: false, left: c?.left ?? null };
+      await timeUp(c.actor);
+      return { ok: true };
+    }
 
     if (op === "resign") {
       s = structuredClone(s);
@@ -209,8 +241,14 @@ export function createHandler(env: Env) {
       if (body.version != null && body.version !== g.version) throw new HttpError(409, "Medzitým sa stav hry zmenil – obnovujem.");
       const a = body.action as Action;
       if (!a || typeof a !== "object" || a.p !== seat) throw new HttpError(400, "Teraz nie si na rade.");
+      const c = clockNow(s);
+      if (c && c.left <= 0) {
+        await timeUp(c.actor);
+        return { ok: true, timeout: true, version: g.version + 1 };
+      }
       try {
         s = applyAction(s, a);
+        if (c) s.clock = { ms: c.ms, at: Date.now() };
       } catch (e) {
         if (e instanceof IllegalAction) throw new HttpError(400, e.message);
         throw e;

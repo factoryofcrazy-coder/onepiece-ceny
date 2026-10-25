@@ -146,6 +146,35 @@ describe("edge function game", () => {
     expect((await call(mover, { op: "act", id, action: { type: "endTurn", p: v.seat } })).status).toBe(400);
   });
 
+  it("šachové hodiny: čas sa odpočítava hráčovi na rade, po 20 min prehráva", async () => {
+    const { id } = await call("ta", { op: "create", deck: { preset: "st26" } });
+    await call("tb", { op: "join", id, deck: { preset: "st01" } });
+    const g = T.games.find((x) => x.id === id)!;
+    const pr = T.game_private.find((x) => x.game_id === id)!;
+    expect(pr.state.clock.ms).toEqual([20 * 60_000, 20 * 60_000]);
+    const mover = g.to_move === USERS.ta.id ? "ta" : "tb";
+    const waiter = mover === "ta" ? "tb" : "ta";
+    const v = viewOf(id, USERS[mover].id);
+    expect(v.view.clock).toBeTruthy(); // hodiny vidia obaja hráči
+    // hráč na rade premýšľal 5 minút
+    pr.state.clock.at -= 5 * 60_000;
+    expect((await call(mover, { op: "act", id, action: { type: "answer", p: v.seat, choice: { yes: false } }, version: g.version })).status).toBe(200);
+    const left = pr.state.clock.ms[v.seat];
+    expect(left).toBeLessThanOrEqual(15 * 60_000 + 50);
+    expect(left).toBeGreaterThan(15 * 60_000 - 2000);
+    expect(pr.state.clock.ms[1 - v.seat]).toBe(20 * 60_000);
+    // predčasná žiadosť o koniec na čas nič nespraví
+    expect((await call(waiter, { op: "timeout", id })).ok).toBe(false);
+    expect(g.status).toBe("playing");
+    // hráčovi na rade vyprší čas
+    const actor = pr.state.prompt ? pr.state.prompt.p : pr.state.active;
+    pr.state.clock.at -= pr.state.clock.ms[actor] + 1000;
+    expect((await call(waiter, { op: "timeout", id })).ok).toBe(true);
+    expect(g.status).toBe("done");
+    expect(g.end_reason).toBe("time");
+    expect(g.winner).not.toBe(actor === 0 ? g.host : g.guest);
+  });
+
   it("zrušenie výzvy len hostiteľom a max 3 otvorené výzvy", async () => {
     const ids: string[] = [];
     for (let i = 0; i < 3; i++) ids.push((await call("tb", { op: "create", deck: { preset: "st01" } })).id);

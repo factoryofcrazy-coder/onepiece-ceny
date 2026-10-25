@@ -48,7 +48,7 @@ export default function Login() {
         {mode === "up" && (
           <label className="field">
             <span>Prezývka</span>
-            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="napr. Filip" />
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="tvoja prezývka" />
           </label>
         )}
         <label className="field">

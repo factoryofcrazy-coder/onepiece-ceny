@@ -7,6 +7,7 @@ import type { Card } from "@/lib/data";
 import { basePower, blockersFor, counterOf, counterOptions, def, donOnField, fieldOf, handCost, hasKw, mainActions, power } from "@/lib/engine/engine";
 import type { Action, AnswerChoice, GameEvent, GameState, P } from "@/lib/engine/types";
 import "./game.css";
+import { fmtClock, useGameClock } from "./clock";
 import ReportButton, { type ActionLog } from "./ReportButton";
 
 export type BoardProps = {
@@ -20,6 +21,7 @@ export type BoardProps = {
   elo?: [number | null, number | null]; // podľa miesta (0/1)
   onExit: () => void;
   onResign?: () => void;
+  onTimeout?: () => void; // online: súperovi (alebo mne) vypršal čas – nech to server overí
   result?: ReactNode; // doplnok do obrazovky konca hry (napr. zmena ELO)
   gameId?: string; // online hra – pre hlásenie problémov
 };
@@ -30,7 +32,8 @@ const HEART = (
   </svg>
 );
 
-export default function Board({ s, me, byCode, mode, onAction, busy, error, elo, onExit, onResign, result, gameId }: BoardProps) {
+export default function Board({ s, me, byCode, mode, onAction, busy, error, elo, onExit, onResign, onTimeout, result, gameId }: BoardProps) {
+  const clock = useGameClock(s, onTimeout);
   const actionLog = useRef<ActionLog>([]);
   const opp: P = me === 0 ? 1 : 0;
   const [sel, setSel] = useState<string | null>(null);
@@ -99,6 +102,49 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
   const answer = (choice: AnswerChoice) => pr && send({ type: "answer", p: me, choice });
 
   const isWide = () => typeof window !== "undefined" && window.matchMedia("(min-width: 1101px)").matches;
+
+  // ------------------------------------------------------------ lupa: po chvíľke nad kartou veľký náhľad s efektom priamo pri karte
+  const [hz, setHz] = useState<{ iid: string; x: number; y: number; side: "l" | "r" } | null>(null);
+  const hzT = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const hover = (iid: string) => ({
+    onMouseEnter: (e: React.MouseEvent<HTMLElement>) => {
+      setPeek(iid);
+      clearTimeout(hzT.current);
+      if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+      const r = e.currentTarget.getBoundingClientRect();
+      hzT.current = setTimeout(() => {
+        const side = r.right + 440 < window.innerWidth ? "r" : "l";
+        setHz({ iid, x: side === "r" ? r.right + 12 : r.left - 12, y: r.top + r.height / 2, side });
+      }, 380);
+    },
+    onMouseLeave: () => {
+      clearTimeout(hzT.current);
+      setHz(null);
+    },
+  });
+  useEffect(() => () => clearTimeout(hzT.current), []);
+  useEffect(() => setHz(null), [s]);
+
+  // ------------------------------------------------------------ veľkosť kariet (A− / A+), pamätá si ju prehliadač
+  const [zoomLvl, setZoomLvl] = useState(1);
+  useEffect(() => {
+    try {
+      const v = Number(localStorage.getItem("op-card-zoom"));
+      if (v >= 0.8 && v <= 1.4) setZoomLvl(v);
+    } catch {
+      /* bez úložiska */
+    }
+  }, []);
+  const bump = (d: number) =>
+    setZoomLvl((z) => {
+      const n = Math.round(Math.min(1.4, Math.max(0.8, z + d)) * 10) / 10;
+      try {
+        localStorage.setItem("op-card-zoom", String(n));
+      } catch {
+        /* bez úložiska */
+      }
+      return n;
+    });
   const showDetail = (iid: string) => (isWide() ? setPeek(iid) : setZoom(iid));
 
   const clickField = (iid: string) => {
@@ -180,6 +226,56 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
     }
   }, [s]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // ------------------------------------------------------------ útoky: šľah od útočníka k cieľu, súboj síl, výbuch pri K.O.
+  type Strike =
+    | { id: number; t: "atk"; x1: number; y1: number; x2: number; y2: number; a: number; d: number; delay: number }
+    | { id: number; t: "boom" | "slash"; x: number; y: number; delay: number };
+  const [strikes, setStrikes] = useState<Strike[]>([]);
+  const posRef = useRef<Map<string, { x: number; y: number }>>(new Map());
+  const strikeLog = useRef<number | null>(null);
+  useEffect(() => {
+    const tb = tableRef.current;
+    if (!tb) return;
+    const base = tb.getBoundingClientRect();
+    const center = (el: Element) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.left - base.left + r.width / 2, y: r.top - base.top + r.height / 2 };
+    };
+    const cur = new Map<string, { x: number; y: number }>();
+    tb.querySelectorAll<HTMLElement>("[data-iid]").forEach((el) => cur.set(el.dataset.iid!, center(el)));
+    const prev = posRef.current;
+    posRef.current = cur;
+    const from = strikeLog.current;
+    strikeLog.current = s.log.length;
+    if (from == null || from >= s.log.length) return;
+    const at = (iid: string) => cur.get(iid) ?? prev.get(iid);
+    const out: Strike[] = [];
+    let k = 0;
+    for (const e of s.log.slice(from).slice(-6)) {
+      const id = Date.now() + Math.random();
+      const delay = k * 320;
+      if (e.t === "Attack") {
+        const A = at(e.attacker);
+        const B = at(e.target);
+        if (!A || !B) continue;
+        const a = s.cards[e.attacker] ? power(s, e.attacker) : 0;
+        const d = s.cards[e.target] ? power(s, e.target) : 0;
+        out.push({ id, t: "atk", x1: A.x, y1: A.y, x2: B.x, y2: B.y, a, d, delay });
+        k++;
+      } else if (e.t === "KO") {
+        const P_ = prev.get(e.iid) ?? cur.get(e.iid);
+        if (P_) (out.push({ id, t: "boom", ...P_, delay }), k++);
+      } else if (e.t === "LifeDamage") {
+        const el = tb.querySelector(`[data-life="${e.p}"]`);
+        if (el) (out.push({ id, t: "slash", ...center(el), delay }), k++);
+      }
+    }
+    if (!out.length) return;
+    setStrikes((x) => [...x, ...out].slice(-8));
+    const ids = out.map((o) => o.id);
+    setTimeout(() => setStrikes((x) => x.filter((o) => !ids.includes(o.id))), 1700 + k * 320);
+  }, [s]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ------------------------------------------------------------ vykresľovanie
   const flags = (iid: string) => {
     const c = s.cards[iid];
@@ -204,9 +300,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
       <button
         key={iid}
         className={`fc ${lead ? "lead" : ""} ${flags(iid)}`}
+        data-iid={iid}
         onClick={() => clickField(iid)}
-        onMouseEnter={() => setPeek(iid)}
-        title={d.name}
+        {...hover(iid)}
       >
         <span className="img">{cd ? <CardImg card={cd} eager /> : <span className="cimg ph">{d.name}</span>}</span>
         {pw != null && <span className={`pow ${pw > d.power || base > d.power ? "up" : pw < d.power ? "down" : ""}`}>{pw}</span>}
@@ -236,6 +332,14 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
           <div className="nm">{x.name}</div>
           <div className="st">
             {elo?.[p] != null && <span className="elo">ELO {elo[p]}</span>}
+            {clock && (
+              <span
+                className={`clk ${clock.actor === p ? "run" : ""} ${clock.ms[p] < 120_000 ? "low" : ""} ${clock.ms[p] <= 0 ? "out" : ""}`}
+                title="Zostávajúci čas na celú hru"
+              >
+                ⏱ {fmtClock(clock.ms[p])}
+              </span>
+            )}
             <span>
               ruka <b>{x.hand.length}</b>
             </span>
@@ -266,11 +370,19 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
             })}
           </div>
 
-          <div className={`a-life life ${hit[p] ? "hit" : ""} ${s.turn > 0 && lifeN <= 1 ? "low" : ""} ${lifeN === 0 ? "empty" : ""}`} title={`Life: ${lifeN}`}>
+          <div data-life={p} className={`a-life life ${hit[p] ? "hit" : ""} ${s.turn > 0 && lifeN <= 1 ? "low" : ""} ${lifeN === 0 ? "empty" : ""}`} title={`Life: ${lifeN}`}>
             <div className="life-stack" style={{ ["--n" as any]: Math.max(0, lifeN - 1) }}>
-              {x.life.map((_, i) => (
-                <i key={i} className="back" style={{ ["--i" as any]: i }} />
-              ))}
+              {/* x.life[0] = vrch Life; lícom hore otočené karty sú vidieť obom hráčom */}
+              {x.life.map((iid, i) => {
+                const up = iid !== "hidden" && s.cards[iid]?.faceUp ? card(iid) : undefined;
+                return up ? (
+                  <span key={iid} className="lup" style={{ ["--i" as any]: i }} {...hover(iid)} onClick={() => showDetail(iid)} title={`${up.name} – Life lícom hore`}>
+                    <CardImg card={up} />
+                  </span>
+                ) : (
+                  <i key={i} className="back" style={{ ["--i" as any]: i }} />
+                );
+              })}
             </div>
             <span className="life-num" style={s.turn === 0 ? { opacity: 0.4 } : undefined}>
               {HEART}
@@ -484,7 +596,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
                 {offBoard.map((i) => {
                   const c = card(i);
                   return (
-                    <button key={i} className={`pcard ${picked.includes(i) ? "on" : ""}`} onClick={() => togglePick(i)} onMouseEnter={() => setPeek(i)} title={name(i)}>
+                    <button key={i} className={`pcard ${picked.includes(i) ? "on" : ""}`} onClick={() => togglePick(i)} {...hover(i)}>
                       {c ? <CardImg card={c} eager /> : <span className="cimg ph">{name(i)}</span>}
                     </button>
                   );
@@ -697,7 +809,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
   const peekIid = zoom ?? peek;
 
   return (
-    <div className="gwrap">
+    <div className="gwrap" style={{ ["--zoom" as any]: zoomLvl }}>
       <div className="gtable" ref={tableRef}>
         <div className="gtop">
           <span className={`turnpill ${s.active === me ? "mine" : ""}`}>
@@ -707,6 +819,14 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
           </span>
           <span className="phase">{s.battle ? "Súboj" : s.phase === "main" ? "Main fáza" : s.phase === "setup" ? "Mulligan" : ""}</span>
           <span className="sp" />
+          <span className="zoomctl" title="Veľkosť kariet">
+            <button onClick={() => bump(-0.1)} disabled={zoomLvl <= 0.8} aria-label="Menšie karty">
+              A−
+            </button>
+            <button onClick={() => bump(0.1)} disabled={zoomLvl >= 1.4} aria-label="Väčšie karty">
+              A+
+            </button>
+          </span>
           <ReportButton s={s} mode={mode} gameId={gameId} actions={actionLog.current} byCode={byCode} peek={peek} />
           {onResign && s.winner == null && (
             <button
@@ -761,8 +881,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
                 style={{ ["--rot" as any]: rot, ["--arc" as any]: arc, ["--ov" as any]: ov, animationDelay: `${Math.min(i, 8) * 40}ms` }}
                 onClick={() => clickHand(iid)}
                 onDoubleClick={() => playable && (send({ type: "play", p: me, iid }), setSel(null))}
-                onMouseEnter={() => setPeek(iid)}
-                title={d?.name}
+                {...hover(iid)}
               >
                 {c ? <CardImg card={c} eager /> : <i className="back" style={{ display: "block", aspectRatio: "600/838", borderRadius: 8 }} />}
                 {d && d.type !== "Leader" && <span className={`hcost ${hc < d.cost ? "cheap" : ""}`}>{hc}</span>}
@@ -782,6 +901,31 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
                 {f.text}
               </span>
             ))}
+          </div>
+        )}
+        {strikes.length > 0 && (
+          <div className="strikes" aria-hidden>
+            <svg>
+              {strikes.map((k) =>
+                k.t === "atk" ? (
+                  <line key={k.id} className="streak" x1={k.x1} y1={k.y1} x2={k.x2} y2={k.y2} style={{ animationDelay: `${k.delay}ms` }} />
+                ) : null,
+              )}
+            </svg>
+            {strikes.map((k) =>
+              k.t === "atk" ? (
+                <span key={k.id} className="clash" style={{ left: k.x2, top: k.y2, animationDelay: `${k.delay + 180}ms` }}>
+                  <i className="x" />
+                  <b className={k.a >= k.d ? "win" : ""}>{k.a}</b>
+                  <em>⚔</em>
+                  <b className={k.a < k.d ? "win" : ""}>{k.d}</b>
+                </span>
+              ) : (
+                <span key={k.id} className={k.t} style={{ left: k.x, top: k.y, animationDelay: `${k.delay}ms` }}>
+                  {k.t === "boom" && Array.from({ length: 8 }, (_, i) => <i key={i} style={{ ["--a" as any]: `${i * 45}deg` }} />)}
+                </span>
+              ),
+            )}
           </div>
         )}
         {banner && (
@@ -816,6 +960,14 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         <Log s={s} name={name} me={me} />
       </aside>
 
+      {hz && s.cards[hz.iid] && (
+        <div className={`hzoom ${hz.side}`} style={{ left: hz.x, top: hz.y }} aria-hidden>
+          {card(hz.iid) && <CardImg card={card(hz.iid)!} eager />}
+          <div className="hztext">
+            <PeekText s={s} iid={hz.iid} />
+          </div>
+        </div>
+      )}
       {zoom && s.cards[zoom] && (
         <div className="modal" onClick={() => setZoom(null)}>
           <div className="mbox" onClick={(e) => e.stopPropagation()}>
@@ -880,9 +1032,24 @@ function PeekText({ s, iid }: { s: GameState; iid: string }) {
         )}
       </div>
       {!d.scripted && <p className="warnline small" style={{ margin: 0 }}>Efekt tejto karty zatiaľ nie je naprogramovaný – hrá sa bez efektu.</p>}
-      {d.text && <div className="txt">{d.text}</div>}
+      {d.text && <div className="txt">{richText(d.text)}</div>}
     </>
   );
+}
+
+/** zvýrazní [On Play], [When Attacking], [DON!! x1]… ako farebné štítky */
+function richText(t: string): ReactNode[] {
+  return t.split(/(\[[^\]]{1,40}\])/g).map((part, i) => {
+    const m = part.match(/^\[(.+)\]$/);
+    if (!m) return part;
+    const k = m[1].toLowerCase();
+    const cls = /don/.test(k) ? "don" : /counter/.test(k) ? "ctr" : /trigger/.test(k) ? "trg" : /blocker|rush|double attack|banish/.test(k) ? "kw" : /once per turn/.test(k) ? "opt" : "tm";
+    return (
+      <b key={i} className={`kwt ${cls}`}>
+        {m[1]}
+      </b>
+    );
+  });
 }
 
 function Peek({ s, iid, card }: { s: GameState; iid: string; card?: Card }) {
@@ -917,6 +1084,8 @@ function describe(e: GameEvent, s: GameState, name: (iid: string) => string): { 
       return { text: `${name(e.iid)} je K.O.`, who: owner(e.iid), big: true };
     case "LifeDamage":
       return { text: `${who(e.p)} stratil Life`, who: e.p, big: true };
+    case "LifeFlipped":
+      return { text: `${who(e.p)} otočil ${e.n} Life ${e.up ? "lícom hore" : "lícom dole"}`, who: e.p };
     case "Attack":
       return { text: `${name(e.attacker)} útočí na ${name(e.target)}`, who: owner(e.attacker) };
     case "CardDrawn":
@@ -934,10 +1103,12 @@ function fxOf(e: GameEvent, s: GameState, name: (iid: string) => string, me: P):
       return { text: `${e.p === me ? "Stratil si" : `${s.players[e.p].name} stratil`} Life`, kind: "life" };
     case "DonReturned":
       return { text: `↩ ${s.players[e.p].name}: DON!! −${e.n}`, kind: "don" };
+    case "LifeFlipped":
+      return { text: `${e.p === me ? "Otočil si" : `${s.players[e.p].name} otočil`} ${e.n} Life ${e.up ? "lícom hore" : "lícom dole"}`, kind: "life" };
     case "CardPlayed":
       return e.p === me ? null : { text: `${s.players[e.p].name} zahral ${name(e.iid)}`, kind: "" };
     case "Info":
-      return /blokuje|bez účinku/.test(e.msg) ? { text: e.msg, kind: "" } : null;
+      return /blokuje|bez účinku|nedá použiť/.test(e.msg) ? { text: e.msg, kind: "" } : null;
     default:
       return null;
   }

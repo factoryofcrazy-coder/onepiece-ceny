@@ -279,6 +279,7 @@ export type GameEvent =
   | { t: "KO"; iid: string; battle?: boolean }
   | { t: "LifeDamage"; p: P; n: number }
   | { t: "LifeRemoved"; p: P }
+  | { t: "LifeFlipped"; p: P; n: number; up: boolean }
   | { t: "Attack"; attacker: string; target: string }
   | { t: "Turn"; p: P; turn: number }
   | { t: "Info"; msg: string };
@@ -352,6 +353,8 @@ export type GameState = {
   log: GameEvent[];
   winner: P | null;
   nextId: number;
+  /** šachové hodiny online hry: zostávajúci čas každého hráča (ms) a kedy začal plynúť čas hráčovi na rade (epoch ms) */
+  clock?: { ms: [number, number]; at: number };
 };
 
 // ------------------------------------------------------------------ akcie hráča

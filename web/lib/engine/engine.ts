@@ -618,7 +618,7 @@ function costText(st: Step): string {
     case "lifeToHand":
       return "vezmi Life kartu do ruky";
     case "lifeFace":
-      return st.up ? "otoč Life kartu lícom hore" : "otoč Life kartu lícom dole";
+      return `otoč ${st.n === "all" ? "všetky" : st.n} Life ${st.up ? "lícom hore" : "lícom dole"}`;
     case "giveDon":
       return "pripoj aktívne DON!!";
     default:
@@ -884,13 +884,16 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
     case "lifeFace": {
       const x = pl(s, sp(st.side));
       let n = st.n === "all" ? x.life.length : st.n;
+      let flipped = 0;
       for (const i of x.life) {
         if (n <= 0) break;
         if (!!s.cards[i].faceUp !== st.up) {
           s.cards[i].faceUp = st.up;
           n--;
+          flipped++;
         }
       }
+      if (flipped) s.log.push({ t: "LifeFlipped", p: x === s.players[0] ? 0 : 1, n: flipped, up: st.up });
       return true;
     }
     case "trashLifeUntil": {
@@ -1096,7 +1099,7 @@ function run(s: GameState) {
         if (!f.asked && f.ci === 0) {
           const ok = f.costs.every((st) => canPay(s, st, c));
           if (!ok) {
-            if (f.costs.length) info(s, `${f.label}: cenu nie je možné zaplatiť.`);
+            if (f.costs.length) info(s, `${f.label}: efekt sa nedá použiť – cenu nie je možné zaplatiť (${f.costs.map(costText).join(", ")}).`);
             finishFrame(s, f, false);
             continue;
           }

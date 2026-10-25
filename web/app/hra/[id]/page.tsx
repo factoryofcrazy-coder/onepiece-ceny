@@ -230,6 +230,7 @@ function OnlineGamePage() {
       elo={g.rated ? [eloOf(0), eloOf(1)] : undefined}
       onExit={() => router.push("/hra")}
       onResign={g.status === "playing" ? () => simple("resign") : undefined}
+      onTimeout={g.status === "playing" ? () => gameCall({ op: "timeout", id }).then(load, () => {}) : undefined}
       result={
         <>
           {result}

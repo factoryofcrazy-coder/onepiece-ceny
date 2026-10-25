@@ -274,7 +274,7 @@ function OnlineLobby({ userId, decks, byCode }: { userId: string; decks: DeckOpt
                       <span style={{ color: won ? "#7ff0b8" : "var(--bad)" }}>{won ? "Výhra" : "Prehra"}</span> vs {meHost ? g.guest_name : g.host_name}
                     </div>
                     <div className="s">
-                      {g.end_reason === "resign" ? "vzdanie" : `${g.turn} ťahov`} · {ago(g.updated_at)}
+                      {g.end_reason === "resign" ? "vzdanie" : g.end_reason === "time" ? "na čas" : `${g.turn} ťahov`} · {ago(g.updated_at)}
                     </div>
                   </span>
                   {g.rated && g.elo_delta != null && (
@@ -408,10 +408,16 @@ function LocalGame({ initial, mode, byCode, onExit }: { initial: GameState; mode
     }
   };
 
+  const botTurn = useRef(-1);
   useEffect(() => {
     if (mode !== "bot" || s.winner != null) return;
     const a = botAction(s, 1);
     if (!a) return;
+    // prirodzené tempo: na začiatku ťahu počká na banner, útok a zahranie karty si treba pozrieť
+    const freshTurn = botTurn.current !== s.turn;
+    botTurn.current = s.turn;
+    const wait =
+      a.type === "attack" ? 1700 : a.type === "play" ? 1500 : a.type === "endTurn" ? 1300 : a.type === "answer" ? 1100 : 1200;
     const t = setTimeout(() => {
       setS((cur) => {
         try {
@@ -420,7 +426,7 @@ function LocalGame({ initial, mode, byCode, onExit }: { initial: GameState; mode
           return cur.active === 1 && !cur.prompt ? applyAction(cur, { type: "endTurn", p: 1 }) : cur;
         }
       });
-    }, 750);
+    }, wait + (freshTurn ? 900 : 0));
     return () => clearTimeout(t);
   }, [s, mode]);
 
