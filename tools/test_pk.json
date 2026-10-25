@@ -1,0 +1,283 @@
+[
+ {
+  "q": "",
+  "status": 200,
+  "ms": 371,
+  "cc": "public, s-maxage=43200, stale-while-revalidate=86400",
+  "sets": 205,
+  "first": [
+   {
+    "id": "30th-c",
+    "name": "30th Classic Collection",
+    "series": "Mega Evolution",
+    "seriesId": "me",
+    "date": "2026-09-16",
+    "total": 30,
+    "official": 0,
+    "logo": "",
+    "symbol": ""
+   },
+   {
+    "id": "30th",
+    "name": "30th Celebration",
+    "series": "Mega Evolution",
+    "seriesId": "me",
+    "date": "2026-09-16",
+    "total": 158,
+    "official": 128,
+    "logo": "",
+    "symbol": ""
+   },
+   {
+    "id": "me05",
+    "name": "Pitch Black",
+    "series": "Mega Evolution",
+    "seriesId": "me",
+    "date": "2026-07-17",
+    "total": 120,
+    "official": 84,
+    "logo": "https://assets.tcgdex.net/en/me/me05/logo.webp",
+    "symbol": "https://assets.tcgdex.net/univ/me/me05/symbol.webp"
+   }
+  ]
+ },
+ {
+  "q": "?set=me02",
+  "status": 200,
+  "ms": 679,
+  "cc": "public, s-maxage=86400, stale-while-revalidate=172800",
+  "cards": 214,
+  "priced": 214,
+  "set": {
+   "id": "me02",
+   "name": "Phantasmal Flames",
+   "series": "Mega Evolution",
+   "date": "2025-11-14",
+   "total": 130,
+   "official": 94,
+   "logo": "https://assets.tcgdex.net/en/me/me02/logo.webp"
+  },
+  "sample": [
+   {
+    "code": "me02-006",
+    "name": "Lombre",
+    "num": "006",
+    "set": "me02",
+    "setName": "Phantasmal Flames",
+    "rarity": "Common",
+    "type": "Pokemon",
+    "types": [
+     "Grass"
+    ],
+    "hp": 90,
+    "stage": "Stage1",
+    "illustrator": "Shigenori Negishi",
+    "img": "https://assets.tcgdex.net/en/me/me02/006/high.webp",
+    "id": "pk:me02-006_r",
+    "v": "Reverse Holo",
+    "eur": 0.06
+   },
+   {
+    "code": "me02-007",
+    "name": "Ludicolo",
+    "num": "007",
+    "set": "me02",
+    "setName": "Phantasmal Flames",
+    "rarity": "Uncommon",
+    "type": "Pokemon",
+    "types": [
+     "Grass"
+    ],
+    "hp": 160,
+    "stage": "Stage2",
+    "illustrator": "Anesaki Dynamic",
+    "img": "https://assets.tcgdex.net/en/me/me02/007/high.webp",
+    "id": "pk:me02-007",
+    "v": "",
+    "eur": 0.03
+   },
+   {
+    "code": "me02-007",
+    "name": "Ludicolo",
+    "num": "007",
+    "set": "me02",
+    "setName": "Phantasmal Flames",
+    "rarity": "Uncommon",
+    "type": "Pokemon",
+    "types": [
+     "Grass"
+    ],
+    "hp": 160,
+    "stage": "Stage2",
+    "illustrator": "Anesaki Dynamic",
+    "img": "https://assets.tcgdex.net/en/me/me02/007/high.webp",
+    "id": "pk:me02-007_r",
+    "v": "Reverse Holo",
+    "eur": 0.1
+   }
+  ],
+  "rev": 84,
+  "top": [
+   [
+    "Mega Charizard X ex",
+    "Holo",
+    731.41
+   ],
+   [
+    "Mega Charizard X ex",
+    "Holo",
+    243.29
+   ],
+   [
+    "Mega Charizard X ex",
+    "Holo",
+    21
+   ]
+  ]
+ },
+ {
+  "q": "?set=sv08",
+  "status": 200,
+  "ms": 538,
+  "cc": "public, s-maxage=86400, stale-while-revalidate=172800",
+  "cards": 417,
+  "priced": 417,
+  "set": {
+   "id": "sv08",
+   "name": "Surging Sparks",
+   "series": "Scarlet & Violet",
+   "date": "2024-11-08",
+   "total": 252,
+   "official": 191,
+   "logo": "https://assets.tcgdex.net/en/sv/sv08/logo.webp"
+  },
+  "sample": [
+   {
+    "code": "sv08-006",
+    "name": "Spewpa",
+    "num": "006",
+    "set": "sv08",
+    "setName": "Surging Sparks",
+    "rarity": "Common",
+    "type": "Pokemon",
+    "types": [
+     "Grass"
+    ],
+    "hp": 80,
+    "stage": "Stage1",
+    "illustrator": "tono",
+    "img": "https://assets.tcgdex.net/en/sv/sv08/006/high.webp",
+    "id": "pk:sv08-006_r",
+    "v": "Reverse Holo",
+    "eur": 0.06
+   },
+   {
+    "code": "sv08-007",
+    "name": "Vivillon",
+    "num": "007",
+    "set": "sv08",
+    "setName": "Surging Sparks",
+    "rarity": "Uncommon",
+    "type": "Pokemon",
+    "types": [
+     "Grass"
+    ],
+    "hp": 120,
+    "stage": "Stage2",
+    "illustrator": "Amelicart",
+    "img": "https://assets.tcgdex.net/en/sv/sv08/007/high.webp",
+    "id": "pk:sv08-007",
+    "v": "",
+    "eur": 0.02
+   },
+   {
+    "code": "sv08-007",
+    "name": "Vivillon",
+    "num": "007",
+    "set": "sv08",
+    "setName": "Surging Sparks",
+    "rarity": "Uncommon",
+    "type": "Pokemon",
+    "types": [
+     "Grass"
+    ],
+    "hp": 120,
+    "stage": "Stage2",
+    "illustrator": "Amelicart",
+    "img": "https://assets.tcgdex.net/en/sv/sv08/007/high.webp",
+    "id": "pk:sv08-007_r",
+    "v": "Reverse Holo",
+    "eur": 0.15
+   }
+  ],
+  "rev": 165,
+  "top": [
+   [
+    "Pikachu ex",
+    "Holo",
+    263.59
+   ],
+   [
+    "Latias ex",
+    "Holo",
+    143.36
+   ],
+   [
+    "Milotic ex",
+    "Holo",
+    106.61
+   ]
+  ]
+ },
+ {
+  "q": "?q=pikachu",
+  "status": 200,
+  "ms": 65,
+  "cc": "public, s-maxage=86400, stale-while-revalidate=172800",
+  "cards": 200,
+  "sample": [
+   {
+    "code": "cel25-9",
+    "id": "pk:cel25-9",
+    "name": "Surfing Pikachu VMAX",
+    "num": "9",
+    "set": "cel25",
+    "img": "https://assets.tcgdex.net/en/swsh/cel25/9/high.webp"
+   },
+   {
+    "code": "det1-10",
+    "id": "pk:det1-10",
+    "name": "Detective Pikachu",
+    "num": "10",
+    "set": "det1",
+    "img": "https://assets.tcgdex.net/en/sm/det1/10/high.webp"
+   },
+   {
+    "code": "np-12",
+    "id": "pk:np-12",
+    "name": "Pikachu",
+    "num": "12",
+    "set": "np",
+    "img": "https://assets.tcgdex.net/en/pop/np/12/high.webp"
+   }
+  ],
+  "rev": 0,
+  "top": [
+   [
+    "Pikachu on the Ball",
+    null,
+    null
+   ],
+   [
+    "Pikachu",
+    null,
+    null
+   ],
+   [
+    "Pikachu",
+    null,
+    null
+   ]
+  ]
+ }
+]
