@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-25T08:51:39Z",
+ "updated": "2026-10-25T09:03:31Z",
  "fx": {
   "CZK": 24.327,
   "USD": 1.1193,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-10-25T08:27:12Z",
+   "ts": "2026-10-25T09:03:31Z",
    "ok": true,
    "items": [
     {
@@ -574,7 +574,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-10-25T08:27:12Z",
+   "ts": "2026-10-25T09:03:31Z",
    "ok": true,
    "items": [
     {
@@ -3002,7 +3002,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-10-25T08:27:12Z",
+   "ts": "2026-10-25T09:03:31Z",
    "ok": true,
    "items": [
     {
@@ -3685,7 +3685,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-10-25T08:27:12Z",
+   "ts": "2026-10-25T09:03:31Z",
    "ok": true,
    "items": [
     {
@@ -3812,7 +3812,7 @@
   },
   "poring": {
    "ts": "2026-10-25T08:27:12Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece Card Game: Mini Tin Vol.3",
@@ -3942,10 +3942,13 @@
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.poringcards.eu/user/shop/detail/502_onepiecethetimeofbattleboosterboxop-16-copy.png?ff=1&x=423&y=318&q=85&ts=6a16f4d5&sg=2175fb9d"
     }
-   ]
+   ],
+   "error": "The read operation timed out",
+   "fails": 1,
+   "warned": false
   },
   "cardstore": {
-   "ts": "2026-10-25T08:27:12Z",
+   "ts": "2026-10-25T09:03:31Z",
    "ok": true,
    "items": [
     {
@@ -5720,7 +5723,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-10-25T08:27:12Z",
+   "ts": "2026-10-25T09:03:31Z",
    "ok": true,
    "items": [
     {
@@ -5798,7 +5801,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-10-25T08:27:12Z",
+   "ts": "2026-10-25T09:03:31Z",
    "ok": true,
    "items": [
     {
