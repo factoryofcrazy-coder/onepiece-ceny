@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-25T08:14:21Z",
+ "updated": "2026-10-25T08:27:12Z",
  "fx": {
   "CZK": 24.327,
   "USD": 1.1193,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-10-24T20:03:23Z",
+   "ts": "2026-10-25T08:27:12Z",
    "ok": true,
    "items": [
     {
@@ -20,15 +20,6 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/21263_one-piece-tcg-op17-the-world--s-strongest-warriors-booster-pack.png?ff=1&x=100&y=100&q=85&ts=6a915349&sg=8dda0505"
     },
     {
-     "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Pack (Japonsky)",
-     "url": "https://www.cardempire.sk/one-piece-tcg-op17-the-world--s-strongest-warriors-booster-pack--japonsky-/",
-     "price": 8.0,
-     "currency": "EUR",
-     "eur": 8.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/21260_upper-deck-premier-2024-25-hockey-hobby-box--19.png?ff=1&x=100&y=100&q=85&ts=6a8e9f13&sg=8dda0505"
-    },
-    {
      "name": "One Piece TCG - The Time of Battle Booster Pack (OP16) - EN",
      "url": "https://www.cardempire.sk/one-piece-tcg-the-time-of-battle-booster-pack--op16-en/",
      "price": 8.0,
@@ -36,6 +27,15 @@
      "eur": 8.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/19326_op16booster.png?ff=1&x=100&y=100&q=85&ts=6a2a8bdc&sg=8dda0505"
+    },
+    {
+     "name": "One Piece TCG - OP17 The World´s Strongest Warriors - Booster Pack (Japonsky)",
+     "url": "https://www.cardempire.sk/one-piece-tcg-op17-the-world--s-strongest-warriors-booster-pack--japonsky-/",
+     "price": 8.0,
+     "currency": "EUR",
+     "eur": 8.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/21260_upper-deck-premier-2024-25-hockey-hobby-box--19.png?ff=1&x=100&y=100&q=85&ts=6a8e9f13&sg=8dda0505"
     },
     {
      "name": "One Piece TCG - Illustration Box Vol.8",
@@ -90,15 +90,6 @@
      "eur": 45.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/12264_untitled-design-2025-12-20t150846-233.png?ff=1&x=100&y=100&q=85&ts=6946ae01&sg=8dda0505"
-    },
-    {
-     "name": "One Piece TCG - OP13 - Carrying On His Will - Booster Box - (Japonský)",
-     "url": "https://www.cardempire.sk/one-piece-tcg-op13-carrying-on-his-will-booster-box-japonsky-/",
-     "price": 175.0,
-     "currency": "EUR",
-     "eur": 175.0,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/11250_op13japbox.png?ff=1&x=100&y=100&q=85&ts=6901190e&sg=8dda0505"
     },
     {
      "name": "One Piece TCG - OP 11 - A Fist of Divine Speed",
@@ -518,6 +509,15 @@
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/11343_untitled-design--29.png?ff=1&x=423&y=318&q=85&ts=69086333&sg=2175fb9d"
     },
     {
+     "name": "One Piece TCG - OP13 - Carrying On His Will - Booster Box - (Japonský)",
+     "url": "https://www.cardempire.sk/one-piece-tcg-op13-carrying-on-his-will-booster-box-japonsky-/",
+     "price": 175.0,
+     "currency": "EUR",
+     "eur": 175.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/11250_op13japbox.png?ff=1&x=423&y=318&q=85&ts=6901190e&sg=2175fb9d"
+    },
+    {
      "name": "One Piece TCG - Carrying On His Will - Booster Box - Sealed Case",
      "url": "https://www.cardempire.sk/one-piece-tcg-carrying-on-his-will-booster-box-sealed-case/",
      "price": 7000.0,
@@ -574,7 +574,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-10-24T20:03:23Z",
+   "ts": "2026-10-25T08:27:12Z",
    "ok": true,
    "items": [
     {
@@ -3002,7 +3002,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-10-24T20:03:23Z",
+   "ts": "2026-10-25T08:27:12Z",
    "ok": true,
    "items": [
     {
@@ -3685,15 +3685,15 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-10-23T11:43:57Z",
-   "ok": false,
+   "ts": "2026-10-25T08:27:12Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece TCG: OP-16 The Time of Battle Booster",
      "url": "https://www.pokemon4u.cz/one-piece-tcg--op-16-the-time-of-battle-booster/",
      "price": 179.0,
      "currency": "CZK",
-     "eur": 7.38,
+     "eur": 7.36,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.pokemon4u.cz/user/shop/related/46759_snimek-obrazovky-2026-06-11-084211.png?ff=1&x=100&y=100&q=85&ts=6a2b1c6a&sg=8dda0505"
     },
@@ -3702,14 +3702,11 @@
      "url": "https://www.pokemon4u.cz/one-piece-tcg--op-16-the-time-of-battle-booster-box/",
      "price": 4299.0,
      "currency": "CZK",
-     "eur": 177.21,
+     "eur": 176.72,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.pokemon4u.cz/user/shop/related/46762_skbnsxjjtohfdkb12vbqr05uovq1zrf3uz2qdugcnukw45ggnmkceclafenodwkbqyxymusdwsi3v9i9oxtlit28-i7azzzgbew7roqn5ezynd-yqtism7c4zk-jhh-fyphimytl-cjyqeorfmlotoepo-80m7xvbnkzlrzarbv-pby-qouqyhfoxksbmeb2.jpg?ff=1&x=100&y=100&q=85&ts=6a2b1fda&sg=8dda0505"
     }
-   ],
-   "error": "The read operation timed out",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "xzone": {
    "ts": "2026-10-25T08:14:21Z",
@@ -3814,7 +3811,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-10-24T20:03:23Z",
+   "ts": "2026-10-25T08:27:12Z",
    "ok": true,
    "items": [
     {
@@ -3948,7 +3945,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-10-24T20:03:23Z",
+   "ts": "2026-10-25T08:27:12Z",
    "ok": true,
    "items": [
     {
@@ -5723,7 +5720,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-10-24T20:03:23Z",
+   "ts": "2026-10-25T08:27:12Z",
    "ok": true,
    "items": [
     {
@@ -5801,7 +5798,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-10-24T20:03:23Z",
+   "ts": "2026-10-25T08:27:12Z",
    "ok": true,
    "items": [
     {
@@ -5859,6 +5856,15 @@
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/438787_one-piece-tcg-adventure-on-kami-s-island-booster.png?ff=1&x=100&y=100&q=85&ts=69c5284e&sg=8dda0505"
     },
     {
+     "name": "One Piece Card Game - Green Starter Deck Roronoa Zoro (ST-32)",
+     "url": "https://www.blacklotus.cz/one-piece-card-game-green-starter-deck-roronoa-zoro/",
+     "price": 499.0,
+     "currency": "CZK",
+     "eur": 20.51,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451919-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a135f&sg=8dda0505"
+    },
+    {
      "name": "One Piece Card Game - Set Sail Deck",
      "url": "https://www.blacklotus.cz/one-piece-card-game-set-sail-deck/",
      "price": 799.0,
@@ -5884,15 +5890,6 @@
      "eur": 16.4,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451922-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a1400&sg=8dda0505"
-    },
-    {
-     "name": "One Piece Card Game - Green Starter Deck Roronoa Zoro (ST-32)",
-     "url": "https://www.blacklotus.cz/one-piece-card-game-green-starter-deck-roronoa-zoro/",
-     "price": 499.0,
-     "currency": "CZK",
-     "eur": 20.51,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/451919-1_bez-nazvu.png?ff=1&x=100&y=100&q=85&ts=6a6a135f&sg=8dda0505"
     },
     {
      "name": "One Piece Card Game - Red Black Starter Deck Sabo (ST-35)",
