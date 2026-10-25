@@ -758,7 +758,7 @@ def crawl(shop):
     if shop["parser"] == "wcstore":
         return crawl_wcstore(shop)
     if shop["parser"] == "cernyrytir":
-        rows = crawl_cernyrytir(shop)
+        rows = list({r["id"]: r for r in crawl_cernyrytir(shop)}.values())     # produkt môže byť vo viacerých kategóriách
         return [r for r in rows if game_ok(r["name"], shop) and r["price"]]
     parse = PARSERS[shop["parser"]]
     seen_ids, seen_urls, rows = set(), set(), []
