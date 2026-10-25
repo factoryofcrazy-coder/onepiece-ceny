@@ -1,0 +1,13 @@
+name: Discover
+on:
+  push:
+    branches: [pokemon-discover]
+jobs:
+  d:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: python tools/discover.py tools/candidates.txt > disc.jsonl; cat disc.jsonl
+      - uses: actions/upload-artifact@v4
+        with: {name: disc, path: disc.jsonl}
