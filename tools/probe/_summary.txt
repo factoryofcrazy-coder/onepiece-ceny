@@ -1,19 +1,7 @@
-pokeunited OK 200 383678 micro=59 ld=0 prod=0 https://www.pokeunited.cz/
-fyft OK 200 231827 micro=13 ld=0 prod=0 https://www.fyft.cz/
-keepseven ERR HTTP Error 429: Too Many Requests https://keepseven.de/
-crispycards OK 200 27256 micro=0 ld=0 prod=0 https://crispycards.de/collections/all/products.json?limit=5
-comicplanet OK 200 635768 micro=0 ld=0 prod=0 https://www.comicplanet.de/sammelkarten/pokemon/deutsch/displays-pkm
-pushdich OK 200 6410 micro=0 ld=0 prod=0 https://www.pushdich-tcg.de/collections/all/products.json?limit=5
-pokesynek OK 200 2258711 micro=0 ld=3 prod=0 https://www.pokesynek.de/
-kartovo OK 200 167420 micro=20 ld=0 prod=0 https://www.kartovo.net/
-sammelmania OK 200 431382 micro=0 ld=0 prod=0 https://sammelmania.at/Shop/pokemon-karten
-spielraum ERR HTTP Error 403: Forbidden https://www.spielraum.co.at/de/pokemon/displays
-sammelkartenshop_at OK 200 51806 micro=0 ld=0 prod=0 https://www.sammelkarten-shop.at/
-grubi OK 200 100123 micro=0 ld=1 prod=0 https://www.grubi-co.at/de/sammelkarten/pokemon/booster-displays/
-rays OK 200 21520 micro=0 ld=0 prod=0 https://rays-kartenhaus.at/collections/pokemon-displays/products.json?limit=5
-cernyrytir_cats ERR HTTP Error 500: Internal Server Error https://eshop-api.cernyrytir.eu/api/public/merch/category/list
-cernyrytir_js OK 200 5020 micro=0 ld=1 prod=0 https://cernyrytir.cz/merch
-butticards2 OK 200 128999 micro=0 ld=0 prod=0 https://www.butticards.at/Shop/Pokemon-c72181358?offset=0
-ihrysko_cat ERR HTTP Error 500: Internal Server Error https://www.ihrysko.sk/one-piece-tcg-c100345
-svether2 ERR HTTP Error 404: Not Found https://www.svet-her.cz/pokemon-karty/
-dobrovsky2 ERR HTTP Error 404: Not Found https://www.knihydobrovsky.cz/pokemon-tcg?sort=date
+dilaras OK 200 8634 micro=0 ld=0 prod=0 https://dilaras.at/collections/all/products.json?limit=3
+collectit ERR HTTP Error 403: Forbidden https://www.collect-it.de/pokemon/booster-displays
+geodude OK 200 483928 micro=0 ld=1 prod=0 https://pokegeodude.shop/sammelkarten/pokemon/boosterdisplay
+konzoliste OK 200 248985 micro=2 ld=2 prod=0 https://www.konzoliste.cz/sk/pokemon-elite-trainer-boxy/
+konzoliste_home OK 200 415115 micro=30 ld=2 prod=0 https://www.konzoliste.cz/sk/
+gengar OK 200 357888 micro=0 ld=0 prod=0 https://www.gengar.cz/sk/produkty-elite-trainer-box
+gengar_home OK 200 574867 micro=0 ld=0 prod=0 https://www.gengar.cz/sk/
