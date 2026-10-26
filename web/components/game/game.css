@@ -883,35 +883,74 @@
 .dskin-bar i { display: block; height: 100%; background: var(--gold); border-radius: 4px; }
 @media (max-width: 560px) { .dskins-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .dskins-stats { width: 100%; } .dskins-stats div { flex: 1; } }
 
-/* ============================================================ KAMEŇ, PAPIER, NOŽNICE (kto začína) */
-.rps-pick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.rps-btn {
-  display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 8px 12px; border-radius: 12px; cursor: pointer;
-  background: var(--g-bg); border: 1px solid var(--g-rule); color: var(--g-text); font: 800 15px var(--display);
-  transition: transform .15s var(--ease), border-color .15s, background .15s;
+/* ============================================================ KAMEŇ, PAPIER, NOŽNICE (kto začína)
+   Kompaktný modál nad stolom; stôl za ním je len jemne stmavený, aby hráč nestratil kontext. */
+.rpsm-veil {
+  position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px;
+  background: rgba(8, 15, 24, .52); animation: fade .2s both;
 }
-.rps-btn .gi { color: var(--g-gold); }
-.rps-btn:hover:not(:disabled) { transform: translateY(-3px); border-color: var(--g-gold); background: #0f1c2b; }
-.rps-btn:focus-visible { outline: 2px solid var(--g-gold); outline-offset: 2px; }
-.rps-btn:disabled { opacity: .5; cursor: default; }
-.rps-duel { display: flex; align-items: center; justify-content: center; gap: 14px; }
-.rps-tile {
-  display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 104px; padding: 10px 12px; border-radius: 12px;
-  background: var(--g-bg); border: 1px solid var(--g-rule); animation: rps-flip .45s var(--ease) both;
+.rpsm-veil.out { animation: rpsm-out .3s ease 1s forwards; }
+@keyframes rpsm-out { to { opacity: 0; } }
+.rpsm {
+  width: min(620px, 100%); max-height: 100%; overflow: auto;
+  display: flex; flex-direction: column; gap: 14px; padding: 20px 22px 22px; border-radius: 14px;
+  background: var(--g-raise); border: 1px solid var(--g-rule); border-top: 2px solid var(--g-gold);
+  box-shadow: 0 30px 60px -24px #000; animation: pop .25s var(--ease) both;
 }
-.rps-tile.opp { animation-delay: .12s; }
-.rps-tile b { font: 800 14px var(--display); }
-.rps-tile small { font-size: 11.5px; color: var(--g-mute); }
-.rps-tile.me .gi { color: var(--me); }
-.rps-tile.opp .gi { color: var(--opp); }
-.rps-tile.win { border-color: var(--g-gold); box-shadow: 0 0 0 1px var(--g-gold-dim); }
-.rps-vs { font: 800 13px var(--display); color: var(--g-mute); }
-@keyframes rps-flip { from { opacity: 0; transform: rotateY(90deg) scale(.9); } }
-.gprompt.rpswait { flex-direction: column; gap: 6px; padding: 8px 14px; }
-.gprompt.rpswait .rps-tile { min-width: 84px; padding: 4px 10px; flex-direction: row; gap: 6px; }
-.gprompt.rpswait .rps-tile small { display: none; }
-.gprompt.rpswait .rps-tile .gi { width: 18px; height: 18px; }
-@media (min-width: 1101px) and (min-height: 600px) {
-  .gprompt.rpswait { flex-direction: row; gap: 12px; }
+.rpsm-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.rpsm-head h3 { margin: 0; font: 800 20px/1.2 var(--display); letter-spacing: -.01em; }
+.rpsm-round { font: 700 12px var(--body); color: var(--g-mute); font-variant-numeric: tabular-nums; }
+.rpsm-sub { margin: -6px 0 0; color: var(--g-mute); font-size: 14px; }
+
+.rpsm-picks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.rpsm-pick {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 10px 16px; border-radius: 12px;
+  background: var(--g-bg); border: 1px solid var(--g-rule); color: var(--g-text); font: inherit; cursor: pointer;
+  transition: transform .15s var(--ease), border-color .15s, background .15s, opacity .2s;
 }
-@media (max-width: 720px) { .rps-btn { padding: 12px 4px 10px; font-size: 14px; } .rps-tile { min-width: 88px; } }
+.rpsm-pick b { font: 800 15px var(--display); }
+.rpsm-art { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: rgba(213, 173, 96, .08); color: #c9a75e; transition: color .15s, background .15s; }
+.rpsm-pick:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--g-gold-dim); background: #0c1622; }
+.rpsm-pick:hover:not(:disabled) .rpsm-art { color: var(--g-gold); background: rgba(213, 173, 96, .14); }
+.rpsm-pick:focus-visible { outline: 2px solid var(--g-gold); outline-offset: 2px; }
+.rpsm-pick.on { border-color: var(--g-gold); background: rgba(213, 173, 96, .07); }
+.rpsm-pick.on .rpsm-art { color: var(--g-gold); background: rgba(213, 173, 96, .16); }
+.rpsm-pick:disabled { cursor: default; }
+.rpsm-pick:disabled:not(.on) { opacity: .4; }
+.rpsm-lock { position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--g-gold); color: var(--g-bg); }
+.rpsm-status { margin: 0; min-height: 20px; display: flex; align-items: center; gap: 8px; color: var(--g-mute); font-size: 13px; }
+.rpsm-status .spin, .rpsm-result .spin { width: 14px; height: 14px; }
+
+/* odhalenie: obe voľby naraz, krátke otočenie */
+.rpsm-duel { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; }
+.rpsm-side {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px; border-radius: 12px;
+  background: var(--g-bg); border: 1px solid var(--g-rule); animation: rpsm-flip .5s var(--ease) both;
+  transition: opacity .3s .5s, border-color .3s .5s;
+}
+.rpsm-side b { font: 800 15px var(--display); }
+.rpsm-side small { font-size: 12px; color: var(--g-mute); }
+.rpsm-side.me .rpsm-art { color: var(--me); background: rgba(111, 195, 190, .1); }
+.rpsm-side.opp .rpsm-art { color: var(--opp); background: rgba(224, 122, 108, .1); }
+.rpsm-side.win { border-color: var(--g-gold); }
+.rpsm-side.lose { opacity: .55; }
+.rpsm-vs { font: 800 14px var(--display); color: var(--g-mute); }
+@keyframes rpsm-flip { from { opacity: 0; transform: perspective(600px) rotateY(80deg) scale(.94); } }
+
+.rpsm-result { margin: 0; display: flex; align-items: center; gap: 8px; font: 700 15px/1.35 var(--display); animation: fade .3s .45s both; }
+.rpsm-result.win { color: var(--g-gold); }
+.rpsm-result.tie, .rpsm-result.lose { color: var(--g-text); }
+.rpsm-result.start { justify-content: center; padding: 10px 0 4px; font-size: 18px; color: var(--g-gold); animation: fade .25s both; }
+.rpsm-hint { margin: -6px 0 0; font-size: 13px; color: var(--g-mute); animation: fade .3s .5s both; }
+.rpsm-acts { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; animation: fade .3s .55s both; }
+.rpsm-acts .btn { min-width: 132px; justify-content: center; }
+
+@media (max-width: 720px) {
+  .rpsm-veil { position: fixed; z-index: 55; padding: 12px; }
+  .rpsm { padding: 16px; gap: 12px; }
+  .rpsm-head h3 { font-size: 18px; }
+  .rpsm-picks { gap: 8px; }
+  .rpsm-pick { padding: 14px 4px 12px; gap: 8px; }
+  .rpsm-art { width: 52px; height: 52px; }
+  .rpsm-acts .btn { flex: 1; min-width: 0; }
+}

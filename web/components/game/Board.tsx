@@ -5,10 +5,11 @@ import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { CardImg } from "@/components/ui";
 import type { Card } from "@/lib/data";
 import { basePower, blockersFor, counterOf, counterOptions, def, donOnField, fieldOf, handCost, hasKw, mainActions, power } from "@/lib/engine/engine";
-import type { Action, AnswerChoice, GameEvent, GameState, P, RpsPick } from "@/lib/engine/types";
+import type { Action, AnswerChoice, GameEvent, GameState, P } from "@/lib/engine/types";
 import "./game.css";
 import { fmtClock, useGameClock } from "./clock";
 import ReportButton, { type ActionLog } from "./ReportButton";
+import RpsOverlay from "./RpsOverlay";
 import { Icon, type IconName } from "./icons";
 import { recordBotGame, useDonSkin, type DonSkin } from "@/lib/donSkins";
 
@@ -485,28 +486,10 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
 
   const middle = () => {
     if (s.winner != null) return null;
+    // kameň-papier-nožnice má vlastný modál nad stolom – v strednom páse len krátka poznámka
+    if (s.prompt && (s.prompt.kind === "rps" || s.prompt.kind === "firstChoice")) return <p className="hint">Rozhoduje sa, kto začne.</p>;
     if (s.prompt && s.prompt.p !== me) {
       const who = s.players[s.prompt.p].name;
-      if (s.prompt.kind === "rps") {
-        const mine = s.rps?.picks[me];
-        return (
-          <div className="gprompt wait">
-            <span className="spin" />{" "}
-            {mine && mine !== "hidden" ? `Dal si ${rpsWord(mine)}. ${who} ešte vyberá…` : `${who} vyberá kameň, papier alebo nožnice…`}
-          </div>
-        );
-      }
-      if (s.prompt.kind === "firstChoice") {
-        const last = s.rps!.rounds[s.rps!.rounds.length - 1];
-        return (
-          <div className="gprompt wait rpswait">
-            <RpsDuel s={s} me={me} />
-            <span>
-              <span className="spin" /> {beatText(last[s.prompt.p], last[me])} {who} si vyberá, či pôjde prvý.
-            </span>
-          </div>
-        );
-      }
       return (
         <div className="gprompt wait">
           <span className="spin" /> {mode === "bot" ? "Bot rozmýšľa…" : `Rozhoduje ${who}…`}
@@ -626,49 +609,6 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
     let sheet = false;
 
     switch (p.kind) {
-      case "rps": {
-        const last = s.rps?.rounds[s.rps.rounds.length - 1];
-        const tie = !!last && last[0] === last[1];
-        icon = "scissors";
-        sheet = true;
-        title = tie ? "Remíza, ešte raz" : "Kameň, papier, nožnice";
-        desc = tie
-          ? `Obaja ste dali ${rpsWord(last![0])}. Vyber znova.`
-          : "Kto vyhrá, vyberie si, či pôjde prvý alebo druhý. Súper tvoju voľbu neuvidí, kým nevyberie svoju.";
-        body = (
-          <>
-            {tie && <RpsDuel s={s} me={me} />}
-            <div className="rps-pick" role="group" aria-label="Tvoja voľba">
-              {RPS_OPTS.map((o) => (
-                <button key={o.id} className="rps-btn" onClick={() => answer({ rps: o.id })} disabled={busy}>
-                  <Icon name={o.id} size={40} />
-                  <span>{o.label}</span>
-                </button>
-              ))}
-            </div>
-          </>
-        );
-        break;
-      }
-      case "firstChoice": {
-        const last = s.rps!.rounds[s.rps!.rounds.length - 1];
-        icon = "check";
-        sheet = true;
-        title = "Vyhral si! Ideš prvý, alebo druhý?";
-        desc = `${beatText(last[me], last[me === 0 ? 1 : 0])} Kto ide prvý, v prvom ťahu neťahá kartu a dostane 1 DON!!. Druhý si potiahne a dostane 2 DON!!.`;
-        body = <RpsDuel s={s} me={me} />;
-        acts = (
-          <>
-            <button className="btn ghost sm" onClick={() => answer({ first: false })}>
-              Idem druhý
-            </button>
-            <button className="btn sm" onClick={() => answer({ first: true })}>
-              Idem prvý
-            </button>
-          </>
-        );
-        break;
-      }
       case "oneOf":
         title = p.label;
         src = effectSrc;
@@ -1141,6 +1081,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
             )}
           </div>
         )}
+        <RpsOverlay s={s} me={me} busy={busy} onPick={(k) => answer({ rps: k })} onFirst={(f) => answer({ first: f })} />
         {banner && (
           <div key={banner.id} className={`turnbanner ${banner.mine ? "" : "opp"}`}>
             <span>{mode === "local" ? `Hrá ${s.players[s.active].name}` : banner.mine ? "Tvoj ťah" : "Ťah súpera"}</span>
@@ -1234,44 +1175,6 @@ function howMany(min: number, max: number): string {
   if (min === max) return `${max} ${k(max)}`;
   if (min === 0) return `najviac ${max}`;
   return `${min} až ${max}`;
-}
-
-const RPS_OPTS: { id: RpsPick; label: string }[] = [
-  { id: "rock", label: "Kameň" },
-  { id: "paper", label: "Papier" },
-  { id: "scissors", label: "Nožnice" },
-];
-const rpsWord = (k: RpsPick) => RPS_OPTS.find((o) => o.id === k)!.label.toLowerCase();
-/** „Papier porazil kameň.“ / „Nožnice porazili papier.“ */
-const beatText = (win: RpsPick, lose: RpsPick) => {
-  const w = rpsWord(win);
-  return `${w[0].toUpperCase()}${w.slice(1)} ${win === "scissors" ? "porazili" : "porazil"} ${rpsWord(lose)}.`;
-};
-
-/** posledné kolo kameň-papier-nožnice: moja voľba proti súperovej */
-function RpsDuel({ s, me }: { s: GameState; me: P }) {
-  const r = s.rps?.rounds[s.rps.rounds.length - 1];
-  if (!r) return null;
-  const o: P = me === 0 ? 1 : 0;
-  const mine = r[me];
-  const theirs = r[o];
-  const tie = mine === theirs;
-  const iWon = s.rps!.winner === me && !tie;
-  return (
-    <div className={`rps-duel ${tie ? "tie" : ""}`} key={s.rps!.rounds.length}>
-      <span className={`rps-tile me ${!tie && iWon ? "win" : ""}`}>
-        <Icon name={mine} size={30} />
-        <b>{RPS_OPTS.find((x) => x.id === mine)!.label}</b>
-        <small>{s.players[me].name}</small>
-      </span>
-      <span className="rps-vs">{tie ? "=" : "vs"}</span>
-      <span className={`rps-tile opp ${!tie && !iWon ? "win" : ""}`}>
-        <Icon name={theirs} size={30} />
-        <b>{RPS_OPTS.find((x) => x.id === theirs)!.label}</b>
-        <small>{s.players[o].name}</small>
-      </span>
-    </div>
-  );
 }
 
 function PeekText({ s, iid }: { s: GameState; iid: string }) {
@@ -1407,7 +1310,7 @@ function fxOf(e: GameEvent, s: GameState, name: (iid: string) => string, me: P):
     case "CardPlayed":
       return e.p === me ? null : { text: `${who(e.p)} zahral ${name(e.iid)}`, kind: "" };
     case "Info":
-      return /blokuje|nestačil|nepoužil|Remíza|poradie|ide prvý|ide druhý/.test(e.msg) ? { text: e.msg, kind: "" } : null;
+      return /blokuje|nestačil|nepoužil/.test(e.msg) ? { text: e.msg, kind: "" } : null;
     default:
       return null;
   }
