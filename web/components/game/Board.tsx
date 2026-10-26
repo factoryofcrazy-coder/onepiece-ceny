@@ -9,6 +9,7 @@ import type { Action, AnswerChoice, GameEvent, GameState, P } from "@/lib/engine
 import "./game.css";
 import { fmtClock, useGameClock } from "./clock";
 import ReportButton, { type ActionLog } from "./ReportButton";
+import { Icon } from "./icons";
 
 export type BoardProps = {
   s: GameState;
@@ -26,11 +27,7 @@ export type BoardProps = {
   gameId?: string; // online hra – pre hlásenie problémov
 };
 
-const HEART = (
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-    <path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21Z" />
-  </svg>
-);
+const HEART = <Icon name="heart" size={13} />;
 
 export default function Board({ s, me, byCode, mode, onAction, busy, error, elo, onExit, onResign, onTimeout, result, gameId }: BoardProps) {
   const clock = useGameClock(s, onTimeout);
@@ -301,6 +298,8 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         key={iid}
         className={`fc ${lead ? "lead" : ""} ${flags(iid)}`}
         data-iid={iid}
+        aria-label={`${d.name}${lead ? " (leader)" : ""}${pw != null ? `, sila ${pw}` : ""}${c.rested ? ", v rest" : ""}${c.don ? `, ${c.don} DON!!` : ""}`}
+        aria-pressed={sel === iid || attacking === iid || picked.includes(iid)}
         onClick={() => clickField(iid)}
         {...hover(iid)}
       >
@@ -314,9 +313,10 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         {!d.scripted && <span className="warn" title="Efekt zatiaľ nie je naprogramovaný – hrá sa bez efektu">!</span>}
         {c.don > 0 && (
           <span className="dons" title={`${c.don} DON!! pripojené`}>
-            {Array.from({ length: Math.min(c.don, 6) }, (_, i) => (
+            {Array.from({ length: Math.min(c.don, 4) }, (_, i) => (
               <i key={i} className="tok" />
             ))}
+            {c.don > 1 && <b className="dn">{c.don}</b>}
           </span>
         )}
       </button>
@@ -325,29 +325,37 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
 
   const Plate = (p: P) => {
     const x = s.players[p];
+    const on = s.active === p && s.winner == null && s.turn > 0;
     return (
-      <div className={`plate ${p === me ? "pme" : "popp"}`}>
-        <span className="av">{(x.name || "?").slice(0, 1).toUpperCase()}</span>
-        <span style={{ minWidth: 0 }}>
-          <div className="nm">{x.name}</div>
-          <div className="st">
+      <div className={`plate ${p === me ? "pme" : "popp"} ${on ? "on" : ""}`}>
+        <span className="av" aria-hidden>
+          {(x.name || "?").slice(0, 1).toUpperCase()}
+        </span>
+        <span className="pinfo">
+          <span className="nm">
+            {x.name}
             {elo?.[p] != null && <span className="elo">ELO {elo[p]}</span>}
-            {clock && (
-              <span
-                className={`clk ${clock.actor === p ? "run" : ""} ${clock.ms[p] < 120_000 ? "low" : ""} ${clock.ms[p] <= 0 ? "out" : ""}`}
-                title="Zostávajúci čas na celú hru"
-              >
-                ⏱ {fmtClock(clock.ms[p])}
-              </span>
-            )}
-            <span>
-              ruka <b>{x.hand.length}</b>
+          </span>
+          <span className="st">
+            <span title="Karty v ruke">
+              <Icon name="hand" size={13} /> <b>{x.hand.length}</b>
             </span>
-            <span>
+            <span title="DON!! na poli">
               DON!! <b>{donOnField(s, p)}</b>/10
             </span>
-          </div>
+          </span>
         </span>
+        {clock && (
+          <span
+            className={`clk ${clock.actor === p ? "run" : ""} ${clock.ms[p] < 120_000 ? "low" : ""} ${clock.ms[p] <= 0 ? "out" : ""}`}
+            title="Zostávajúci čas na celú hru"
+            role="timer"
+            aria-label={`Čas: ${fmtClock(clock.ms[p])}`}
+          >
+            <Icon name="clock" size={13} />
+            {fmtClock(clock.ms[p])}
+          </span>
+        )}
       </div>
     );
   };
@@ -467,7 +475,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
       return (
         <div className="actbar">
           <span className="hint">
-            Vyber cieľ útoku pre <b>{name(attacking)}</b> ({power(s, attacking)}) – súperov leader alebo postava v rest
+            <Icon name="swords" size={15} /> Vyber cieľ pre <b>{name(attacking)}</b> ({power(s, attacking)}): súperov leader alebo postava v rest
           </span>
           <button className="btn ghost sm" onClick={() => setAttacking(null)}>
             Zrušiť
@@ -481,29 +489,35 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
           <span className="who">{name(sel)}</span>
           {selInHand ? (
             <button className="btn sm" disabled={!canPlay(sel)} onClick={() => (send({ type: "play", p: me, iid: sel }), setSel(null))}>
-              {canPlay(sel) ? `Zahrať (${handCost(s, sel)} DON!!)` : `Treba ${handCost(s, sel)} aktívnych DON!!`}
+              {canPlay(sel) ? (
+                <>
+                  <Icon name="play" size={13} /> Zahrať za {handCost(s, sel)} DON!!
+                </>
+              ) : (
+                `Treba ${handCost(s, sel)} aktívnych DON!!`
+              )}
             </button>
           ) : (
             <>
               {canAttack(sel) && (
                 <button className="btn sm" onClick={() => (setAttacking(sel), setSel(null))}>
-                  ⚔ Útočiť
+                  <Icon name="swords" size={14} /> Útočiť
                 </button>
               )}
               {P0.donActive > 0 && sel !== P0.stage && (
-                <button className="btn ghost sm" onClick={() => send({ type: "attachDon", p: me, target: sel })}>
-                  +1 DON!! <span className="muted">({P0.donActive})</span>
+                <button className="btn ghost sm" onClick={() => send({ type: "attachDon", p: me, target: sel })} title={`Pripojiť 1 DON!! (aktívnych ${P0.donActive})`}>
+                  <Icon name="plus" size={13} /> DON!! <span className="muted">{P0.donActive}</span>
                 </button>
               )}
               {activ.map((a) => (
                 <button key={a.ability} className="btn ghost sm" onClick={() => send(a)}>
-                  ✦ Aktivovať efekt
+                  <Icon name="spark" size={13} /> Aktivovať efekt
                 </button>
               ))}
             </>
           )}
           <button className="btn ghost sm" onClick={() => (setZoom(sel), setSel(null))}>
-            Detail
+            <Icon name="eye" size={14} /> Detail
           </button>
         </div>
       );
@@ -511,13 +525,13 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
     if (s.battle) return BattleView();
     if (myTurn)
       return (
-        <p className="hint">
-          <b>Tvoj ťah.</b> Klikni na kartu v ruke a zahraj ju, na leadera/postavu pre DON!! alebo útok. Dvojklik v ruke = zahrať hneď.
+        <p className="hint" title="Dvojklik na kartu v ruke ju zahrá hneď">
+          Vyber kartu v ruke a zahraj ju, alebo klikni na leadera či postavu pre DON!! a útok.
         </p>
       );
     return (
       <p className="hint">
-        Na ťahu je <b>{s.players[s.active].name}</b>…
+        <span className="spin" aria-hidden /> Na ťahu je <b>{s.players[s.active].name}</b>
       </p>
     );
   };
@@ -532,7 +546,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
           <span className={a >= t ? "win" : "lose"}>{a}</span>
           <small>{name(b.attacker)}</small>
         </span>
-        <span className="vs">VS</span>
+        <span className="vs" aria-label="proti">
+          <Icon name="swords" size={16} />
+        </span>
         <span className="side">
           <span className={t > a ? "win" : "lose"}>{t}</span>
           <small>{name(b.target)}</small>
@@ -551,7 +567,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         return (
           <div className="gprompt">
             <h4>
-              <span className="ic">?</span> {p.label}
+              <span className="ic">
+              <Icon name="question" size={14} />
+            </span> {p.label}
             </h4>
             <div className="opts">
               {p.options.map((o, k) => (
@@ -566,7 +584,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         return (
           <div className="gprompt">
             <h4>
-              <span className="ic">↻</span> Ponecháš si túto ruku?
+              <span className="ic">
+              <Icon name="swap" size={14} />
+            </span> Ponecháš si túto ruku?
             </h4>
             <p>Môžeš raz vymeniť všetkých 5 kariet za nové (mulligan). {s.first === me ? "Začínaš ty." : "Začína súper."}</p>
             <div className="acts">
@@ -583,7 +603,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         return (
           <div className="gprompt">
             <h4>
-              <span className="ic">✦</span> {p.label}
+              <span className="ic">
+              <Icon name="spark" size={14} />
+            </span> {p.label}
             </h4>
             <p>
               {offBoard.length ? "Klikni na karty nižšie" : "Klikni na zvýraznené karty"} – vyber {p.min === p.max ? p.max : `${p.min}–${p.max}`}
@@ -592,11 +614,13 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
               {picked.length > 0 && <b style={{ color: "var(--text)" }}>Vybraté: {picked.map(name).join(", ")}</b>}
             </p>
             {offBoard.length > 0 && (
-              <div className="pcards">
+              <div className="gpicks">
                 {offBoard.map((i) => {
                   const c = card(i);
                   return (
-                    <button key={i} className={`pcard ${picked.includes(i) ? "on" : ""}`} onClick={() => togglePick(i)} {...hover(i)}>
+                    <button key={i} className={`gpick ${picked.includes(i) ? "on" : ""}`}
+                      aria-pressed={picked.includes(i)}
+                      aria-label={name(i)} onClick={() => togglePick(i)} {...hover(i)}>
                       {c ? <CardImg card={c} eager /> : <span className="cimg ph">{name(i)}</span>}
                     </button>
                   );
@@ -624,7 +648,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         return (
           <div className="gprompt">
             <h4>
-              <span className="ic">?</span> {p.label}
+              <span className="ic">
+              <Icon name="question" size={14} />
+            </span> {p.label}
             </h4>
             <div className="acts">
               <button className="btn ghost sm" onClick={() => answer({ yes: false })}>
@@ -642,7 +668,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         return (
           <div className="gprompt">
             <h4>
-              <span className="ic">⇅</span> Viac efektov naraz – ktorý ide prvý?
+              <span className="ic">
+              <Icon name="order" size={14} />
+            </span> Viac efektov naraz – ktorý ide prvý?
             </h4>
             <div className="opts">
               {p.options.map((k) => (
@@ -657,7 +685,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         return (
           <div className="gprompt">
             <h4>
-              <span className="ic">⛨</span> {name(s.battle!.attacker)} ({power(s, s.battle!.attacker)}) útočí na {name(s.battle!.target)}
+              <span className="ic">
+              <Icon name="shield" size={14} />
+            </span> {name(s.battle!.attacker)} ({power(s, s.battle!.attacker)}) útočí na {name(s.battle!.target)}
             </h4>
             <p>Môžeš zablokovať – klikni na zvýrazneného [Blocker]-a alebo vyber nižšie.</p>
             <div className="acts">
@@ -683,7 +713,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         return (
           <div className="gprompt">
             <h4>
-              <span className="ic">⛨</span> Counter: {name(b.attacker)} {atk} → {name(b.target)} {tgt}
+              <span className="ic">
+              <Icon name="shield" size={14} />
+            </span> Counter: {name(b.attacker)} {atk} → {name(b.target)} {tgt}
             </h4>
             <p>
               Klikni na karty v ruke s counterom (svietia). Postava pridá svoj counter, [Counter] event stojí DON!!.{" "}
@@ -709,7 +741,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         return (
           <div className="gprompt">
             <h4>
-              <span className="ic">!</span> Life karta má [Trigger]: {name(p.iid)}
+              <span className="ic">
+              <Icon name="alert" size={14} />
+            </span> Life karta má [Trigger]: {name(p.iid)}
             </h4>
             <div className="row gap" style={{ alignItems: "flex-start" }}>
               {c && <CardImg card={c} className="trigcard" eager />}
@@ -730,7 +764,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         return (
           <div className="gprompt">
             <h4>
-              <span className="ic">!</span> Máš 6 postáv – klikni na jednu, ktorá pôjde do trashu
+              <span className="ic">
+              <Icon name="alert" size={14} />
+            </span> Máš 6 postáv – klikni na jednu, ktorá pôjde do trashu
             </h4>
           </div>
         );
@@ -767,7 +803,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
     return (
       <div className="gprompt">
         <h4>
-          <span className="ic">↩</span> {p.label}
+          <span className="ic">
+            <Icon name="return" size={14} />
+          </span> {p.label}
         </h4>
         <p>
           Vráť {p.atLeast ? `aspoň ${p.n}` : p.n} DON!! do DON!! balíčka. Vybraté: <span className={`progress ${ok ? "ok" : ""}`}>{total}</span>
@@ -808,96 +846,133 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
   const winnerMe = s.winner === me;
   const peekIid = zoom ?? peek;
 
+  const modeLabel = mode === "bot" ? "Tréning proti botovi" : mode === "local" ? "Dvaja na jednom zariadení" : "Online hra";
+  const phaseLabel = s.winner != null ? "Koniec hry" : s.turn === 0 ? "Príprava" : s.battle ? "Súboj" : s.phase === "main" ? "Hlavná fáza" : s.phase === "setup" ? "Mulligan" : "";
+  const turnName = s.turn === 0 ? "Príprava" : s.active === me ? (mode === "local" ? s.players[me].name : "Tvoj ťah") : s.players[s.active].name;
+  const handDim = myTurn && !pr && !attacking;
+
   return (
     <div className="gwrap" style={{ ["--zoom" as any]: zoomLvl }}>
       <div className="gtable" ref={tableRef}>
         <div className="gtop">
-          <span className={`turnpill ${s.active === me ? "mine" : ""}`}>
-            <span className="tn">Ťah {Math.max(1, s.turn)}</span>
-            <span className="dot" />
-            {s.turn === 0 ? "Príprava" : s.active === me ? (mode === "local" ? s.players[me].name : "Tvoj ťah") : s.players[s.active].name}
-          </span>
-          <span className="phase">{s.battle ? "Súboj" : s.phase === "main" ? "Main fáza" : s.phase === "setup" ? "Mulligan" : ""}</span>
+          <span className="gmode">{modeLabel}</span>
           <span className="sp" />
-          <span className="zoomctl" title="Veľkosť kariet">
-            <button onClick={() => bump(-0.1)} disabled={zoomLvl <= 0.8} aria-label="Menšie karty">
+          <span className="zoomctl" role="group" aria-label="Veľkosť kariet">
+            <button onClick={() => bump(-0.1)} disabled={zoomLvl <= 0.8} aria-label="Menšie karty" title="Menšie karty">
               A−
             </button>
-            <button onClick={() => bump(0.1)} disabled={zoomLvl >= 1.4} aria-label="Väčšie karty">
+            <button onClick={() => bump(0.1)} disabled={zoomLvl >= 1.4} aria-label="Väčšie karty" title="Väčšie karty">
               A+
             </button>
           </span>
           <ReportButton s={s} mode={mode} gameId={gameId} actions={actionLog.current} byCode={byCode} peek={peek} />
           {onResign && s.winner == null && (
             <button
-              className={`btn sm ${confirmResign ? "" : "ghost danger"}`}
+              className={`btn sm ${confirmResign ? "resign" : "ghost danger"}`}
               onClick={() => {
                 if (confirmResign) return onResign();
                 setConfirmResign(true);
                 setTimeout(() => setConfirmResign(false), 4000);
               }}
+              title="Vzdať sa"
             >
-              {confirmResign ? "Naozaj sa vzdať?" : "Vzdať sa"}
+              <Icon name="flag" size={14} />
+              <span className="lbl-wide">{confirmResign ? "Naozaj sa vzdať?" : "Vzdať sa"}</span>
             </button>
           )}
-          <button className="btn ghost sm" onClick={onExit}>
-            {mode === "online" ? "Späť" : "Ukončiť"}
+          <button className="btn ghost sm" onClick={onExit} title={mode === "online" ? "Späť do lobby" : "Ukončiť hru"}>
+            <Icon name="exit" size={14} />
+            <span className="lbl-wide">{mode === "online" ? "Späť" : "Ukončiť"}</span>
           </button>
-          {myTurn ? (
-            <button className={`btn endbtn ${confirmEnd ? "confirm" : ""}`} onClick={endTurn} disabled={busy}>
-              {confirmEnd ? "Máš ešte útoky – ukončiť?" : "Ukončiť ťah"}
-            </button>
-          ) : null}
         </div>
 
         <div className="hands-opp" aria-label={`Súper má v ruke ${oppHand} kariet`}>
           {Plate(opp)}
-          {Array.from({ length: Math.min(oppHand, 12) }, (_, i) => (
-            <i key={i} className="bk back" style={{ ["--i" as any]: i, ["--mid" as any]: (Math.min(oppHand, 12) - 1) / 2 }} />
-          ))}
+          <span className="bks" aria-hidden>
+            {Array.from({ length: Math.min(oppHand, 12) }, (_, i) => (
+              <i key={i} className="bk back" style={{ ["--i" as any]: i, ["--mid" as any]: (Math.min(oppHand, 12) - 1) / 2 }} />
+            ))}
+          </span>
         </div>
 
         {Half(opp)}
-        <div className="gmid" ref={midRef}>
-          {middle()}
-          {(error || localErr) && <p className="gerr">{error || localErr}</p>}
+        <div className={`gmid ${s.active === me ? "mine" : "theirs"}`} ref={midRef}>
+          <div className="gturn" aria-live="polite">
+            <span className="tn">Ťah {Math.max(1, s.turn)}</span>
+            <span className="tw">
+              <i className="dot" aria-hidden />
+              {turnName}
+            </span>
+            <span className="ph">{phaseLabel}</span>
+          </div>
+          <div className="gcenter">
+            {middle()}
+            {(error || localErr) && (
+              <p className="gerr" role="alert">
+                {error || localErr}
+              </p>
+            )}
+          </div>
+          <div className="gend">
+            {myTurn ? (
+              <button className={`btn endbtn ${confirmEnd ? "confirm" : ""}`} onClick={endTurn} disabled={busy}>
+                {confirmEnd ? "Máš ešte útoky. Ukončiť?" : "Ukončiť ťah"}
+              </button>
+            ) : s.winner == null && s.turn > 0 ? (
+              <span className="endwait">{pr ? "Čaká sa na tvoju odpoveď" : s.active === me ? "Čaká sa na súpera" : "Súper je na ťahu"}</span>
+            ) : null}
+          </div>
         </div>
         {Half(me)}
 
-        {Plate(me)}
-        <div className="hand">
-          {hand.map((iid, i) => {
-            const d = s.cards[iid] ? def(s, iid) : null;
-            const c = card(iid);
-            const playable = canPlay(iid);
-            const isCounter = counterOpts.includes(iid) || (pr?.kind === "choose" && pr.options.includes(iid));
-            const hc = d ? handCost(s, iid) : 0;
-            const rot = hand.length > 1 ? (i - mid) * Math.min(4, 26 / hand.length) : 0;
-            const arc = ((i - mid) * (i - mid) - mid * mid) * (hand.length > 6 ? 1.3 : 2.2);
-            return (
-              <button
-                key={iid}
-                className={`hc ${playable || isCounter ? "ok" : ""} ${sel === iid ? "sel" : ""} ${picked.includes(iid) ? "picked" : ""} ${pr?.kind === "counter" && !isCounter ? "no" : ""}`}
-                style={{ ["--rot" as any]: rot, ["--arc" as any]: arc, ["--ov" as any]: ov, animationDelay: `${Math.min(i, 8) * 40}ms` }}
-                onClick={() => clickHand(iid)}
-                onDoubleClick={() => playable && (send({ type: "play", p: me, iid }), setSel(null))}
-                {...hover(iid)}
-              >
-                {c ? <CardImg card={c} eager /> : <i className="back" style={{ display: "block", aspectRatio: "600/838", borderRadius: 8 }} />}
-                {d && d.type !== "Leader" && <span className={`hcost ${hc < d.cost ? "cheap" : ""}`}>{hc}</span>}
-                {pr?.kind === "counter" && isCounter && d && (
-                  <span className="hctr">{d.type === "Character" ? `+${counterOf(s, iid)}` : `event ${handCost(s, iid)} DON!!`}</span>
-                )}
-                {d && !d.scripted && <span className="warn">!</span>}
-              </button>
-            );
-          })}
+        <div className="tray">
+          {Plate(me)}
+          <div className={`hand ${handDim ? "dimmable" : ""}`} role="group" aria-label={`Tvoja ruka, ${hand.length} kariet`}>
+            {hand.map((iid, i) => {
+              const d = s.cards[iid] ? def(s, iid) : null;
+              const c = card(iid);
+              const playable = canPlay(iid);
+              const isCounter = counterOpts.includes(iid) || (pr?.kind === "choose" && pr.options.includes(iid));
+              const hc = d ? handCost(s, iid) : 0;
+              const rot = hand.length > 1 ? (i - mid) * Math.min(4, 26 / hand.length) : 0;
+              const arc = ((i - mid) * (i - mid) - mid * mid) * (hand.length > 6 ? 1.3 : 2.2);
+              const off = (pr?.kind === "counter" && !isCounter) || (handDim && !playable);
+              return (
+                <button
+                  key={iid}
+                  className={`hc ${playable || isCounter ? "ok" : ""} ${sel === iid ? "sel" : ""} ${picked.includes(iid) ? "picked" : ""} ${off ? "no" : ""}`}
+                  style={{ ["--rot" as any]: rot, ["--arc" as any]: arc, ["--ov" as any]: ov, animationDelay: `${Math.min(i, 8) * 40}ms` }}
+                  onClick={() => clickHand(iid)}
+                  onDoubleClick={() => playable && (send({ type: "play", p: me, iid }), setSel(null))}
+                  aria-pressed={sel === iid || picked.includes(iid)}
+                  aria-label={`${d?.name ?? "karta"}${d && d.type !== "Leader" ? `, cena ${hc}` : ""}${playable ? ", dá sa zahrať" : ""}${isCounter && pr?.kind === "counter" ? ", counter" : ""}`}
+                  {...hover(iid)}
+                >
+                  {c ? <CardImg card={c} eager /> : <i className="back" style={{ display: "block", aspectRatio: "600/838", borderRadius: 8 }} />}
+                  {d && d.type !== "Leader" && <span className={`hcost ${hc < d.cost ? "cheap" : ""}`}>{hc}</span>}
+                  {pr?.kind === "counter" && isCounter && d && (
+                    <span className="hctr">{d.type === "Character" ? `+${counterOf(s, iid)}` : `event ${handCost(s, iid)} DON!!`}</span>
+                  )}
+                  {picked.includes(iid) && (
+                    <span className="hpick" aria-hidden>
+                      <Icon name="check" size={13} />
+                    </span>
+                  )}
+                  {d && !d.scripted && <span className="warn">!</span>}
+                </button>
+              );
+            })}
+            {!hand.length && <span className="hand-empty">Ruka je prázdna</span>}
+          </div>
         </div>
 
         {fx.length > 0 && (
           <div className="fxs">
             {fx.map((f) => (
               <span key={f.id} className={`fx ${f.kind}`}>
+                {f.kind === "ko" && <Icon name="burst" size={15} />}
+                {f.kind === "life" && <Icon name="heart" size={14} />}
+                {f.kind === "don" && <Icon name="return" size={14} />}
                 {f.text}
               </span>
             ))}
@@ -908,7 +983,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
             <svg>
               {strikes.map((k) =>
                 k.t === "atk" ? (
-                  <line key={k.id} className="streak" x1={k.x1} y1={k.y1} x2={k.x2} y2={k.y2} style={{ animationDelay: `${k.delay}ms` }} />
+                  <line key={k.id} className="sline" x1={k.x1} y1={k.y1} x2={k.x2} y2={k.y2} style={{ animationDelay: `${k.delay}ms` }} />
                 ) : null,
               )}
             </svg>
@@ -917,7 +992,9 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
                 <span key={k.id} className="clash" style={{ left: k.x2, top: k.y2, animationDelay: `${k.delay + 180}ms` }}>
                   <i className="x" />
                   <b className={k.a >= k.d ? "win" : ""}>{k.a}</b>
-                  <em>⚔</em>
+                  <em>
+                    <Icon name="swords" size={14} />
+                  </em>
                   <b className={k.a < k.d ? "win" : ""}>{k.d}</b>
                 </span>
               ) : (
@@ -954,7 +1031,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
         ) : (
           <div className="peek empty">
             <i className="back" style={{ display: "block" }} />
-            Prejdi myšou na kartu – uvidíš ju tu zväčšenú aj s efektom.
+            Prejdi myšou na kartu a uvidíš ju tu zväčšenú aj s efektom.
           </div>
         )}
         <Log s={s} name={name} me={me} />
@@ -1070,39 +1147,40 @@ function lastInfo(s: GameState) {
 }
 
 /** riadok priebehu hry */
-function describe(e: GameEvent, s: GameState, name: (iid: string) => string): { text: string; who: P | null; big?: boolean } | null {
+type LogKind = "play" | "attack" | "ko" | "life" | "don" | "info";
+function describe(e: GameEvent, s: GameState, name: (iid: string) => string): { text: string; who: P | null; big?: boolean; k: LogKind } | null {
   const who = (p: P) => s.players[p].name;
   const owner = (iid: string) => (s.cards[iid] ? s.cards[iid].owner : null);
   switch (e.t) {
     case "CardPlayed":
-      return { text: `${who(e.p)} zahral ${name(e.iid)}`, who: e.p, big: true };
+      return { text: `${who(e.p)} zahral ${name(e.iid)}`, who: e.p, big: true, k: "play" };
     case "DonReturned":
-      return { text: `${who(e.p)} vrátil ${e.n} DON!!`, who: e.p };
+      return { text: `${who(e.p)} vrátil ${e.n} DON!!`, who: e.p, k: "don" };
     case "DonAdded":
-      return { text: `${who(e.p)} +${e.n} DON!! ${e.state === "active" ? "aktívne" : "v rest"}`, who: e.p };
+      return { text: `${who(e.p)} +${e.n} DON!! ${e.state === "active" ? "aktívne" : "v rest"}`, who: e.p, k: "don" };
     case "KO":
-      return { text: `${name(e.iid)} je K.O.`, who: owner(e.iid), big: true };
+      return { text: `${name(e.iid)} je K.O.`, who: owner(e.iid), big: true, k: "ko" };
     case "LifeDamage":
-      return { text: `${who(e.p)} stratil Life`, who: e.p, big: true };
+      return { text: `${who(e.p)} stratil Life`, who: e.p, big: true, k: "life" };
     case "LifeFlipped":
-      return { text: `${who(e.p)} otočil ${e.n} Life ${e.up ? "lícom hore" : "lícom dole"}`, who: e.p };
+      return { text: `${who(e.p)} otočil ${e.n} Life ${e.up ? "lícom hore" : "lícom dole"}`, who: e.p, k: "life" };
     case "Attack":
-      return { text: `${name(e.attacker)} útočí na ${name(e.target)}`, who: owner(e.attacker) };
+      return { text: `${name(e.attacker)} útočí na ${name(e.target)}`, who: owner(e.attacker), k: "attack" };
     case "CardDrawn":
       return null;
     case "Info":
-      return { text: e.msg, who: null };
+      return { text: e.msg, who: null, k: "info" };
   }
 }
 
 function fxOf(e: GameEvent, s: GameState, name: (iid: string) => string, me: P): { text: string; kind: string } | null {
   switch (e.t) {
     case "KO":
-      return { text: `💥 ${name(e.iid)} je K.O.`, kind: "ko" };
+      return { text: `${name(e.iid)} je K.O.`, kind: "ko" };
     case "LifeDamage":
       return { text: `${e.p === me ? "Stratil si" : `${s.players[e.p].name} stratil`} Life`, kind: "life" };
     case "DonReturned":
-      return { text: `↩ ${s.players[e.p].name}: DON!! −${e.n}`, kind: "don" };
+      return { text: `${s.players[e.p].name}: DON!! −${e.n}`, kind: "don" };
     case "LifeFlipped":
       return { text: `${e.p === me ? "Otočil si" : `${s.players[e.p].name} otočil`} ${e.n} Life ${e.up ? "lícom hore" : "lícom dole"}`, kind: "life" };
     case "CardPlayed":
@@ -1114,23 +1192,30 @@ function fxOf(e: GameEvent, s: GameState, name: (iid: string) => string, me: P):
   }
 }
 
+const LOG_ICON = { play: "play", attack: "swords", ko: "burst", life: "heart", don: "return", info: "alert" } as const;
+
 function Log({ s, name, me }: { s: GameState; name: (iid: string) => string; me: P }) {
   // najnovšie hore
-  const rows: { key: number; text: string; cls: string }[] = [];
+  const rows: { key: number; text: string; cls: string; k: LogKind }[] = [];
   s.log.forEach((e, i) => {
     const d = describe(e, s, name);
-    if (d) rows.push({ key: i, text: d.text, cls: `${d.who != null ? `p${d.who === me ? 0 : 1}` : ""} ${d.big ? "big" : ""}` });
+    if (d) rows.push({ key: i, text: d.text, k: d.k, cls: `${d.who != null ? `p${d.who === me ? 0 : 1}` : ""} ${d.big ? "big" : ""} k-${d.k}` });
   });
   const shown = rows.slice(-60).reverse();
   return (
-    <ul className="glog">
+    <section className="glog" aria-label="Priebeh hry">
       <h5>Priebeh hry</h5>
-      {shown.map((r) => (
-        <li key={r.key} className={r.cls}>
-          {r.text}
-        </li>
-      ))}
-      {!shown.length && <li>Hra sa začína…</li>}
-    </ul>
+      <ul>
+        {shown.map((r) => (
+          <li key={r.key} className={r.cls}>
+            <span className="lk" aria-hidden>
+              <Icon name={LOG_ICON[r.k]} size={12} />
+            </span>
+            <span>{r.text}</span>
+          </li>
+        ))}
+        {!shown.length && <li className="k-info">Hra sa začína</li>}
+      </ul>
+    </section>
   );
 }

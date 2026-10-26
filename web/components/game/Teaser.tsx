@@ -40,7 +40,7 @@ export default function GameTeaser() {
           </p>
         </div>
 
-        <div className="peek" aria-hidden>
+        <div className="tz-board" aria-hidden>
           <div className="peek-row peek-opp">
             {pick.opp && <CardImg card={pick.opp} className="peek-card leader" />}
             <div className="peek-life">
