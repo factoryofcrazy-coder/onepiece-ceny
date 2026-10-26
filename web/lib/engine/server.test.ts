@@ -138,7 +138,8 @@ describe("edge function game", () => {
     expect((await call(waiter, { op: "act", id, action: { type: "answer", p: v.seat, choice: { yes: false } } })).status).toBe(400);
     expect((await call(waiter, { op: "act", id, action: { type: "answer", p: wv.seat, choice: { yes: false } } })).status).toBe(400);
     expect((await call(mover, { op: "act", id, action: { type: "answer", p: v.seat, choice: { yes: false } }, version: v.version - 1 })).status).toBe(409);
-    expect((await call(mover, { op: "act", id, action: { type: "answer", p: v.seat, choice: { yes: false } }, version: v.version })).status).toBe(200);
+    // hra začína kameňom-papierom-nožnicami
+    expect((await call(mover, { op: "act", id, action: { type: "answer", p: v.seat, choice: { rps: "rock" } }, version: v.version })).status).toBe(200);
     expect((await call(waiter, { op: "resign", id })).status).toBe(200);
     expect(g.status).toBe("done");
     expect(g.winner).toBe(USERS[mover].id);
@@ -158,7 +159,7 @@ describe("edge function game", () => {
     expect(v.view.clock).toBeTruthy(); // hodiny vidia obaja hráči
     // hráč na rade premýšľal 5 minút
     pr.state.clock.at -= 5 * 60_000;
-    expect((await call(mover, { op: "act", id, action: { type: "answer", p: v.seat, choice: { yes: false } }, version: g.version })).status).toBe(200);
+    expect((await call(mover, { op: "act", id, action: { type: "answer", p: v.seat, choice: { rps: "rock" } }, version: g.version })).status).toBe(200);
     const left = pr.state.clock.ms[v.seat];
     expect(left).toBeLessThanOrEqual(15 * 60_000 + 50);
     expect(left).toBeGreaterThan(15 * 60_000 - 2000);

@@ -1,6 +1,7 @@
 "use client";
 // „Nahlásiť problém“ – hráč opíše, čo engine urobil zle; uloží sa aj stav hry a posledné ťahy, aby sa to dalo zopakovať.
 import Link from "next/link";
+import { Icon } from "./icons";
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { CardImg } from "@/components/ui";
@@ -75,8 +76,9 @@ export default function ReportButton({
 
   return (
     <>
-      <button className="btn ghost sm" onClick={() => setOpen(true)} title="Nahlásiť zlý ťah alebo efekt">
-        ⚑ Nahlásiť
+      <button className="btn ghost sm" onClick={() => setOpen(true)} title="Nahlásiť zlý ťah alebo efekt" aria-label="Nahlásiť problém">
+        <Icon name="report" size={14} />
+        <span className="lbl-wide">Nahlásiť</span>
       </button>
       {open &&
         createPortal(
@@ -126,7 +128,7 @@ export default function ReportButton({
                         const c = byCode.get(code);
                         const on = cards.includes(code);
                         return (
-                          <button key={code} className={`pcard ${on ? "on" : ""}`} onClick={() => setCards(on ? cards.filter((x) => x !== code) : [...cards, code])} title={c?.name ?? code}>
+                          <button key={code} className={`gpick ${on ? "on" : ""}`} onClick={() => setCards(on ? cards.filter((x) => x !== code) : [...cards, code])} title={c?.name ?? code}>
                             {c ? <CardImg card={c} eager /> : <span className="cimg ph">{code}</span>}
                             <span className="tiny">{code}</span>
                           </button>

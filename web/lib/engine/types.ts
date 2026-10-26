@@ -310,6 +310,8 @@ export type Pending = { source: string; controller: P; ability: number; label: s
 
 export type Prompt =
   | { kind: "mulligan"; p: P }
+  | { kind: "rps"; p: P }
+  | { kind: "firstChoice"; p: P }
   | { kind: "choose"; p: P; label: string; options: string[]; min: number; max: number; zone?: Zone; maxTotalCost?: number; distinctNames?: boolean }
   | { kind: "payCost"; p: P; label: string }
   | { kind: "donSource"; p: P; n: number; atLeast: boolean; label: string }
@@ -355,7 +357,11 @@ export type GameState = {
   nextId: number;
   /** šachové hodiny online hry: zostávajúci čas každého hráča (ms) a kedy začal plynúť čas hráčovi na rade (epoch ms) */
   clock?: { ms: [number, number]; at: number };
+  /** kameň-papier-nožnice o poradie: aktuálne voľby (súperovu klient nevidí, kým nevyberú obaja) a odohrané kolá */
+  rps?: { picks: [RpsPick | "hidden" | null, RpsPick | "hidden" | null]; rounds: [RpsPick, RpsPick][]; winner: P | null };
 };
+
+export type RpsPick = "rock" | "paper" | "scissors";
 
 // ------------------------------------------------------------------ akcie hráča
 export type Action =
@@ -373,4 +379,6 @@ export type AnswerChoice =
   | { don: { active: number; rested: number; attached: Record<string, number> } }
   | { order: number }
   | { option: number }
-  | { counter: string[] };
+  | { counter: string[] }
+  | { rps: RpsPick }
+  | { first: boolean };

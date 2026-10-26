@@ -27,13 +27,13 @@ export const CUSTOM: Record<string, Handler> = {
         const n = f.sub.option as number;
         if (!n) return (f.sub = undefined), true;
         const opts = [x.leader, ...x.characters.filter((i) => def(s, i).traits.includes("Straw Hat Crew"))];
-        s.prompt = { kind: "choose", p, label: `+${n * 2000} power počas súboja – komu?`, options: opts, min: 1, max: 1, zone: "leaderOrCharacters" };
+        s.prompt = { kind: "choose", p, label: `Komu dáš +${n * 2000} power na tento súboj?`, options: opts, min: 1, max: 1, zone: "leaderOrCharacters" };
         f.sub = { phase: "target", n, awaiting: true };
         return false;
       }
       const max = x.donActive;
       if (!max) return true;
-      s.prompt = { kind: "oneOf", p, label: "Koľko DON!! dáš do rest? (každý = +2000)", options: Array.from({ length: max + 1 }, (_, i) => `${i} DON!!`) };
+      s.prompt = { kind: "oneOf", p, label: "Koľko DON!! dáš do rest? Každé pridá +2000.", options: Array.from({ length: max + 1 }, (_, i) => `${i} DON!!`) };
       f.sub = { phase: "n", awaiting: true };
       return false;
     },
@@ -64,7 +64,7 @@ export const CUSTOM: Record<string, Handler> = {
         }
       }
       const minCards = Math.max(0, n - x.donActive);
-      s.prompt = { kind: "choose", p, label: `Daj do rest ${n} kariet (zvyšok zaplatia DON!!)`, options: cards, min: minCards, max: Math.min(n, cards.length), zone: "field" };
+      s.prompt = { kind: "choose", p, label: `Daj do rest ${n} kariet, zvyšok zaplatíš DON!!`, options: cards, min: minCards, max: Math.min(n, cards.length), zone: "field" };
       f.sub = { awaiting: true };
       return false;
     },
@@ -81,7 +81,7 @@ export const CUSTOM: Record<string, Handler> = {
         const k = Math.min(max - f.sub.pick.length, o.donActive);
         o.donActive -= k;
         o.donRested += k;
-        if (k) info(s, `${o.name}: ${k} DON!! do rest.`);
+        if (k) info(s, `${o.name} dáva ${k} DON!! do rest.`);
         f.sub = undefined;
         return true;
       }
@@ -94,7 +94,7 @@ export const CUSTOM: Record<string, Handler> = {
         o.donRested += k;
         return true;
       }
-      s.prompt = { kind: "choose", p, label: `Vyber až ${max} súperových kariet do rest (nevybraté miesta = súperove DON!!)`, options: opts, min: 0, max: Math.min(max, opts.length), zone: "field" };
+      s.prompt = { kind: "choose", p, label: `Ktoré súperove karty dáš do rest? Najviac ${max}, zvyšok pôjde z jeho DON!!.`, options: opts, min: 0, max: Math.min(max, opts.length), zone: "field" };
       f.sub = { awaiting: true };
       return false;
     },
@@ -108,7 +108,7 @@ export const CUSTOM: Record<string, Handler> = {
       if (f.sub?.done) {
         if (f.sub.pick[0]) {
           s.battle.target = f.sub.pick[0];
-          info(s, `Cieľ útoku zmenený na ${def(s, f.sub.pick[0]).name}.`);
+          info(s, `Útok sa presúva na ${def(s, f.sub.pick[0]).name}.`);
         }
         f.sub = undefined;
         return true;
@@ -168,7 +168,7 @@ export const CUSTOM: Record<string, Handler> = {
         f.sub = undefined;
         return true;
       }
-      s.prompt = { kind: "choose", p: f.controller, label: `Vyber ${n} karty z trashu – pôjdu pod balíček`, options: [...x.trash], min: n, max: n, zone: "trash" };
+      s.prompt = { kind: "choose", p: f.controller, label: `Vyber ${n} karty z trashu, pôjdu pod balíček`, options: [...x.trash], min: n, max: n, zone: "trash" };
       f.sub = { awaiting: true };
       return false;
     },

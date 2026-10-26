@@ -4,7 +4,7 @@ import { shuffle } from "./rng";
 import { CUSTOM } from "./custom";
 import {
   Ability, Action, AnswerChoice, CardDef, CardFlag, Cond, Filter, Frame, GameEvent, GameState, Inst, Keyword, Listen,
-  Modifier, Num, other, P, Pending, PlayerFlag, PlayerState, Side, StaticMod, Step, Until, Zone,
+  Modifier, Num, other, P, Pending, PlayerFlag, PlayerState, RpsPick, Side, StaticMod, Step, Until, Zone,
 } from "./types";
 
 const MAX_DON = 10;
@@ -13,7 +13,12 @@ const MAX_CHARS = 5;
 // ------------------------------------------------------------------ setup
 export type DeckInput = { name: string; leader: string; cards: string[] };
 
-export function newGame(decks: [DeckInput, DeckInput], defs: Record<string, CardDef>, seed = Date.now() % 2147483647, first: P = 0): GameState {
+/**
+ * Nová hra. `first` = kto začína; "rps" = najprv kameň-papier-nožnice, víťaz si vyberie, či ide prvý alebo druhý
+ * (výzvy rps → firstChoice → mulligan). Bez "rps" sa začína rovno mulliganom (testy, staré hry).
+ */
+export function newGame(decks: [DeckInput, DeckInput], defs: Record<string, CardDef>, seed = Date.now() % 2147483647, firstOrRps: P | "rps" = 0): GameState {
+  const first: P = firstOrRps === "rps" ? 0 : firstOrRps;
   const s: GameState = {
     seed, turn: 0, active: first, first, phase: "setup",
     players: [null as any, null as any], cards: {}, defs, mods: [], stack: [], pending: [], prompt: null,
@@ -37,9 +42,16 @@ export function newGame(decks: [DeckInput, DeckInput], defs: Record<string, Card
     };
     s.players[p].hand = s.players[p].deck.splice(0, 5);
   });
-  s.prompt = { kind: "mulligan", p: first };
+  if (firstOrRps === "rps") {
+    s.rps = { picks: [null, null], rounds: [], winner: null };
+    s.prompt = { kind: "rps", p: 0 };
+  } else s.prompt = { kind: "mulligan", p: first };
   return s;
 }
+
+const RPS: RpsPick[] = ["rock", "paper", "scissors"];
+const RPS_SK: Record<RpsPick, string> = { rock: "kameň", paper: "papier", scissors: "nožnice" };
+const beats = (a: RpsPick, b: RpsPick) => (a === "rock" && b === "scissors") || (a === "paper" && b === "rock") || (a === "scissors" && b === "paper");
 
 /** Hlboká kópia – engine nikdy nemení vstupný stav. Definície kariet sa nemenia → zdieľajú sa. */
 const clone = (s: GameState): GameState => {
@@ -486,7 +498,7 @@ function pushSub(s: GameState, parent: Frame, steps: any[], extra: Partial<Frame
 export function draw(s: GameState, p: P, n: number) {
   for (let i = 0; i < n; i++) {
     const x = pl(s, p);
-    if (!x.deck.length) return lose(s, p, "nemá kartu na ťahanie");
+    if (!x.deck.length) return lose(s, p, "došli mu karty v balíčku");
     x.hand.push(x.deck.shift()!);
   }
   if (n > 0) emit(s, { t: "CardDrawn", p, n });
@@ -525,7 +537,7 @@ export function lose(s: GameState, p: P, why: string) {
   s.winner = other(p);
   s.phase = "over";
   s.prompt = null;
-  info(s, `${pl(s, p).name} prehral – ${why}.`);
+  info(s, `${pl(s, p).name} prehral, ${why}.`);
 }
 function putOnField(s: GameState, iid: string, rested = false) {
   const c = s.cards[iid];
@@ -606,23 +618,23 @@ function costText(st: Step): string {
     case "returnDon":
       return `DON!! −${typeof st.n === "number" ? st.n : "X"}${st.atLeast ? " alebo viac" : ""}`;
     case "restDon":
-      return `daj do rest ${typeof st.n === "number" ? st.n : "X"} DON!!`;
+      return `${typeof st.n === "number" ? st.n : "X"} DON!! do rest`;
     case "rest":
-      return st.v === "$self" ? "daj túto kartu do rest" : "daj do rest";
+      return st.v === "$self" ? "táto karta do rest" : "karta do rest";
     case "move":
-      return st.v === "$self" ? "vyhoď túto kartu" : "presuň kartu";
+      return st.v === "$self" ? "vyhodiť túto kartu" : "presunúť kartu";
     case "discard":
-      return `vyhoď ${typeof st.n === "number" ? st.n : "X"} kartu z ruky`;
+      return `vyhodiť ${typeof st.n === "number" ? st.n : "X"} ${st.n === 1 ? "kartu" : "karty"} z ruky`;
     case "reveal":
-      return `ukáž ${st.n} karty z ruky`;
+      return `ukázať ${st.n} ${st.n === 1 ? "kartu" : "karty"} z ruky`;
     case "lifeToHand":
-      return "vezmi Life kartu do ruky";
+      return "Life karta do ruky";
     case "lifeFace":
-      return `otoč ${st.n === "all" ? "všetky" : st.n} Life ${st.up ? "lícom hore" : "lícom dole"}`;
+      return `otočiť ${st.n === "all" ? "všetky" : st.n} Life ${st.up ? "lícom hore" : "lícom dole"}`;
     case "giveDon":
-      return "pripoj aktívne DON!!";
+      return "pripojiť aktívne DON!!";
     default:
-      return "zaplať cenu";
+      return "zaplatiť cenu";
   }
 }
 
@@ -666,7 +678,7 @@ function removeStep(s: GameState, f: Frame, iids: string[], kind: Removal, battl
     }
     const opp = byOpp && ownerOf(s, iid) !== f.controller;
     if (opp && protectedFromOpp(s, iid)) {
-      info(s, `${nameOf(s, iid)} sa nedá odstrániť efektom súpera.`);
+      info(s, `${nameOf(s, iid)} sa súperovým efektom odstrániť nedá.`);
       f.sub.i++;
       continue;
     }
@@ -835,7 +847,7 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
     }
     case "handToDeck": {
       if (f.sub?.done && st.where === "topOrBottom" && f.sub.option == null) {
-        s.prompt = { kind: "oneOf", p, label: "Kam dať vybrané karty?", options: ["Navrch balíčka", "Pod balíček"] };
+        s.prompt = { kind: "oneOf", p, label: "Kam dáš vybrané karty?", options: ["Navrch balíčka", "Pod balíček"] };
         f.sub = { awaiting: true, pick: f.sub.pick };
         return false;
       }
@@ -917,7 +929,7 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
         f.sub = { failed: true };
         return true;
       }
-      s.prompt = { kind: "donSource", p: who, n, atLeast: !!st.atLeast, label: `${f.label}: vyber DON!! na vrátenie` };
+      s.prompt = { kind: "donSource", p: who, n, atLeast: !!st.atLeast, label: `${f.label}: ktoré DON!! vrátiš?` };
       f.sub = { awaiting: true };
       return false;
     }
@@ -1016,14 +1028,14 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
         if (o) f.steps = [...f.steps.slice(0, f.pc + 1), ...o.steps, ...f.steps.slice(f.pc + 1)];
         return true;
       }
-      s.prompt = { kind: "oneOf", p: st.chooser === "opp" ? other(p) : p, label: `${f.label}: vyber jednu možnosť`, options: st.options.map((o) => o.label) };
+      s.prompt = { kind: "oneOf", p: st.chooser === "opp" ? other(p) : p, label: `${f.label}: čo si vyberieš?`, options: st.options.map((o) => o.label) };
       f.sub = { awaiting: true };
       return false;
     }
     case "custom": {
       const h = CUSTOM[st.fn];
       if (!h) {
-        info(s, `Chýba efekt ${st.fn}.`);
+        info(s, `Efekt ${st.fn} zatiaľ chýba, preskakuje sa.`);
         return true;
       }
       return h.run(s, f, st.arg);
@@ -1036,14 +1048,14 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
       return true;
     case "extraTurn":
       pl(s, p).extraTurn = true;
-      info(s, `${pl(s, p).name} bude mať extra ťah.`);
+      info(s, `${pl(s, p).name} dostane ťah navyše.`);
       return true;
     case "win":
       if (s.winner == null) {
         s.winner = p;
         s.phase = "over";
         s.prompt = null;
-        info(s, `${pl(s, p).name} vyhral efektom karty ${f.label}.`);
+        info(s, `${pl(s, p).name} vyhral vďaka efektu karty ${f.label}.`);
       }
       return true;
     case "runAbility": {
@@ -1061,14 +1073,14 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
     case "reveal": {
       if (f.sub?.done) {
         if (st.v) f.vars[st.v] = f.sub.pick;
-        info(s, `${pl(s, p).name} ukázal: ${f.sub.pick.map((i: string) => nameOf(s, i)).join(", ")}`);
+        info(s, `${pl(s, p).name} ukazuje: ${f.sub.pick.map((i: string) => nameOf(s, i)).join(", ")}`);
         f.sub = undefined;
         return true;
       }
       const opts = candidates(s, { ...st.f, zone: "hand", side: "me" }, c);
       if (opts.length <= st.n) {
         if (st.v) f.vars[st.v] = opts;
-        info(s, `${pl(s, p).name} ukázal: ${opts.map((i) => nameOf(s, i)).join(", ")}`);
+        info(s, `${pl(s, p).name} ukazuje: ${opts.map((i) => nameOf(s, i)).join(", ")}`);
         return true;
       }
       promptChoose(s, f, p, `Ukáž ${st.n} karty z ruky`, opts, st.n, st.n, "hand");
@@ -1099,13 +1111,13 @@ function run(s: GameState) {
         if (!f.asked && f.ci === 0) {
           const ok = f.costs.every((st) => canPay(s, st, c));
           if (!ok) {
-            if (f.costs.length) info(s, `${f.label}: efekt sa nedá použiť – cenu nie je možné zaplatiť (${f.costs.map(costText).join(", ")}).`);
+            if (f.costs.length) info(s, `${f.label}: efekt sa nepoužil, cena sa nedala zaplatiť (${f.costs.map(costText).join(", ")}).`);
             finishFrame(s, f, false);
             continue;
           }
           if (f.optional) {
             const what = f.costs.length ? f.costs.map(costText).join(", ") : "použiť efekt";
-            s.prompt = { kind: "payCost", p: f.controller, label: `${f.label}: ${what}?` };
+            s.prompt = { kind: "payCost", p: f.controller, label: f.costs.length ? `${f.label}: použiť efekt? Cena: ${what}` : `${f.label}: použiť efekt?` };
             return;
           }
           f.asked = true;
@@ -1173,7 +1185,7 @@ function finishFrame(s: GameState, f: Frame, done: boolean) {
     if (parent?.sub) parent.sub.saved.push(f.parentSave);
     const ab = f.ability != null ? def(s, f.source).abilities[f.ability] : null;
     if (ab?.once) s.usedOnce.push(onceKeyOf(f.source, ab, f.ability!));
-    info(s, `${nameOf(s, f.parentSave)} zachránená (${def(s, f.source).name}).`);
+    info(s, `${def(s, f.source).name}: ${nameOf(s, f.parentSave)} zostáva na stole.`);
   }
   if (f.kind === "mainEvent" || f.kind === "counterEvent" || f.kind === "triggerEvent") {
     const z = zoneOf(s, f.source);
@@ -1257,12 +1269,12 @@ function resolveDamage(s: GameState) {
   if (b.hitsLeft == null) {
     const atk = power(s, b.attacker);
     const tgt = power(s, b.target);
-    if (atk < tgt) return info(s, `Útok ${atk} < ${tgt} – bez účinku.`);
+    if (atk < tgt) return info(s, `Útok ${atk} nestačil na ${tgt}.`);
     if (def(s, b.target).type !== "Leader") {
       const attr = def(s, b.attacker).attribute;
       for (const st of activeStatics(s))
         if (st.m.stat === "noBattleKO" && attr.toLowerCase().includes(st.m.attribute.toLowerCase()) && staticTargets(s, st, b.target, st.m)) {
-          info(s, `${nameOf(s, b.target)} sa nedá K.O. v súboji touto kartou.`);
+          info(s, `${nameOf(s, b.target)} sa v tomto súboji nedá K.O.`);
           return;
         }
       // K.O. v súboji – cez rámec, aby fungovali náhradné efekty
@@ -1277,7 +1289,7 @@ function resolveDamage(s: GameState) {
   while (b.hitsLeft! > 0) {
     b.hitsLeft!--;
     const x = pl(s, tp);
-    if (!x.life.length) return lose(s, tp, "dostal zásah s 0 Life");
+    if (!x.life.length) return lose(s, tp, "dostal zásah a nemal už žiadne Life");
     const card = x.life.shift()!;
     s.cards[card].faceUp = false;
     emit(s, { t: "LifeDamage", p: tp, n: 1 });
@@ -1400,30 +1412,30 @@ function canAttackWith(s: GameState, iid: string, p: P): boolean {
 }
 
 export function applyAction(state: GameState, a: Action): GameState {
-  if (state.winner != null) fail("Hra skončila.");
+  if (state.winner != null) fail("Hra sa už skončila.");
   const s = clone(state);
   if (s.prompt) {
-    if (a.type !== "answer") fail("Engine čaká na odpoveď.");
-    if (s.prompt.p !== a.p) fail("Na rade je druhý hráč.");
+    if (a.type !== "answer") fail("Najprv odpovedz na otázku v strede stola.");
+    if (s.prompt.p !== a.p) fail("Teraz rozhoduje súper.");
     answer(s, (a as Extract<Action, { type: "answer" }>).choice);
     if (!s.prompt) run(s);
     return s;
   }
-  if (a.type === "answer") fail("Nie je na čo odpovedať.");
-  if (a.type === "mulligan") fail("Mulligan nie je teraz možný.");
-  if (a.p !== s.active) fail("Nie si na ťahu.");
-  if (s.phase !== "main" || s.stack.length || s.pending.length || s.battle) fail("Teraz sa to nedá.");
+  if (a.type === "answer") fail("Teraz nie je na čo odpovedať.");
+  if (a.type === "mulligan") fail("Mulligan sa dá len na začiatku hry.");
+  if (a.p !== s.active) fail("Počkaj, teraz hrá súper.");
+  if (s.phase !== "main" || s.stack.length || s.pending.length || s.battle) fail("Toto sa teraz nedá, najprv sa dohrá súboj alebo efekt.");
   const x = pl(s, a.p);
   switch (a.type) {
     case "play": {
-      if (!x.hand.includes(a.iid)) fail("Karta nie je v ruke.");
+      if (!x.hand.includes(a.iid)) fail("Túto kartu už nemáš v ruke.");
       const d = def(s, a.iid);
-      if (d.type === "Leader") fail("Leadera nemožno zahrať.");
-      if (d.type === "Event" && !d.abilities.some((ab) => ab.when === "main") && d.scripted) fail("Tento event sa nedá zahrať v Main fáze.");
-      if (d.type === "Character" && playerFlag(s, a.p, "noPlayChars")) fail("Tento ťah už nemôžeš hrať postavy.");
-      if (d.type === "Character" && playerFlag(s, a.p, "noPlayChars5") && d.cost >= 5) fail("Tento ťah nemôžeš hrať postavy s base cost 5+.");
+      if (d.type === "Leader") fail("Leadera sa zahrať nedá.");
+      if (d.type === "Event" && !d.abilities.some((ab) => ab.when === "main") && d.scripted) fail("Tento event sa v Main fáze zahrať nedá.");
+      if (d.type === "Character" && playerFlag(s, a.p, "noPlayChars")) fail("V tomto ťahu už postavy hrať nemôžeš.");
+      if (d.type === "Character" && playerFlag(s, a.p, "noPlayChars5") && d.cost >= 5) fail("V tomto ťahu nemôžeš hrať postavy s base cost 5 a viac.");
       const c = handCost(s, a.iid);
-      if (x.donActive < c) fail(`Potrebuješ ${c} aktívnych DON!!.`);
+      if (x.donActive < c) fail(`Na túto kartu potrebuješ ${c} aktívne DON!!.`);
       x.donActive -= c;
       x.donRested += c;
       if (d.type === "Character" && hasName(d, "Trafalgar Law") && d.cost >= 4) x.flags = x.flags.filter((f) => f.flag !== "lawDiscount2");
@@ -1440,27 +1452,27 @@ export function applyAction(state: GameState, a: Action): GameState {
       break;
     }
     case "attachDon": {
-      if (!x.donActive) fail("Nemáš aktívny DON!!.");
-      if (!fieldOf(s, a.p).includes(a.target) || a.target === x.stage) fail("DON!! sa dá dať len na leadera alebo postavu.");
+      if (!x.donActive) fail("Nemáš žiadne aktívne DON!!.");
+      if (!fieldOf(s, a.p).includes(a.target) || a.target === x.stage) fail("DON!! môžeš pripojiť len na leadera alebo postavu.");
       x.donActive--;
       s.cards[a.target].don++;
       break;
     }
     case "activate": {
-      if (!fieldOf(s, a.p).includes(a.iid)) fail("Karta nie je na tvojom poli.");
-      if (!canActivate(s, a.iid, a.ability, a.p)) fail("Tento efekt sa teraz nedá aktivovať.");
+      if (!fieldOf(s, a.p).includes(a.iid)) fail("Táto karta nie je na tvojej strane stola.");
+      if (!canActivate(s, a.iid, a.ability, a.p)) fail("Tento efekt sa teraz použiť nedá.");
       startAbility(s, a.iid, a.p, a.ability);
       break;
     }
     case "attack": {
-      if (s.turnCount[a.p] <= 1) fail("V prvom ťahu každého hráča sa neútočí.");
-      if (!canAttackWith(s, a.attacker, a.p)) fail("Táto karta teraz nemôže útočiť.");
+      if (s.turnCount[a.p] <= 1) fail("V prvom ťahu sa ešte neútočí.");
+      if (!canAttackWith(s, a.attacker, a.p)) fail("Táto karta teraz útočiť nemôže.");
       const isLeaderTarget = a.target === pl(s, other(a.p)).leader;
-      if (!attackTargets(s, a.p).includes(a.target)) fail("Cieľ musí byť súperov leader alebo postava v rest.");
+      if (!attackTargets(s, a.p).includes(a.target)) fail("Zaútočiť môžeš len na súperovho leadera alebo na postavu v rest.");
       if (!isLeaderTarget && def(s, a.attacker).type === "Character" && s.cards[a.attacker].playedTurn === s.turn && !hasKw(s, a.attacker, "rush") && !hasKw(s, a.attacker, "rushChar"))
-        fail("Bez [Rush] nemôže útočiť.");
+        fail("Bez [Rush] nemôže zaútočiť hneď v ťahu, keď prišla na stôl.");
       if (isLeaderTarget && def(s, a.attacker).type === "Character" && s.cards[a.attacker].playedTurn === s.turn && !hasKw(s, a.attacker, "rush"))
-        fail("[Rush: Character] môže útočiť len na postavy.");
+        fail("S [Rush: Character] môže v tomto ťahu útočiť len na postavy.");
       s.cards[a.attacker].rested = true;
       s.phase = "battle";
       s.battle = { attacker: a.attacker, target: a.target, step: "whenAttacking", counterPower: 0 };
@@ -1471,7 +1483,7 @@ export function applyAction(state: GameState, a: Action): GameState {
       if (isLeaderTarget) fire(s, "LeaderAttackedOrAttacks", other(a.p), null);
       if (flagOn(s, a.attacker, "attackTax2")) {
         s.stack.push({
-          source: a.attacker, controller: a.p, steps: [], pc: 0, vars: {}, flags: [], label: "Útok (vyhoď 2 karty)",
+          source: a.attacker, controller: a.p, steps: [], pc: 0, vars: {}, flags: [], label: "Útok: vyhoď 2 karty z ruky",
           costs: [{ op: "discard", n: 2 }], ci: 0, optional: false, asked: true, kind: "attackTax",
         });
       }
@@ -1491,6 +1503,39 @@ function answer(s: GameState, ch: AnswerChoice) {
   s.prompt = null;
   const restore = () => (s.prompt = pr);
   switch (pr.kind) {
+    case "rps": {
+      const pick = (ch as any).rps as RpsPick;
+      if (!RPS.includes(pick) || !s.rps) return (restore(), fail("Vyber kameň, papier alebo nožnice."));
+      s.rps.picks[pr.p] = pick;
+      const [a, b] = s.rps.picks;
+      if (a == null || b == null) {
+        s.prompt = { kind: "rps", p: other(pr.p) };
+        return;
+      }
+      const round: [RpsPick, RpsPick] = [a as RpsPick, b as RpsPick];
+      s.rps.rounds.push(round);
+      s.rps.picks = [null, null];
+      const names = `${pl(s, 0).name}: ${RPS_SK[round[0]]}, ${pl(s, 1).name}: ${RPS_SK[round[1]]}`;
+      if (round[0] === round[1]) {
+        info(s, `${names}. Remíza, ide sa znova.`);
+        s.prompt = { kind: "rps", p: 0 };
+        return;
+      }
+      const w: P = beats(round[0], round[1]) ? 0 : 1;
+      s.rps.winner = w;
+      info(s, `${names}. Vyhral ${pl(s, w).name} a vyberá si poradie.`);
+      s.prompt = { kind: "firstChoice", p: w };
+      return;
+    }
+    case "firstChoice": {
+      const goFirst = (ch as any).first;
+      if (typeof goFirst !== "boolean") return (restore(), fail("Vyber, či ideš prvý alebo druhý."));
+      s.first = goFirst ? pr.p : other(pr.p);
+      s.active = s.first;
+      info(s, `${pl(s, pr.p).name} ide ${goFirst ? "prvý" : "druhý"}. Začína ${pl(s, s.first).name}.`);
+      s.prompt = { kind: "mulligan", p: s.first };
+      return;
+    }
     case "mulligan": {
       const x = pl(s, pr.p);
       if ((ch as any).yes === true) {
@@ -1509,20 +1554,20 @@ function answer(s: GameState, ch: AnswerChoice) {
     }
     case "payCost": {
       const yes = (ch as any).yes;
-      if (typeof yes !== "boolean") return (restore(), fail("Odpovedz áno/nie."));
+      if (typeof yes !== "boolean") return (restore(), fail("Vyber áno alebo nie."));
       f.asked = true;
       if (!yes) finishFrame(s, f, false);
       return;
     }
     case "donSource": {
       const d = (ch as any).don;
-      if (!d) return (restore(), fail("Chýba výber DON!!."));
+      if (!d) return (restore(), fail("Vyber, ktoré DON!! vrátiš."));
       const x = pl(s, pr.p);
       const total = d.active + d.rested + Object.values(d.attached as Record<string, number>).reduce((a: number, b: number) => a + b, 0);
-      if (pr.atLeast ? total < pr.n : total !== pr.n) return (restore(), fail(`Vráť ${pr.atLeast ? "aspoň " : ""}${pr.n} DON!!.`));
+      if (pr.atLeast ? total < pr.n : total !== pr.n) return (restore(), fail(`Treba vrátiť ${pr.atLeast ? "aspoň " : ""}${pr.n} DON!!.`));
       if (d.active < 0 || d.rested < 0 || d.active > x.donActive || d.rested > x.donRested) return (restore(), fail("Toľko DON!! nemáš."));
       for (const [iid, n] of Object.entries(d.attached as Record<string, number>))
-        if (n < 0 || !fieldOf(s, pr.p).includes(iid) || s.cards[iid].don < n) return (restore(), fail("Na karte nie je toľko DON!!."));
+        if (n < 0 || !fieldOf(s, pr.p).includes(iid) || s.cards[iid].don < n) return (restore(), fail("Na tej karte toľko DON!! nie je."));
       x.donActive -= d.active;
       x.donRested -= d.rested;
       for (const [iid, n] of Object.entries(d.attached as Record<string, number>)) s.cards[iid].don -= n;
@@ -1536,26 +1581,26 @@ function answer(s: GameState, ch: AnswerChoice) {
     case "choose": {
       const pick = (ch as any).pick ?? [];
       if (!Array.isArray(pick) || new Set(pick).size !== pick.length || pick.some((i: string) => !pr.options.includes(i)) || pick.length < pr.min || pick.length > pr.max)
-        return (restore(), fail("Neplatný výber."));
+        return (restore(), fail("Tento výber sa nedá použiť."));
       const st = (f.ci < f.costs.length ? f.costs[f.ci] : f.steps[f.pc]) as Step;
       if (st.op === "choose" && (st.distinctNames || st.maxTotalCost != null)) {
         const names = pick.map((i: string) => nameOf(s, i));
-        if (st.distinctNames && new Set(names).size !== names.length) return (restore(), fail("Karty musia mať rôzne mená."));
+        if (st.distinctNames && new Set(names).size !== names.length) return (restore(), fail("Každá karta musí mať iné meno."));
         if (st.maxTotalCost != null && pick.reduce((a: number, i: string) => a + (onField(s, i) ? cost(s, i) : def(s, i).cost), 0) > st.maxTotalCost)
-          return (restore(), fail(`Spolu najviac cost ${st.maxTotalCost}.`));
+          return (restore(), fail(`Spolu môžu mať najviac cost ${st.maxTotalCost}.`));
       }
       f.sub = { ...(f.sub ?? {}), done: true, pick };
       return;
     }
     case "oneOf": {
       const o = (ch as any).option;
-      if (typeof o !== "number" || o < 0 || o >= pr.options.length) return (restore(), fail("Vyber možnosť."));
+      if (typeof o !== "number" || o < 0 || o >= pr.options.length) return (restore(), fail("Vyber jednu z možností."));
       f.sub = { ...(f.sub ?? {}), done: true, option: o };
       return;
     }
     case "orderTriggers": {
       const k = (ch as any).order;
-      if (!pr.options.includes(k)) return (restore(), fail("Neplatné poradie."));
+      if (!pr.options.includes(k)) return (restore(), fail("Takéto poradie sa nedá."));
       const [x] = s.pending.splice(k, 1);
       startPending(s, x);
       return;
@@ -1563,10 +1608,10 @@ function answer(s: GameState, ch: AnswerChoice) {
     case "blocker": {
       const pick = (ch as any).pick ?? [];
       if (pick[0]) {
-        if (!pr.options.includes(pick[0])) return (restore(), fail("Tento blocker sa nedá použiť."));
+        if (!pr.options.includes(pick[0])) return (restore(), fail("Táto postava teraz blokovať nemôže."));
         s.cards[pick[0]].rested = true;
         s.battle!.target = pick[0];
-        info(s, `${nameOf(s, pick[0])} blokuje.`);
+        info(s, `${nameOf(s, pick[0])} blokuje útok.`);
         fire(s, "BlockerActivated", pr.p, pick[0]);
       }
       return;
@@ -1582,17 +1627,17 @@ function answer(s: GameState, ch: AnswerChoice) {
       const opts = counterOptions(s, pr.p);
       let don = x.donActive;
       for (const iid of used) {
-        if (!opts.includes(iid)) return (restore(), fail("Túto kartu nemôžeš použiť ako counter."));
+        if (!opts.includes(iid)) return (restore(), fail("Túto kartu ako counter použiť nemôžeš."));
         if (def(s, iid).type === "Event") don -= handCost(s, iid);
       }
-      if (don < 0) return (restore(), fail("Nemáš dosť DON!! na eventy."));
+      if (don < 0) return (restore(), fail("Na tieto eventy nemáš dosť DON!!."));
       for (const iid of used) {
         const d = def(s, iid);
         if (d.type === "Character") {
           const v = counterOf(s, iid);
           moveTo(s, iid, "trash");
           addMod(s, { target: b.target, kind: "power", amount: v, until: "battle", owner: pr.p });
-          info(s, `Counter ${nameOf(s, iid)} +${v}`);
+          info(s, `Counter +${v} (${nameOf(s, iid)})`);
         } else {
           const c = handCost(s, iid);
           x.donActive -= c;
@@ -1618,7 +1663,7 @@ function answer(s: GameState, ch: AnswerChoice) {
     }
     case "trashCharacter": {
       const pick = (ch as any).pick ?? [];
-      if (!pick[0] || !pr.options.includes(pick[0])) return (restore(), fail("Vyber postavu na odhodenie."));
+      if (!pick[0] || !pr.options.includes(pick[0])) return (restore(), fail("Vyber postavu, ktorá pôjde do trashu."));
       leaveField(s, pick[0]);
       pl(s, pr.p).trash.push(pick[0]);
       return;
@@ -1648,6 +1693,7 @@ export function viewFor(s: GameState, p: P) {
   const codes = new Set(Object.values(cards).map((c) => c.code));
   v.defs = Object.fromEntries(Object.entries(s.defs).filter(([k]) => codes.has(k)));
   v.seed = 0;
+  if (v.rps && v.rps.picks[o]) v.rps.picks[o] = "hidden";
   // rámce môžu odkazovať na skryté karty (premenné) – klient ich nepotrebuje
   v.stack = v.stack.map((f) => ({ ...f, vars: Object.fromEntries(Object.entries(f.vars).map(([k, l]) => [k, l.filter((i) => !hidden.has(i))])) }));
   return v;

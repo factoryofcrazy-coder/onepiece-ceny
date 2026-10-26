@@ -41,6 +41,11 @@ export function botAction(s: GameState, me: P): Action | null {
 export function botAnswer(s: GameState, me: P): AnswerChoice {
   const pr = s.prompt!;
   switch (pr.kind) {
+    case "rps":
+      // bot hrá v prehliadači a súperovu voľbu nepoužije – čistá náhoda
+      return { rps: (["rock", "paper", "scissors"] as const)[Math.floor(Math.random() * 3)] };
+    case "firstChoice":
+      return { first: true };
     case "mulligan":
       return { yes: false };
     case "choose": {
