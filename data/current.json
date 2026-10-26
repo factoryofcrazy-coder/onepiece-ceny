@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-26T10:31:35Z",
+ "updated": "2026-10-26T10:59:01Z",
  "fx": {
   "CZK": 24.327,
   "USD": 1.1193,
@@ -589,7 +589,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -1818,7 +1818,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -2185,7 +2185,7 @@
   },
   "najada": {
    "ts": "2026-10-26T10:31:35Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece: The Time of Battle Booster Box",
@@ -2579,10 +2579,13 @@
      "inStock": true,
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/One_Piece_PURPLE_BLACK_Monkey_D._Luffy_Starter_Deck.webp"
     }
-   ]
+   ],
+   "error": "The read operation timed out",
+   "fails": 1,
+   "warned": false
   },
   "tolarie": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -2807,7 +2810,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -3503,7 +3506,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -3673,7 +3676,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -3724,7 +3727,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -4212,7 +4215,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -4713,7 +4716,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -5269,7 +5272,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -5347,7 +5350,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -5683,8 +5686,8 @@
     }
    ],
    "error": "obchod vrátil 0 produktov – možno zmenil web alebo URL kategórie",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "wombat": {
    "ts": "2026-10-26T10:31:35Z",
@@ -5888,7 +5891,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
@@ -6200,7 +6203,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-26T10:31:35Z",
+   "ts": "2026-10-26T10:59:01Z",
    "ok": true,
    "items": [
     {
