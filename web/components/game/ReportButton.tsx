@@ -77,7 +77,7 @@ export default function ReportButton({
   return (
     <>
       <button className="btn ghost sm" onClick={() => setOpen(true)} title="Nahlásiť zlý ťah alebo efekt" aria-label="Nahlásiť problém">
-        <Icon name="flag" size={14} />
+        <Icon name="report" size={14} />
         <span className="lbl-wide">Nahlásiť</span>
       </button>
       {open &&

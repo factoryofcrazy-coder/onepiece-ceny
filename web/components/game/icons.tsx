@@ -3,7 +3,7 @@ import type { ReactNode, SVGProps } from "react";
 
 export type IconName =
   | "clock" | "swords" | "burst" | "return" | "spark" | "shield" | "swap" | "order" | "flag"
-  | "exit" | "play" | "plus" | "eye" | "heart" | "question" | "alert" | "trash" | "hand" | "check";
+  | "exit" | "report" | "play" | "plus" | "eye" | "heart" | "question" | "alert" | "trash" | "hand" | "check";
 
 const P: Record<IconName, ReactNode> = {
   clock: (<><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2.5 2M9.5 2.5h5" /></>),
@@ -15,6 +15,7 @@ const P: Record<IconName, ReactNode> = {
   swap: (<><path d="M4 8h13l-3-3M20 16H7l3 3" /></>),
   order: (<><path d="M8 4v16M4 8l4-4 4 4M16 20V4M12 16l4 4 4-4" /></>),
   flag: (<><path d="M5 21V4" /><path d="M5 4h11l-2 4 2 4H5" /></>),
+  report: (<><path d="M4.5 5.5h15v10h-8l-4.5 4v-4h-2.5Z" /><path d="M12 8.5v3" /><circle cx="12" cy="13.6" r=".5" /></>),
   exit: (<><path d="M14 4h5v16h-5" /><path d="M10 8l-4 4 4 4M6 12h10" /></>),
   play: (<path d="M7 4.5v15l12-7.5Z" />),
   plus: (<path d="M12 5v14M5 12h14" />),

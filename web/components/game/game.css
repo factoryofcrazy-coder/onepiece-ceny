@@ -1,8 +1,12 @@
 /* ==================================================================== HRA
-   Hracia plocha ako námorná mapa na stole: tichá tmavomodrá podložka, tenké obrysy zón
-   s rohovými značkami, mosadzný pás v strede (ťah · akcie · ukončenie ťahu).
-   Výraznosť patrí kartám; farba hráča (morské sklo) a súpera (koral) nesie, kto je kto.
-   Veľkosť karty --cw sa počíta z výšky aj šírky okna. */
+   Hracia plocha ako námorná mapa na stole: tichá tmavomodrá podložka, zóny ako jemné podklady,
+   mosadzný pás v strede (ťah · výzvy · ukončenie ťahu). Výraznosť patrí kartám;
+   farba hráča (morské sklo) a súpera (koral) nesie, kto je kto.
+
+   Na PC (≥ 1101 × 600) zaberá hra presne okno pod navigáciou: .gwrap má výšku 100dvh − navigácia
+   a je CSS kontajner, veľkosť karty --cw sa počíta z jeho výšky (cqh) aj šírky (cqw).
+   Výška stola ≈ 256 px pevných častí + 7,25 × --cw (2 polovice × 2,8 cw, ruka 1,65 cw).
+   Menšie obrazovky sa posúvajú normálne. */
 
 .gwrap {
   --g-bg: #080f18;
@@ -10,73 +14,80 @@
   --g-raise: #142233;
   --g-rule: #27384a;
   --g-text: #f2f0e9;
-  --g-mute: #9ba9b9;
+  --g-mute: #a3b0be;
   --g-gold: #d5ad60;
-  --g-gold-dim: rgba(213, 173, 96, .32);
+  --g-gold-dim: rgba(213, 173, 96, .3);
   --me: #6fc3be;
   --opp: #e07a6c;
   --ok: #8fd8a8;
+  --zone: rgba(155, 169, 185, .045);
   --cw: calc(clamp(46px, min(calc((100dvh - 362px) / 7.9), 6.6vw), 96px) * var(--zoom, 1));
   --ch: calc(var(--cw) * 1.4);
   --slot: calc(var(--cw) * 1.16);
   --side: max(calc(var(--cw) * 1.3), 118px);
+  --mid-h: 80px;
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 14px;
+  gap: 12px;
   margin: 14px 0 28px;
   color: var(--g-text);
 }
 .gi { flex: none; display: inline-block; vertical-align: -2px; }
+.gwrap .btn { box-shadow: none; border-radius: 8px; }
+.gwrap .btn.sm { min-height: 32px; padding: 6px 12px; }
+.gwrap .btn.ghost { border-color: var(--g-rule); color: var(--g-text); }
+.gwrap .btn.ghost:hover { background: rgba(155, 169, 185, .08); border-color: #3a5068; }
+.gwrap .btn.ghost.danger { color: #f0a097; }
+/* primárne akcie v hre sú mosadzné ako „Ukončiť ťah“; vzdanie ostáva koralové */
+.gwrap .btn:not(.ghost) { background: var(--g-gold); color: var(--g-bg); }
+.gwrap .btn.resign { background: var(--opp); color: var(--g-bg); }
+.gwrap .btn:not(.ghost):disabled { background: #4f4430; color: #c9bfa8; opacity: 1; }
+.gwrap .btn:focus-visible { outline: 2px solid var(--g-gold); outline-offset: 2px; }
 
 /* ------------------------------------------------------------- stôl */
 .gtable {
   position: relative;
   min-width: 0;
+  display: flex; flex-direction: column;
   border-radius: 14px;
   border: 1px solid var(--g-rule);
   overflow: hidden;
   background:
-    /* ružica v strede stola */
-    radial-gradient(circle at 50% 50%, transparent 0 calc(var(--cw) * 1.9), rgba(213, 173, 96, .07) calc(var(--cw) * 1.9) calc(var(--cw) * 1.9 + 1px), transparent calc(var(--cw) * 1.9 + 1px)),
-    repeating-conic-gradient(from 0deg at 50% 50%, rgba(213, 173, 96, .028) 0 .5deg, transparent .5deg 22.5deg),
-    /* rovnobežky a poludníky mapy */
-    repeating-linear-gradient(0deg, rgba(155, 169, 185, .035) 0 1px, transparent 1px 72px),
-    repeating-linear-gradient(90deg, rgba(155, 169, 185, .025) 0 1px, transparent 1px 72px),
+    repeating-conic-gradient(from 0deg at 50% 50%, rgba(213, 173, 96, .018) 0 .5deg, transparent .5deg 22.5deg),
+    repeating-linear-gradient(0deg, rgba(155, 169, 185, .022) 0 1px, transparent 1px 72px),
+    repeating-linear-gradient(90deg, rgba(155, 169, 185, .016) 0 1px, transparent 1px 72px),
     var(--g-felt);
   box-shadow: 0 30px 70px -40px #000;
-  scroll-margin-top: 72px;
+  scroll-margin-top: calc(var(--navh, 64px) + 8px);
 }
-.gtop {
-  display: flex; align-items: center; gap: 8px; padding: 8px 12px;
-  border-bottom: 1px solid var(--g-rule);
-  background: var(--g-bg);
+
+/* horný riadok: súper, jeho ruka, ovládanie */
+.gtopbar {
+  position: relative; flex: none; display: flex; align-items: center; gap: 12px;
+  min-height: 52px; padding: 6px 12px; background: var(--g-bg); border-bottom: 1px solid var(--g-rule);
 }
-.gtop .gmode { font: 600 13px var(--body); color: var(--g-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.gtop .sp { flex: 1; }
-.gwrap .btn.ghost { border-color: var(--g-rule); color: var(--g-text); }
-.gwrap .btn.ghost:hover { background: rgba(155, 169, 185, .08); border-color: #3a5068; }
-.gwrap .btn.ghost.danger { color: #f0a097; }
-.gwrap .btn { box-shadow: none; }
-/* primárne akcie v hre sú mosadzné ako „Ukončiť ťah“; vzdanie ostáva koralové */
-.gwrap .btn:not(.ghost) { background: var(--g-gold); color: var(--g-bg); }
-.gwrap .btn.resign { background: var(--opp); color: var(--g-bg); }
-.gwrap .btn:not(.ghost):disabled { background: #5d5038; color: #c9bfa8; opacity: 1; }
+.gtopbar .plate { flex: none; }
+.gtopbar .bks { flex: 1; display: flex; justify-content: center; align-self: stretch; overflow: hidden; padding-top: 2px; }
+.gtopbar .bk { width: 26px; height: 36px; border-radius: 4px; margin-left: -14px; border-width: 1.5px; transform: rotate(calc((var(--i) - var(--mid)) * -3deg)); transform-origin: 50% -150%; animation: fade .3s both; }
+.gtopbar .bk:first-child { margin-left: 0; }
+.gctl { flex: none; display: flex; align-items: center; gap: 6px; }
+.gctl .gmode { font: 600 12.5px var(--body); color: var(--g-mute); white-space: nowrap; margin-right: 4px; }
+.gctl .lbl-wide { display: none; }
+.gctl .btn.sm { padding: 6px 9px; }
 
 /* ------------------------------------------------------------- polovica stola */
-.half { position: relative; padding: 12px 14px; transition: background .4s; }
-.half.opp { padding-bottom: 10px; }
-.half.me { padding-top: 10px; }
+.half { position: relative; flex: 1 0 auto; display: flex; flex-direction: column; justify-content: center; padding: 10px 14px; }
 .half::before {
   content: ""; position: absolute; top: 10px; bottom: 10px; left: 0; width: 3px; border-radius: 0 3px 3px 0;
   background: var(--me); opacity: 0; transition: opacity .35s;
 }
 .half.opp::before { background: var(--opp); }
-.half.turn { background: rgba(8, 15, 24, .28); }
+.half.turn { background: rgba(8, 15, 24, .22); }
 .half.turn::before { opacity: 1; }
 
 .mat {
-  display: grid; gap: 12px 12px; align-items: center;
+  display: grid; gap: 10px 12px; align-items: center;
   grid-template-columns: var(--side) minmax(0, 1fr) auto var(--side);
 }
 .half.me .mat { grid-template-areas: "life chars chars deck" "dond cost core trash"; }
@@ -85,43 +96,40 @@
 .a-trash { grid-area: trash; } .a-dond { grid-area: dond; } .a-cost { grid-area: cost; }
 .a-life, .a-deck, .a-trash, .a-dond { justify-self: center; }
 
-/* názov zóny: malý, tichý, v rámčeku zóny */
+/* názov zóny: malý text v rohu podkladu, bez rámčeka */
 .zlabel {
-  position: absolute; top: -8px; left: 12px; padding: 0 6px; border-radius: 4px;
-  font: 600 11px/16px var(--body); color: var(--g-mute); background: var(--g-felt); white-space: nowrap;
+  position: absolute; top: 5px; left: 9px; z-index: 1; pointer-events: none;
+  font: 600 11px/1 var(--body); color: var(--g-mute); opacity: .8; white-space: nowrap;
 }
-.half.turn .zlabel { background: #0b1520; }
-.half.opp .zlabel { top: auto; bottom: -8px; }
+.half.opp .zlabel { top: auto; bottom: 5px; }
 
-/* zóna postáv – plný tenký obrys s mosadznými rohmi */
+/* zóna postáv – jemný podklad s mosadznými rohmi, bez obrysu */
 .chars {
-  position: relative; display: flex; justify-content: center; gap: 8px;
-  padding: 10px 8px; border-radius: 10px; min-height: calc(var(--ch) + 20px);
-  border: 1px solid rgba(155, 169, 185, .12);
+  position: relative; display: flex; justify-content: center; align-items: center; gap: 8px;
+  padding: 6px 8px; border-radius: 10px; min-height: calc(var(--ch) + 12px);
   background:
-    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 0 0 / 10px 1px no-repeat,
-    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 0 0 / 1px 10px no-repeat,
-    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 100% 0 / 10px 1px no-repeat,
-    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 100% 0 / 1px 10px no-repeat,
-    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 0 100% / 10px 1px no-repeat,
-    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 0 100% / 1px 10px no-repeat,
-    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 100% 100% / 10px 1px no-repeat,
-    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 100% 100% / 1px 10px no-repeat,
-    rgba(8, 15, 24, .32);
+    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 0 0 / 9px 1px no-repeat,
+    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 0 0 / 1px 9px no-repeat,
+    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 100% 0 / 9px 1px no-repeat,
+    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 100% 0 / 1px 9px no-repeat,
+    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 0 100% / 9px 1px no-repeat,
+    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 0 100% / 1px 9px no-repeat,
+    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 100% 100% / 9px 1px no-repeat,
+    linear-gradient(var(--g-gold-dim), var(--g-gold-dim)) 100% 100% / 1px 9px no-repeat,
+    var(--zone);
 }
+/* prázdny slot: len náznak miesta, nepúta pozornosť */
 .slot { width: var(--slot); height: var(--ch); border-radius: 8px; flex: none; }
-.slot.empty { border: 1px solid rgba(155, 169, 185, .06); background: rgba(155, 169, 185, .02); }
+.slot.vac { background: rgba(155, 169, 185, .025); }
 .core { display: flex; justify-content: center; align-items: center; gap: 14px; }
 .half.opp .core { flex-direction: row-reverse; }
 .stage-slot {
   width: calc(var(--cw) * .9); height: calc(var(--ch) * .9 / 1.16); border-radius: 8px;
-  border: 1px solid rgba(155, 169, 185, .12); background: rgba(8, 15, 24, .32);
-  display: grid; place-items: center; color: var(--g-mute); font: 600 11px var(--body); opacity: .8;
+  background: var(--zone); display: grid; place-items: center; color: var(--g-mute); font: 600 11px var(--body); opacity: .75;
 }
 .cost-area {
   position: relative; display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: 2px;
-  min-height: calc(var(--cw) * .82); padding: 8px 10px; border-radius: 10px;
-  border: 1px solid rgba(155, 169, 185, .12); background: rgba(8, 15, 24, .32);
+  min-height: calc(var(--cw) * .82); padding: 8px 10px; border-radius: 10px; background: var(--zone);
 }
 
 /* ------------------------------------------------------------- karta na poli */
@@ -131,22 +139,23 @@
   animation: deal .4s var(--ease) both;
 }
 .fc.lead { --slot: calc(var(--cw) * 1.16); }
-.fc .img { width: calc(var(--slot) * .86); max-width: 100%; transition: transform .35s var(--ease), filter .25s, box-shadow .2s; border-radius: 7px; position: relative; }
+.fc .img { width: calc(var(--slot) * .86); max-width: 100%; transition: transform .3s var(--ease), filter .2s, box-shadow .2s; border-radius: 7px; position: relative; }
 .fc.lead .img { width: calc(var(--slot) * .92); box-shadow: 0 0 0 1px var(--g-gold-dim); }
 .fc .img .cimg { width: 100%; border-radius: 7px; display: block; box-shadow: 0 10px 18px -10px #000; }
 .fc .img .cimg.ph { aspect-ratio: 600/838; font-size: 9px; }
 .fc.rested .img { transform: rotate(90deg) scale(.78); filter: saturate(.7) brightness(.82); }
-.fc:hover .img { filter: brightness(1.08); }
+.fc:hover .img { transform: translateY(-3px); filter: brightness(1.06); }
+.fc.rested:hover .img { transform: rotate(90deg) scale(.8); }
 .fc:focus-visible { outline: none; }
 .fc:focus-visible .img { box-shadow: 0 0 0 2px var(--g-bg), 0 0 0 4px var(--g-gold); }
 
 /* stavy: dá sa vybrať (zlatá) · vybraté mnou (biela) · označené vo výzve (farba hráča) · cieľ útoku (koral) */
-.fc.hl .img { box-shadow: 0 0 0 2px var(--g-gold), 0 0 16px -2px rgba(213, 173, 96, .55); animation: aim 1.6s ease-in-out infinite; }
-.fc.picked .img { box-shadow: 0 0 0 3px var(--me), 0 0 16px -2px rgba(111, 195, 190, .6); animation: none; }
-.fc.sel .img { box-shadow: 0 0 0 2px var(--g-text), 0 14px 26px -12px #000; transform: translateY(-5px); }
+.fc.hl .img { box-shadow: 0 0 0 2px var(--g-gold), 0 0 14px -2px rgba(213, 173, 96, .5); animation: aim 1.6s ease-in-out infinite; }
+.fc.picked .img { box-shadow: 0 0 0 3px var(--me), 0 0 14px -2px rgba(111, 195, 190, .55); animation: none; }
+.fc.sel .img, .fc.sel:hover .img { box-shadow: 0 0 0 2px var(--g-text), 0 14px 26px -12px #000; transform: translateY(-5px); }
 .fc.sel.rested .img { transform: rotate(90deg) scale(.78) translateX(-5px); }
-.fc.tgt .img { box-shadow: 0 0 0 3px var(--opp), 0 0 18px -2px rgba(224, 122, 108, .7); animation: shake .45s both; }
-.fc.atk .img { box-shadow: 0 0 0 3px var(--g-gold), 0 0 20px -2px rgba(213, 173, 96, .6); }
+.fc.tgt .img { box-shadow: 0 0 0 3px var(--opp), 0 0 16px -2px rgba(224, 122, 108, .65); animation: shake .45s both; }
+.fc.atk .img { box-shadow: 0 0 0 3px var(--g-gold), 0 0 18px -2px rgba(213, 173, 96, .55); }
 .half.me .fc.atk .img { animation: lunge-up .5s var(--ease) both; }
 .half.opp .fc.atk .img { animation: lunge-down .5s var(--ease) both; }
 .half.me .fc.atk.rested .img, .half.opp .fc.atk.rested .img { animation: none; }
@@ -176,10 +185,7 @@
 }
 .fc .dons { position: absolute; top: -8px; right: -5px; z-index: 3; display: flex; align-items: center; }
 .fc .dons .tok { --t: calc(var(--cw) * .24); margin-left: calc(var(--t) * -.6); }
-.fc .dons .dn {
-  margin-left: 3px; font: 800 11px/1 var(--display); color: var(--g-bg); background: var(--g-gold);
-  padding: 2px 5px; border-radius: 6px; box-shadow: 0 2px 6px -2px #000;
-}
+.fc .dons .dn { margin-left: 3px; font: 800 11px/1 var(--display); color: var(--g-bg); background: var(--g-gold); padding: 2px 5px; border-radius: 6px; box-shadow: 0 2px 6px -2px #000; }
 
 /* ------------------------------------------------------------- DON!! žetóny */
 .tok {
@@ -197,11 +203,10 @@
 .cost-area.many .tok + .tok { margin-left: calc(var(--t) * -.42); }
 @keyframes don-in { from { opacity: 0; transform: translateY(-12px) scale(.7); } }
 .cost-sum {
-  position: absolute; bottom: -8px; right: 12px; padding: 0 6px; border-radius: 4px; white-space: nowrap;
-  font: 600 11px/16px var(--body); color: var(--g-gold); background: var(--g-felt); font-variant-numeric: tabular-nums;
+  position: absolute; bottom: 4px; right: 9px; white-space: nowrap;
+  font: 600 11px/1 var(--body); color: var(--g-gold); font-variant-numeric: tabular-nums;
 }
-.half.turn .cost-sum { background: #0b1520; }
-.half.opp .cost-sum { bottom: auto; top: -8px; }
+.half.opp .cost-sum { bottom: auto; top: 4px; }
 
 /* ------------------------------------------------------------- balíčky, Life, trash */
 .pile { position: relative; width: calc(var(--cw) * .82); height: calc(var(--cw) * .82 * 1.4); border: 0; padding: 0; background: none; color: inherit; cursor: default; }
@@ -214,9 +219,10 @@
 }
 .pile.trash { cursor: pointer; }
 .pile.trash:hover .cimg, .pile.trash:focus-visible .cimg { filter: grayscale(.2) brightness(.85); }
+.pile.trash:focus-visible { outline: 2px solid var(--g-gold); outline-offset: 3px; border-radius: 8px; }
 .pile.trash .cimg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 7px; filter: grayscale(.5) brightness(.6); transition: filter .2s; }
-.pile.empty .back { background: rgba(8, 15, 24, .32); border: 1px solid rgba(155, 169, 185, .12); box-shadow: none; }
-.pile .lbl { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font: 600 11px var(--body); color: var(--g-mute); }
+.pile.vac .back { background: var(--zone); border: 0; box-shadow: none; }
+.pile .lbl { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font: 600 11px var(--body); color: var(--g-mute); opacity: .8; }
 .back {
   background:
     radial-gradient(circle at 50% 50%, transparent 0 22%, rgba(213, 173, 96, .5) 23% 25%, transparent 26%),
@@ -226,6 +232,7 @@
 }
 .pile.dondeck .back { background: linear-gradient(160deg, #3a2d16, #1d150a); border-color: #a9853f; }
 .pile.dondeck .back::after { content: "DON!!"; position: absolute; inset: 0; display: grid; place-items: center; font: 900 calc(var(--cw) * .2)/1 var(--display); color: var(--g-gold); transform: rotate(-90deg); letter-spacing: -.03em; }
+.pile.dondeck.vac .back::after { opacity: .3; }
 
 .life { position: relative; width: calc(var(--cw) * 1.05); display: flex; flex-direction: column; align-items: center; }
 .life-stack { position: relative; width: calc(var(--cw) * 1.0); height: calc(var(--cw) * .72 + var(--n, 0) * var(--cw) * .14); }
@@ -249,7 +256,7 @@
 .life.low .life-num { animation: life-low 1.4s ease-in-out infinite; }
 @keyframes life-hit { 0% { transform: translateX(-50%) scale(1.5); filter: brightness(1.8); } }
 @keyframes life-low { 50% { box-shadow: 0 0 0 2px var(--g-felt), 0 0 0 5px rgba(185, 54, 58, .45); } }
-.life.empty .life-stack { border: 1px solid rgba(185, 54, 58, .45); border-radius: 6px; }
+.life.vac .life-stack { background: rgba(185, 54, 58, .12); border-radius: 6px; }
 
 /* ------------------------------------------------------------- menovky hráčov */
 .plate { display: flex; align-items: center; gap: 10px; min-width: 0; z-index: 4; }
@@ -279,18 +286,17 @@
 .clk.out { color: var(--opp); border-color: var(--opp); }
 @keyframes blink { 50% { opacity: .45; } }
 
-/* ------------------------------------------------------------- stredný pás: ťah · akcie · ukončenie */
+/* ------------------------------------------------------------- stredný pás: ťah · výzvy · ukončenie */
 .gmid {
-  position: relative; display: grid; grid-template-columns: minmax(150px, auto) minmax(0, 1fr) minmax(150px, auto);
-  align-items: center; gap: 14px; min-height: 64px; padding: 8px 14px;
+  position: relative; z-index: 12; flex: none; display: grid; grid-template-columns: 168px minmax(0, 1fr) 168px;
+  align-items: center; gap: 14px; min-height: var(--mid-h); padding: 6px 14px;
   background: var(--g-bg);
   border-top: 1px solid var(--g-gold-dim); border-bottom: 1px solid var(--g-gold-dim);
-  box-shadow: 0 1px 0 rgba(213, 173, 96, .06) inset, 0 -1px 0 rgba(213, 173, 96, .06) inset;
 }
 .gturn { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 10px; align-items: center; min-width: 0; }
 .gturn .tn {
   grid-row: 1 / 3; display: grid; place-items: center; min-width: 44px; height: 44px; padding: 0 6px; border-radius: 10px;
-  font: 800 11px/1.1 var(--body); color: var(--g-mute); text-align: center; border: 1px solid var(--g-rule); background: var(--g-felt);
+  font: 800 11px/1.1 var(--body); color: var(--g-mute); text-align: center; background: var(--g-felt);
   font-variant-numeric: tabular-nums;
 }
 .gturn .tw { display: flex; align-items: center; gap: 7px; font: 800 16px/1.15 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -298,14 +304,12 @@
 .gmid.mine .gturn .dot { background: var(--me); }
 .gmid.mine .gturn .tw { color: var(--me); }
 .gturn .ph { font: 600 12px var(--body); color: var(--g-mute); white-space: nowrap; }
-.gcenter { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-width: 0; }
+.gcenter { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 0; }
+.gcenter > * { flex: none; }
 .gend { display: flex; justify-content: flex-end; align-items: center; }
-.endbtn {
-  font: 800 15px/1 var(--display); padding: 13px 20px; border-radius: 10px; white-space: nowrap;
-  background: var(--g-gold); color: var(--g-bg);
-}
+.endbtn { font: 800 15px/1 var(--display); padding: 13px 20px; border-radius: 10px; white-space: nowrap; }
 .endbtn:hover { filter: brightness(1.06); }
-.endbtn.confirm { background: var(--opp); color: var(--g-bg); }
+.gwrap .endbtn.confirm { background: var(--opp); color: var(--g-bg); }
 .endwait { font: 600 12.5px var(--body); color: var(--g-mute); text-align: right; }
 
 .gmid .hint { display: flex; align-items: center; justify-content: center; gap: 7px; flex-wrap: wrap; font-size: 13.5px; color: var(--g-mute); text-align: center; margin: 0; }
@@ -313,30 +317,54 @@
 .gmid .hint .spin { width: 13px; height: 13px; }
 .battle { display: flex; align-items: center; gap: 14px; font: 800 20px var(--display); font-variant-numeric: tabular-nums; animation: pop .3s var(--ease) both; }
 .battle .side { display: flex; flex-direction: column; align-items: center; line-height: 1.05; }
-.battle .side small { font: 600 11px var(--body); color: var(--g-mute); max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.battle .vs { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: var(--g-gold); border: 1px solid var(--g-gold-dim); }
+.battle .side small { font: 600 11px var(--body); color: var(--g-mute); max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.battle .vs { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: var(--g-gold); background: var(--g-felt); }
 .battle .win { color: var(--ok); } .battle .lose { color: #f0a097; }
 
 .actbar { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; animation: pop .2s var(--ease) both; }
 .actbar .who { font: 700 14px var(--display); margin-right: 2px; }
-.actbar .hint { margin-right: 4px; }
-.gerr { color: #f0a097; font-size: 13px; margin: 0; animation: shake .4s both; }
+.gerr { color: #f0a097; font-size: 12.5px; margin: 0; animation: shake .4s both; }
 
-/* ------------------------------------------------------------- výzva (prompt) */
+/* ------------------------------------------------------------- výzvy */
+/* kompaktný riadok: [zdrojová karta / ikona] [názov + popis] [voľby] */
 .gprompt {
-  width: min(660px, 100%); display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: 12px;
-  background: var(--g-raise); border: 1px solid rgba(213, 173, 96, .55);
-  box-shadow: 0 20px 44px -22px #000; animation: pop .25s var(--ease) both;
+  width: 100%; display: flex; align-items: center; gap: 12px; padding: 6px 8px 6px 6px; border-radius: 10px;
+  background: var(--g-raise); border: 1px solid rgba(213, 173, 96, .5); animation: pop .2s var(--ease) both;
 }
-.gprompt.wait { border-color: var(--g-rule); background: var(--g-felt); flex-direction: row; align-items: center; justify-content: center; color: var(--g-mute); font-size: 13px; padding: 10px 14px; box-shadow: none; width: auto; }
-.gprompt h4 { margin: 0; font: 800 16px/1.25 var(--display); display: flex; align-items: center; gap: 9px; }
-.gprompt h4 .ic { width: 26px; height: 26px; border-radius: 8px; background: rgba(213, 173, 96, .14); color: var(--g-gold); display: grid; place-items: center; flex: none; }
-.gprompt p { margin: 0; color: var(--g-mute); font-size: 13.5px; }
-.gprompt .acts { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
-.gprompt .opts { display: flex; flex-wrap: wrap; gap: 8px; }
-.gprompt .opts .btn.on, .gprompt .acts .btn.on { border-color: var(--me); color: var(--me); }
+.gprompt.wait { width: auto; border-color: var(--g-rule); background: var(--g-felt); justify-content: center; color: var(--g-mute); font-size: 13px; padding: 9px 14px; }
+.gp-head { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; }
+.gp-head .ic { width: 30px; height: 30px; border-radius: 8px; background: rgba(213, 173, 96, .14); color: var(--g-gold); display: grid; place-items: center; flex: none; }
+.gp-src { flex: none; width: 40px; padding: 0; border: 0; background: none; border-radius: 4px; cursor: zoom-in; }
+.gp-src .cimg { width: 100%; border-radius: 4px; display: block; box-shadow: 0 0 0 1px var(--g-gold-dim); }
+.gp-src:focus-visible { outline: 2px solid var(--g-gold); outline-offset: 2px; }
+.gp-text { min-width: 0; }
+.gp-text h4 { margin: 0; font: 800 14.5px/1.25 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gp-text p {
+  margin: 2px 0 0; color: var(--g-mute); font-size: 12.5px; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.gp-text p b { color: var(--g-text); }
+.gprompt .acts, .gsheet .acts { flex: none; display: flex; align-items: center; gap: 6px; max-width: 62%; overflow-x: auto; }
+.gprompt .btn.on, .gsheet .btn.on { border-color: var(--me); color: var(--me); }
+/* panel nad stolom pre výzvy s kartami / riadkami; dá sa skryť a pozrieť si stôl */
+.gsheet {
+  position: absolute; z-index: 13; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%);
+  width: min(680px, calc(100% - 28px)); max-height: var(--sheet-max, 60vh); overflow: auto;
+  display: flex; flex-direction: column; gap: 10px; padding: 12px 14px 14px; border-radius: 12px;
+  background: var(--g-raise); border: 1px solid rgba(213, 173, 96, .55); box-shadow: 0 24px 50px -18px #000;
+  animation: sheet-in .2s var(--ease) both;
+}
+.gprompt.gbar .gp-text p { display: none; }
+.gprompt.gbar .gp-src { width: 30px; }
+.gsheet .gp-text h4 { white-space: normal; }
+.gsheet .gp-text p { -webkit-line-clamp: unset; display: block; }
+.gsheet .acts { max-width: none; justify-content: flex-end; flex-wrap: wrap; overflow: visible; }
+.gsheet .opts.col { display: flex; flex-direction: column; gap: 6px; }
+.gsheet .opts.col .btn { justify-content: flex-start; text-align: left; }
+@keyframes sheet-in { from { opacity: 0; transform: translate(-50%, 8px); } }
 .spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(155, 169, 185, .3); border-top-color: var(--g-gold); animation: spin .8s linear infinite; flex: none; display: inline-block; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.donrows { display: flex; flex-direction: column; gap: 6px; }
 .donrow { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 10px; background: var(--g-bg); }
 .donrow .lab { flex: 1; font-size: 13px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .donrow .tokrow { display: flex; }
@@ -345,34 +373,29 @@
 .stepper button { width: 30px; height: 30px; border: 0; border-radius: 7px; background: var(--g-raise); color: var(--g-text); font: 800 16px var(--body); cursor: pointer; }
 .stepper button:disabled { opacity: .35; cursor: default; }
 .stepper b { min-width: 24px; text-align: center; font: 800 15px var(--display); }
-.progress { font: 800 14px var(--display); color: var(--g-gold); font-variant-numeric: tabular-nums; }
+.progress { font: 800 13.5px var(--display); color: var(--g-gold); font-variant-numeric: tabular-nums; }
 .progress.ok { color: var(--ok); }
-.trigcard { width: 110px; border-radius: 8px; animation: deal .4s var(--ease) both; }
+.trig { display: flex; gap: 12px; align-items: flex-start; }
+.trig .trigcard { width: 120px; flex: none; border-radius: 8px; }
+.trig .txt { font-size: 14px; line-height: 1.55; color: #e2e6ea; white-space: pre-line; }
 /* karty mimo stola vo výzve (hľadanie v balíčku, trash, Life) */
-.gpicks { display: flex; gap: 8px; flex-wrap: wrap; max-height: 300px; overflow: auto; padding: 6px 4px; }
-.gpick { position: relative; width: 96px; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; color: inherit; transition: transform .2s var(--ease); animation: deal .3s var(--ease) both; }
+.gpicks { display: flex; gap: 10px; flex-wrap: wrap; padding: 8px 4px 4px; }
+.gpick { position: relative; width: 100px; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; color: inherit; transition: transform .2s var(--ease); animation: deal .3s var(--ease) both; }
 .gpick .cimg { width: 100%; border-radius: 7px; display: block; box-shadow: 0 8px 16px -10px #000; }
 .gpick:hover, .gpick:focus-visible { transform: translateY(-4px); outline: none; }
 .gpick:focus-visible .cimg { box-shadow: 0 0 0 2px var(--g-bg), 0 0 0 4px var(--g-gold); }
-.gpick.on .cimg { box-shadow: 0 0 0 3px var(--me), 0 0 14px -2px rgba(111, 195, 190, .6); }
-@media (max-width: 720px) { .gpick { width: 70px; } }
+.gpick.on .cimg { box-shadow: 0 0 0 3px var(--me), 0 0 14px -2px rgba(111, 195, 190, .55); }
+.gpick .hpick { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--me); color: var(--g-bg); }
 
-/* ------------------------------------------------------------- súperova ruka a moja ruka */
-.hands-opp { position: relative; display: flex; align-items: center; gap: 12px; padding: 8px 14px 0; height: calc(var(--cw) * .62 + 14px); min-height: 50px; overflow: hidden; }
-.hands-opp .plate { flex: none; align-self: flex-start; padding-top: 2px; }
-.hands-opp .bks { position: absolute; left: 50%; top: 0; transform: translateX(-50%); display: flex; justify-content: center; }
-.hands-opp .bk { width: calc(var(--cw) * .55); height: calc(var(--cw) * .77); border-radius: 5px; margin-left: calc(var(--cw) * -.3); transform: translateY(calc(var(--cw) * -.2)) rotate(calc((var(--i) - var(--mid)) * -3deg)); transform-origin: 50% -200%; animation: fade .3s both; }
-.hands-opp .bk:first-child { margin-left: 0; }
-
+/* ------------------------------------------------------------- moja ruka */
 .tray {
-  position: relative; display: grid; grid-template-columns: 220px minmax(0, 1fr) 220px; align-items: end;
-  border-top: 1px solid var(--g-rule);
-  background: linear-gradient(180deg, rgba(8, 15, 24, .45), rgba(8, 15, 24, .85));
+  position: relative; flex: none; display: grid; grid-template-columns: 210px minmax(0, 1fr) 210px; align-items: end;
+  border-top: 1px solid var(--g-rule); background: rgba(8, 15, 24, .6);
 }
-.tray .plate { align-self: end; padding: 0 0 16px 14px; }
+.tray .plate { align-self: end; padding: 0 0 12px 14px; }
 .hand {
   position: relative; grid-column: 2; display: flex; justify-content: center; align-items: flex-end;
-  padding: 18px 8px 12px; min-height: calc(var(--cw) * 1.18 * 1.4 + 30px);
+  padding: 14px 8px 10px; min-height: calc(var(--cw) * 1.18 * 1.4 + 24px);
 }
 .hand-empty { align-self: center; color: var(--g-mute); font-size: 13px; }
 .hc {
@@ -380,21 +403,21 @@
   position: relative; width: var(--w); flex: none; padding: 0; border: 0; background: none; cursor: pointer; color: inherit;
   margin-left: calc(var(--w) * var(--ov, -0.18));
   transform: translateY(calc(var(--arc, 0) * 1px)) rotate(calc(var(--rot, 0) * 1deg));
-  transform-origin: 50% 120%; transition: transform .22s var(--ease), margin .22s var(--ease), filter .2s;
+  transform-origin: 50% 120%; transition: transform .2s var(--ease), margin .2s var(--ease), filter .2s;
   animation: draw-in .4s var(--ease) both;
 }
 .hc:first-child { margin-left: 0; }
 .hc .cimg { width: 100%; border-radius: 8px; display: block; box-shadow: 0 12px 22px -12px #000; transition: box-shadow .2s; }
-.hc:hover, .hc:focus-visible, .hc.sel { transform: translateY(-20px) scale(1.12); z-index: 5; outline: none; }
+.hc:hover, .hc:focus-visible, .hc.sel { transform: translateY(-18px) scale(1.1); z-index: 5; outline: none; }
 .hc:focus-visible .cimg { box-shadow: 0 0 0 2px var(--g-bg), 0 0 0 4px var(--g-gold), 0 16px 30px -12px #000; }
 /* dá sa zahrať: tenký prstenec v mojej farbe, bez rozmazanej žiary */
 .hc.ok .cimg { box-shadow: 0 0 0 2px var(--me), 0 12px 22px -12px #000; }
 .hc.sel .cimg, .hc.ok.sel .cimg { box-shadow: 0 0 0 3px var(--g-text), 0 18px 32px -12px #000; }
-.hc.picked { transform: translateY(-24px) scale(1.08); z-index: 5; }
+.hc.picked { transform: translateY(-22px) scale(1.06); z-index: 5; }
 .hc.picked .cimg { box-shadow: 0 0 0 3px var(--g-gold), 0 16px 30px -12px #000; }
 /* nedá sa zahrať / nemá counter: stlmená, ale čitateľná */
 .hc.no { filter: brightness(.6) saturate(.65); }
-.hc.no:hover, .hc.no:focus-visible { filter: brightness(.85) saturate(.85); }
+.hc.no:hover, .hc.no:focus-visible { filter: brightness(.88) saturate(.85); }
 .hc .hcost {
   position: absolute; top: -7px; left: -7px; z-index: 2; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
   background: var(--g-bg); color: var(--g-gold); border: 2px solid var(--g-gold); font: 800 12px var(--display);
@@ -405,26 +428,40 @@
 .hc .hpick { position: absolute; top: -7px; right: -7px; z-index: 3; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--g-gold); color: var(--g-bg); }
 @keyframes draw-in { from { opacity: 0; transform: translateY(50px) rotate(8deg); } }
 
-/* ------------------------------------------------------------- bočný panel: detail karty a priebeh */
-.gside { display: flex; flex-direction: column; gap: 12px; min-width: 0; position: sticky; top: 76px; align-self: start; max-height: calc(100dvh - 92px); }
-.peek { border-radius: 14px; border: 1px solid var(--g-rule); background: var(--g-felt); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
-.peek .cimg { width: 100%; max-width: 230px; margin: 0 auto 4px; border-radius: 10px; display: block; box-shadow: 0 20px 40px -20px #000; }
-.peek h3 { margin: 2px 0 0; font-size: 17px; }
-.peek .meta, .hztext .meta { display: flex; flex-wrap: wrap; gap: 5px 10px; font-size: 12.5px; color: var(--g-mute); }
-.peek .meta b, .hztext .meta b { color: var(--g-text); }
-.peek .txt { font-size: 14px; line-height: 1.55; color: #e2e6ea; max-height: 240px; overflow: auto; white-space: pre-line; }
-.peek.empty { color: var(--g-mute); font-size: 13px; text-align: center; padding: 24px 16px; }
-.peek.empty .back { width: 64px; height: 90px; border-radius: 8px; margin: 0 auto 12px; opacity: .45; }
-.glog { flex: 1; min-height: 120px; display: flex; flex-direction: column; border-radius: 14px; border: 1px solid var(--g-rule); background: var(--g-bg); overflow: hidden; }
+/* ------------------------------------------------------------- pravý panel: detail karty a priebeh */
+.gside { display: flex; flex-direction: column; gap: 10px; min-width: 0; min-height: 0; position: sticky; top: calc(var(--navh, 64px) + 12px); align-self: start; max-height: calc(100dvh - var(--navh, 64px) - 24px); }
+.peek { flex: none; display: flex; flex-direction: column; gap: 10px; min-height: 0; border-radius: 14px; border: 1px solid var(--g-rule); background: var(--g-felt); padding: 12px; }
+.pk-img { display: flex; justify-content: center; }
+.pk-img .cimg { width: auto; height: auto; max-width: 100%; max-height: var(--pk-img, 300px); aspect-ratio: 600 / 838; border-radius: 9px; display: block; box-shadow: 0 18px 36px -18px #000; }
+.pk-body { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.pk-head h3, .hztext .pk-head h3, .mtext .pk-head h3 { margin: 0; font: 800 17px/1.2 var(--display); }
+.pk-sub { display: block; margin-top: 2px; font-size: 12px; color: var(--g-mute, #a3b0be); }
+.pk-stats { display: flex; flex-wrap: wrap; gap: 6px; }
+.pk-stats span { display: flex; flex-direction: column; min-width: 58px; padding: 5px 9px 6px; border-radius: 8px; background: rgba(8, 15, 24, .7); }
+.pk-stats i { font: 600 10.5px/1.2 var(--body); font-style: normal; color: var(--g-mute, #a3b0be); }
+.pk-stats b { font: 800 16px/1.15 var(--display); font-variant-numeric: tabular-nums; color: var(--g-text, #f2f0e9); }
+.pk-stats .up b { color: var(--ok, #8fd8a8); }
+.pk-stats .down b { color: #f0a097; }
+.peek .txt { font-size: 13.5px; line-height: 1.6; color: #e2e6ea; max-height: var(--pk-txt, 200px); overflow: auto; white-space: pre-line; padding-right: 4px; }
+.peek.vac { color: var(--g-mute); font-size: 13px; text-align: center; padding: 22px 16px; }
+.peek.vac .back { width: 60px; height: 84px; border-radius: 8px; margin: 0 auto 12px; opacity: .45; }
+
+.glog { flex: 1 1 auto; min-height: 140px; display: flex; flex-direction: column; border-radius: 14px; border: 1px solid var(--g-rule); background: var(--g-bg); overflow: hidden; }
 .glog h5 { margin: 0; padding: 10px 12px 8px; font: 700 13px var(--display); color: var(--g-text); border-bottom: 1px solid var(--g-rule); }
-.glog ul { flex: 1; min-height: 0; overflow: auto; list-style: none; margin: 0; padding: 8px 10px; display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; }
-.glog li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 6px; align-items: start; color: #b6c1cc; padding: 3px 2px; animation: fade .3s both; }
+.glog ul { flex: 1; min-height: 0; overflow: auto; list-style: none; margin: 0; padding: 6px 10px 10px; display: flex; flex-direction: column; gap: 2px; font-size: 12.5px; }
+.glog li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 7px; align-items: start; color: #b6c1cc; padding: 2px; animation: fade .3s both; }
 .glog li .lk { width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; background: var(--g-felt); color: var(--g-mute); }
 .glog li.p0 .lk { color: var(--me); background: rgba(111, 195, 190, .1); }
 .glog li.p1 .lk { color: var(--opp); background: rgba(224, 122, 108, .1); }
 .glog li.k-ko .lk, .glog li.k-life .lk { color: #f0a097; }
 .glog li.big { color: var(--g-text); font-weight: 600; }
 .glog li > span:last-child { padding-top: 2px; }
+.glog li.turnrow { display: flex; align-items: center; gap: 8px; margin: 8px 0 2px; padding: 0; font: 700 11.5px var(--body); color: var(--g-mute); }
+.glog li.turnrow::after { content: ""; flex: 1; height: 1px; background: var(--g-rule); }
+.glog li.turnrow.p0 { color: var(--me); }
+.glog li.turnrow.p1 { color: var(--opp); }
+.glog li.turnrow:first-child { margin-top: 2px; }
+.glog li.start { display: block; color: var(--g-mute); padding: 6px 2px; }
 
 /* ------------------------------------------------------------- efekty, prekrytia */
 .fxs { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); z-index: 15; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; }
@@ -471,11 +508,9 @@
 }
 .hzoom.l { transform: translate(-100%, -50%); }
 .hzoom > .cimg { width: 100%; border-radius: 10px; box-shadow: 0 16px 30px -16px #000; }
-.hztext { min-width: 0; display: flex; flex-direction: column; gap: 7px; overflow: hidden; }
-.hztext h3 { margin: 0; font-size: 18px; }
-.hztext .meta { color: #9ba9b9; }
-.hztext .meta b { color: #f2f0e9; }
-.hztext .txt { font-size: 14.5px; line-height: 1.55; color: #e2e6ea; white-space: pre-line; overflow: auto; }
+.hztext { min-width: 0; display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+.hztext .txt { font-size: 14px; line-height: 1.55; color: #e2e6ea; white-space: pre-line; overflow: auto; }
+.mtext { display: flex; flex-direction: column; gap: 10px; }
 @keyframes hz-in { from { opacity: 0; scale: .96; } }
 @media (max-height: 700px) { .hzoom { grid-template-columns: 140px 1fr; width: 380px; } }
 @media (hover: none) { .hzoom { display: none; } }
@@ -486,13 +521,14 @@
 .kwt.trg { background: #c9a227; color: #080f18; }
 .kwt.kw { background: #6b4aa8; }
 .kwt.opt { background: #33506c; }
-.mtext .txt { font-size: 15px; line-height: 1.55; white-space: pre-line; }
+.mtext .txt { font-size: 15px; line-height: 1.6; white-space: pre-line; }
 
-.zoomctl { display: inline-flex; border: 1px solid var(--g-rule); border-radius: 9px; overflow: hidden; }
-.zoomctl button { background: transparent; color: var(--g-text); border: 0; padding: 7px 9px; font: 800 12px/1 var(--display); cursor: pointer; }
+.zoomctl { display: inline-flex; border: 1px solid var(--g-rule); border-radius: 8px; overflow: hidden; }
+.zoomctl button { background: transparent; color: var(--g-text); border: 0; padding: 0 9px; min-height: 30px; font: 800 12px/1 var(--display); cursor: pointer; }
 .zoomctl button + button { border-left: 1px solid var(--g-rule); }
 .zoomctl button:hover:not(:disabled) { background: rgba(155, 169, 185, .08); }
 .zoomctl button:disabled { opacity: .35; cursor: default; }
+.zoomctl button:focus-visible { outline: 2px solid var(--g-gold); outline-offset: -2px; }
 
 /* ------------------------------------------------------------- útoky: šľah, súboj síl, K.O. */
 .strikes { position: absolute; inset: 0; z-index: 14; pointer-events: none; }
@@ -526,19 +562,45 @@
 .slash::before { rotate: 30deg; }
 .slash::after { rotate: -30deg; }
 
-/* ------------------------------------------------------------- nízke okná na PC */
-@media (max-height: 820px) and (min-width: 1101px) {
-  .gwrap { --cw: calc(clamp(44px, min(calc((100dvh - 352px) / 7.4), 6.6vw), 96px) * var(--zoom, 1)); margin-top: 8px; }
-  .gtop { padding: 5px 12px; }
-  .hands-opp { min-height: 42px; padding-top: 6px; }
-  .gmid { min-height: 54px; padding: 5px 14px; }
+/* ============================================================ PC: celý zápas v okne pod navigáciou
+   Výška .gwrap = okno − navigácia − okraje; karta sa prispôsobí výške aj šírke kontajnera.
+   Pevné časti stola: horný riadok 52 + 2 × polovica (2 × 10 padding + 10 medzera + 12 zóna postáv)
+   + stredný pás 80 + ruka (24 padding + oblúk) ≈ 256 px; zvyšok = 7,25 × --cw. */
+@media (min-width: 1101px) and (min-height: 600px) {
+  body.in-match .foot { display: none; }
+  body.in-match main.wrap { animation: none; }
+  .gwrap {
+    height: calc(100dvh - var(--navh, 64px) - 16px);
+    margin: 8px 0;
+    container-type: size;
+    grid-template-rows: minmax(0, 1fr);
+  }
+  .gtable {
+    --cw: calc(clamp(40px, min(calc((100cqh - 248px) / 7.25), calc((100cqw - 300px - 12px - 112px - 236px) / 5.8)), 104px) * var(--zoom, 1));
+    --ch: calc(var(--cw) * 1.4);
+    --slot: calc(var(--cw) * 1.16);
+    --side: max(calc(var(--cw) * 1.3), 118px);
+    min-height: 0;
+  }
+  /* A+ zväčší karty nad výšku okna – vtedy sa posúva stôl, nie stránka */
+  .gwrap.zoomed .gtable { overflow-y: auto; }
+  .gside { position: static; max-height: none; height: 100%; --pk-img: min(300px, 34cqh); --pk-txt: min(220px, 22cqh); }
+  .gmid { height: var(--mid-h); }
+  .gsheet { --sheet-max: calc(48cqh - 16px); }
+}
+/* nízke okná na PC: tesnejšie medzery, nie menšie karty */
+@media (min-width: 1101px) and (min-height: 600px) and (max-height: 820px) {
+  .gwrap { --mid-h: 66px; }
+  .gtopbar { min-height: 46px; padding-block: 4px; }
+  .gtopbar .bk { width: 22px; height: 30px; }
+  .half { padding-block: 6px; }
+  .mat { gap: 6px 12px; }
+  .gtable { --cw: calc(clamp(40px, min(calc((100cqh - 204px) / 7.25), calc((100cqw - 660px) / 5.8)), 104px) * var(--zoom, 1)); }
   .gturn .tn { height: 38px; min-width: 40px; }
   .endbtn { padding: 11px 18px; }
-  .half { padding-top: 6px; padding-bottom: 6px; }
-  .mat { gap: 8px 12px; }
-  .tray .plate { padding-bottom: 10px; }
-  .chars { padding: 6px 8px; min-height: calc(var(--ch) + 12px); }
-  .hand { padding-top: 14px; padding-bottom: 8px; min-height: calc(var(--cw) * 1.18 * 1.4 + 22px); }
+  .hand { padding-top: 12px; padding-bottom: 6px; }
+  .tray .plate { padding-bottom: 8px; }
+  .gp-src { width: 34px; }
 }
 
 /* ------------------------------------------------------------- tablet */
@@ -548,24 +610,27 @@
   .gside .peek { display: none; }
   .glog { max-height: 240px; }
   .tray { grid-template-columns: 180px minmax(0, 1fr) 40px; }
+  .gctl .gmode { display: none; }
 }
 
 /* ------------------------------------------------------------- mobil */
 @media (max-width: 720px) {
   .gwrap { --cw: min(60px, calc((100vw - 42px) / 5.95)); --side: calc(var(--cw) * 1.1); margin: 8px -16px 20px; }
-  .gtable { border-radius: 0; border-left: 0; border-right: 0; scroll-margin-top: 132px; }
-  .gtop { padding: 6px 10px; gap: 6px; }
-  .gtop .gmode { font-size: 12px; }
-  .gtop .btn.sm { padding: 8px 9px; }
+  .gtable { border-radius: 0; border-left: 0; border-right: 0; }
   .lbl-wide { display: none; }
   .zoomctl { display: none; }
+  .gtopbar { flex-wrap: wrap; gap: 8px; padding: 6px 10px; }
+  .gtopbar .bks { order: 3; flex-basis: 100%; justify-content: flex-start; align-self: auto; padding: 0; }
+  .gtopbar .bk { width: 18px; height: 26px; margin-left: -11px; transform: none; }
+  .gctl { margin-left: auto; }
+  .gctl .btn.sm { padding: 6px 8px; }
 
   .half { padding: 10px 6px; }
   .half::before { top: 6px; bottom: 6px; }
   .mat { gap: 10px 6px; grid-template-columns: var(--side) minmax(0, 1fr) var(--side); }
   .half.me .mat { grid-template-areas: "chars chars chars" "life core deck" "dond cost trash"; }
   .half.opp .mat { grid-template-areas: "trash cost dond" "deck core life" "chars chars chars"; }
-  .chars { gap: 4px; padding: 10px 4px; }
+  .chars { gap: 4px; padding: 8px 4px; }
   .cost-area { min-height: calc(var(--cw) * .7); padding: 6px 4px; }
   .cost-area.many .tok + .tok { margin-left: calc(var(--t) * -.55); }
   .tok { --t: calc(var(--cw) * .4); }
@@ -573,18 +638,14 @@
   .cost-sum { font-size: 10px; right: 6px; }
   .pow { font-size: 11px; padding: 3px 5px; }
   .life-num { font-size: 13px; padding: 3px 7px 3px 5px; }
-
-  .hands-opp { padding: 8px 10px 0; height: auto; min-height: 0; }
-  .hands-opp .bks { position: static; transform: none; margin-left: auto; }
-  .hands-opp .bk { width: 18px; height: 26px; margin-left: -11px; transform: none; }
   .plate { gap: 8px; }
   .plate .av { width: 28px; height: 28px; font-size: 13px; border-radius: 8px; }
   .plate .nm { font-size: 13px; }
   .plate .st { gap: 8px; font-size: 11.5px; }
   .clk { padding: 5px 6px; font-size: 12px; }
 
-  /* stredný pás: ťah a tlačidlo hore, akcie pod nimi */
-  .gmid { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "turn end" "center center"; gap: 8px 10px; padding: 8px 10px; }
+  /* stredný pás: ťah a tlačidlo hore, výzvy pod nimi na celú šírku */
+  .gmid { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "turn end" "center center"; gap: 8px 10px; padding: 8px 10px; min-height: 0; }
   .gturn { grid-area: turn; }
   .gend { grid-area: end; }
   .gcenter { grid-area: center; }
@@ -593,8 +654,12 @@
   .gturn .tw { font-size: 15px; }
   .endbtn { padding: 11px 14px; font-size: 14px; }
   .battle { font-size: 16px; gap: 10px; }
-  .gprompt { padding: 12px; }
   .gmid .hint { font-size: 13px; }
+  .gprompt { flex-wrap: wrap; }
+  .gprompt .acts { max-width: none; width: 100%; justify-content: flex-end; flex-wrap: wrap; }
+  .gp-text h4 { white-space: normal; }
+  .gsheet { position: fixed; left: 8px; right: 8px; bottom: 8px; width: auto; transform: none; max-height: 72dvh; z-index: 55; animation: fade .2s both; }
+  .gpick { width: 76px; }
 
   .tray { display: block; }
   .tray .plate { padding: 8px 10px 0; }
@@ -603,6 +668,7 @@
   .hc:hover { transform: none; }
   .hc.sel, .hc.picked, .hc:focus-visible { transform: translateY(-14px); }
   .gover, .gcover { position: fixed; z-index: 60; border-radius: 0; }
+  .gtable { scroll-margin-top: calc(var(--navh, 100px) + 8px); }
 }
 @media (hover: none) { .hc:hover { transform: translateY(calc(var(--arc, 0) * 1px)) rotate(calc(var(--rot, 0) * 1deg)); } }
 @media (hover: none) and (max-width: 720px) { .hc:hover { transform: none; } }
