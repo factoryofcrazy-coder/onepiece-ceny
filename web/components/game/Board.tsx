@@ -10,6 +10,7 @@ import "./game.css";
 import { fmtClock, useGameClock } from "./clock";
 import ReportButton, { type ActionLog } from "./ReportButton";
 import { Icon, type IconName } from "./icons";
+import { recordBotGame, useDonSkin, type DonSkin } from "@/lib/donSkins";
 
 export type BoardProps = {
   s: GameState;
@@ -31,6 +32,15 @@ const HEART = <Icon name="heart" size={13} />;
 
 export default function Board({ s, me, byCode, mode, onAction, busy, error, elo, onExit, onResign, onTimeout, result, gameId }: BoardProps) {
   const clock = useGameClock(s, onTimeout);
+  const { skin: donSkin, choose: chooseSkin } = useDonSkin();
+  // koniec hry proti botovi sa zapíše do štatistík DON!! skinov (raz za hru)
+  const [newSkins, setNewSkins] = useState<DonSkin[]>([]);
+  const recorded = useRef(false);
+  useEffect(() => {
+    if (mode !== "bot" || s.winner == null || recorded.current) return;
+    recorded.current = true;
+    setNewSkins(recordBotGame(s.winner === me));
+  }, [s.winner, mode, me]);
   const actionLog = useRef<ActionLog>([]);
   const opp: P = me === 0 ? 1 : 0;
   const [sel, setSel] = useState<string | null>(null);
@@ -911,7 +921,10 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
   const handDim = myTurn && !pr && !attacking;
 
   return (
-    <div className={`gwrap ${zoomLvl > 1 ? "zoomed" : ""}`} style={{ ["--zoom" as any]: zoomLvl }}>
+    <div
+      className={`gwrap ${zoomLvl > 1 ? "zoomed" : ""} ${donSkin.img ? "has-skin" : ""}`}
+      style={{ ["--zoom" as any]: zoomLvl, ...(donSkin.img ? { ["--my-don" as any]: `url(${donSkin.img})` } : {}) }}
+    >
       <div className="gtable" ref={tableRef}>
         <div className="gtopbar">
           {Plate(opp)}
@@ -1073,6 +1086,20 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
             <h2>{mode === "local" ? `Vyhral ${s.players[s.winner].name}` : winnerMe ? "Víťazstvo!" : "Prehra"}</h2>
             <p>{lastInfo(s)}</p>
             {result}
+            {newSkins.length > 0 && (
+              <div className="unlocks">
+                <span className="ul-t">Odomkol si nový DON!! skin</span>
+                <div className="ul-row">
+                  {newSkins.map((k) => (
+                    <button key={k.id} className={`ul-skin ${donSkin.id === k.id ? "on" : ""}`} onClick={() => chooseSkin(k.id)} title={`Použiť skin ${k.name}`}>
+                      {k.img ? <img src={k.img} alt="" /> : <i className="tok" />}
+                      <span>{k.name}</span>
+                      <b>{donSkin.id === k.id ? "Používaš" : "Použiť"}</b>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="row">
               <button className="btn" onClick={onExit}>
                 {mode === "online" ? "Späť do lobby" : "Nová hra"}

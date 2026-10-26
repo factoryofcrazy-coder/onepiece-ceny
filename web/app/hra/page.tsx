@@ -6,6 +6,7 @@ import Board from "@/components/game/Board";
 import DeckSelect from "@/components/game/DeckSelect";
 import "@/components/game/game.css";
 import GameTeaser from "@/components/game/Teaser";
+import DonSkins from "@/components/game/DonSkins";
 import { GAME_PUBLIC } from "@/lib/config";
 import { CardImg, DataError, Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
@@ -61,6 +62,7 @@ function GamePage() {
       ) : (
         <Training decks={decks} byCode={byCode} onStart={(s, mode) => setLocal({ s, mode })} />
       )}
+      <DonSkins />
       <p className="small muted" style={{ marginTop: 18 }}>
         Efekty sú naprogramované pre všetky karty z turnajových top deckov (Limitless, posledných 30 dní) a starter decky ST-01/ST-26. Ostatné karty sa hrajú bez efektu a sú označené výkričníkom. Decky si
         postavíš v <Link href="/decky">Deckoch</Link> (leader + 40–50 kariet).

@@ -3,7 +3,7 @@ import type { ReactNode, SVGProps } from "react";
 
 export type IconName =
   | "clock" | "swords" | "burst" | "return" | "spark" | "shield" | "swap" | "order" | "flag"
-  | "exit" | "report" | "play" | "plus" | "eye" | "heart" | "question" | "alert" | "trash" | "hand" | "check";
+  | "exit" | "report" | "play" | "plus" | "eye" | "heart" | "question" | "alert" | "trash" | "hand" | "check" | "lock";
 
 const P: Record<IconName, ReactNode> = {
   clock: (<><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2.5 2M9.5 2.5h5" /></>),
@@ -25,6 +25,7 @@ const P: Record<IconName, ReactNode> = {
   alert: (<><path d="M12 7v6" /><circle cx="12" cy="17" r=".6" /></>),
   trash: (<><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" /></>),
   hand: (<><rect x="3" y="7" width="9" height="13" rx="1.5" transform="rotate(-10 7.5 13.5)" /><rect x="11" y="5" width="9" height="13" rx="1.5" transform="rotate(8 15.5 11.5)" /></>),
+  lock: (<><rect x="5" y="10.5" width="14" height="10" rx="2" /><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" /></>),
   check: (<path d="m5 12.5 4.5 4.5L19 7.5" />),
 };
 

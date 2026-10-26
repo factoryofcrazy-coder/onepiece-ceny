@@ -813,3 +813,72 @@
   .peek-don span { width: 26px; height: 26px; font-size: 6px; }
 }
 @media (prefers-reduced-motion: reduce) { .teaser-badge, .peek-don span { animation: none; } }
+/* ============================================================ ZADNÁ STRANA KARIET A DON!! SKINY */
+/* zadná strana: balíček, súperova ruka, prázdny trash; Life leží → otočená verzia */
+.gwrap .back {
+  background: url(/game/back.webp) center / 100% 100% no-repeat, #1d3f8a;
+  border: 0; box-shadow: 0 6px 12px -6px #000;
+}
+.gwrap .life-stack .back { background: url(/game/back-land.webp) center / 100% 100% no-repeat, #1d3f8a; box-shadow: 0 3px 8px -3px #000; }
+.gwrap .pile.vac .back { background: var(--zone); box-shadow: none; }
+.gwrap .pile.dondeck .back { background: linear-gradient(160deg, #3a2d16, #1d150a); border: 2px solid #a9853f; }
+
+/* zvolený skin: moje DON!! žetóny (cost area, pripojené na kartách, výzvy) a môj DON!! balíček */
+.has-skin .half.me .tok,
+.has-skin .gsheet .donrow .tok,
+.has-skin .unlocks .tok {
+  background: var(--my-don) center / cover no-repeat, #1d150a;
+  border-color: rgba(255, 255, 255, .45);
+  box-shadow: 0 4px 10px -5px #000;
+}
+.has-skin .half.me .tok::after, .has-skin .gsheet .donrow .tok::after { content: none; }
+.has-skin .half.me .pile.dondeck .back { background: var(--my-don) center / cover no-repeat, #1d150a; border-color: rgba(255, 255, 255, .5); }
+.has-skin .half.me .pile.dondeck .back::after { content: none; }
+.has-skin .half.me .tok.r { filter: grayscale(.75) brightness(.5); }
+
+/* koniec hry: nový odomknutý skin */
+.unlocks { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.unlocks .ul-t { font: 700 13px var(--body); color: var(--g-gold); }
+.ul-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.ul-skin {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; width: 92px; padding: 8px 6px; border-radius: 10px; cursor: pointer;
+  background: var(--g-raise); border: 1px solid var(--g-rule); color: var(--g-text); font: 600 12px var(--body);
+}
+.ul-skin img, .ul-skin .tok { width: 54px; height: 76px; border-radius: 6px; object-fit: cover; }
+.ul-skin b { font: 700 11px var(--body); color: var(--g-gold); }
+.ul-skin.on { border-color: var(--g-gold); }
+.ul-skin:focus-visible { outline: 2px solid var(--g-gold); outline-offset: 2px; }
+
+/* lobby: výber DON!! skinu */
+.dskins { margin-top: 16px; }
+.dskins-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.dskins-head p { margin: 4px 0 0; max-width: 52ch; }
+.dskins-stats { display: flex; gap: 8px; margin: 0; }
+.dskins-stats div { padding: 6px 12px; border-radius: 10px; background: rgba(6, 18, 31, .55); border: 1px solid var(--line); }
+.dskins-stats dt { font: 600 11px var(--body); color: var(--muted); }
+.dskins-stats dd { margin: 0; font: 800 18px/1.2 var(--display); font-variant-numeric: tabular-nums; }
+.dskins-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 12px; }
+.dskin {
+  position: relative; display: flex; flex-direction: column; gap: 4px; padding: 8px; border-radius: 12px; text-align: left; cursor: pointer;
+  background: rgba(6, 18, 31, .45); border: 1px solid transparent; color: var(--text); font: inherit; transition: border-color .2s, transform .2s var(--ease);
+}
+.dskin:hover:not(.locked) { border-color: #2a5172; transform: translateY(-2px); }
+.dskin:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.dskin.on { border-color: var(--gold); background: rgba(242, 184, 75, .08); }
+.dskin.locked { cursor: default; }
+.dskin-art { position: relative; display: block; aspect-ratio: 3 / 5; border-radius: 8px; overflow: hidden; background: #0b1520; }
+.dskin-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dskin.locked .dskin-art img, .dskin.locked .dskin-classic { filter: grayscale(.85) brightness(.45); }
+.dskin-classic {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: linear-gradient(160deg, #f0d79a, #d5ad60 45%, #8d6a2c);
+}
+.dskin-classic::after { content: "DON!!"; font: 900 22px/1 var(--display); color: #3b2a17; transform: rotate(-90deg); letter-spacing: -.04em; }
+.dskin-lock { position: absolute; inset: 0; display: grid; place-items: center; color: #e8eef5; }
+.dskin-on { position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: var(--ink); }
+.dskin-name { font: 700 13.5px/1.2 var(--display); }
+.dskin-req { font-size: 11.5px; line-height: 1.3; color: var(--muted); }
+.dskin.on .dskin-req { color: var(--gold); }
+.dskin-bar { display: block; height: 4px; border-radius: 4px; background: rgba(138, 160, 184, .18); overflow: hidden; }
+.dskin-bar i { display: block; height: 100%; background: var(--gold); border-radius: 4px; }
+@media (max-width: 560px) { .dskins-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .dskins-stats { width: 100%; } .dskins-stats div { flex: 1; } }
