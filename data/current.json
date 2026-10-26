@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-26T10:59:01Z",
+ "updated": "2026-10-26T14:59:39Z",
  "fx": {
   "CZK": 24.327,
   "USD": 1.1193,
@@ -589,7 +589,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -1818,7 +1818,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -2184,8 +2184,8 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-26T10:31:35Z",
-   "ok": false,
+   "ts": "2026-10-26T14:59:39Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece: The Time of Battle Booster Box",
@@ -2303,7 +2303,7 @@
      "price": 17.99,
      "currency": "EUR",
      "eur": 17.99,
-     "inStock": true,
+     "inStock": false,
      "hint": "Pack",
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/One_Piece_Carrying_on_his_Will_Booster_1.webp"
     },
@@ -2513,7 +2513,7 @@
      "price": 16.39,
      "currency": "EUR",
      "eur": 16.39,
-     "inStock": false,
+     "inStock": true,
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/One_Piece__BLUE_Kuzan_Starter_Deck_ST-33.webp"
     },
     {
@@ -2579,13 +2579,10 @@
      "inStock": true,
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/One_Piece_PURPLE_BLACK_Monkey_D._Luffy_Starter_Deck.webp"
     }
-   ],
-   "error": "The read operation timed out",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "tolarie": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -2810,7 +2807,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -3506,7 +3503,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -3676,7 +3673,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -3727,7 +3724,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -4215,7 +4212,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -4716,7 +4713,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -5272,7 +5269,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -5350,7 +5347,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -5500,8 +5497,8 @@
    ]
   },
   "butticards": {
-   "ts": "2026-10-26T09:03:58Z",
-   "ok": false,
+   "ts": "2026-10-26T14:59:39Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece - OP17 -  The World’s Strongest Warriors - Display - Japanisch",
@@ -5684,10 +5681,7 @@
      "inStock": false,
      "img": "https://d2j6dbq0eux0bg.cloudfront.net/images/44059914/products/666614602/4358220179.jpg"
     }
-   ],
-   "error": "obchod vrátil 0 produktov – možno zmenil web alebo URL kategórie",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "wombat": {
    "ts": "2026-10-26T10:31:35Z",
@@ -5891,7 +5885,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -6203,7 +6197,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-26T10:59:01Z",
+   "ts": "2026-10-26T14:59:39Z",
    "ok": true,
    "items": [
     {
@@ -6258,7 +6252,7 @@
      "price": 9257.0,
      "currency": "JPY",
      "eur": 52.74,
-     "inStock": false,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
     {
@@ -6294,7 +6288,7 @@
      "price": 15428.0,
      "currency": "JPY",
      "eur": 87.9,
-     "inStock": false,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1758-037930df5454/eb01box_sst-thumb-320.webp"
     },
     {
@@ -6438,7 +6432,7 @@
      "price": 9349.0,
      "currency": "JPY",
      "eur": 53.27,
-     "inStock": false,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/06/op16-the-time-of-battle-box-sst-logo-2-300x300.webp"
     },
     {
