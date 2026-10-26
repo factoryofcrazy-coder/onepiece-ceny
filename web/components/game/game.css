@@ -882,3 +882,36 @@
 .dskin-bar { display: block; height: 4px; border-radius: 4px; background: rgba(138, 160, 184, .18); overflow: hidden; }
 .dskin-bar i { display: block; height: 100%; background: var(--gold); border-radius: 4px; }
 @media (max-width: 560px) { .dskins-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .dskins-stats { width: 100%; } .dskins-stats div { flex: 1; } }
+
+/* ============================================================ KAMEŇ, PAPIER, NOŽNICE (kto začína) */
+.rps-pick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.rps-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 8px 12px; border-radius: 12px; cursor: pointer;
+  background: var(--g-bg); border: 1px solid var(--g-rule); color: var(--g-text); font: 800 15px var(--display);
+  transition: transform .15s var(--ease), border-color .15s, background .15s;
+}
+.rps-btn .gi { color: var(--g-gold); }
+.rps-btn:hover:not(:disabled) { transform: translateY(-3px); border-color: var(--g-gold); background: #0f1c2b; }
+.rps-btn:focus-visible { outline: 2px solid var(--g-gold); outline-offset: 2px; }
+.rps-btn:disabled { opacity: .5; cursor: default; }
+.rps-duel { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.rps-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 104px; padding: 10px 12px; border-radius: 12px;
+  background: var(--g-bg); border: 1px solid var(--g-rule); animation: rps-flip .45s var(--ease) both;
+}
+.rps-tile.opp { animation-delay: .12s; }
+.rps-tile b { font: 800 14px var(--display); }
+.rps-tile small { font-size: 11.5px; color: var(--g-mute); }
+.rps-tile.me .gi { color: var(--me); }
+.rps-tile.opp .gi { color: var(--opp); }
+.rps-tile.win { border-color: var(--g-gold); box-shadow: 0 0 0 1px var(--g-gold-dim); }
+.rps-vs { font: 800 13px var(--display); color: var(--g-mute); }
+@keyframes rps-flip { from { opacity: 0; transform: rotateY(90deg) scale(.9); } }
+.gprompt.rpswait { flex-direction: column; gap: 6px; padding: 8px 14px; }
+.gprompt.rpswait .rps-tile { min-width: 84px; padding: 4px 10px; flex-direction: row; gap: 6px; }
+.gprompt.rpswait .rps-tile small { display: none; }
+.gprompt.rpswait .rps-tile .gi { width: 18px; height: 18px; }
+@media (min-width: 1101px) and (min-height: 600px) {
+  .gprompt.rpswait { flex-direction: row; gap: 12px; }
+}
+@media (max-width: 720px) { .rps-btn { padding: 12px 4px 10px; font-size: 14px; } .rps-tile { min-width: 88px; } }

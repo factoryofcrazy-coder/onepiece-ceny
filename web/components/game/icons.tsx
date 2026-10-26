@@ -3,7 +3,7 @@ import type { ReactNode, SVGProps } from "react";
 
 export type IconName =
   | "clock" | "swords" | "burst" | "return" | "spark" | "shield" | "swap" | "order" | "flag"
-  | "exit" | "report" | "play" | "plus" | "eye" | "heart" | "question" | "alert" | "trash" | "hand" | "check" | "lock";
+  | "exit" | "report" | "play" | "plus" | "eye" | "heart" | "question" | "alert" | "trash" | "hand" | "check" | "lock" | "rock" | "paper" | "scissors";
 
 const P: Record<IconName, ReactNode> = {
   clock: (<><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2.5 2M9.5 2.5h5" /></>),
@@ -26,6 +26,9 @@ const P: Record<IconName, ReactNode> = {
   trash: (<><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" /></>),
   hand: (<><rect x="3" y="7" width="9" height="13" rx="1.5" transform="rotate(-10 7.5 13.5)" /><rect x="11" y="5" width="9" height="13" rx="1.5" transform="rotate(8 15.5 11.5)" /></>),
   lock: (<><rect x="5" y="10.5" width="14" height="10" rx="2" /><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" /></>),
+  rock: (<><path d="M7 10.5V8.8a1.8 1.8 0 0 1 3.6 0v1.4M10.6 9.6V8a1.8 1.8 0 0 1 3.6 0v2M14.2 9.8V8.9a1.8 1.8 0 0 1 3.6 0v4.6c0 4-2.6 6.5-6.3 6.5-3.2 0-5.6-2.1-6.2-5.1L4.7 13a1.7 1.7 0 0 1 2.9-1.5L9 13" /><path d="M7 10.5v2.3" /></>),
+  paper: (<><path d="M7 3.5h7.5L19 8v12.5H7Z" /><path d="M14.5 3.5V8H19M10 12h6M10 15h6M10 18h4" /></>),
+  scissors: (<><circle cx="6.5" cy="17.5" r="2.8" /><circle cx="6.5" cy="6.5" r="2.8" /><path d="M8.6 8.3 20 18M8.6 15.7 20 6M13.5 12h.01" /></>),
   check: (<path d="m5 12.5 4.5 4.5L19 7.5" />),
 };
 

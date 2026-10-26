@@ -128,7 +128,7 @@ export const reveal = (n: number, f: FX = {}): Step => ({ op: "reveal", n, f: { 
 /** Pripoj až n DON!! v rest na leadera alebo 1 postavu */
 export const giveDon = (n: Num, f: Filter = myLC(), max = 1, each = false, label?: string): Step[] => {
   const v = nv();
-  return [choose(f, max, label ?? `Komu dať ${typeof n === "number" ? n : ""} DON!!`, 0, v), { op: "giveDon", v, n, each }];
+  return [choose(f, max, label ?? `Komu dáš ${typeof n === "number" ? `${n} ` : ""}DON!!?`, 0, v), { op: "giveDon", v, n, each }];
 };
 export const giveDonLeader = (n: Num): Step[] => {
   const v = nv();

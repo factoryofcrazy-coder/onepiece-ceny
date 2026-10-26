@@ -39,7 +39,7 @@ export default function DonSkins() {
         <div>
           <h3 id="dskins-h">DON!! skiny</h3>
           <p className="small muted">
-            Vzhľad tvojich DON!! žetónov v hre. Ďalšie odomkneš hraním. Odomknuté {open} z {DON_SKINS.length}.
+            Takto budú vyzerať tvoje DON!! v hre. Ďalšie si odomkneš hraním, zatiaľ máš {open} z {DON_SKINS.length}.
           </p>
         </div>
         <dl className="dskins-stats">
@@ -98,7 +98,7 @@ export default function DonSkins() {
           );
         })}
       </div>
-      {!user && <p className="small muted" style={{ margin: 0 }}>Online výhry sa počítajú po prihlásení. Výhry proti botovi sa ukladajú v tomto prehliadači.</p>}
+      {!user && <p className="small muted" style={{ margin: 0 }}>Online výhry sa rátajú, keď si prihlásený. Výhry proti botovi si pamätá tento prehliadač.</p>}
     </section>
   );
 }

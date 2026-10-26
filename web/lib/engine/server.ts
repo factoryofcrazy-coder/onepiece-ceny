@@ -5,7 +5,7 @@ import { applyAction, IllegalAction, newGame, viewFor } from "./engine";
 import { DECK_ST01, DECK_ST26 } from "./fixtures";
 import type { Action, CardDef, GameState, P } from "./types";
 
-export const VERSION = "2026-10-25-clock";
+export const VERSION = "2026-10-26-rps";
 
 /** každý hráč má na celú online hru 20 minút; čas plynie tomu, kto má práve konať (ťah, counter, voľba) */
 export const CLOCK_MS = 20 * 60 * 1000;
@@ -191,7 +191,7 @@ export function createHandler(env: Env) {
         ],
         defs,
         randInt() % 2147483646 + 1,
-        (randInt() % 2) as P,
+        "rps", // kto začína, rozhodne kameň-papier-nožnice
       );
       s.clock = { ms: [CLOCK_MS, CLOCK_MS], at: Date.now() };
       const g2 = { ...g, guest: me.id };

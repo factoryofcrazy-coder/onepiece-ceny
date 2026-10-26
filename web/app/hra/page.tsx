@@ -38,7 +38,7 @@ function GamePage() {
         <div>
           <h1>Hra</h1>
           <p className="muted">
-            One Piece TCG s automatickými pravidlami a efektmi. Online hry stráži server – súper nevidí tvoju ruku ani balíček a výsledky idú do{" "}
+            Zahraj si One Piece TCG priamo tu. Pravidlá aj efekty kariet rieši hra za teba. V online zápase súper nevidí tvoju ruku ani balíček a hodnotené výsledky idú do{" "}
             <Link href="/rebricek">rebríčka</Link>.
           </p>
         </div>
@@ -56,7 +56,7 @@ function GamePage() {
           <OnlineLobby userId={user.id} decks={decks} byCode={byCode} />
         ) : (
           <div className="empty">
-            Na online hru sa treba <Link href="/login">prihlásiť</Link>. Tréning proti botovi ide aj bez prihlásenia.
+            Na online zápas sa musíš <Link href="/login">prihlásiť</Link>. Tréning s botom si zahráš aj bez účtu.
           </div>
         )
       ) : (
@@ -64,8 +64,8 @@ function GamePage() {
       )}
       <DonSkins />
       <p className="small muted" style={{ marginTop: 18 }}>
-        Efekty sú naprogramované pre všetky karty z turnajových top deckov (Limitless, posledných 30 dní) a starter decky ST-01/ST-26. Ostatné karty sa hrajú bez efektu a sú označené výkričníkom. Decky si
-        postavíš v <Link href="/decky">Deckoch</Link> (leader + 40–50 kariet).
+        Efekty poznáme pri všetkých kartách z turnajových top deckov (Limitless, posledných 30 dní) a pri starter deckoch ST-01 a ST-26. Ostatné karty
+        sa hrajú bez efektu a majú pri sebe výkričník. Vlastný deck si poskladáš v <Link href="/decky">Deckoch</Link> (leader a 40 až 50 kariet).
       </p>
     </div>
   );
@@ -183,7 +183,7 @@ function OnlineLobby({ userId, decks, byCode }: { userId: string; decks: DeckOpt
             <span className="small muted">{deckStat(deck, byCode)}</span>
           </label>
           <label className="check">
-            <input type="checkbox" checked={rated} onChange={(e) => setRated(e.target.checked)} /> Hodnotená hra (ELO do rebríčka)
+            <input type="checkbox" checked={rated} onChange={(e) => setRated(e.target.checked)} /> Hodnotený zápas (počíta sa do rebríčka)
           </label>
           <button className="btn" onClick={create} disabled={!!busy}>
             {busy === "create" ? "Vytváram…" : "Vytvoriť výzvu"}
@@ -191,12 +191,12 @@ function OnlineLobby({ userId, decks, byCode }: { userId: string; decks: DeckOpt
           {myOpen.map((g) => (
             <div key={g.id} className="glist">
               <div className="waiting">
-                <span className="spin" /> Čakáš na súpera s deckom <b style={{ color: "var(--text)" }}>{g.host_deck_name}</b>
+                <span className="spin" /> Čakáš na súpera. Hráš s deckom <b style={{ color: "var(--text)" }}>{g.host_deck_name}</b>
               </div>
               <div className="linkbox">
                 <code>{typeof location !== "undefined" ? `${location.host}/hra/${g.id.slice(0, 8)}…` : ""}</code>
                 <button className="btn sm" onClick={() => copy(g.id)}>
-                  {copied === g.id ? "Skopírované ✓" : "Kopírovať odkaz"}
+                  {copied === g.id ? "Skopírované" : "Kopírovať odkaz"}
                 </button>
                 <button className="btn ghost sm" onClick={() => cancel(g.id)} disabled={busy === g.id}>
                   Zrušiť
@@ -205,13 +205,13 @@ function OnlineLobby({ userId, decks, byCode }: { userId: string; decks: DeckOpt
             </div>
           ))}
           <p className="small muted" style={{ margin: 0 }}>
-            Pošli odkaz kamošovi (alebo nech si výzvu nájde medzi otvorenými výzvami). Keď sa pripojí, hra sa ti otvorí sama.
+            Pošli kamošovi odkaz, alebo nech si výzvu nájde v zozname. Keď sa pripojí, hra sa ti otvorí sama.
           </p>
         </div>
 
         <div className="gcard">
           <span className="kicker">Otvorené výzvy</span>
-          <h3>Prijmi hru</h3>
+          <h3>Pridaj sa k hre</h3>
           <div className="glist">
             {othersOpen.map((g) => (
               <div key={g.id} className="grow-item">
@@ -225,14 +225,14 @@ function OnlineLobby({ userId, decks, byCode }: { userId: string; decks: DeckOpt
                   </div>
                 </span>
                 <button className="btn sm" onClick={() => join(g.id)} disabled={!!busy}>
-                  {busy === g.id ? "…" : "Prijať"}
+                  {busy === g.id ? "…" : "Hrať"}
                 </button>
               </div>
             ))}
             {!othersOpen.length && <p className="small muted">Zatiaľ nikto nečaká. Vytvor výzvu a pošli kamošovi odkaz.</p>}
           </div>
           <p className="small muted" style={{ margin: 0 }}>
-            Prijmeš s deckom: <b style={{ color: "var(--text)" }}>{deck?.name}</b>
+            Pridáš sa s deckom <b style={{ color: "var(--text)" }}>{deck?.name}</b>
           </p>
         </div>
 
@@ -250,14 +250,14 @@ function OnlineLobby({ userId, decks, byCode }: { userId: string; decks: DeckOpt
                   <span style={{ minWidth: 0 }}>
                     <div className="t">vs {oppName}</div>
                     <div className="s">
-                      Ťah {g.turn} · {mine ? <b style={{ color: "var(--foam)" }}>si na ťahu</b> : "čaká sa na súpera"} · {ago(g.updated_at)}
+                      Ťah {g.turn} · {mine ? <b style={{ color: "var(--foam)" }}>si na rade</b> : "hrá súper"} · {ago(g.updated_at)}
                     </div>
                   </span>
                   <span className="btn sm">{mine ? "Hrať" : "Pozrieť"}</span>
                 </Link>
               );
             })}
-            {!playing.length && <p className="small muted">Žiadna rozohraná hra.</p>}
+            {!playing.length && <p className="small muted">Teraz nemáš žiadnu rozohranú hru.</p>}
           </div>
         </div>
 
@@ -276,7 +276,7 @@ function OnlineLobby({ userId, decks, byCode }: { userId: string; decks: DeckOpt
                       <span style={{ color: won ? "#7ff0b8" : "var(--bad)" }}>{won ? "Výhra" : "Prehra"}</span> vs {meHost ? g.guest_name : g.host_name}
                     </div>
                     <div className="s">
-                      {g.end_reason === "resign" ? "vzdanie" : g.end_reason === "time" ? "na čas" : `${g.turn} ťahov`} · {ago(g.updated_at)}
+                      {g.end_reason === "resign" ? "vzdaním" : g.end_reason === "time" ? "na čas" : `${g.turn} ťahov`} · {ago(g.updated_at)}
                     </div>
                   </span>
                   {g.rated && g.elo_delta != null && (
@@ -288,7 +288,7 @@ function OnlineLobby({ userId, decks, byCode }: { userId: string; decks: DeckOpt
                 </Link>
               );
             })}
-            {!done.length && <p className="small muted">Ešte žiadny odohraný zápas.</p>}
+            {!done.length && <p className="small muted">Zatiaľ si neodohral žiadny zápas.</p>}
           </div>
           <Link href="/rebricek" className="small">
             Celý rebríček →
@@ -306,7 +306,7 @@ function deckStat(d: DeckOpt | undefined, byCode: Map<string, Card>) {
     const card = byCode.get(c);
     return card && buildDef(card).scripted;
   }).length;
-  return `${d.cards.length} kariet · efekty naprogramované pre ${ok}/${codes.length}`;
+  return `${d.cards.length} kariet, efekty poznáme pri ${ok} z ${codes.length}`;
 }
 
 // ================================================================== tréning (bot / jedno zariadenie)
@@ -315,6 +315,9 @@ function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<st
   const [b, setB] = useState("st01");
   const [mode, setMode] = useState<"bot" | "local">("bot");
   const [err, setErr] = useState<string | null>(null);
+  const { profile } = useAuth();
+  // meno vystupuje v hláseniach enginu („Filip prehral…“), preto nie „Ty“
+  const myName = profile?.username?.trim() || "Hráč";
   const da = decks.find((d) => d.id === a) ?? decks[0];
   const db = decks.find((d) => d.id === b) ?? decks[decks.length - 1];
 
@@ -326,16 +329,16 @@ function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<st
       if (!c) missing.push(code);
       else defs[code] = buildDef(c);
     }
-    if (missing.length) return setErr(`V databáze chýbajú karty: ${missing.join(", ")}`);
+    if (missing.length) return setErr(`Niektoré karty z decku zatiaľ nepoznáme: ${missing.join(", ")}`);
     onStart(
       newGame(
         [
-          { name: mode === "bot" ? "Ty" : "Hráč 1", leader: da.leader, cards: da.cards },
+          { name: mode === "bot" ? myName : "Hráč 1", leader: da.leader, cards: da.cards },
           { name: mode === "bot" ? "Bot" : "Hráč 2", leader: db.leader, cards: db.cards },
         ],
         defs,
         Math.floor(Math.random() * 2147483646) + 1,
-        Math.random() < 0.5 ? 0 : 1,
+        "rps", // kto začína, rozhodne kameň-papier-nožnice
       ),
       mode,
     );
@@ -379,7 +382,7 @@ function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<st
         </div>
         <span className="grow" />
         <button className="btn" onClick={start}>
-          Začať hru
+          Hrať
         </button>
       </div>
       {err && <p className="gerr">{err}</p>}
@@ -438,9 +441,9 @@ function LocalGame({ initial, mode, byCode, onExit }: { initial: GameState; mode
       {cover != null && mode === "local" && s.winner == null && (
         <div className="gcover">
           <h2>Na rade je {s.players[cover].name}</h2>
-          <p className="muted">Odovzdaj zariadenie – druhý hráč nech sa nepozerá.</p>
+          <p className="muted">Podaj zariadenie druhému hráčovi a nepozeraj sa mu do kariet.</p>
           <button className="btn" onClick={() => setCover(null)}>
-            Som pripravený
+            Môžem hrať
           </button>
         </div>
       )}

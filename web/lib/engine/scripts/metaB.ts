@@ -19,7 +19,7 @@ const runMain: Step = { op: "runAbility", which: "main" };
 const runOnPlay: Step = { op: "runAbility", which: "onPlay" };
 const runOnKO: Step = { op: "runAbility", which: "onKO" };
 const giveActiveDonTo = (name: string, n: number): Step[] => [
-  { op: "choose", v: "r", f: myLC({ name }), min: 1, max: 1, label: `Komu dať ${n} aktívne DON!!` },
+  { op: "choose", v: "r", f: myLC({ name }), min: 1, max: 1, label: `Komu dáš ${n} aktívne DON!!?` },
   { op: "giveDon", v: "r", n, active: true },
 ];
 const ifVar = (v: string, then: Step[]): Step => ifThen({ c: "cmp", a: { n: "varCount", v }, op: ">=", b: 1 }, then);
@@ -285,7 +285,7 @@ export const META_B: Record<string, Script> = {
     abilities: [
       activateMain(power(oppChar(), -3000), {
         optional: true,
-        cost: [{ op: "choose", v: "g", f: myLC(), min: 1, max: 1, label: "Komu dať 1 aktívne DON!!" }, { op: "giveDon", v: "g", n: 1, active: true }, trashSelf],
+        cost: [{ op: "choose", v: "g", f: myLC(), min: 1, max: 1, label: "Komu dáš 1 aktívne DON!!?" }, { op: "giveDon", v: "g", n: 1, active: true }, trashSelf],
       }),
     ],
   },

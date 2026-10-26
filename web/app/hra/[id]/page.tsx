@@ -78,7 +78,7 @@ function OnlineGamePage() {
   const myMove = !!(g && user && g.status === "playing" && g.to_move === user.id);
   useEffect(() => {
     const base = "Grand Line Tracker";
-    document.title = myMove ? "● Si na ťahu – Hra" : g?.status === "playing" ? "Hra – čaká sa na súpera" : base;
+    document.title = myMove ? "● Si na ťahu – Hra" : g?.status === "playing" ? "Hra – hrá súper" : base;
     return () => {
       document.title = base;
     };

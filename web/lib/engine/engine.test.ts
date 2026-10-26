@@ -463,3 +463,53 @@ describe("bot", () => {
     expect(done).toBe(50);
   }, 120_000);
 });
+
+describe("kameň-papier-nožnice o poradie", () => {
+  const rps = () => newGame([DECK_ST26, DECK_ST01], DEFS, 42, "rps");
+
+  it("najprv voľba oboch hráčov, potom víťaz vyberá poradie a začína mulligan", () => {
+    let s = rps();
+    expect(s.prompt).toEqual({ kind: "rps", p: 0 });
+    s = ans(s, 0, { rps: "paper" });
+    expect(s.prompt).toEqual({ kind: "rps", p: 1 });
+    s = ans(s, 1, { rps: "rock" });
+    expect(s.prompt).toEqual({ kind: "firstChoice", p: 0 });
+    expect(s.rps!.rounds).toEqual([["paper", "rock"]]);
+    s = ans(s, 0, { first: false }); // víťaz ide druhý
+    expect(s.first).toBe(1);
+    expect(s.active).toBe(1);
+    expect(s.prompt).toEqual({ kind: "mulligan", p: 1 });
+    s = ans(s, 1, { yes: false });
+    s = ans(s, 0, { yes: false });
+    expect(s.turn).toBe(1);
+    expect(s.active).toBe(1);
+    expect(s.players[1].hand.length).toBe(5); // prvý hráč v prvom ťahu neťahá
+    expect(s.players[0].hand.length).toBe(5);
+  });
+
+  it("remíza sa opakuje, víťaz druhého kola si vyberá", () => {
+    let s = rps();
+    s = ans(s, 0, { rps: "rock" });
+    s = ans(s, 1, { rps: "rock" });
+    expect(s.prompt).toEqual({ kind: "rps", p: 0 });
+    s = ans(s, 0, { rps: "rock" });
+    s = ans(s, 1, { rps: "paper" });
+    expect(s.prompt).toEqual({ kind: "firstChoice", p: 1 });
+    expect(s.rps!.rounds.length).toBe(2);
+    s = ans(s, 1, { first: true });
+    expect(s.first).toBe(1);
+  });
+
+  it("súper nevidí moju voľbu, kým nevyberie svoju", () => {
+    let s = rps();
+    s = ans(s, 0, { rps: "scissors" });
+    expect(viewFor(s, 1).rps!.picks[0]).toBe("hidden");
+    expect(viewFor(s, 0).rps!.picks[0]).toBe("scissors");
+  });
+
+  it("neplatná odpoveď a cudzí hráč sú odmietnuté", () => {
+    const s = rps();
+    expect(() => ans(s, 1, { rps: "rock" })).toThrow(IllegalAction);
+    expect(() => ans(s, 0, { yes: true })).toThrow(IllegalAction);
+  });
+});
