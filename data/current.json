@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-27T01:10:09Z",
+ "updated": "2026-10-27T02:54:00Z",
  "fx": {
   "CZK": 24.369,
   "USD": 1.1188,
@@ -589,7 +589,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -1818,7 +1818,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -2184,7 +2184,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -2582,7 +2582,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -2807,7 +2807,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -3503,7 +3503,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -3673,7 +3673,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -3724,7 +3724,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -4212,7 +4212,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -4713,7 +4713,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -5269,7 +5269,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -5347,7 +5347,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -5498,7 +5498,7 @@
   },
   "butticards": {
    "ts": "2026-10-27T01:10:09Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece - OP17 -  The World’s Strongest Warriors - Display - Japanisch",
@@ -5681,7 +5681,10 @@
      "inStock": false,
      "img": "https://d2j6dbq0eux0bg.cloudfront.net/images/44059914/products/666614602/4358220179.jpg"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.butticards.at/Shop/One-Piece-c163462755)",
+   "fails": 1,
+   "warned": false
   },
   "wombat": {
    "ts": "2026-10-26T16:33:37Z",
@@ -5885,7 +5888,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
@@ -6197,15 +6200,15 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-27T01:10:09Z",
+   "ts": "2026-10-27T02:54:00Z",
    "ok": true,
    "items": [
     {
      "name": "EB-05 Heroines Edition vol.2 Japanese One Piece Booster Box [Pre-order / Ships Nov 2–4]",
      "url": "https://samuraiswordtokyo.com/products/eb05box",
-     "price": 17499.0,
+     "price": 15999.0,
      "currency": "JPY",
-     "eur": 99.34,
+     "eur": 90.83,
      "inStock": false,
      "preorder": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/10/eb05-heroines-edition-vol2-booster-box-official-300x300.webp"
@@ -6240,9 +6243,9 @@
     {
      "name": "OP-01 Romance Dawn Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op01box-damaged-box",
-     "price": 35191.0,
+     "price": 34713.0,
      "currency": "JPY",
-     "eur": 199.78,
+     "eur": 197.07,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4106-b4c20ebc0716/op01box_sst_88bb8ccc-0939-4e52-b392-8d54ae1ce257-thumb-320.webp"
     },
@@ -6339,9 +6342,9 @@
     {
      "name": "OP-12 Legacy of the Master Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-12-legacy-of-the-master-japanese-one-piece-booster-box-damaged-box",
-     "price": 15906.0,
+     "price": 15428.0,
      "currency": "JPY",
-     "eur": 90.3,
+     "eur": 87.58,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4128-f576cdebe44a/op12box_sst-thumb-320.webp"
     },
@@ -6510,9 +6513,9 @@
     {
      "name": "OP-12 Legacy of the Master Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op12box",
-     "price": 17251.0,
+     "price": 16728.0,
      "currency": "JPY",
-     "eur": 97.93,
+     "eur": 94.96,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4128-f576cdebe44a/op12box_sst-thumb-320.webp"
     },
@@ -6609,9 +6612,9 @@
     {
      "name": "OP-01 Romance Dawn Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op01box",
-     "price": 38901.0,
+     "price": 38367.0,
      "currency": "JPY",
-     "eur": 220.84,
+     "eur": 217.81,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4106-b4c20ebc0716/op01box_sst_88bb8ccc-0939-4e52-b392-8d54ae1ce257-thumb-320.webp"
     },
