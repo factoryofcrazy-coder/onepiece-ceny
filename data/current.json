@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-29T01:20:57Z",
+ "updated": "2026-10-29T03:04:19Z",
  "fx": {
   "CZK": 24.367,
   "USD": 1.1133,
@@ -589,7 +589,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -1818,8 +1818,8 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-28T22:56:24Z",
-   "ok": false,
+   "ts": "2026-10-29T03:04:19Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece TCG: Illustration Box Vol. 3 (IB-03)",
@@ -2181,13 +2181,10 @@
      "inStock": true,
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/b64fe8f1b690c3258468066fd6f88e1d.jpg"
     }
-   ],
-   "error": "IncompleteRead(64019 bytes read)",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "najada": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -2585,7 +2582,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -2810,7 +2807,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -3506,7 +3503,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -3676,7 +3673,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -3727,7 +3724,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -4215,7 +4212,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -4716,7 +4713,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -5280,7 +5277,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -5358,7 +5355,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -5508,7 +5505,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -5897,7 +5894,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
@@ -6209,15 +6206,15 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-29T01:20:57Z",
+   "ts": "2026-10-29T03:04:19Z",
    "ok": true,
    "items": [
     {
      "name": "EB-05 Heroines Edition vol.2 Japanese One Piece Booster Box [Pre-order / Ships Nov 2–4]",
      "url": "https://samuraiswordtokyo.com/products/eb05box",
-     "price": 15999.0,
+     "price": 13500.0,
      "currency": "JPY",
-     "eur": 90.98,
+     "eur": 76.77,
      "inStock": false,
      "preorder": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/10/eb05-heroines-edition-vol2-booster-box-official-300x300.webp"
@@ -6246,7 +6243,7 @@
      "price": 9257.0,
      "currency": "JPY",
      "eur": 52.64,
-     "inStock": false,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
     {
