@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-28T22:56:24Z",
+ "updated": "2026-10-29T01:20:57Z",
  "fx": {
   "CZK": 24.367,
   "USD": 1.1133,
@@ -589,7 +589,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -1819,7 +1819,7 @@
   },
   "ihrysko": {
    "ts": "2026-10-28T22:56:24Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece TCG: Illustration Box Vol. 3 (IB-03)",
@@ -2181,10 +2181,13 @@
      "inStock": true,
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/b64fe8f1b690c3258468066fd6f88e1d.jpg"
     }
-   ]
+   ],
+   "error": "IncompleteRead(64019 bytes read)",
+   "fails": 1,
+   "warned": false
   },
   "najada": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -2351,7 +2354,7 @@
      "price": 3.99,
      "currency": "EUR",
      "eur": 3.99,
-     "inStock": true,
+     "inStock": false,
      "img": "https://d1avvq5q4v8v8k.cloudfront.net/media/products/One_Piece_Royal_Blood_Booster_Japanese.webp"
     },
     {
@@ -2582,7 +2585,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -2807,7 +2810,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -3503,7 +3506,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -3673,7 +3676,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -3724,7 +3727,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -4212,7 +4215,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -4713,7 +4716,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -5277,7 +5280,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -5355,7 +5358,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -5505,7 +5508,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -5894,7 +5897,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
@@ -6206,7 +6209,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-28T22:56:24Z",
+   "ts": "2026-10-29T01:20:57Z",
    "ok": true,
    "items": [
     {
