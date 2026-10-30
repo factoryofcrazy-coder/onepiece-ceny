@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-30T15:11:43Z",
+ "updated": "2026-10-30T17:02:13Z",
  "fx": {
   "CZK": 24.353,
   "USD": 1.1172,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "veselydrak": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -49,16 +49,6 @@
      "inStock": true,
      "hint": "Box",
      "img": "https://www.vesely-drak.sk/obrazek/6ac89ca9ef7b2/pokemon-30th-celebration-booster-balicek-simplified-chinese-cinsky-6ac8a06875a1a.jpg"
-    },
-    {
-     "name": "Pokémon Abyss Eye M5 Booster Box – kórejský",
-     "url": "https://www.vesely-drak.sk/produkty/pokemon-korean/19548-pokemon-abyss-eye-m5-booster-box-korejsky/",
-     "price": 71.96,
-     "currency": "EUR",
-     "eur": 71.96,
-     "inStock": true,
-     "hint": "Box",
-     "img": "https://www.vesely-drak.sk/obrazek/6a96d5ac8688d/karty-pokemon-tcg-abyss-eye-booster-box-korejsky-6a96da171884d.jpg"
     },
     {
      "name": "Pokémon Gem Pack Vol. 6 (CBB6C) Booster Box – čínsky",
@@ -439,6 +429,16 @@
      "inStock": false,
      "hint": "Box",
      "img": "https://www.vesely-drak.sk/obrazek/6a7f8b031d415/cinsky-pokemon-booster-box-brilliant-counterattack-cs2.5c-6a7f8c52ec081.jpg"
+    },
+    {
+     "name": "Pokémon Abyss Eye M5 Booster Box – kórejský",
+     "url": "https://www.vesely-drak.sk/produkty/pokemon-korean/19548-pokemon-abyss-eye-m5-booster-box-korejsky/",
+     "price": 71.96,
+     "currency": "EUR",
+     "eur": 71.96,
+     "inStock": false,
+     "hint": "Box",
+     "img": "https://www.vesely-drak.sk/obrazek/6a96d5ac8688d/karty-pokemon-tcg-abyss-eye-booster-box-korejsky-6a96da171884d.jpg"
     },
     {
      "name": "Pokémon Chaos Rising Booster Bundle",
@@ -2815,15 +2815,6 @@
      "img": "https://www.vesely-drak.sk/obrazek/6ad9b27e16c03/pokemon-deck-crafters-collection-6ad9b36d8af66.jpg"
     },
     {
-     "name": "Ochranný PET box na Pokémon Booster Bundle - 10 ks",
-     "url": "https://www.vesely-drak.sk/produkty/pokemon-krabicky/19971-ochranny-pet-box-na-pokemon-booster-bundle-10-ks/",
-     "price": 21.96,
-     "currency": "EUR",
-     "eur": 21.96,
-     "inStock": true,
-     "img": "https://www.vesely-drak.sk/obrazek/6adb4882d6135/ochranny-pet-box-na-pokemon-booster-bundle-ii-6adb4a25dbe27.jpg"
-    },
-    {
      "name": "Pokémon kusová japonská karta Moltres AR 105/103 - 30th Celebration",
      "url": "https://www.vesely-drak.sk/produkty/pokemon-kusove-karty-a-herni-prislusenstvi/19825-pokemon-kusova-japonska-karta-moltres-ar-105-103-30th-celebration/",
      "price": 6.76,
@@ -4066,15 +4057,6 @@
      "img": "https://www.vesely-drak.sk/obrazek/6a6b595786956/pokemon-kusova-japonska-karta-mega-excadrill-ex-sr-101-081-abyss-eye-6a6b59cb340ad.jpg"
     },
     {
-     "name": "Pokémon Japonská kusová karta Morpeko ex SR 100/081 Abyss Eye",
-     "url": "https://www.vesely-drak.sk/produkty/pokemon-kusove-karty-a-herni-prislusenstvi/19311-pokemon-kusova-japonska-karta-morpeko-ex-sr-100-081-abyss-eye/",
-     "price": 7.96,
-     "currency": "EUR",
-     "eur": 7.96,
-     "inStock": true,
-     "img": "https://www.vesely-drak.sk/obrazek/6a6b5a242a0be/pokemon-kusova-japonska-karta-morpeko-ex-sr-100-081-abyss-eye-6a6b5a99bbb46.jpg"
-    },
-    {
      "name": "Pokémon Glory of Team Rocket Booster Box - korejsky",
      "url": "https://www.vesely-drak.sk/produkty/japonske-pokemon-karty-booster-box/16417-pokemon-glory-of-team-rocket-booster-box-korejsky/",
      "price": 119.96,
@@ -4235,11 +4217,38 @@
      "eur": 79.96,
      "inStock": true,
      "img": "https://www.vesely-drak.sk/obrazek/688c93719f033/megabrave-500x-688c9b79817f3.jpg"
+    },
+    {
+     "name": "Pokémon Mega Brave Booster - japonský",
+     "url": "https://www.vesely-drak.sk/produkty/japonske-karty-pokemon-boostery/16357-pokemon-mega-brave-booster-japonsky/",
+     "price": 2.76,
+     "currency": "EUR",
+     "eur": 2.76,
+     "inStock": true,
+     "img": "https://www.vesely-drak.sk/obrazek/688c93719f033/nbvjkg-688c9c0302f66.jpg"
+    },
+    {
+     "name": "Pokémon Mega Symphonia Booster Box - japonský",
+     "url": "https://www.vesely-drak.sk/produkty/japonske-pokemon-karty-booster-box/16358-pokemon-mega-symphonia-booster-box-japonsky/",
+     "price": 79.96,
+     "currency": "EUR",
+     "eur": 79.96,
+     "inStock": true,
+     "img": "https://www.vesely-drak.sk/obrazek/688c9e27ec1c2/megasymphonia-500x-688ca0cf5b8ff.jpg"
+    },
+    {
+     "name": "Pokémon Mega Symphonia Booster - japonský",
+     "url": "https://www.vesely-drak.sk/produkty/japonske-karty-pokemon-boostery/16360-pokemon-mega-symphonia-booster-japonsky/",
+     "price": 2.76,
+     "currency": "EUR",
+     "eur": 2.76,
+     "inStock": true,
+     "img": "https://www.vesely-drak.sk/obrazek/688ca3e07c8a6/mega-symphonia-booster-pack-688ca4bac36bb.jpg"
     }
    ]
   },
   "kartovo": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -4724,7 +4733,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -4955,7 +4964,7 @@
    ]
   },
   "pompo_sk": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -5465,7 +5474,7 @@
    ]
   },
   "gorila": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -5550,15 +5559,6 @@
      "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157843.jpg?v=17933394032"
     },
     {
-     "name": "Pokémon: Deck Box krabička na 75 karet - Snorlax and Munchlax",
-     "url": "https://www.gorila.sk/detail/1814705/Pokemon-Deck-Box-krabicka-na-75-karet-Snorlax-and-Munchlax",
-     "price": 3.53,
-     "currency": "EUR",
-     "eur": 3.53,
-     "inStock": true,
-     "img": "https://mrtns.sk/gorila/products/_ml/1814/ml1814705.jpg?v=17933394172"
-    },
-    {
      "name": "Pokémon TCG: Violet ex - Booster (japonský)",
      "url": "https://www.gorila.sk/detail/4157847/Pokemon-TCG-Violet-ex-Booster-japonsky",
      "price": 6.06,
@@ -5566,11 +5566,20 @@
      "eur": 6.06,
      "inStock": false,
      "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157847.jpg?v=17933394032"
+    },
+    {
+     "name": "Pokémon: Deck Box krabička na 75 karet - Snorlax and Munchlax",
+     "url": "https://www.gorila.sk/detail/1814705/Pokemon-Deck-Box-krabicka-na-75-karet-Snorlax-and-Munchlax",
+     "price": 3.53,
+     "currency": "EUR",
+     "eur": 3.53,
+     "inStock": true,
+     "img": "https://mrtns.sk/gorila/products/_ml/1814/ml1814705.jpg?v=17933394172"
     }
    ]
   },
   "konzoliste": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -5650,7 +5659,7 @@
    ]
   },
   "gengar": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -6121,7 +6130,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -6235,7 +6244,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -6553,7 +6562,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -6920,7 +6929,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -7143,7 +7152,7 @@
    ]
   },
   "planetaher": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -7824,7 +7833,7 @@
    ]
   },
   "tlama": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -7842,7 +7851,7 @@
      "price": 2149.0,
      "currency": "CZK",
      "eur": 88.24,
-     "inStock": true,
+     "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.tlamagames.com/user/shop/related/122068_6a45265c3eac4-tcg-pokemon-karty-30th-celebration-booster-bundle-6a452838cb975-1.webp?ff=1&x=100&y=100&q=85&ts=6abea216&sg=8dda0505"
     },
     {
@@ -8082,7 +8091,7 @@
    ]
   },
   "pokeunited": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -8131,15 +8140,6 @@
      "img": "https://cdn.myshoptet.com/usr/www.pokeunited.cz/user/shop/related/1037_pitch-black-eng-booster.webp?ff=1&x=100&y=100&q=85&ts=6a50e3c9&sg=8dda0505"
     },
     {
-     "name": "TREASURE - FUSION STRIKE HALF BOOSTER BOX",
-     "url": "https://www.pokeunited.cz/treasure-fusion-strike-half-booster-box/",
-     "price": 849.0,
-     "currency": "CZK",
-     "eur": 34.86,
-     "inStock": false,
-     "img": "https://cdn.myshoptet.com/usr/www.pokeunited.cz/user/shop/related/1177_10073c85-75b2-4324-a2d9-fd0903c59375.png?ff=1&x=100&y=100&q=85&ts=6ae261b0&sg=8dda0505"
-    },
-    {
      "name": "Lost Origin ENG booster",
      "url": "https://www.pokeunited.cz/lost-origin-eng-booster/",
      "price": 649.0,
@@ -8182,7 +8182,7 @@
      "currency": "CZK",
      "eur": 4.48,
      "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.pokeunited.cz/user/shop/detail/989_abyss-eye-booster-pack-webp.png?ff=1&x=423&y=318&q=85&ts=6a16ffdd&sg=2175fb9d"
+     "img": "https://cdn.myshoptet.com/usr/www.pokeunited.cz/user/shop/related/989_abyss-eye-booster-pack-webp.png?ff=1&x=100&y=100&q=85&ts=6a16ffdd&sg=8dda0505"
     },
     {
      "name": "Astral Radiance ENG booster",
@@ -8376,7 +8376,7 @@
    ]
   },
   "fyft": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -8616,7 +8616,7 @@
    ]
   },
   "imago": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -8811,7 +8811,7 @@
    ]
   },
   "dobrovsky": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -8934,18 +8934,9 @@
    ]
   },
   "svether": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
-    {
-     "name": "Pokémon: Album Premium Green Snap Binder",
-     "url": "https://www.svet-her.cz/spolecenske-hry/pokemon-album-premium-green-snap-binder",
-     "price": 569.0,
-     "currency": "CZK",
-     "eur": 23.36,
-     "inStock": true,
-     "img": "https://i00.eu/img/497/230x260f/5p22sfig/63121.jpg"
-    },
     {
      "name": "Pokémon - SV Prismatic Evolutions - Super-Premium Collection",
      "url": "https://www.svet-her.cz/spolecenske-hry/pokemon-sv-prismatic-evolutions-super-premium-collection",
@@ -8954,6 +8945,15 @@
      "eur": 246.34,
      "inStock": true,
      "img": "https://i00.eu/img/497/230x260f/2errvdm7/62945.jpg"
+    },
+    {
+     "name": "Pokémon: Album Premium Green Snap Binder",
+     "url": "https://www.svet-her.cz/spolecenske-hry/pokemon-album-premium-green-snap-binder",
+     "price": 569.0,
+     "currency": "CZK",
+     "eur": 23.36,
+     "inStock": true,
+     "img": "https://i00.eu/img/497/230x260f/5p22sfig/63121.jpg"
     },
     {
      "name": "Pokémon: Trenér expert",
@@ -8976,7 +8976,7 @@
    ]
   },
   "pompo_cz": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -9198,9 +9198,9 @@
     {
      "name": "Pokémon TCG: ME03 Perfect Order - Booster",
      "url": "https://pompo.cz/pokemon-tcg-me03-perfect-order-booster_z264803/",
-     "price": 169.0,
+     "price": 160.0,
      "currency": "CZK",
-     "eur": 6.94,
+     "eur": 6.57,
      "inStock": false,
      "img": "https://data.pompo.cz/data/tmp/2/3/509403_2.jpg?1774520467_1"
     },
@@ -9212,15 +9212,6 @@
      "eur": 77.98,
      "inStock": false,
      "img": "https://data.pompo.cz/data/tmp/2/6/533986_2.jpg?1783491689_1"
-    },
-    {
-     "name": "Pokémon UP: Mega Charizard X & Y - A5 album na 80 karet",
-     "url": "https://pompo.cz/pokemon-up-mega-charizard-x-y-a5-album-na-80-karet_z269422/",
-     "price": 254.0,
-     "currency": "CZK",
-     "eur": 10.43,
-     "inStock": false,
-     "img": "https://data.pompo.cz/data/tmp/2/9/523859_2.jpg?1779358831_1"
     },
     {
      "name": "Pokémon TCG: ME04 Chaos Rising - 3 Blister Booster",
@@ -9248,15 +9239,6 @@
      "eur": 51.29,
      "inStock": false,
      "img": "https://data.pompo.cz/data/tmp/2/6/477666_2.jpg?1760523780_1"
-    },
-    {
-     "name": "Pokémon UP: Mega Charizard X & Y - A4 album na 180 karet",
-     "url": "https://pompo.cz/pokemon-up-mega-charizard-x-y-a4-album-na-180-karet_z269421/",
-     "price": 375.0,
-     "currency": "CZK",
-     "eur": 15.4,
-     "inStock": false,
-     "img": "https://data.pompo.cz/data/tmp/2/2/523852_2.jpg?1779358825_1"
     },
     {
      "name": "Pokémon TCG: ME05 Pitch Black - 3 Blister Booster",
@@ -9468,7 +9450,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -11160,7 +11142,7 @@
      "price": 199.9,
      "currency": "EUR",
      "eur": 199.9,
-     "inStock": false,
+     "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/Pok_mon_-_30th_Anniversary_Collection_20er_Display_-_JPN_2cff177b3a7be7dc.webp?v=1791206111"
     },
     {
@@ -11169,7 +11151,7 @@
      "price": 239.9,
      "currency": "EUR",
      "eur": 239.9,
-     "inStock": false,
+     "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/PKM30thAnniversaryBBJPN_Binder.webp?v=1791466217"
     },
     {
@@ -16448,7 +16430,7 @@
      "price": 139.9,
      "currency": "EUR",
      "eur": 139.9,
-     "inStock": false,
+     "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/Pok_mon_-_Karmesin_Purpur_Ewige_Rivalen_18er_Booster_Display_-_DE_56dd11e48ea34d33.png?v=1791205505"
     },
     {
@@ -16616,7 +16598,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -17072,7 +17054,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -17859,6 +17841,16 @@
      "eur": 14.95,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0814/4656/8264/files/Pokemon-Coin-Set-Terastal-Grand-Gathering-CSV9.5-chinesisch.jpg?v=1785418001"
+    },
+    {
+     "name": "[DE] Pokémon Top Trainer Box - Mega-Entwicklung : Delta-Herrschaft (ME06)",
+     "url": "https://yonko-tcg.de/products/de-pokemon-top-trainer-box-mega-entwicklung-delta-herrschaft-me06",
+     "price": 74.95,
+     "currency": "EUR",
+     "eur": 74.95,
+     "inStock": false,
+     "preorder": true,
+     "img": "https://cdn.shopify.com/s/files/1/0814/4656/8264/files/Pokemon-Top-Trainer-Box-Mega-Entwicklung-Delta-Herrschaft-ME06-Box-deutsch.jpg?v=1792487549"
     },
     {
      "name": "[T-CHN] Pokémon Box - 5 Year Anniversary",
@@ -19337,15 +19329,6 @@
      "img": "https://cdn.shopify.com/s/files/1/0814/4656/8264/files/Pokemon-Tin-Karmesin-Purpur-Miraidon-Koraidon-deutsch.jpg?v=1755092891"
     },
     {
-     "name": "[DE] Pokémon Top Trainer Box - Mega-Entwicklung : Delta-Herrschaft (ME06)",
-     "url": "https://yonko-tcg.de/products/de-pokemon-top-trainer-box-mega-entwicklung-delta-herrschaft-me06",
-     "price": 74.95,
-     "currency": "EUR",
-     "eur": 74.95,
-     "inStock": false,
-     "img": "https://cdn.shopify.com/s/files/1/0814/4656/8264/files/Pokemon-Top-Trainer-Box-Mega-Entwicklung-Delta-Herrschaft-ME06-Box-deutsch.jpg?v=1792487549"
-    },
-    {
      "name": "[T-CHN] Pokémon Blister - Mega Evolution Joyful Blister Set",
      "url": "https://yonko-tcg.de/products/t-chn-pokemon-blister-mega-evolution-joyful-blister-set",
      "price": 24.95,
@@ -20554,7 +20537,7 @@
    ]
   },
   "crispycards": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -25577,7 +25560,7 @@
    ]
   },
   "pushdich": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -25745,7 +25728,7 @@
    ]
   },
   "cardcorner": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -25968,7 +25951,7 @@
    ]
   },
   "gate": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -26452,7 +26435,7 @@
    ]
   },
   "comicplanet": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -26491,7 +26474,7 @@
      "price": 54.99,
      "currency": "EUR",
      "eur": 54.99,
-     "inStock": true,
+     "inStock": false,
      "img": "https://www.comicplanet.de/media/0d/27/6e/1783326606/gc-pkm-d-30j-bb.jpg?ts=1783326606"
     },
     {
@@ -26893,7 +26876,7 @@
    ]
   },
   "trader": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -27223,7 +27206,7 @@
    ]
   },
   "geodude": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -28203,7 +28186,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -28452,7 +28435,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -30015,7 +29998,7 @@
    ]
   },
   "rays": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -30183,7 +30166,7 @@
    ]
   },
   "sammelmania": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -30291,7 +30274,7 @@
      "price": 39.99,
      "currency": "EUR",
      "eur": 39.99,
-     "inStock": true,
+     "inStock": false,
      "img": "https://sammelmania.at/media/7b/dc/2c/1790341296/pkm_30_jahre_tin_2_nacht_-_de-1_2026-07-06_14-24-01-removebg-preview.png?ts=1790341296"
     },
     {
@@ -30404,7 +30387,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -30800,7 +30783,7 @@
      "price": 17327.0,
      "currency": "JPY",
      "eur": 98.63,
-     "inStock": true,
+     "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/7504-5fc4c8002c76/sv8abox_main_no_shrink-thumb-320.webp"
     },
     {
@@ -32129,7 +32112,7 @@
    ]
   },
   "fyft_sk": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -32189,9 +32172,9 @@
     {
      "name": "Pokémon TCG: Deck Crafters Collection",
      "url": "https://www.fyft.sk/pokemon-tcg-deck-crafters-collection/",
-     "price": 14.2,
+     "price": 14.1,
      "currency": "EUR",
-     "eur": 14.2,
+     "eur": 14.1,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.fyft.sk/user/shop/detail/74930_d-7dd2b9524a144f32879c1b58c726c0c5-1000-1000.png?ff=1&x=423&y=423&q=85&ts=6adaafc7&sg=89595c3b"
     },
@@ -32243,9 +32226,9 @@
     {
      "name": "Pokémon TCG: 30. Celebration Elite Trainer Box",
      "url": "https://www.fyft.sk/pokemon-tcg--30--celebration-elite-trainer-box/",
-     "price": 168.0,
+     "price": 167.0,
      "currency": "EUR",
-     "eur": 168.0,
+     "eur": 167.0,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.fyft.sk/user/shop/detail/73301_6a44c1616ae47-pokemon-karty-etb-30th-celebration-elite-trainer-box-6a44c585c472b.png?ff=1&x=423&y=423&q=85&ts=6a98c6bb&sg=89595c3b"
     },
@@ -32270,18 +32253,18 @@
     {
      "name": "Pokémon TCG: 30th Celebration ex Tin",
      "url": "https://www.fyft.sk/pokemon-tcg--30th-celebration-ex-tin/",
-     "price": 55.3,
+     "price": 54.2,
      "currency": "EUR",
-     "eur": 55.3,
+     "eur": 54.2,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.fyft.sk/user/shop/detail/73304_6a467c65a679c-tcg-pokemon-karty-30th-celebration-tin-greninja-ex-6a467d3c774b8.png?ff=1&x=423&y=423&q=85&ts=6a98c6bb&sg=89595c3b"
     },
     {
      "name": "Pokémon TCG: 30th Celebration Greninja ex Box",
      "url": "https://www.fyft.sk/pokemon-tcg--30th-celebration-greninja-ex-box/",
-     "price": 55.3,
+     "price": 54.2,
      "currency": "EUR",
-     "eur": 55.3,
+     "eur": 54.2,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.fyft.sk/user/shop/detail/73307_6a450c456db91-tcg-pokemon-karty-30th-celebration-greninja-ex-box-6a450dc52c249.png?ff=1&x=423&y=423&q=85&ts=6a98c6bc&sg=89595c3b"
     },
@@ -32297,9 +32280,9 @@
     {
      "name": "Pokémon TCG: 30th Celebration Sylveon ex Box",
      "url": "https://www.fyft.sk/pokemon-tcg--30th-celebration-sylveon-ex-box/",
-     "price": 55.3,
+     "price": 54.2,
      "currency": "EUR",
-     "eur": 55.3,
+     "eur": 54.2,
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.fyft.sk/user/shop/detail/73313_6a4511c5b4677-tcg-pokemon-karty-30th-celebration-sylveon-ex-box-6a451376e8fe5.png?ff=1&x=423&y=423&q=85&ts=6a98c6bc&sg=89595c3b"
     },
@@ -32369,7 +32352,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -33017,7 +33000,7 @@
      "price": 39.99,
      "currency": "EUR",
      "eur": 39.99,
-     "inStock": false,
+     "inStock": true,
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/421c368f953a64b8ec3a54a2e3fe8544.jpg"
     },
     {
@@ -33725,7 +33708,7 @@
    ]
   },
   "kitstore_sk": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -33902,7 +33885,7 @@
    ]
   },
   "sparkys": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -34214,7 +34197,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -35379,6 +35362,15 @@
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=ff940ec4-a189-49bc-852e-f512aefdb839&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
     {
+     "name": "Pokémon - Stellar Miracle Booster - Korean",
+     "url": "https://cernyrytir.cz/merch/detail/9889a66a-35e1-4d1b-9225-7a5709b31b3e",
+     "price": 49.0,
+     "currency": "CZK",
+     "eur": 2.01,
+     "inStock": true,
+     "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=f20d3aa7-b4e8-498d-931f-ce981ce981b3&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
+    },
+    {
      "name": "Pokémon - Terastal Gathering Booster - Chinese",
      "url": "https://cernyrytir.cz/merch/detail/4a661299-6095-403b-8a35-88f1f8831ef2",
      "price": 225.0,
@@ -35534,7 +35526,7 @@
    ]
   },
   "kitstore": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -35711,7 +35703,7 @@
    ]
   },
   "plastic": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -36616,7 +36608,7 @@
    ]
   },
   "xzone_cz": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -36737,13 +36729,22 @@
      "img": "https://cdn.xzone.cz/p/obaly-a-krabicky-na-karty/krabicka-na-karty-ultra-pro-pokemon-scorching-summit-alcove-click/krabicka-na-karty-ultra-pro-pokemon-scorching-summit-alcove-click-magneticka-150w.png"
     },
     {
-     "name": "Karetní hra Pokémon TCG - Mega Moonlit Tin - Clefable ex",
-     "url": "https://www.xzone.cz/karetni-hra-pokemon-tcg-mega-clefable-ex-tin",
-     "price": 790.0,
+     "name": "Karetní hra Pokémon TCG: Mega Evolution - Delta Reign - Booster Bundle (6 boosterů)",
+     "url": "https://www.xzone.cz/karetni-hra-pokemon-tcg-mega-evolution-delta-reign-booster-bundle-6-boosteru",
+     "price": 890.0,
      "currency": "CZK",
-     "eur": 32.44,
-     "inStock": true,
-     "img": "https://cdn.xzone.cz/p/tiny/karetni-hra-pokemon-tcg-mega-clefable-ex-tin/karetni-hra-pokemon-tcg-mega-clefable-ex-tin-150w.png"
+     "eur": 36.55,
+     "inStock": false,
+     "img": "https://cdn.xzone.cz/p/boostery/karetni-hra-pokemon-tcg-mega-evolution-delta-reign-booster-bundle/karetni-hra-pokemon-tcg-mega-evolution-delta-reign-booster-bundle-6-boosteru-150w.png"
+    },
+    {
+     "name": "Karetní hra Pokémon TCG: Mega Greninja ex League Battle Deck",
+     "url": "https://www.xzone.cz/karetni-hra-pokemon-tcg-mega-greninja-ex-league-battle-deck",
+     "price": 799.0,
+     "currency": "CZK",
+     "eur": 32.81,
+     "inStock": false,
+     "img": "https://cdn.xzone.cz/p/battle-decky/karetni-hra-pokemon-tcg-mega-greninja-ex-league-battle-deck/karetni-hra-pokemon-tcg-mega-greninja-ex-league-battle-deck-150w.png"
     },
     {
      "name": "Karetní hra Pokémon TCG: Mega Forces Tin - Mega Dragonite ex Tin",
@@ -36791,22 +36792,13 @@
      "img": "https://cdn.xzone.cz/p/pokemon-tcg/karetni-hra-pokemon-tcg-30th-celebration-battle-deck-umbreon-ex/karetni-hra-pokemon-tcg-30th-celebration-battle-deck-umbreon-ex-150w.png"
     },
     {
-     "name": "Karetní hra Pokémon TCG: Mega Evolution - Delta Reign - Booster Bundle (6 boosterů)",
-     "url": "https://www.xzone.cz/karetni-hra-pokemon-tcg-mega-evolution-delta-reign-booster-bundle-6-boosteru",
-     "price": 890.0,
+     "name": "Karetní hra Pokémon TCG - Mega Moonlit Tin - Clefable ex",
+     "url": "https://www.xzone.cz/karetni-hra-pokemon-tcg-mega-clefable-ex-tin",
+     "price": 790.0,
      "currency": "CZK",
-     "eur": 36.55,
-     "inStock": false,
-     "img": "https://cdn.xzone.cz/p/boostery/karetni-hra-pokemon-tcg-mega-evolution-delta-reign-booster-bundle/karetni-hra-pokemon-tcg-mega-evolution-delta-reign-booster-bundle-6-boosteru-150w.png"
-    },
-    {
-     "name": "Karetní hra Pokémon TCG: Mega Greninja ex League Battle Deck",
-     "url": "https://www.xzone.cz/karetni-hra-pokemon-tcg-mega-greninja-ex-league-battle-deck",
-     "price": 799.0,
-     "currency": "CZK",
-     "eur": 32.81,
-     "inStock": false,
-     "img": "https://cdn.xzone.cz/p/battle-decky/karetni-hra-pokemon-tcg-mega-greninja-ex-league-battle-deck/karetni-hra-pokemon-tcg-mega-greninja-ex-league-battle-deck-150w.png"
+     "eur": 32.44,
+     "inStock": true,
+     "img": "https://cdn.xzone.cz/p/tiny/karetni-hra-pokemon-tcg-mega-clefable-ex-tin/karetni-hra-pokemon-tcg-mega-clefable-ex-tin-150w.png"
     },
     {
      "name": "Karetní hra Pokémon TCG: Mega Evolution - Delta Reign - Booster (10 karet)",
@@ -36847,7 +36839,7 @@
    ]
   },
   "veselydrak_cz": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -36889,16 +36881,6 @@
      "inStock": true,
      "hint": "Box",
      "img": "https://www.vesely-drak.cz/obrazek/6ac89ca9ef7b2/pokemon-30th-celebration-booster-balicek-simplified-chinese-cinsky-6ac8a06875a1a.jpg"
-    },
-    {
-     "name": "Pokémon Abyss Eye M5 Booster Box - korejsky",
-     "url": "https://www.vesely-drak.cz/produkty/pokemon-korean/19548-pokemon-abyss-eye-m5-booster-box-korejsky/",
-     "price": 1799.0,
-     "currency": "CZK",
-     "eur": 73.87,
-     "inStock": true,
-     "hint": "Box",
-     "img": "https://www.vesely-drak.cz/obrazek/6a96d5ac8688d/karty-pokemon-tcg-abyss-eye-booster-box-korejsky-6a96da171884d.jpg"
     },
     {
      "name": "Pokémon Gem Pack Vol. 6 (CBB6C) Booster Box - čínsky",
@@ -37279,6 +37261,16 @@
      "inStock": false,
      "hint": "Box",
      "img": "https://www.vesely-drak.cz/obrazek/6a7f8b031d415/cinsky-pokemon-booster-box-brilliant-counterattack-cs2.5c-6a7f8c52ec081.jpg"
+    },
+    {
+     "name": "Pokémon Abyss Eye M5 Booster Box - korejsky",
+     "url": "https://www.vesely-drak.cz/produkty/pokemon-korean/19548-pokemon-abyss-eye-m5-booster-box-korejsky/",
+     "price": 1799.0,
+     "currency": "CZK",
+     "eur": 73.87,
+     "inStock": false,
+     "hint": "Box",
+     "img": "https://www.vesely-drak.cz/obrazek/6a96d5ac8688d/karty-pokemon-tcg-abyss-eye-booster-box-korejsky-6a96da171884d.jpg"
     },
     {
      "name": "Pokémon Chaos Rising Booster Bundle",
@@ -39655,15 +39647,6 @@
      "img": "https://www.vesely-drak.cz/obrazek/6ad9b27e16c03/pokemon-deck-crafters-collection-6ad9b36d8af66.jpg"
     },
     {
-     "name": "Ochranný PET box na Pokémon Booster Bundle - 10 ks",
-     "url": "https://www.vesely-drak.cz/produkty/pokemon-krabicky/19971-ochranny-pet-box-na-pokemon-booster-bundle-10-ks/",
-     "price": 549.0,
-     "currency": "CZK",
-     "eur": 22.54,
-     "inStock": true,
-     "img": "https://www.vesely-drak.cz/obrazek/6adb4882d6135/ochranny-pet-box-na-pokemon-booster-bundle-ii-6adb4a25dbe27.jpg"
-    },
-    {
      "name": "Pokémon kusová japonská karta Moltres AR 105/103 - 30th Celebration",
      "url": "https://www.vesely-drak.cz/produkty/pokemon-kusove-karty-a-herni-prislusenstvi/19825-pokemon-kusova-japonska-karta-moltres-ar-105-103-30th-celebration/",
      "price": 169.0,
@@ -40906,15 +40889,6 @@
      "img": "https://www.vesely-drak.cz/obrazek/6a6b595786956/pokemon-kusova-japonska-karta-mega-excadrill-ex-sr-101-081-abyss-eye-6a6b59cb340ad.jpg"
     },
     {
-     "name": "Pokémon kusová japonská karta Morpeko ex SR 100/081 Abyss Eye",
-     "url": "https://www.vesely-drak.cz/produkty/pokemon-kusove-karty-a-herni-prislusenstvi/19311-pokemon-kusova-japonska-karta-morpeko-ex-sr-100-081-abyss-eye/",
-     "price": 199.0,
-     "currency": "CZK",
-     "eur": 8.17,
-     "inStock": true,
-     "img": "https://www.vesely-drak.cz/obrazek/6a6b5a242a0be/pokemon-kusova-japonska-karta-morpeko-ex-sr-100-081-abyss-eye-6a6b5a99bbb46.jpg"
-    },
-    {
      "name": "Pokémon Glory of Team Rocket Booster Box - korejsky",
      "url": "https://www.vesely-drak.cz/produkty/japonske-pokemon-karty-booster-box/16417-pokemon-glory-of-team-rocket-booster-box-korejsky/",
      "price": 2999.0,
@@ -41077,6 +41051,33 @@
      "img": "https://www.vesely-drak.cz/obrazek/688c93719f033/megabrave-500x-688c9b79817f3.jpg"
     },
     {
+     "name": "Pokémon Mega Brave Booster - japonsky",
+     "url": "https://www.vesely-drak.cz/produkty/japonske-karty-pokemon-boostery/16357-pokemon-mega-brave-booster-japonsky/",
+     "price": 69.0,
+     "currency": "CZK",
+     "eur": 2.83,
+     "inStock": true,
+     "img": "https://www.vesely-drak.cz/obrazek/688c93719f033/nbvjkg-688c9c0302f66.jpg"
+    },
+    {
+     "name": "Pokémon Mega Symphonia Booster Box - japonsky",
+     "url": "https://www.vesely-drak.cz/produkty/japonske-pokemon-karty-booster-box/16358-pokemon-mega-symphonia-booster-box-japonsky/",
+     "price": 1999.0,
+     "currency": "CZK",
+     "eur": 82.08,
+     "inStock": true,
+     "img": "https://www.vesely-drak.cz/obrazek/688c9e27ec1c2/megasymphonia-500x-688ca0cf5b8ff.jpg"
+    },
+    {
+     "name": "Pokémon Mega Symphonia Booster - japonsky",
+     "url": "https://www.vesely-drak.cz/produkty/japonske-karty-pokemon-boostery/16360-pokemon-mega-symphonia-booster-japonsky/",
+     "price": 69.0,
+     "currency": "CZK",
+     "eur": 2.83,
+     "inStock": true,
+     "img": "https://www.vesely-drak.cz/obrazek/688ca3e07c8a6/mega-symphonia-booster-pack-688ca4bac36bb.jpg"
+    },
+    {
      "name": "Pokémon Destined Rivals Elite Trainer Box",
      "url": "https://www.vesely-drak.cz/produkty/pokemon-elite-trainer-box/15410-pokemon-destined-rivals-elite-trainer-box/",
      "price": 3999.0,
@@ -41228,6 +41229,15 @@
      "eur": 167.7,
      "inStock": true,
      "img": "https://www.vesely-drak.cz/obrazek/6346a92147898/pokemon-silver-tempest-elite-trainer-box-alolan-vulpix-677e81be1ca9c.jpg"
+    },
+    {
+     "name": "Pokémon Sword and Shield - Lost Origin Elite Trainer Box – Giratina VSTAR",
+     "url": "https://www.vesely-drak.cz/produkty/specialni-sety/9350-pokemon-sword-and-shield-lost-origin-elite-trainer-box-giratina-vstar/",
+     "price": 5999.0,
+     "currency": "CZK",
+     "eur": 246.34,
+     "inStock": true,
+     "img": "https://www.vesely-drak.cz/obrazek/62f703192ed18/pokemon-lost-origin-elite-trainer-box-cz-62f70354e698a.jpg"
     },
     {
      "name": "Pokémon Sword and Shield - Lost Origin Elite Trainer Box – Giratina VSTAR - 2. jakost",
@@ -41399,20 +41409,11 @@
      "eur": 299.72,
      "inStock": false,
      "img": "https://www.vesely-drak.cz/obrazek/6467330ac9cba/pokemon-paldea-evolved-elite-trainer-box-krabice-66d0758f894b0.jpg"
-    },
-    {
-     "name": "Pokémon Sword and Shield - Lost Origin Elite Trainer Box – Giratina VSTAR",
-     "url": "https://www.vesely-drak.cz/produkty/specialni-sety/9350-pokemon-sword-and-shield-lost-origin-elite-trainer-box-giratina-vstar/",
-     "price": 5999.0,
-     "currency": "CZK",
-     "eur": 246.34,
-     "inStock": false,
-     "img": "https://www.vesely-drak.cz/obrazek/62f703192ed18/pokemon-lost-origin-elite-trainer-box-cz-62f70354e698a.jpg"
     }
    ]
   },
   "gengar_cz": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -41454,7 +41455,7 @@
    ]
   },
   "konzoliste_cz": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -41507,7 +41508,7 @@
    ]
   },
   "pokepop": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -41837,7 +41838,7 @@
    ]
   },
   "hras": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -41879,7 +41880,7 @@
    ]
   },
   "pokekarty": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -42101,7 +42102,7 @@
    ]
   },
   "spellbound": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -42161,7 +42162,7 @@
    ]
   },
   "kartickarna": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -42537,7 +42538,7 @@
    ]
   },
   "akcnihracky": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -42633,7 +42634,7 @@
    ]
   },
   "toysshop": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
@@ -42873,7 +42874,7 @@
    ]
   },
   "geekhall": {
-   "ts": "2026-10-30T15:11:43Z",
+   "ts": "2026-10-30T17:02:13Z",
    "ok": true,
    "items": [
     {
