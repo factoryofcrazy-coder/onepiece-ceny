@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-31T14:53:42Z",
+ "updated": "2026-10-31T16:55:23Z",
  "fx": {
   "CZK": 24.353,
   "USD": 1.1172,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "veselydrak": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -2887,15 +2887,6 @@
      "img": "https://www.vesely-drak.sk/obrazek/6ac3b7ae08922/japonska-kusova-pokemon-karta-greninja-ex-015-103---30th-celebration-6ac3b8106c3e9.jpg"
     },
     {
-     "name": "Pokémon kusová japonská karta Mewtwo ex 055/103 - 30th Celebration",
-     "url": "https://www.vesely-drak.sk/produkty/pokemon-kusove-karty-a-herni-prislusenstvi/19843-pokemon-kusova-japonska-karta-mewtwo-ex-055-103-30th-celebration/",
-     "price": 2.36,
-     "currency": "EUR",
-     "eur": 2.36,
-     "inStock": true,
-     "img": "https://www.vesely-drak.sk/obrazek/6ac3bc3ee1be3/japonska-kusova-pokemon-karta-mewtwo-ex-055-103---30th-celebration-6ac3bc96cd494.jpg"
-    },
-    {
      "name": "Pokémon kusová japonská karta Sylveon ex 059/103 - 30th Celebration",
      "url": "https://www.vesely-drak.sk/produkty/pokemon-kusove-karty-a-herni-prislusenstvi/19846-pokemon-kusova-japonska-karta-sylveon-ex-059-103-30th-celebration/",
      "price": 2.36,
@@ -4235,11 +4226,20 @@
      "eur": 6.76,
      "inStock": true,
      "img": "https://www.vesely-drak.sk/obrazek/69cb6ad0718ef/pokemon-kusova-japonska-karta-tauros-ar-094-083-69cb6b98c0351.jpg"
+    },
+    {
+     "name": "Pokémon Japonská kusová karta Patrat AR 095/083 Ninja Spinner",
+     "url": "https://www.vesely-drak.sk/produkty/pokemon-kusove-karty-a-herni-prislusenstvi/18390-pokemon-kusova-japonska-karta-patrat-ar-095-083-ninja-spinner/",
+     "price": 6.36,
+     "currency": "EUR",
+     "eur": 6.36,
+     "inStock": true,
+     "img": "https://www.vesely-drak.sk/obrazek/69cb6bbe0895e/pokemon-kusova-japonska-karta-patrat-ar-095-083-69cb6c7cbed4f.jpg"
     }
    ]
   },
   "kartovo": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -4724,7 +4724,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -4955,7 +4955,7 @@
    ]
   },
   "pompo_sk": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -5015,9 +5015,9 @@
     {
      "name": "Pokémon TCG: ME02.5 Ascended Heroes - First Partner Deluxe Pin Collection",
      "url": "https://pompo.sk/pokemon-tcg-me02-5-ascended-heroes-first-partner-deluxe-pin-collection_z264800/",
-     "price": 82.0,
+     "price": 82.1,
      "currency": "EUR",
-     "eur": 82.0,
+     "eur": 82.1,
      "inStock": true,
      "img": "https://pompo.sk/data/tmp/2/1/509511_2.jpg?1774520520_1"
     },
@@ -5465,7 +5465,7 @@
    ]
   },
   "gorila": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -5487,13 +5487,22 @@
      "img": "https://mrtns.sk/gorila/products/_ml/1676/ml1676909.jpg?v=17748399082"
     },
     {
-     "name": "Pokémon TCG: Mega Brave - Booster (japonský)",
-     "url": "https://www.gorila.sk/detail/4157839/Pokemon-TCG-Mega-Brave-Booster-japonsky",
-     "price": 7.0,
+     "name": "Pokémon Deck Protector obaly na karty 65 ks - Frosted Forest",
+     "url": "https://www.gorila.sk/detail/1814727/Pokemon-Deck-Protector-obaly-na-karty-65-ks-Frosted-Forest",
+     "price": 10.67,
      "currency": "EUR",
-     "eur": 7.0,
+     "eur": 10.67,
+     "inStock": true,
+     "img": "https://mrtns.sk/gorila/products/_ml/1814/ml1814727.jpg?v=17933295042"
+    },
+    {
+     "name": "Pokémon: Kroužkové album na stránkové obaly 25 x 31,5 cm - Pikachu & Mimikyu",
+     "url": "https://www.gorila.sk/detail/1968579/Pokemon-Krouzkove-album-na-strankove-obaly-25-x-31-5-cm-Pikachu-Mimikyu",
+     "price": 18.75,
+     "currency": "EUR",
+     "eur": 18.75,
      "inStock": false,
-     "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157839.jpg?v=17934281782"
+     "img": "https://mrtns.sk/gorila/products/_ml/1968/ml1968579.jpg?v=17933295042"
     },
     {
      "name": "Pokémon Prerelease Box Of Energy",
@@ -5514,22 +5523,13 @@
      "img": "https://mrtns.sk/gorila/products/_ml/1814/ml1814743.jpg?v=17900463082"
     },
     {
-     "name": "Pokémon Deck Protector obaly na karty 65 ks - Frosted Forest",
-     "url": "https://www.gorila.sk/detail/1814727/Pokemon-Deck-Protector-obaly-na-karty-65-ks-Frosted-Forest",
-     "price": 10.67,
+     "name": "Pokémon TCG: Storm Emeralda - Booster (japonský)",
+     "url": "https://www.gorila.sk/detail/4157843/Pokemon-TCG-Storm-Emeralda-Booster-japonsky",
+     "price": 9.35,
      "currency": "EUR",
-     "eur": 10.67,
-     "inStock": true,
-     "img": "https://mrtns.sk/gorila/products/_ml/1814/ml1814727.jpg?v=17933295042"
-    },
-    {
-     "name": "Pokémon: Kroužkové album na stránkové obaly 25 x 31,5 cm - Pikachu & Mimikyu",
-     "url": "https://www.gorila.sk/detail/1968579/Pokemon-Krouzkove-album-na-strankove-obaly-25-x-31-5-cm-Pikachu-Mimikyu",
-     "price": 18.75,
-     "currency": "EUR",
-     "eur": 18.75,
+     "eur": 9.35,
      "inStock": false,
-     "img": "https://mrtns.sk/gorila/products/_ml/1968/ml1968579.jpg?v=17933295042"
+     "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157843.jpg?v=17934281782"
     },
     {
      "name": "Pokémon TCG: Ruler of the Black Flame - Booster (japonský)",
@@ -5539,15 +5539,6 @@
      "eur": 12.17,
      "inStock": false,
      "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157829.jpg?v=17928327692"
-    },
-    {
-     "name": "Pokémon TCG: Storm Emeralda - Booster (japonský)",
-     "url": "https://www.gorila.sk/detail/4157843/Pokemon-TCG-Storm-Emeralda-Booster-japonsky",
-     "price": 9.35,
-     "currency": "EUR",
-     "eur": 9.35,
-     "inStock": false,
-     "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157843.jpg?v=17934281782"
     },
     {
      "name": "Pokémon TCG: Violet ex - Booster (japonský)",
@@ -5570,7 +5561,7 @@
    ]
   },
   "konzoliste": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -5650,7 +5641,7 @@
    ]
   },
   "gengar": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -6121,7 +6112,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -6235,7 +6226,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -6553,7 +6544,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -6911,7 +6902,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -7134,7 +7125,7 @@
    ]
   },
   "planetaher": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -7815,7 +7806,7 @@
    ]
   },
   "tlama": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -8073,7 +8064,7 @@
    ]
   },
   "pokeunited": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -8358,7 +8349,7 @@
    ]
   },
   "fyft": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -8598,7 +8589,7 @@
    ]
   },
   "imago": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -8793,7 +8784,7 @@
    ]
   },
   "dobrovsky": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -8916,7 +8907,7 @@
    ]
   },
   "svether": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -8958,7 +8949,7 @@
    ]
   },
   "pompo_cz": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -9081,9 +9072,9 @@
     {
      "name": "Pokémon TCG: ME02.5 Ascended Heroes - Elite Trainer Box",
      "url": "https://pompo.cz/pokemon-tcg-me02-5-ascended-heroes-elite-trainer-box_z262209/",
-     "price": 4486.0,
+     "price": 4495.0,
      "currency": "CZK",
-     "eur": 184.21,
+     "eur": 184.58,
      "inStock": true,
      "img": "https://data.pompo.cz/data/tmp/2/1/496811_2.jpg?1770999985_1"
     },
@@ -9450,7 +9441,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -16598,7 +16589,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -17054,7 +17045,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -20537,7 +20528,7 @@
    ]
   },
   "crispycards": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -25520,29 +25511,11 @@
      "eur": 119.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0950/2733/1402/files/PokemonSilberneSturmwindeTopTrainerBox_DE.webp?v=1770996137"
-    },
-    {
-     "name": "Pokémon Silver Tempest 3-Pack Blister (ENG)",
-     "url": "https://crispycards.de/products/pokemon-silver-tempest-3-pack-blister-eng",
-     "price": 49.99,
-     "currency": "EUR",
-     "eur": 49.99,
-     "inStock": true,
-     "img": "https://cdn.shopify.com/s/files/1/0950/2733/1402/files/PokemonSilverTempest3-PackBlister.webp?v=1758110314"
-    },
-    {
-     "name": "Pokémon Silver Tempest Build & Battle Stadium (ENG)",
-     "url": "https://crispycards.de/products/pokemon-silver-tempest-build-battle-stadium-eng",
-     "price": 194.99,
-     "currency": "EUR",
-     "eur": 194.99,
-     "inStock": true,
-     "img": "https://cdn.shopify.com/s/files/1/0950/2733/1402/files/PokemonSilverTempestBuild_BattleStadium.webp?v=1759335905"
     }
    ]
   },
   "pushdich": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -25710,7 +25683,7 @@
    ]
   },
   "cardcorner": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -25859,15 +25832,6 @@
      "img": "https://www.card-corner.de/media/image/product/3150/sm/pokemon-destined-rivals-elite-trainer-box.webp"
     },
     {
-     "name": "Pokemon 30 Jahre Poster Kollektion",
-     "url": "https://www.card-corner.de/Pokemon-30-Jahre-Poster-Kollektion",
-     "price": 39.99,
-     "currency": "EUR",
-     "eur": 39.99,
-     "inStock": true,
-     "img": "https://www.card-corner.de/media/image/product/4736/sm/pokemon-30-jahre-poster-kollektion.webp"
-    },
-    {
      "name": "Pokemon 30 Jahre Booster (Deutsch)",
      "url": "https://www.card-corner.de/Pokemon-30-Jahre-Booster-Deutsch",
      "price": 15.99,
@@ -25875,6 +25839,15 @@
      "eur": 15.99,
      "inStock": true,
      "img": "https://www.card-corner.de/media/image/product/5501/sm/pokemon-30-jahre-booster-deutsch.webp"
+    },
+    {
+     "name": "Pokemon 30 Jahre Poster Kollektion",
+     "url": "https://www.card-corner.de/Pokemon-30-Jahre-Poster-Kollektion",
+     "price": 39.99,
+     "currency": "EUR",
+     "eur": 39.99,
+     "inStock": true,
+     "img": "https://www.card-corner.de/media/image/product/4736/sm/pokemon-30-jahre-poster-kollektion.webp"
     },
     {
      "name": "Pokemon Mega Entwicklung 18er Display",
@@ -25933,7 +25906,7 @@
    ]
   },
   "gate": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -26417,7 +26390,7 @@
    ]
   },
   "comicplanet": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -26858,7 +26831,7 @@
    ]
   },
   "trader": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -27188,7 +27161,7 @@
    ]
   },
   "geodude": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -28177,7 +28150,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -28426,7 +28399,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -29989,7 +29962,7 @@
    ]
   },
   "rays": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -30157,7 +30130,7 @@
    ]
   },
   "sammelmania": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -30378,7 +30351,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -32103,7 +32076,7 @@
    ]
   },
   "fyft_sk": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -32343,7 +32316,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -33414,7 +33387,7 @@
      "price": 6.99,
      "currency": "EUR",
      "eur": 6.99,
-     "inStock": true,
+     "inStock": false,
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/bf3a7b4e3f53544e0a02818f16cb439a.jpg"
     },
     {
@@ -33699,7 +33672,7 @@
    ]
   },
   "kitstore_sk": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -33876,7 +33849,7 @@
    ]
   },
   "sparkys": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -34188,7 +34161,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -35443,15 +35416,6 @@
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=9878d9b6-bab5-4c49-8a46-f695a9072955&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
     {
-     "name": "Pokémon - Incandescent Arcana Booster Box - Chinese",
-     "url": "https://cernyrytir.cz/merch/detail/e82b54dc-7de5-4315-9716-6e216a671a14",
-     "price": 1249.0,
-     "currency": "CZK",
-     "eur": 51.29,
-     "inStock": true,
-     "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=af30869e-f90c-4023-b7f7-90ef20064713&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
-    },
-    {
      "name": "Pokémon - True Mystery Slim Booster Box - Chinese",
      "url": "https://cernyrytir.cz/merch/detail/2910cac4-8667-4224-a23c-c8711588110f",
      "price": 699.0,
@@ -35517,7 +35481,7 @@
    ]
   },
   "kitstore": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -35694,7 +35658,7 @@
    ]
   },
   "plastic": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -36599,7 +36563,7 @@
    ]
   },
   "xzone_cz": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -36830,7 +36794,7 @@
    ]
   },
   "veselydrak_cz": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -39710,15 +39674,6 @@
      "img": "https://www.vesely-drak.cz/obrazek/6ac3b7ae08922/japonska-kusova-pokemon-karta-greninja-ex-015-103---30th-celebration-6ac3b8106c3e9.jpg"
     },
     {
-     "name": "Pokémon kusová japonská karta Mewtwo ex 055/103 - 30th Celebration",
-     "url": "https://www.vesely-drak.cz/produkty/pokemon-kusove-karty-a-herni-prislusenstvi/19843-pokemon-kusova-japonska-karta-mewtwo-ex-055-103-30th-celebration/",
-     "price": 59.0,
-     "currency": "CZK",
-     "eur": 2.42,
-     "inStock": true,
-     "img": "https://www.vesely-drak.cz/obrazek/6ac3bc3ee1be3/japonska-kusova-pokemon-karta-mewtwo-ex-055-103---30th-celebration-6ac3bc96cd494.jpg"
-    },
-    {
      "name": "Pokémon kusová japonská karta Sylveon ex 059/103 - 30th Celebration",
      "url": "https://www.vesely-drak.cz/produkty/pokemon-kusove-karty-a-herni-prislusenstvi/19846-pokemon-kusova-japonska-karta-sylveon-ex-059-103-30th-celebration/",
      "price": 59.0,
@@ -41060,6 +41015,15 @@
      "img": "https://www.vesely-drak.cz/obrazek/69cb6ad0718ef/pokemon-kusova-japonska-karta-tauros-ar-094-083-69cb6b98c0351.jpg"
     },
     {
+     "name": "Pokémon kusová japonská karta Patrat AR 095/083 Ninja Spinner",
+     "url": "https://www.vesely-drak.cz/produkty/pokemon-kusove-karty-a-herni-prislusenstvi/18390-pokemon-kusova-japonska-karta-patrat-ar-095-083-ninja-spinner/",
+     "price": 159.0,
+     "currency": "CZK",
+     "eur": 6.53,
+     "inStock": true,
+     "img": "https://www.vesely-drak.cz/obrazek/69cb6bbe0895e/pokemon-kusova-japonska-karta-patrat-ar-095-083-69cb6c7cbed4f.jpg"
+    },
+    {
      "name": "Pokémon Destined Rivals Elite Trainer Box",
      "url": "https://www.vesely-drak.cz/produkty/pokemon-elite-trainer-box/15410-pokemon-destined-rivals-elite-trainer-box/",
      "price": 3999.0,
@@ -41404,7 +41368,7 @@
    ]
   },
   "gengar_cz": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -41446,7 +41410,7 @@
    ]
   },
   "konzoliste_cz": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -41499,7 +41463,7 @@
    ]
   },
   "pokepop": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -41820,7 +41784,7 @@
    ]
   },
   "hras": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -41833,22 +41797,22 @@
      "img": "https://cdn.myshoptet.com/usr/www.hras.cz/user/shop/detail/115362_karetni-hra-pokemon-tcg--deck-crafter-s-collection-2026.jpg?ff=1&x=423&y=318&q=85&ts=6ad85ad9&sg=2175fb9d"
     },
     {
-     "name": "Pokémon TCG: 30th Celebration Poster Collection",
-     "url": "https://www.hras.cz/pokemon/pokemon-tcg--30th-celebration-poster-collection/",
-     "price": 1299.0,
+     "name": "Pokémon UP: ME03 - A4 album",
+     "url": "https://www.hras.cz/pokemon/pokemon-up--me03-a4-album-na-252-karet/",
+     "price": 399.0,
      "currency": "CZK",
-     "eur": 53.34,
+     "eur": 16.38,
      "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.hras.cz/user/shop/detail/114799_pokemon-tcg--30th-celebration-poster-collection.jpg?ff=1&x=423&y=318&q=85&ts=6aa8fa4a&sg=2175fb9d"
+     "img": "https://cdn.myshoptet.com/usr/www.hras.cz/user/shop/detail/112867_pokemon-up--me03-a4-album.jpg?ff=1&x=423&y=318&q=85&ts=69c4dbce&sg=2175fb9d"
     },
     {
-     "name": "Pokémon TCG: Poké Ball Tin 2024 (reprint)",
-     "url": "https://www.hras.cz/pokemon/pokemon-tcg--poke-ball-tin-2024-reprint/",
-     "price": 569.0,
+     "name": "Pokémon TCG: SV8.5 Prismatic Evolutions - Super Premium Collection",
+     "url": "https://www.hras.cz/pokemon/pokemon-tcg--sv8-5-prismatic-evolutions-s/",
+     "price": 5719.0,
      "currency": "CZK",
-     "eur": 23.36,
+     "eur": 234.84,
      "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.hras.cz/user/shop/detail/114366_d-78c54f76814b4918aada215556c840c2-1000-1000.webp?ff=1&x=423&y=318&q=85&ts=6a798080&sg=2175fb9d"
+     "img": "https://cdn.myshoptet.com/usr/www.hras.cz/user/shop/detail/109029-1_pokemon-tcg--sv8-5-prismatic-evolutions-super-premium-collection.jpg?ff=1&x=423&y=318&q=85&ts=68271c1d&sg=2175fb9d"
     },
     {
      "name": "Pokémon TCG: Battle Academy 2024 (s českými a slovenskými pravidly)",
@@ -41862,7 +41826,7 @@
    ]
   },
   "pokekarty": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -42084,7 +42048,7 @@
    ]
   },
   "spellbound": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -42144,7 +42108,7 @@
    ]
   },
   "kartickarna": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -42520,7 +42484,7 @@
    ]
   },
   "akcnihracky": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -42616,7 +42580,7 @@
    ]
   },
   "toysshop": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
@@ -42847,7 +42811,7 @@
    ]
   },
   "geekhall": {
-   "ts": "2026-10-31T14:53:42Z",
+   "ts": "2026-10-31T16:55:23Z",
    "ok": true,
    "items": [
     {
