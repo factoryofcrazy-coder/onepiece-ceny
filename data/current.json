@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-02T07:46:23Z",
+ "updated": "2026-11-02T09:25:19Z",
  "fx": {
   "CZK": 24.353,
   "USD": 1.1172,
@@ -642,7 +642,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -1871,7 +1871,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -2237,7 +2237,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -2626,7 +2626,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -2849,7 +2849,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -3563,7 +3563,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -3733,7 +3733,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -3784,7 +3784,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -4272,7 +4272,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -4791,7 +4791,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -5355,7 +5355,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -5433,7 +5433,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -5584,7 +5584,7 @@
   },
   "butticards": {
    "ts": "2026-11-02T07:46:23Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece - OP09 - The Four Emperors - Display - Englisch*",
@@ -5768,7 +5768,10 @@
      "inStock": false,
      "img": "https://d2j6dbq0eux0bg.cloudfront.net/images/44059914/products/666614602/4358220179.jpg"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.butticards.at/Shop/One-Piece-c163462755)",
+   "fails": 1,
+   "warned": false
   },
   "wombat": {
    "ts": "2026-10-31T20:52:50Z",
@@ -6053,7 +6056,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -6366,7 +6369,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-11-02T07:46:23Z",
+   "ts": "2026-11-02T09:25:19Z",
    "ok": true,
    "items": [
     {
@@ -6376,8 +6379,7 @@
      "currency": "JPY",
      "eur": 75.14,
      "inStock": false,
-     "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/10/eb05-heroines-edition-vol2-booster-box-official-300x300.webp",
-     "preorder": true
+     "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/10/eb05-heroines-edition-vol2-booster-box-official-300x300.webp"
     },
     {
      "name": "OP-06 Wings of the Captain Japanese One Piece Booster Box – Damaged Box",
@@ -6400,9 +6402,9 @@
     {
      "name": "OP-17 The World’s Strongest Warriors Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box-damaged-box",
-     "price": 9359.0,
+     "price": 9338.0,
      "currency": "JPY",
-     "eur": 53.27,
+     "eur": 53.15,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
@@ -6418,9 +6420,9 @@
     {
      "name": "EB-03 Heroines Edition Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/eb-03-heroines-edition-japanese-one-piece-booster-box-damaged-box",
-     "price": 11358.0,
+     "price": 11338.0,
      "currency": "JPY",
-     "eur": 64.65,
+     "eur": 64.54,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1762-81171649d67e/eb03box_sst-thumb-320.webp"
     },
@@ -6472,18 +6474,18 @@
     {
      "name": "OP-14 The Azure Sea’s Seven Booster Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-14-the-azure-seas-seven-booster-japanese-one-piece-booster-box-damaged-box",
-     "price": 9410.0,
+     "price": 9399.0,
      "currency": "JPY",
-     "eur": 53.56,
+     "eur": 53.5,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4132-0b53b0de33e9/op14box_sst-thumb-320.webp"
     },
     {
      "name": "OP-13 Carrying on His Will Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-13-carrying-on-his-will-japanese-one-piece-booster-box-damaged-box",
-     "price": 17286.0,
+     "price": 17266.0,
      "currency": "JPY",
-     "eur": 98.39,
+     "eur": 98.28,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4130-f30c2b9ef984/op13box_sst-thumb-320.webp"
     },
@@ -6535,9 +6537,9 @@
     {
      "name": "OP-07 500 Years in the Future Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-07-500-years-in-the-future-japanese-one-piece-booster-box-damaged-box",
-     "price": 14535.0,
+     "price": 14525.0,
      "currency": "JPY",
-     "eur": 82.74,
+     "eur": 82.68,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4118-cf4993f57082/op07box_sst-thumb-320.webp"
     },
@@ -6580,27 +6582,27 @@
     {
      "name": "OP-16 The Time of Battle Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-16-the-time-of-battle-japanese-one-piece-booster-box-damaged-box",
-     "price": 8922.0,
+     "price": 8861.0,
      "currency": "JPY",
-     "eur": 50.79,
+     "eur": 50.44,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/06/op16-the-time-of-battle-box-sst-logo-2-300x300.webp"
     },
     {
      "name": "OP-17 The World’s Strongest Warriors Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box",
-     "price": 10643.0,
+     "price": 10619.0,
      "currency": "JPY",
-     "eur": 60.58,
+     "eur": 60.45,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
     {
      "name": "OP-16 The Time of Battle Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op16box",
-     "price": 9961.0,
+     "price": 9897.0,
      "currency": "JPY",
-     "eur": 56.7,
+     "eur": 56.34,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/06/op16-the-time-of-battle-box-sst-logo-2-300x300.webp"
     },
@@ -6616,36 +6618,36 @@
     {
      "name": "PRB-01 One Piece Card The Best Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/prb01box",
-     "price": 21787.0,
+     "price": 21785.0,
      "currency": "JPY",
-     "eur": 124.02,
+     "eur": 124.0,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4480-6ed547b0e5e4/prb01box_sst_d4b56848-43ef-4ac7-b81e-32e30b0930bf-thumb-320.webp"
     },
     {
      "name": "OP-15 Island of God Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op15box",
-     "price": 9309.0,
+     "price": 9307.0,
      "currency": "JPY",
-     "eur": 52.99,
+     "eur": 52.98,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4134-460f725eadf2/op15box_sst-thumb-320.webp"
     },
     {
      "name": "OP-14 The Azure Sea’s Seven Booster Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op14box",
-     "price": 10897.0,
+     "price": 10890.0,
      "currency": "JPY",
-     "eur": 62.03,
+     "eur": 61.99,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4132-0b53b0de33e9/op14box_sst-thumb-320.webp"
     },
     {
      "name": "OP-13 Carrying on His Will Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op13box",
-     "price": 18924.0,
+     "price": 18911.0,
      "currency": "JPY",
-     "eur": 107.72,
+     "eur": 107.64,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4130-f30c2b9ef984/op13box_sst-thumb-320.webp"
     },
@@ -6688,7 +6690,7 @@
     {
      "name": "OP-08 Two Legends Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op08box",
-     "price": 11787.0,
+     "price": 11786.0,
      "currency": "JPY",
      "eur": 67.09,
      "inStock": false,
@@ -6697,9 +6699,9 @@
     {
      "name": "OP-07 500 Years in the Future Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op07box",
-     "price": 15611.0,
+     "price": 15597.0,
      "currency": "JPY",
-     "eur": 88.86,
+     "eur": 88.78,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4118-cf4993f57082/op07box_sst-thumb-320.webp"
     },
@@ -6769,9 +6771,9 @@
     {
      "name": "EB-03 Heroines Edition Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/eb03box",
-     "price": 11956.0,
+     "price": 11940.0,
      "currency": "JPY",
-     "eur": 68.06,
+     "eur": 67.96,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1762-81171649d67e/eb03box_sst-thumb-320.webp"
     },
