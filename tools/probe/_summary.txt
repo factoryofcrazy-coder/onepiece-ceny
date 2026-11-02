@@ -1,11 +1,3 @@
-sam1 OK 200 1302 micro=0 ld=0 prod=0 https://samuraiswordtokyo.com/wp-json/sst-lce/v1/estimate?country=SK&product_id=4133&qty=1
-sam2 OK 200 1304 micro=0 ld=0 prod=0 https://samuraiswordtokyo.com/wp-json/sst-lce/v1/estimate?country=SK&product_id=4133&qty=2
-sam3 OK 200 1278 micro=0 ld=0 prod=0 https://samuraiswordtokyo.com/wp-json/sst-lce/v1/estimate?country=SK&product_id=4133&qty=3
-sam6 OK 200 1283 micro=0 ld=0 prod=0 https://samuraiswordtokyo.com/wp-json/sst-lce/v1/estimate?country=SK&product_id=4133&qty=6
-uturi_en ERR HTTP Error 404: Not Found https://uturitrading.com/en/collections/display-one-piece/products.json?limit=250
-uturi_sug ERR HTTP Error 404: Not Found https://uturitrading.com/search/suggest.json?q=one+piece+japanese&resources[type]=product&resources[limit]=10
-cardbinder_sug OK 200 35385 micro=0 ld=0 prod=0 https://card-binder.com/search/suggest.json?q=one+piece+booster+box+japanese&resources[type]=product&resources[limit]=10
-cardbinder_coll OK 200 910056 micro=0 ld=5 prod=0 https://card-binder.com/de/collections/ein-teiler-kartenspiel
-underpaid_sug OK 200 24656 micro=0 ld=0 prod=0 https://underpaidcollectibles.com/search/suggest.json?q=one+piece+display+jp&resources[type]=product&resources[limit]=10
-gate_op ERR HTTP Error 404: Not Found https://www.gate-to-the-games.de/One-Piece-Karten/
-pushdich_ship OK 200 882475 micro=0 ld=1 prod=0 https://www.pushdich-tcg.de/policies/shipping-policy
+underpaid_op OK 200 15 micro=0 ld=0 prod=0 https://underpaidcollectibles.com/collections/one-piece/products.json?limit=250
+cardbinder_op OK 200 15 micro=0 ld=0 prod=0 https://card-binder.com/collections/one-piece/products.json?limit=250
+crispy_op OK 200 1086612 micro=0 ld=0 prod=0 https://crispycards.de/collections/one-piece/products.json?limit=250
