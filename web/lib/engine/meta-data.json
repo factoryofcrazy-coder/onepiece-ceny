@@ -1,25 +1,8 @@
 {
-"updated": "2026-10-26T04:50:53.534Z",
+"updated": "2026-11-02T05:16:20.328Z",
 "tournaments": 14,
 "missing": [
-"EB05-001",
-"EB05-004",
-"EB05-008",
-"EB05-014",
-"EB05-020",
-"EB05-021",
-"EB05-023",
-"EB05-028",
-"EB05-031",
-"EB05-033",
-"EB05-034",
-"EB05-039",
-"EB05-040",
-"EB05-043",
-"EB05-046",
-"EB05-047",
-"EB05-059",
-"EB05-061"
+"P-108"
 ],
 "decks": [
 {
@@ -229,213 +212,6 @@
 "OP12-018": 4,
 "EB05-008": 4,
 "ST21-017": 2
-}
-},
-{
-"leader": "OP09-062",
-"leaderName": "Nico Robin",
-"player": "Matzel0307",
-"placing": 1,
-"tournament": "[OP17] ChinoizeCup #115 Monday",
-"players": 128,
-"date": "2026-09-28T18:00:00.000Z",
-"cards": {
-"ST34-003": 3,
-"OP17-113": 3,
-"OP17-074": 4,
-"OP17-107": 4,
-"OP17-109": 4,
-"OP17-102": 4,
-"OP12-112": 3,
-"OP17-106": 4,
-"EB04-058": 2,
-"OP17-114": 4,
-"OP17-110": 2,
-"OP16-119": 3,
-"OP17-112": 4,
-"OP09-078": 4,
-"EB04-059": 2
-}
-},
-{
-"leader": "OP17-039",
-"leaderName": "Rocks.D.Xebec",
-"player": "PolGoFo",
-"placing": 1,
-"tournament": "[OP17] ChinoizeCup #115 Monday",
-"players": 128,
-"date": "2026-09-28T18:00:00.000Z",
-"cards": {
-"OP08-051": 4,
-"OP17-050": 4,
-"OP17-045": 4,
-"OP17-052": 4,
-"OP17-054": 4,
-"OP17-046": 4,
-"OP17-044": 2,
-"OP17-049": 4,
-"OP17-040": 4,
-"OP17-048": 4,
-"OP17-118": 4,
-"OP17-055": 4,
-"OP17-056": 4
-}
-},
-{
-"leader": "OP15-058",
-"leaderName": "Enel",
-"player": "Oo_Ricky_oO",
-"placing": 2,
-"tournament": "[OP17] ChinoizeCup #115 Monday",
-"players": 128,
-"date": "2026-09-28T18:00:00.000Z",
-"cards": {
-"OP12-071": 4,
-"OP15-061": 4,
-"OP15-067": 4,
-"OP15-066": 2,
-"OP15-071": 4,
-"OP12-063": 2,
-"OP09-072": 1,
-"OP10-067": 2,
-"OP15-118": 3,
-"OP15-075": 4,
-"OP15-076": 4,
-"OP15-077": 4,
-"OP15-078": 4,
-"OP15-074": 3,
-"OP13-076": 1,
-"OP05-077": 3,
-"OP09-077": 1
-}
-},
-{
-"leader": "OP12-061",
-"leaderName": "Donquixote Rosinante",
-"player": "NinjaTrain",
-"placing": 2,
-"tournament": "[OP17] ChinoizeCup #115 Monday",
-"players": 128,
-"date": "2026-09-28T18:00:00.000Z",
-"cards": {
-"OP12-108": 4,
-"OP16-064": 4,
-"OP10-114": 3,
-"P-088": 4,
-"P-093": 4,
-"ST10-010": 2,
-"EB04-058": 4,
-"EB04-038": 4,
-"OP16-065": 4,
-"OP15-078": 4,
-"OP13-076": 2,
-"OP12-115": 4,
-"OP09-077": 3,
-"OP16-078": 4
-}
-},
-{
-"leader": "OP17-039",
-"leaderName": "Rocks.D.Xebec",
-"player": "OnkelYonko",
-"placing": 3,
-"tournament": "[OP17] ChinoizeCup #115 Monday",
-"players": 128,
-"date": "2026-09-28T18:00:00.000Z",
-"cards": {
-"OP08-051": 3,
-"OP17-050": 1,
-"OP17-045": 4,
-"OP17-054": 4,
-"OP17-041": 4,
-"OP17-044": 4,
-"OP17-046": 4,
-"OP17-049": 4,
-"OP17-040": 4,
-"OP17-048": 4,
-"OP17-118": 4,
-"OP17-055": 4,
-"OP17-056": 4,
-"EB02-030": 2
-}
-},
-{
-"leader": "OP08-098",
-"leaderName": "Kalgara",
-"player": "BMKid",
-"placing": 3,
-"tournament": "[OP17] ChinoizeCup #115 Monday",
-"players": 128,
-"date": "2026-09-28T18:00:00.000Z",
-"cards": {
-"OP15-108": 4,
-"OP11-106": 2,
-"OP15-101": 4,
-"OP08-110": 4,
-"OP08-109": 4,
-"OP12-099": 4,
-"OP15-114": 4,
-"EB04-058": 4,
-"EB03-053": 3,
-"OP15-119": 3,
-"OP12-114": 3,
-"OP08-099": 2,
-"OP17-114": 2,
-"OP06-115": 1,
-"OP08-115": 2,
-"OP05-117": 4
-}
-},
-{
-"leader": "OP17-079",
-"leaderName": "Monkey.D.Luffy",
-"player": "nztcg",
-"placing": 4,
-"tournament": "[OP17] ChinoizeCup #115 Monday",
-"players": 128,
-"date": "2026-09-28T18:00:00.000Z",
-"cards": {
-"OP17-086": 4,
-"OP17-094": 4,
-"OP17-080": 4,
-"OP17-081": 4,
-"OP17-082": 4,
-"OP17-087": 4,
-"OP17-095": 4,
-"OP17-091": 2,
-"OP17-089": 4,
-"OP15-088": 4,
-"OP17-119": 4,
-"OP17-093": 3,
-"OP17-098": 2,
-"ST14-017": 3
-}
-},
-{
-"leader": "OP17-079",
-"leaderName": "Monkey.D.Luffy",
-"player": "trocheesy",
-"placing": 4,
-"tournament": "[OP17] ChinoizeCup #115 Monday",
-"players": 128,
-"date": "2026-09-28T18:00:00.000Z",
-"cards": {
-"OP17-094": 4,
-"OP17-086": 3,
-"OP17-084": 2,
-"OP17-080": 4,
-"OP17-081": 4,
-"OP17-082": 4,
-"OP17-087": 4,
-"OP17-095": 4,
-"OP17-090": 2,
-"OP17-091": 2,
-"OP17-089": 3,
-"OP15-088": 4,
-"OP17-119": 4,
-"OP17-093": 3,
-"OP17-098": 1,
-"ST14-017": 2
 }
 },
 {
@@ -654,428 +430,6 @@
 }
 },
 {
-"leader": "OP08-058",
-"leaderName": "Charlotte Pudding",
-"player": "kevyzhou",
-"placing": 1,
-"tournament": "[OP17] ChinoizeCup #116 Tuesday",
-"players": 119,
-"date": "2026-09-29T18:00:00.000Z",
-"cards": {
-"OP17-113": 4,
-"ST34-003": 2,
-"OP08-062": 4,
-"OP11-106": 3,
-"OP17-109": 4,
-"OP17-074": 3,
-"OP17-104": 3,
-"OP17-107": 2,
-"EB03-051": 1,
-"ST34-002": 3,
-"OP17-103": 4,
-"OP17-114": 4,
-"OP11-067": 1,
-"OP17-112": 4,
-"OP15-078": 4,
-"OP13-076": 1,
-"OP07-077": 2,
-"OP08-077": 1
-}
-},
-{
-"leader": "OP17-079",
-"leaderName": "Monkey.D.Luffy",
-"player": "snorlax1cynda",
-"placing": 1,
-"tournament": "[OP17] ChinoizeCup #116 Tuesday",
-"players": 119,
-"date": "2026-09-29T18:00:00.000Z",
-"cards": {
-"OP17-086": 4,
-"OP17-094": 4,
-"OP17-084": 2,
-"OP17-080": 4,
-"OP17-081": 4,
-"OP17-082": 4,
-"OP17-087": 4,
-"OP17-095": 4,
-"OP17-089": 4,
-"OP15-088": 4,
-"OP17-119": 4,
-"OP17-093": 4,
-"ST14-017": 4
-}
-},
-{
-"leader": "OP15-001",
-"leaderName": "Krieg",
-"player": "markoqt",
-"placing": 2,
-"tournament": "[OP17] ChinoizeCup #116 Tuesday",
-"players": 119,
-"date": "2026-09-29T18:00:00.000Z",
-"cards": {
-"OP15-009": 4,
-"OP15-026": 4,
-"OP15-028": 4,
-"OP17-023": 4,
-"OP15-023": 4,
-"OP15-011": 2,
-"OP15-003": 3,
-"OP15-017": 3,
-"OP15-007": 4,
-"OP15-025": 4,
-"OP15-008": 4,
-"OP17-022": 1,
-"OP15-037": 4,
-"OP15-038": 3,
-"OP13-040": 2
-}
-},
-{
-"leader": "OP17-039",
-"leaderName": "Rocks.D.Xebec",
-"player": "JDilla",
-"placing": 2,
-"tournament": "[OP17] ChinoizeCup #116 Tuesday",
-"players": 119,
-"date": "2026-09-29T18:00:00.000Z",
-"cards": {
-"OP08-051": 4,
-"OP17-045": 4,
-"OP17-054": 4,
-"OP17-041": 4,
-"OP17-044": 4,
-"OP17-046": 4,
-"OP17-049": 4,
-"OP17-040": 4,
-"OP17-048": 4,
-"OP17-118": 4,
-"OP17-055": 4,
-"OP17-056": 4,
-"EB02-030": 2
-}
-},
-{
-"leader": "OP12-061",
-"leaderName": "Donquixote Rosinante",
-"player": "MaGe",
-"placing": 3,
-"tournament": "[OP17] ChinoizeCup #116 Tuesday",
-"players": 119,
-"date": "2026-09-29T18:00:00.000Z",
-"cards": {
-"OP16-064": 4,
-"OP12-108": 3,
-"OP16-067": 1,
-"ST10-010": 4,
-"P-088": 4,
-"P-093": 4,
-"OP16-068": 2,
-"EB04-058": 4,
-"EB04-038": 4,
-"OP17-114": 2,
-"OP16-065": 3,
-"OP17-059": 1,
-"OP15-078": 4,
-"OP13-076": 2,
-"OP12-115": 4,
-"OP16-078": 4
-}
-},
-{
-"leader": "OP17-039",
-"leaderName": "Rocks.D.Xebec",
-"player": "clumsi",
-"placing": 3,
-"tournament": "[OP17] ChinoizeCup #116 Tuesday",
-"players": 119,
-"date": "2026-09-29T18:00:00.000Z",
-"cards": {
-"OP08-051": 4,
-"OP17-050": 2,
-"OP17-045": 4,
-"OP17-054": 4,
-"OP17-052": 1,
-"OP17-046": 4,
-"OP17-041": 3,
-"OP17-044": 2,
-"OP17-049": 4,
-"OP17-043": 2,
-"OP17-040": 4,
-"OP17-048": 4,
-"OP17-118": 4,
-"OP17-055": 4,
-"OP17-056": 4
-}
-},
-{
-"leader": "OP12-061",
-"leaderName": "Donquixote Rosinante",
-"player": "Ludwig",
-"placing": 4,
-"tournament": "[OP17] ChinoizeCup #116 Tuesday",
-"players": 119,
-"date": "2026-09-29T18:00:00.000Z",
-"cards": {
-"OP16-064": 4,
-"OP12-108": 2,
-"OP17-109": 2,
-"ST10-010": 4,
-"P-088": 4,
-"P-093": 4,
-"OP16-068": 2,
-"EB04-058": 4,
-"EB04-038": 4,
-"OP16-065": 4,
-"OP15-078": 4,
-"OP06-115": 1,
-"OP12-115": 4,
-"OP09-077": 2,
-"OP07-076": 1,
-"OP16-078": 4
-}
-},
-{
-"leader": "OP13-004",
-"leaderName": "Sabo",
-"player": "Willerd7",
-"placing": 4,
-"tournament": "[OP17] ChinoizeCup #116 Tuesday",
-"players": 119,
-"date": "2026-09-29T18:00:00.000Z",
-"cards": {
-"OP17-086": 4,
-"OP13-007": 2,
-"OP17-084": 2,
-"OP17-080": 4,
-"OP17-082": 4,
-"OP17-087": 4,
-"OP17-095": 4,
-"ST01-011": 3,
-"OP17-083": 2,
-"OP17-089": 4,
-"OP15-088": 3,
-"OP17-119": 3,
-"OP15-092": 2,
-"OP17-093": 4,
-"OP04-016": 2,
-"OP17-096": 3
-}
-},
-{
-"leader": "OP17-058",
-"leaderName": "Kaido",
-"player": "mrcl2107",
-"placing": 1,
-"tournament": "[EGB] ChinoizeCup #117 Wednesday",
-"players": 114,
-"date": "2026-09-30T18:00:00.000Z",
-"cards": {
-"EB04-032": 4,
-"OP08-074": 4,
-"OP17-073": 4,
-"OP17-074": 4,
-"EB04-031": 4,
-"EB04-030": 1,
-"OP17-061": 3,
-"OP17-065": 2,
-"OP17-062": 4,
-"ST34-004": 2,
-"OP17-063": 2,
-"OP01-094": 1,
-"OP13-076": 1,
-"OP15-077": 1,
-"OP07-077": 4,
-"OP17-077": 2,
-"OP07-076": 3,
-"OP09-077": 2,
-"ST04-017": 2
-}
-},
-{
-"leader": "OP08-098",
-"leaderName": "Kalgara",
-"player": "Nightingale",
-"placing": 1,
-"tournament": "[EGB] ChinoizeCup #117 Wednesday",
-"players": 114,
-"date": "2026-09-30T18:00:00.000Z",
-"cards": {
-"OP15-108": 2,
-"OP11-106": 2,
-"OP15-101": 4,
-"OP08-110": 4,
-"OP08-109": 4,
-"OP12-099": 4,
-"EB03-053": 4,
-"OP15-114": 4,
-"EB04-058": 4,
-"OP15-119": 1,
-"OP12-114": 4,
-"OP17-114": 3,
-"OP08-099": 1,
-"OP08-115": 4,
-"EB01-059": 1,
-"OP05-117": 4
-}
-},
-{
-"leader": "OP03-022",
-"leaderName": "Arlong",
-"player": "Redoon",
-"placing": 2,
-"tournament": "[EGB] ChinoizeCup #117 Wednesday",
-"players": 114,
-"date": "2026-09-30T18:00:00.000Z",
-"cards": {
-"OP17-113": 3,
-"OP06-033": 4,
-"ST07-007": 4,
-"OP17-107": 4,
-"OP17-109": 4,
-"OP03-026": 4,
-"OP03-033": 4,
-"EB02-018": 4,
-"OP17-102": 4,
-"OP06-104": 3,
-"OP12-112": 3,
-"OP16-119": 3,
-"OP17-112": 4,
-"OP17-022": 2
-}
-},
-{
-"leader": "OP13-001",
-"leaderName": "Monkey.D.Luffy",
-"player": "ricmasterflash",
-"placing": 2,
-"tournament": "[EGB] ChinoizeCup #117 Wednesday",
-"players": 114,
-"date": "2026-09-30T18:00:00.000Z",
-"cards": {
-"OP13-016": 4,
-"OP15-035": 3,
-"EB04-002": 3,
-"OP17-023": 2,
-"ST21-003": 1,
-"P-111": 1,
-"OP14-022": 4,
-"OP14-031": 4,
-"OP13-027": 4,
-"OP13-118": 4,
-"OP15-032": 4,
-"EB04-007": 4,
-"OP05-038": 4,
-"OP01-027": 4,
-"ST31-005": 4
-}
-},
-{
-"leader": "OP09-062",
-"leaderName": "Nico Robin",
-"player": "r0xtar",
-"placing": 3,
-"tournament": "[EGB] ChinoizeCup #117 Wednesday",
-"players": 114,
-"date": "2026-09-30T18:00:00.000Z",
-"cards": {
-"OP17-113": 4,
-"ST34-003": 3,
-"OP17-074": 4,
-"OP17-107": 4,
-"OP17-109": 4,
-"OP17-111": 2,
-"OP17-102": 4,
-"OP12-112": 3,
-"OP17-106": 4,
-"EB04-058": 2,
-"OP17-114": 4,
-"OP17-110": 1,
-"OP16-119": 4,
-"OP17-112": 4,
-"OP09-078": 3
-}
-},
-{
-"leader": "OP08-058",
-"leaderName": "Charlotte Pudding",
-"player": "Simpiii",
-"placing": 3,
-"tournament": "[EGB] ChinoizeCup #117 Wednesday",
-"players": 114,
-"date": "2026-09-30T18:00:00.000Z",
-"cards": {
-"OP11-070": 4,
-"OP17-113": 4,
-"OP08-062": 4,
-"OP11-106": 3,
-"OP17-107": 4,
-"OP17-109": 4,
-"OP17-074": 3,
-"OP17-104": 2,
-"ST34-002": 2,
-"OP17-103": 4,
-"OP17-114": 4,
-"OP03-123": 2,
-"OP11-067": 1,
-"OP17-112": 4,
-"OP03-114": 1,
-"OP15-078": 4
-}
-},
-{
-"leader": "OP16-022",
-"leaderName": "Monkey.D.Luffy",
-"player": "Patpat",
-"placing": 4,
-"tournament": "[EGB] ChinoizeCup #117 Wednesday",
-"players": 114,
-"date": "2026-09-30T18:00:00.000Z",
-"cards": {
-"OP02-058": 4,
-"OP16-034": 4,
-"OP16-054": 4,
-"OP16-055": 4,
-"ST30-014": 4,
-"OP16-045": 4,
-"OP16-056": 4,
-"OP16-026": 2,
-"OP16-048": 4,
-"OP16-042": 8,
-"OP02-051": 2,
-"OP02-068": 1,
-"OP16-038": 3,
-"OP06-038": 1,
-"OP12-037": 1
-}
-},
-{
-"leader": "OP17-039",
-"leaderName": "Rocks.D.Xebec",
-"player": "Legandes",
-"placing": 4,
-"tournament": "[EGB] ChinoizeCup #117 Wednesday",
-"players": 114,
-"date": "2026-09-30T18:00:00.000Z",
-"cards": {
-"OP08-051": 4,
-"OP17-050": 3,
-"OP17-045": 3,
-"OP17-052": 4,
-"OP17-054": 4,
-"OP17-046": 4,
-"OP17-041": 2,
-"OP17-044": 2,
-"OP17-049": 4,
-"OP17-040": 4,
-"OP17-048": 4,
-"OP17-118": 4,
-"OP17-055": 4,
-"OP17-056": 4
-}
-},
-{
 "leader": "OP10-099",
 "leaderName": "Eustass\"Captain\"Kid",
 "player": "Shoody",
@@ -1283,6 +637,420 @@
 "OP17-118": 4,
 "OP17-055": 4,
 "OP17-056": 4
+}
+},
+{
+"leader": "OP16-022",
+"leaderName": "Monkey.D.Luffy",
+"player": "not_dev",
+"placing": 1,
+"tournament": "[EB05] ChinoizeCup #128 TUESDAY",
+"players": 64,
+"date": "2026-10-27T19:00:00.000Z",
+"cards": {
+"OP16-034": 4,
+"OP16-054": 4,
+"OP16-055": 4,
+"ST30-014": 4,
+"EB05-025": 4,
+"OP16-045": 4,
+"OP16-056": 4,
+"EB05-028": 3,
+"OP16-026": 2,
+"OP16-048": 4,
+"OP16-042": 8,
+"OP15-032": 1,
+"OP16-032": 2,
+"OP16-038": 2
+}
+},
+{
+"leader": "OP17-058",
+"leaderName": "Kaido",
+"player": "crossai8",
+"placing": 1,
+"tournament": "[EB05] ChinoizeCup #128 TUESDAY",
+"players": 64,
+"date": "2026-10-27T19:00:00.000Z",
+"cards": {
+"EB04-032": 4,
+"EB05-037": 4,
+"P-046": 1,
+"EB05-034": 2,
+"OP17-073": 4,
+"OP17-074": 4,
+"EB04-031": 4,
+"OP17-065": 4,
+"OP17-061": 2,
+"ST34-004": 4,
+"OP17-062": 4,
+"OP14-069": 1,
+"OP15-078": 4,
+"OP07-077": 4,
+"OP07-076": 4
+}
+},
+{
+"leader": "OP14-041",
+"leaderName": "Boa Hancock",
+"player": "Kettensaege",
+"placing": 2,
+"tournament": "[EB05] ChinoizeCup #128 TUESDAY",
+"players": 64,
+"date": "2026-10-27T19:00:00.000Z",
+"cards": {
+"OP14-103": 4,
+"OP17-109": 4,
+"OP14-114": 4,
+"OP15-113": 4,
+"EB05-028": 3,
+"EB04-058": 4,
+"OP16-113": 4,
+"OP11-054": 2,
+"OP14-105": 4,
+"OP14-107": 4,
+"OP14-104": 4,
+"OP14-112": 4,
+"OP14-118": 2,
+"OP07-057": 2,
+"OP06-058": 1
+}
+},
+{
+"leader": "OP05-098",
+"leaderName": "Enel",
+"player": "ZerkSan",
+"placing": 2,
+"tournament": "[EB05] ChinoizeCup #128 TUESDAY",
+"players": 64,
+"date": "2026-10-27T19:00:00.000Z",
+"cards": {
+"OP17-113": 4,
+"OP13-113": 2,
+"OP11-106": 4,
+"OP17-107": 4,
+"OP17-109": 4,
+"OP15-103": 3,
+"OP17-102": 4,
+"EB04-058": 4,
+"OP17-114": 4,
+"OP14-104": 4,
+"OP16-119": 4,
+"OP17-112": 4,
+"EB02-052": 1,
+"OP06-115": 4
+}
+},
+{
+"leader": "OP13-001",
+"leaderName": "Monkey.D.Luffy",
+"player": "kevyzhou",
+"placing": 3,
+"tournament": "[EB05] ChinoizeCup #128 TUESDAY",
+"players": 64,
+"date": "2026-10-27T19:00:00.000Z",
+"cards": {
+"OP13-016": 4,
+"OP06-033": 4,
+"ST24-002": 4,
+"P-108": 2,
+"OP14-031": 4,
+"PRB02-003": 2,
+"PRB02-006": 1,
+"OP13-027": 4,
+"EB05-001": 4,
+"OP13-029": 4,
+"OP15-032": 4,
+"OP13-118": 3,
+"OP13-031": 1,
+"OP13-040": 3,
+"OP14-019": 2,
+"ST31-005": 4
+}
+},
+{
+"leader": "OP05-098",
+"leaderName": "Enel",
+"player": "juruu",
+"placing": 3,
+"tournament": "[EB05] ChinoizeCup #128 TUESDAY",
+"players": 64,
+"date": "2026-10-27T19:00:00.000Z",
+"cards": {
+"OP17-113": 4,
+"OP11-106": 4,
+"OP17-107": 4,
+"OP17-109": 4,
+"OP17-102": 4,
+"EB04-058": 4,
+"OP17-106": 4,
+"OP17-114": 4,
+"OP14-104": 4,
+"OP16-119": 4,
+"OP17-112": 4,
+"EB02-052": 2,
+"OP06-115": 4
+}
+},
+{
+"leader": "OP12-061",
+"leaderName": "Donquixote Rosinante",
+"player": "thunderb8",
+"placing": 4,
+"tournament": "[EB05] ChinoizeCup #128 TUESDAY",
+"players": 64,
+"date": "2026-10-27T19:00:00.000Z",
+"cards": {
+"OP12-108": 4,
+"OP16-064": 4,
+"ST10-010": 4,
+"P-088": 4,
+"P-093": 4,
+"EB04-058": 4,
+"EB04-038": 4,
+"OP17-114": 1,
+"OP16-065": 4,
+"OP15-078": 4,
+"EB05-040": 4,
+"OP12-115": 4,
+"OP09-077": 1,
+"OP16-078": 4
+}
+},
+{
+"leader": "OP13-001",
+"leaderName": "Monkey.D.Luffy",
+"player": "PhoenixShiba",
+"placing": 4,
+"tournament": "[EB05] ChinoizeCup #128 TUESDAY",
+"players": 64,
+"date": "2026-10-27T19:00:00.000Z",
+"cards": {
+"OP07-022": 4,
+"OP13-016": 4,
+"OP14-013": 4,
+"ST24-002": 4,
+"OP06-033": 3,
+"EB01-013": 4,
+"OP14-031": 4,
+"PRB02-003": 3,
+"OP12-023": 4,
+"ST32-002": 4,
+"EB05-001": 4,
+"OP13-031": 3,
+"OP17-022": 2,
+"OP01-055": 2,
+"OP13-040": 1
+}
+},
+{
+"leader": "OP14-041",
+"leaderName": "Boa Hancock",
+"player": "penguino s",
+"placing": 1,
+"tournament": "[EB05] ChinoizeCup #127 MONDAY",
+"players": 64,
+"date": "2026-10-26T19:00:00.000Z",
+"cards": {
+"OP06-106": 4,
+"OP17-109": 4,
+"OP14-114": 4,
+"OP15-113": 4,
+"ST17-004": 2,
+"EB05-028": 2,
+"EB04-058": 4,
+"OP16-113": 4,
+"OP11-054": 2,
+"OP14-105": 4,
+"OP12-119": 2,
+"OP14-107": 2,
+"OP14-104": 4,
+"OP16-119": 4,
+"OP14-112": 3,
+"OP06-115": 1
+}
+},
+{
+"leader": "OP16-080",
+"leaderName": "Marshall.D.Teach",
+"player": "fuat",
+"placing": 1,
+"tournament": "[EB05] ChinoizeCup #127 MONDAY",
+"players": 64,
+"date": "2026-10-26T19:00:00.000Z",
+"cards": {
+"OP16-109": 4,
+"OP16-110": 4,
+"OP16-103": 2,
+"OP09-086": 4,
+"OP16-104": 4,
+"OP16-106": 2,
+"EB04-058": 4,
+"OP16-108": 4,
+"OP16-119": 4,
+"OP14-112": 2,
+"OP09-093": 4,
+"OP09-096": 4,
+"OP14-118": 1,
+"OP16-115": 1,
+"OP16-116": 2,
+"OP09-099": 4
+}
+},
+{
+"leader": "EB04-001",
+"leaderName": "Jewelry Bonney",
+"player": "simbahh",
+"placing": 2,
+"tournament": "[EB05] ChinoizeCup #127 MONDAY",
+"players": 64,
+"date": "2026-10-26T19:00:00.000Z",
+"cards": {
+"OP07-104": 4,
+"OP17-109": 4,
+"OP12-112": 4,
+"EB05-004": 4,
+"EB04-058": 4,
+"OP16-108": 4,
+"OP09-104": 4,
+"EB04-007": 4,
+"EB04-061": 4,
+"OP06-115": 4,
+"OP12-018": 4,
+"ST29-015": 4,
+"OP14-118": 2
+}
+},
+{
+"leader": "OP13-001",
+"leaderName": "Monkey.D.Luffy",
+"player": "skylinexxxgtr34",
+"placing": 2,
+"tournament": "[EB05] ChinoizeCup #127 MONDAY",
+"players": 64,
+"date": "2026-10-26T19:00:00.000Z",
+"cards": {
+"OP07-022": 4,
+"OP13-016": 4,
+"ST30-004": 4,
+"OP06-033": 4,
+"EB01-013": 4,
+"OP14-031": 4,
+"PRB02-003": 1,
+"OP12-023": 4,
+"ST32-002": 4,
+"EB05-001": 4,
+"OP13-031": 3,
+"OP15-032": 2,
+"EB04-007": 3,
+"OP17-022": 2,
+"OP01-055": 2,
+"ST31-005": 1
+}
+},
+{
+"leader": "OP17-039",
+"leaderName": "Rocks.D.Xebec",
+"player": "RubenTR",
+"placing": 3,
+"tournament": "[EB05] ChinoizeCup #127 MONDAY",
+"players": 64,
+"date": "2026-10-26T19:00:00.000Z",
+"cards": {
+"OP08-051": 3,
+"OP17-050": 3,
+"OP17-045": 4,
+"OP17-054": 4,
+"OP17-052": 3,
+"OP17-046": 4,
+"OP17-044": 3,
+"OP17-042": 2,
+"OP17-049": 4,
+"OP17-040": 4,
+"OP17-048": 4,
+"OP17-118": 4,
+"OP17-055": 4,
+"OP17-056": 4
+}
+},
+{
+"leader": "OP09-081",
+"leaderName": "Marshall.D.Teach",
+"player": "Xevi",
+"placing": 3,
+"tournament": "[EB05] ChinoizeCup #127 MONDAY",
+"players": 64,
+"date": "2026-10-26T19:00:00.000Z",
+"cards": {
+"OP09-089": 4,
+"OP09-095": 4,
+"OP11-083": 4,
+"OP09-090": 4,
+"OP09-086": 4,
+"PRB02-015": 2,
+"EB05-046": 2,
+"OP09-083": 4,
+"OP10-082": 4,
+"OP09-084": 1,
+"ST27-003": 3,
+"ST27-005": 1,
+"OP09-093": 3,
+"OP07-096": 3,
+"OP09-096": 3,
+"OP09-099": 4
+}
+},
+{
+"leader": "OP13-001",
+"leaderName": "Monkey.D.Luffy",
+"player": "ricmasterflash",
+"placing": 4,
+"tournament": "[EB05] ChinoizeCup #127 MONDAY",
+"players": 64,
+"date": "2026-10-26T19:00:00.000Z",
+"cards": {
+"OP13-016": 4,
+"OP01-016": 2,
+"OP06-033": 3,
+"PRB02-003": 4,
+"OP14-031": 4,
+"OP14-022": 3,
+"OP13-027": 4,
+"EB05-001": 4,
+"OP13-029": 4,
+"OP15-032": 3,
+"OP13-031": 2,
+"EB04-007": 3,
+"OP14-019": 2,
+"OP05-038": 2,
+"OP08-036": 2,
+"ST31-005": 4
+}
+},
+{
+"leader": "OP13-001",
+"leaderName": "Monkey.D.Luffy",
+"player": "Gefen H",
+"placing": 4,
+"tournament": "[EB05] ChinoizeCup #127 MONDAY",
+"players": 64,
+"date": "2026-10-26T19:00:00.000Z",
+"cards": {
+"OP13-016": 4,
+"OP14-013": 4,
+"ST32-005": 4,
+"ST24-002": 4,
+"EB01-013": 4,
+"PRB02-003": 4,
+"OP14-031": 4,
+"PRB02-005": 2,
+"ST32-002": 4,
+"EB05-001": 4,
+"OP13-031": 4,
+"EB04-007": 3,
+"OP17-022": 2,
+"OP08-036": 1,
+"ST31-005": 2
 }
 },
 {
@@ -2343,6 +2111,214 @@
 }
 },
 {
+"leader": "OP17-039",
+"leaderName": "Rocks.D.Xebec",
+"player": "renenene",
+"placing": 1,
+"tournament": "[EB05+EGB] ChinoizeCup #129 WEDNESDAY",
+"players": 61,
+"date": "2026-10-28T19:00:00.000Z",
+"cards": {
+"OP08-051": 4,
+"OP17-050": 2,
+"OP17-045": 4,
+"OP17-052": 4,
+"OP17-054": 4,
+"OP17-046": 4,
+"OP17-044": 2,
+"OP17-049": 4,
+"OP17-040": 4,
+"OP17-048": 4,
+"OP17-118": 4,
+"OP17-055": 4,
+"OP17-056": 4,
+"OP04-056": 2
+}
+},
+{
+"leader": "OP14-041",
+"leaderName": "Boa Hancock",
+"player": "LilyKei",
+"placing": 1,
+"tournament": "[EB05+EGB] ChinoizeCup #129 WEDNESDAY",
+"players": 61,
+"date": "2026-10-28T19:00:00.000Z",
+"cards": {
+"OP06-106": 4,
+"OP14-114": 4,
+"ST17-004": 3,
+"EB05-028": 3,
+"EB03-053": 4,
+"OP14-115": 4,
+"EB04-058": 4,
+"OP16-113": 4,
+"OP14-105": 4,
+"OP14-107": 4,
+"OP14-112": 4,
+"OP06-115": 2,
+"OP07-056": 1,
+"OP14-118": 1,
+"OP07-057": 2,
+"OP06-058": 2
+}
+},
+{
+"leader": "OP10-003",
+"leaderName": "Sugar",
+"player": "Jellybeanzs",
+"placing": 2,
+"tournament": "[EB05+EGB] ChinoizeCup #129 WEDNESDAY",
+"players": 61,
+"date": "2026-10-28T19:00:00.000Z",
+"cards": {
+"OP10-065": 4,
+"EB05-007": 4,
+"EB05-034": 4,
+"OP10-062": 2,
+"EB05-004": 4,
+"OP10-072": 4,
+"EB03-010": 4,
+"OP10-071": 3,
+"OP09-004": 3,
+"OP14-069": 2,
+"OP15-078": 4,
+"EB05-040": 4,
+"OP10-078": 3,
+"OP07-076": 3,
+"OP10-018": 2
+}
+},
+{
+"leader": "OP01-002",
+"leaderName": "Trafalgar Law",
+"player": "CKK",
+"placing": 2,
+"tournament": "[EB05+EGB] ChinoizeCup #129 WEDNESDAY",
+"players": 61,
+"date": "2026-10-28T19:00:00.000Z",
+"cards": {
+"OP07-022": 4,
+"OP12-034": 4,
+"OP14-013": 4,
+"ST30-002": 4,
+"ST30-004": 1,
+"OP06-033": 4,
+"EB01-013": 4,
+"PRB02-003": 1,
+"EB01-012": 4,
+"OP12-023": 4,
+"ST32-002": 4,
+"EB05-001": 4,
+"OP13-031": 4,
+"OP17-022": 2,
+"OP12-037": 1,
+"OP08-036": 1
+}
+},
+{
+"leader": "OP12-041",
+"leaderName": "Sanji",
+"player": "kevyzhou",
+"placing": 3,
+"tournament": "[EB05+EGB] ChinoizeCup #129 WEDNESDAY",
+"players": 61,
+"date": "2026-10-28T19:00:00.000Z",
+"cards": {
+"EB05-023": 4,
+"OP12-070": 4,
+"EB05-031": 3,
+"EB03-031": 4,
+"OP07-064": 4,
+"OP15-078": 4,
+"OP13-076": 1,
+"OP09-078": 4,
+"OP12-079": 4,
+"EB04-029": 2,
+"EB05-039": 2,
+"OP12-060": 4,
+"EB04-041": 4,
+"OP11-061": 2,
+"OP04-056": 2,
+"OP06-058": 2
+}
+},
+{
+"leader": "OP09-042",
+"leaderName": "Buggy",
+"player": "BMKid",
+"placing": 3,
+"tournament": "[EB05+EGB] ChinoizeCup #129 WEDNESDAY",
+"players": 61,
+"date": "2026-10-28T19:00:00.000Z",
+"cards": {
+"OP09-056": 4,
+"ST25-001": 4,
+"ST25-002": 4,
+"ST25-005": 4,
+"OP16-056": 3,
+"OP09-048": 4,
+"OP12-049": 4,
+"P-084": 1,
+"ST25-003": 4,
+"EB05-021": 4,
+"OP09-051": 4,
+"OP09-057": 4,
+"OP06-058": 4,
+"OP09-060": 2
+}
+},
+{
+"leader": "OP17-039",
+"leaderName": "Rocks.D.Xebec",
+"player": "Khoifish",
+"placing": 4,
+"tournament": "[EB05+EGB] ChinoizeCup #129 WEDNESDAY",
+"players": 61,
+"date": "2026-10-28T19:00:00.000Z",
+"cards": {
+"OP08-051": 4,
+"OP17-045": 4,
+"OP17-054": 4,
+"OP17-052": 2,
+"OP17-046": 4,
+"OP17-042": 3,
+"OP17-044": 3,
+"OP17-049": 4,
+"OP17-040": 4,
+"OP17-048": 4,
+"OP14-049": 1,
+"OP17-118": 4,
+"OP17-055": 4,
+"OP17-056": 4,
+"EB02-030": 1
+}
+},
+{
+"leader": "P-117",
+"leaderName": "Nami",
+"player": "TTP Voly",
+"placing": 4,
+"tournament": "[EB05+EGB] ChinoizeCup #129 WEDNESDAY",
+"players": 61,
+"date": "2026-10-28T19:00:00.000Z",
+"cards": {
+"OP03-044": 4,
+"OP04-041": 4,
+"OP09-050": 4,
+"OP03-048": 4,
+"OP03-050": 4,
+"OP04-050": 4,
+"EB03-028": 4,
+"EB03-023": 2,
+"OP03-047": 2,
+"OP03-054": 4,
+"OP03-055": 4,
+"EB05-030": 4,
+"OP03-056": 4,
+"OP03-057": 2
+}
+},
+{
 "leader": "OP16-022",
 "leaderName": "Monkey.D.Luffy",
 "player": "pereirinha61",
@@ -2799,20 +2775,6 @@
 "traits": "Land of Wano Kouzuki Clan",
 "text": "[Activate:Main] You may trash this Character: Play up to 1 [Land of Wano] type Character card with a cost of 5 or less other than [Kouzuki Hiyori] from your hand. Then, draw 1 card."
 },
-"EB01-059": {
-"name": "Kingdom Come",
-"type": "Event",
-"colors": [
-"Yellow"
-],
-"cost": 6,
-"power": null,
-"counter": null,
-"life": null,
-"attr": "",
-"traits": "Sky Island",
-"text": "[Main] K.O. up to 1 of your opponent's Characters. Then, trash cards from the top of your Life cards until you have 1 Life card.[Trigger] K.O. up to 1 of your opponent's Characters with a cost equal to or less than the total of your and your opponent's Life cards."
-},
 "EB01-061": {
 "name": "Mr.2.Bon.Kurei",
 "type": "Character",
@@ -2840,20 +2802,6 @@
 "attr": "Wisdom",
 "traits": "Straw Hat Crew East Blue",
 "text": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 \"Straw Hat Crew\" type card other than [Nami] and add it to your hand. Then, place the rest at the bottom of your deck in any order."
-},
-"EB02-018": {
-"name": "Buggy",
-"type": "Character",
-"colors": [
-"Green"
-],
-"cost": 4,
-"power": 6000,
-"counter": 0,
-"life": null,
-"attr": "Slash",
-"traits": "Buggy Pirates East Blue",
-"text": "[On Play] If you have no other [Buggy] Characters, up to 1 of your Leader gains [Double Attack] during this turn.\n[Trigger] Rest up to 1 of your opponent's Characters with a cost of 4 or less."
 },
 "EB02-021": {
 "name": "Gum-Gum Giant Pistol",
@@ -2910,6 +2858,34 @@
 "attr": "Special",
 "traits": "Donquixote Pirates Punk Hazard",
 "text": "[Blocker] [On Play] Look at 5 cards from the top of your deck; reveal up to 1 Character card with 1000 power or less or up to 1 Event card and add it to your hand. Then, place the rest at the bottom of your deck in any order."
+},
+"EB03-023": {
+"name": "Kaya",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 2,
+"power": 0,
+"counter": 2000,
+"life": null,
+"attr": "Wisdom",
+"traits": "East Blue",
+"text": "[On Play] Look at 5 cards from the top of your deck and place them at the top or bottom of the deck in any order."
+},
+"EB03-028": {
+"name": "Yu",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 2,
+"power": 0,
+"counter": 1000,
+"life": null,
+"attr": "Wisdom",
+"traits": "East Blue",
+"text": "[On Play] Trash 1 card from your hand. [Activate: Main] You may trash this Character: If you have 4 or less cards in your hand, draw 2 cards."
 },
 "EB03-031": {
 "name": "Vinsmoke Reiju",
@@ -2995,6 +2971,21 @@
 "traits": "Heart Pirates",
 "text": "[Rush] [Activate: Main] You may trash 1 card from your hand and trash this Character: Add up to 1 card from the top of your deck to the top of your Life cards. Then, play up to 1 [Trafalgar Law] with a cost of 7 or less from your hand."
 },
+"EB04-001": {
+"name": "Jewelry Bonney",
+"type": "Leader",
+"colors": [
+"Red",
+"Yellow"
+],
+"cost": null,
+"power": 5000,
+"counter": null,
+"life": 4,
+"attr": "Special",
+"traits": "Bonney Pirates Egghead",
+"text": "[Opponent's Turn] If you have 1 or less Life cards, this Leader gains +2000 power. [Activate: Main] [Once Per Turn] Give up to 1 of your opponent's Characters -1000 power during this turn. Then, if you have 2 or more Life cards, you may add 1 card from the top of your Life cards to your hand."
+},
 "EB04-002": {
 "name": "Jewelry Bonney",
 "type": "Character",
@@ -3078,20 +3069,6 @@
 "attr": "",
 "traits": "Straw Hat Crew Punk Hazard",
 "text": "[Main] If your Leader is [Sanji], look at 3 cards from the top of your deck; reveal up to 1 [Sanji] or Event card and add it to your hand. Then, trash the rest.\n[Counter] You may trash 1 card from your hand: Up to 1 of your [Sanji] cards gains +4000 power during this battle."
-},
-"EB04-030": {
-"name": "Kaido",
-"type": "Character",
-"colors": [
-"Purple"
-],
-"cost": 7,
-"power": 9000,
-"counter": 0,
-"life": null,
-"attr": "Strike",
-"traits": "Animal Kingdom Pirates The Four Emperors",
-"text": "If this Character would be K.O.'d, you may return 1 DON!! card from your field to your DON!! deck instead. [On Play] DON!! -2: If your Leader has the {Animal Kingdom Pirates} type, this Character gains Rush during this turn. Then, rest up to 1 of your opponent's Characters with a cost of 7 or less."
 },
 "EB04-031": {
 "name": "King",
@@ -3177,6 +3154,328 @@
 "traits": "Straw Hat Crew Supernovas Fish-Man Island",
 "text": "[Main] You may turn 1 card from the top of your Life cards face-up: If you have less Characters than your opponent, K.O. up to 1 of your opponent's Characters with a cost of 6 or less and up to 1 of your opponent's Characters with a cost of 5 or less. [Trigger] Draw 2 cards and trash 1 card from your hand."
 },
+"EB04-061": {
+"name": "Monkey.D.Luffy",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 10,
+"power": 12000,
+"counter": 0,
+"life": null,
+"attr": "Strike",
+"traits": "Straw Hat Crew The Four Emperors Egghead",
+"text": "If you have 1 or less Life cards, give this card in your hand -1 cost.\n[On Play] You may trash 1 card from your hand: Your Leader gains +2000 power until the end of your opponent's next End Phase. Then, this Character gains [Blocker] until the end of your opponent's next End Phase."
+},
+"EB05-001": {
+"name": "Jewelry Bonney",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 5,
+"power": 7000,
+"counter": 0,
+"life": null,
+"attr": "Special",
+"traits": "Bonney Pirates Supernovas",
+"text": "[On Play] If your Leader has the {Supernovas} type, draw 2 cards and play up to 2 Character cards with 2000 power or less from your hand.\n[Activate: Main] [Once Per Turn] Give up to 1 of your opponent's Leader or Characters with 6000 power or more-1000 power until the end of your opponent's next End Phase."
+},
+"EB05-004": {
+"name": "Baby 5",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 4,
+"power": 6000,
+"counter": 0,
+"life": null,
+"attr": "Special",
+"traits": "Donquixote Pirates Punk Hazard",
+"text": "[On Play] You may reveal 2 Event cards from your hand: Draw 2 cards.\n[On K.O.] Play up to 1 Character card with 6000 power or less from your hand rested."
+},
+"EB05-007": {
+"name": "Monet",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 2,
+"power": 1000,
+"counter": 2000,
+"life": null,
+"attr": "Special",
+"traits": "Donquixote Pirates Punk Hazard",
+"text": "[On Play] You may reveal a total of 3 Event or {Punk Hazard} type cards from your hand: Draw 1 card.\n[End of Your Turn] This Character gains +5000 power until the end of your opponent's next End Phase."
+},
+"EB05-008": {
+"name": "Luffy, Now's Your Chance",
+"type": "Event",
+"colors": [
+"Red"
+],
+"cost": 1,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "Kuja Pirates The Seven Warlords of the Sea",
+"text": "[Main] You may give 1 active DON!! card to 1 of your Leader and reveal 2 red Event cards from your hand: Give up to 1 of your opponent's rested Characters -7000 power during this turn.\n[Counter] If you have no Characters with a cost of 5 or more, up to 1 of your Leader or up to 1 of your Characters gains +4000 power during this battle."
+},
+"EB05-014": {
+"name": "Shirahoshi",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": 0,
+"counter": 0,
+"life": null,
+"attr": "Wisdom",
+"traits": "Merfolk Fish-Man Island",
+"text": "[On Play] Look at 5 cards from the top of your deck; reveal up to a total of 2 [Megalo] or {Neptunian} type cards and add them to your hand. Then, trash the rest.\n[Activate: Main] You may rest this Character: Up to 1 of your {Neptunian} type Characters with 6000 power or less gains [Rush] during this turn."
+},
+"EB05-020": {
+"name": "My name is Shirahoshi!!",
+"type": "Event",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "Merfolk Fish-Man Island",
+"text": "[Main] You may rest your Leader [Shirahoshi]: Draw 2 cards."
+},
+"EB05-021": {
+"name": "Alvida",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 9,
+"power": 7000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "Cross Guild",
+"text": "[On Play] Draw 2 cards and play up to 1 {Cross Guild} type Character card with a cost of 8 or less from your hand. Then, you cannot play Character cards during this turn.\n[When Attacking] Negate the effect of up to 1 of your opponent's Characters during this turn."
+},
+"EB05-023": {
+"name": "Osome",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 1,
+"power": 0,
+"counter": 2000,
+"life": null,
+"attr": "Wisdom",
+"traits": "Land of Wano",
+"text": "[On Play] You may trash 2 Events from your hand: Draw 3 cards."
+},
+"EB05-025": {
+"name": "Domino",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 2,
+"power": 3000,
+"counter": 1000,
+"life": null,
+"attr": "Wisdom",
+"traits": "Impel Down",
+"text": "[On Play] Look at 3 cards from the top of your deck; reveal up to 1 {Impel Down} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.\n[Trigger] Activate this card's [On Play] effect."
+},
+"EB05-028": {
+"name": "Boa Hancock",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 4,
+"power": 5000,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Kuja Pirates The Seven Warlords of the Sea Impel Down",
+"text": "[On Play] If your opponent has 9 or more cards in their hand, they trash 4 cards from their hand."
+},
+"EB05-030": {
+"name": "Take Care, Everybody.",
+"type": "Event",
+"colors": [
+"Blue"
+],
+"cost": 2,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "Straw Hat Crew East Blue",
+"text": "[Main] If your Leader is [Nami], return up to 1 Character with a cost of 5 or less to the owner's hand. [Counter] Draw 1 card, and up to 1 of your Leader or Characters gains +1000 power during this turn."
+},
+"EB05-031": {
+"name": "Vinsmoke Reiju",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 5,
+"power": 5000,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "The Vinsmoke Family GERMA 66",
+"text": "[On Play] DON!! -1: If your Leader has the {The Vinsmoke Family} type, trash 10 cards from the top of your deck.\n[Activate: Main] You may trash this Character: If your opponent has a Character with 8000 base power or more, add up to 4 DON!! cards as active from your DON!! deck."
+},
+"EB05-033": {
+"name": "Nico Robin",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 1,
+"power": 2000,
+"counter": 2000,
+"life": null,
+"attr": "Strike",
+"traits": "Straw Hat Crew",
+"text": "[On Play] If your Leader has the {Straw Hat Crew} type and the number of DON!! cards on your field is at least 6 less than the number on your opponent's field, draw 3 cards and trash 2 cards from your hand. Then, add up to 4 DON!! cards as rested from your DON!! deck."
+},
+"EB05-034": {
+"name": "Sugar",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 2,
+"power": 0,
+"counter": 2000,
+"life": null,
+"attr": "Special",
+"traits": "Donquixote Pirates",
+"text": "[On Play] DON!! -2: If you have 7 or more DON!! cards on your field, give up to 1 of your opponent's Characters-4000 power during this turn."
+},
+"EB05-037": {
+"name": "Black Maria",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 1,
+"power": 2000,
+"counter": 2000,
+"life": null,
+"attr": "Special",
+"traits": "Animal Kingdom Pirates",
+"text": "[On Play] Look at 3 cards from the top of your deck; reveal up to 1 {Animal Kingdom Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order."
+},
+"EB05-039": {
+"name": "Pink Hornet",
+"type": "Event",
+"colors": [
+"Purple"
+],
+"cost": 1,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "The Vinsmoke Family GERMA 66",
+"text": "[Main] DON!! 1: If your Leader has the {The Vinsmoke Family} type, give up to 1 of your opponent's Characters 4000 power during this turn.\n[Counter] DON!! 1: Your Leader gains +4000 power during this battle."
+},
+"EB05-040": {
+"name": "You Need Me, Don't You?!!",
+"type": "Event",
+"colors": [
+"Purple"
+],
+"cost": 0,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "Donquixote Pirates",
+"text": "[Main] You may return 1 of your active DON!! cards to your DON!! deck: If your Leader has the {Donquixote Pirates} type, draw 3 cards and trash 1 card from your hand.\n[Counter] Your Leader gains +2000 power during this battle."
+},
+"EB05-043": {
+"name": "Perona",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 4,
+"power": 5000,
+"counter": 2000,
+"life": null,
+"attr": "Special",
+"traits": "Thriller Bark Pirates",
+"text": "[On K.O.] K.O. or rest up to 1 of your opponent's Characters with a cost of 6 or less."
+},
+"EB05-046": {
+"name": "Yamato",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 4,
+"power": 5000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "Land of Wano",
+"text": "If your opponent has a Character with 8000 base power or more, this Character gains [Blocker] and +3000 power.\n[On Your Opponent's Attack] You may trash 1 card from your hand: If you have 10 or more cards in your trash, your Leader's base power becomes 7000 during this turn."
+},
+"EB05-047": {
+"name": "Ripley",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 4,
+"power": 4000,
+"counter": 2000,
+"life": null,
+"attr": "Wisdom",
+"traits": "Giant Elbaph",
+"text": "This Character gains +12 cost.\n[On Play] You may trash 1 card from your hand: Play up to 1 Character card with a cost of 2 or less from your trash."
+},
+"EB05-059": {
+"name": "Charlotte Pudding!!",
+"type": "Event",
+"colors": [
+"Yellow"
+],
+"cost": 1,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "Big Mom Pirates",
+"text": "[Main] Draw 1 card, and all of your Characters with 4000 base power and the {Big Mom Pirates} type cannot be K.O.'d in battle until the end of your opponent's next End Phase.\n[Trigger] Draw 1 card and play up to 1 Character card with 4000 power and a [Trigger] from your hand."
+},
+"EB05-061": {
+"name": "Nami",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 3,
+"power": 4000,
+"counter": 2000,
+"life": null,
+"attr": "Special",
+"traits": "Straw Hat Crew",
+"text": "[Once Per Turn] If one of your Characters with 6000 base power or less would be removed from the field by your opponent, you may add 1 card from the top of your Life cards to your hand instead.\n[On Play] Play up to 1 red Character card with a cost of 2 or less from your hand."
+},
 "OP01-002": {
 "name": "Trafalgar Law",
 "type": "Leader",
@@ -3247,20 +3546,6 @@
 "attr": "",
 "traits": "Land of Wano Kouzuki Clan",
 "text": "[Main] You may rest 2 of your Characters: Draw 2 cards."
-},
-"OP01-094": {
-"name": "Kaido",
-"type": "Character",
-"colors": [
-"Purple"
-],
-"cost": 10,
-"power": 12000,
-"counter": 0,
-"life": null,
-"attr": "Strike",
-"traits": "Animal Kingdom Pirates The Four Emperors",
-"text": "[On Play] DON!! -6 (You may return the specified number of DON!! cards from your field to your DON!! deck.): If your Leader has the \"Animal Kingdom Pirates\" type, K.O. all Characters other than this Character."
 },
 "OP02-010": {
 "name": "Dogura",
@@ -3346,48 +3631,117 @@
 "traits": "Buggy Pirates",
 "text": "This Character cannot be K.O.'d in battle by \"Slash\" attribute cards. [On Play] Look at 5 cards from the top of your deck; reveal up to 1 red Event and add it to your hand. Then, place the rest at the bottom of your deck in any order."
 },
-"OP03-022": {
-"name": "Arlong",
-"type": "Leader",
-"colors": [
-"Green",
-"Yellow"
-],
-"cost": null,
-"power": 5000,
-"counter": null,
-"life": 4,
-"attr": "Slash",
-"traits": "Fish-Man Arlong Pirates East Blue",
-"text": "[DON!! x2] [When Attacking (1) (You may rest the specified number of DON!! cards in your cost area.): Play up to 1 Character card with a cost of 4 or less and a [Trigger] from your hand."
-},
-"OP03-026": {
-"name": "Kuroobi",
+"OP03-044": {
+"name": "Kaya",
 "type": "Character",
 "colors": [
-"Green"
+"Blue"
 ],
-"cost": 4,
-"power": 3000,
+"cost": 1,
+"power": 0,
+"counter": 2000,
+"life": null,
+"attr": "Wisdom",
+"traits": "East Blue",
+"text": "[On Play] Draw 2 cards and trash 2 cards from your hand."
+},
+"OP03-047": {
+"name": "Zeff",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 5,
+"power": 6000,
 "counter": 1000,
 "life": null,
 "attr": "Strike",
-"traits": "Fish-Man Arlong Pirates East Blue",
-"text": "[On Play] If your Leader has the [East Blue] type, rest up to 1 of your opponent's Characters. [Trigger] Play this card."
+"traits": "East Blue",
+"text": "[DON!! x1] When this Character's attack deals damage to your opponent's Life, you may trash 7 cards from the top of your deck. [On Play] Return up to 1 Character with a cost of 3 or less to the owner's hand, and you may trash 2 cards from the top of your deck.  This card has been officially errata'd."
 },
-"OP03-033": {
-"name": "Hatchan",
+"OP03-048": {
+"name": "Nojiko",
 "type": "Character",
 "colors": [
-"Green"
+"Blue"
+],
+"cost": 2,
+"power": 0,
+"counter": 1000,
+"life": null,
+"attr": "Wisdom",
+"traits": "East Blue",
+"text": "[On Play] If your Leader is [Nami], return up to 1 of your opponent's Characters with a cost of 5 or less to the owner's hand."
+},
+"OP03-050": {
+"name": "Boodle",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 2,
+"power": 0,
+"counter": 1000,
+"life": null,
+"attr": "Wisdom",
+"traits": "East Blue",
+"text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.) [On K.O.] You may trash 1 card from the top of your deck."
+},
+"OP03-054": {
+"name": "Usopp's Rubber Band of Doom!!!",
+"type": "Event",
+"colors": [
+"Blue"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "Straw Hat Crew East Blue",
+"text": "[Counter] Up to 1 of your Leader or Character cards gains +2000 power during this battle. Then, you may trash 1 card from the top of your deck. [Trigger] Draw 1 card and you may trash 1 card from the top of your deck.  This card has been officially errata'd."
+},
+"OP03-055": {
+"name": "Gum-Gum Giant Gavel",
+"type": "Event",
+"colors": [
+"Blue"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "Straw Hat Crew East Blue",
+"text": "[Counter] You may trash 1 card from your hand: Up to 1 of your Leader gains +4000 power during this battle. Then, you may trash 2 cards from the top of your deck. [Trigger] Return up to 1 Character with a cost of 4 or less to the owner's hand."
+},
+"OP03-056": {
+"name": "Sanji's Pilaf",
+"type": "Event",
+"colors": [
+"Blue"
+],
+"cost": 3,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "East Blue",
+"text": "[Main] Draw 2 cards. [Trigger] Activate this card's [Main] effect."
+},
+"OP03-057": {
+"name": "Three Thousand Worlds",
+"type": "Event",
+"colors": [
+"Blue"
 ],
 "cost": 4,
-"power": 4000,
-"counter": 2000,
+"power": null,
+"counter": null,
 "life": null,
-"attr": "Slash",
-"traits": "Fish-Man Arlong Pirates East Blue",
-"text": "[Trigger] If your Leader has the [East Blue] type, play this card."
+"attr": "",
+"traits": "Straw Hat Crew East Blue",
+"text": "[Main] Place up to 1 Character with a cost of 5 or less at the bottom of the owner's deck. [Trigger] Place up to 1 Character with a cost of 3 or less at the bottom of the owner's deck."
 },
 "OP03-114": {
 "name": "Charlotte Linlin",
@@ -3403,20 +3757,6 @@
 "traits": "Big Mom Pirates",
 "text": "[On Play] If your Leader has the [Big Mom Pirates] type, add up to 1 card from the top of your deck to the top of your Life cards. Then, trash up to 1 card from the top of your opponent's Life cards."
 },
-"OP03-123": {
-"name": "Charlotte Katakuri",
-"type": "Character",
-"colors": [
-"Yellow"
-],
-"cost": 8,
-"power": 8000,
-"counter": 0,
-"life": null,
-"attr": "Strike",
-"traits": "Big Mom Pirates",
-"text": "[On Play] Add up to 1 Character with a cost of 8 or less to the top or bottom of the owner's Life cards face-up."
-},
 "OP04-016": {
 "name": "Bad Manners Kick Course",
 "type": "Event",
@@ -3430,6 +3770,34 @@
 "attr": "",
 "traits": "Alabasta Straw Hat Crew",
 "text": "[Counter] You may trash 1 card from your hand: Up to 1 of your Leader or Character cards gains +3000 power during this battle. [Trigger] Give up to 1 of your opponent's Leader or Character cards -3000 power during this turn."
+},
+"OP04-041": {
+"name": "Apis",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 1,
+"power": 0,
+"counter": 2000,
+"life": null,
+"attr": "Wisdom",
+"traits": "East Blue",
+"text": "[On Play] You may trash 2 cards from your hand: Look at 5 cards from the top of your deck; reveal up to 1 [East Blue] type card and add it to your hand. Then, place the rest at the bottom of your deck in any order."
+},
+"OP04-050": {
+"name": "Hanger",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 2,
+"power": 0,
+"counter": 1000,
+"life": null,
+"attr": "Wisdom",
+"traits": "East Blue",
+"text": "[Activate:Main] You may trash 1 card from your hand and rest this Character: Draw 1 card."
 },
 "OP04-056": {
 "name": "Gum-Gum Red Roc",
@@ -3655,19 +4023,19 @@
 "traits": "Thriller Bark Pirates",
 "text": "[DON!! x2][Your Turn] This Character gains +1000 power for every 5 cards in your trash."
 },
-"OP06-104": {
-"name": "Kikunojo",
+"OP06-106": {
+"name": "Kouzuki Hiyori",
 "type": "Character",
 "colors": [
 "Yellow"
 ],
-"cost": 4,
-"power": 6000,
-"counter": 0,
+"cost": 2,
+"power": 0,
+"counter": 2000,
 "life": null,
-"attr": "Slash",
-"traits": "Land of Wano The Akazaya Nine",
-"text": "[On K.O.] If your opponent has 3 or less Life cards, add up to 1 card from the top of your deck to the top of your Life cards.\n[Trigger] If your opponent has 3 or less Life cards, play this card."
+"attr": "Wisdom",
+"traits": "Land of Wano Kouzuki Clan",
+"text": "[On Play] You may add 1 card from the top or bottom of your Life cards to your hand: Add up to 1 card from your hand to the top of your Life cards."
 },
 "OP06-115": {
 "name": "You're the One Who Should Disappear",
@@ -3696,6 +4064,20 @@
 "attr": "Slash",
 "traits": "Straw Hat Crew",
 "text": "[When Attacking][Once Per Turn](1)(You may rest the specified number of DON!! cards in your cost area.): Set this Character as active.\n[Activate:Main][Once Per Turn](2)(You may rest the specified number of DON!! cards in your cost area.): Set this Character as active."
+},
+"OP07-022": {
+"name": "Otama",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": 0,
+"counter": 2000,
+"life": null,
+"attr": "Special",
+"traits": "Land of Wano",
+"text": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 green [Land of Wano] type card other than [Otama] and add it to your hand. Then, place the rest at the bottom of your deck in any order."
 },
 "OP07-026": {
 "name": "Jewelry Bonney",
@@ -3795,6 +4177,20 @@
 "traits": "CP0",
 "text": "[DON!! x1] [Your Turn] Give all of your opponent's Characters -1 cost."
 },
+"OP07-096": {
+"name": "Tempest Kick",
+"type": "Event",
+"colors": [
+"Black"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "CP9",
+"text": "[Main] Draw 1 card. Then, if you have 10 or more cards in your trash, give up to 1 of your opponent's Characters -3 cost during this turn. [Trigger] K.O. up to 1 of your opponent's Characters with a cost of 3 or less."
+},
 "OP07-099": {
 "name": "Usopp",
 "type": "Character",
@@ -3808,6 +4204,20 @@
 "attr": "Ranged",
 "traits": "Straw Hat Crew Egghead",
 "text": "[Trigger] Up to 1 of your {Egghead} type Leader or Character cards gains +2000 power until the end of your next turn."
+},
+"OP07-104": {
+"name": "Nico Robin",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 3,
+"power": 4000,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Straw Hat Crew Egghead",
+"text": "[Trigger] If your Leader has the {Egghead} type, draw 2 cards."
 },
 "OP08-036": {
 "name": "Electrical Luna",
@@ -3907,20 +4317,6 @@
 "attr": "Strike",
 "traits": "Big Mom Pirates",
 "text": "[Activate:Main] You may trash this Character: If your Leader has the {Big Mom Pirates} type, play up to 1 [Charlotte Katakuri] from your hand with a cost of 3 or more that is equal to or less than the number of DON!! cards on your opponent's field."
-},
-"OP08-074": {
-"name": "Black Maria",
-"type": "Character",
-"colors": [
-"Purple"
-],
-"cost": 3,
-"power": 2000,
-"counter": 2000,
-"life": null,
-"attr": "Special",
-"traits": "Animal Kingdom Pirates",
-"text": "[Activate:Main] [Once Per Turn] If you have no other [Black Maria] Characters, add up to 5 DON!! cards from your DON!! deck and rest them. Then, at the end of this turn, return DON!! cards from your field to your DON!! deck until you have the same number of DON!! cards on your field as your opponent."
 },
 "OP08-077": {
 "name": "Conquest of the Sea",
@@ -4048,6 +4444,20 @@
 "traits": "Cross Guild",
 "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n[On Play] Draw 2 cards and trash 1 card from your hand."
 },
+"OP09-050": {
+"name": "Nami",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 1,
+"power": 1000,
+"counter": 1000,
+"life": null,
+"attr": "Wisdom",
+"traits": "East Blue",
+"text": "[When Attacking] Look at 5 cards from the top of your deck; reveal up to 1 blue Event and add it to your hand. Then, place the rest at the bottom of your deck in any order."
+},
 "OP09-051": {
 "name": "Buggy",
 "type": "Character",
@@ -4090,20 +4500,19 @@
 "traits": "Cross Guild",
 "text": "[Main] Look at 4 cards from the top of your deck; reveal up to 1 \"Cross Guild\" type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.\n[Trigger] Activate this card's [Main] effect."
 },
-"OP09-062": {
-"name": "Nico Robin",
-"type": "Leader",
+"OP09-060": {
+"name": "Emptee Bluffs Island",
+"type": "Stage",
 "colors": [
-"Purple",
-"Yellow"
+"Blue"
 ],
-"cost": null,
-"power": 5000,
-"counter": null,
-"life": 4,
-"attr": "Strike",
-"traits": "Straw Hat Crew",
-"text": "[Banish] (When this card deals damage, the target card is trashed without activating its Trigger.)\n[When Attacking] You may trash 1 card with a [Trigger] from your hand: Add up to 1 DON!! card from your DON!! deck and rest it."
+"cost": 1,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "Cross Guild",
+"text": "[Activate: Main] You may place 2 cards from your hand at the bottom of your deck in any order and rest this Stage: If your Leader has the \"Cross Guild\" type, draw 2 cards."
 },
 "OP09-072": {
 "name": "Franky",
@@ -4147,6 +4556,90 @@
 "traits": "Straw Hat Crew The Four Emperors",
 "text": "[Counter] DON!! 2, You may trash 1 card from your hand: If your Leader has the \"Straw Hat Crew\" type, up to 1 of your Leader or Character cards gains +4000 power during this battle. Then, draw 2 cards."
 },
+"OP09-081": {
+"name": "Marshall.D.Teach",
+"type": "Leader",
+"colors": [
+"Black"
+],
+"cost": null,
+"power": 5000,
+"counter": null,
+"life": 5,
+"attr": "Special",
+"traits": "Blackbeard Pirates The Four Emperors",
+"text": "Your [On Play] effects are negated.\n[Activate: Main] You may trash 1 card from your hand: Your opponent's [On Play] effects are negated until the end of your opponent's next turn."
+},
+"OP09-083": {
+"name": "Van Augur",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 5,
+"power": 6000,
+"counter": 1000,
+"life": null,
+"attr": "Ranged",
+"traits": "Blackbeard Pirates",
+"text": "[Activate: Main] You may rest this Character: If your Leader has the \"Blackbeard Pirates\" type, give up to 1 of your opponent's Characters 3 cost during this turn.\n[On K.O.] Draw 1 card."
+},
+"OP09-084": {
+"name": "Catarina Devon",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 5,
+"power": 6000,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Blackbeard Pirates",
+"text": "[Activate: Main] [Once Per Turn] If your Leader has the \"Blackbeard Pirates\" type, this Character gains [Double Attack], [Banish] or [Blocker] until the end of your opponent's next turn."
+},
+"OP09-086": {
+"name": "Jesus Burgess",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 4,
+"power": 5000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "Blackbeard Pirates",
+"text": "This Character cannot be K.O.'d by your opponent's effects.\nIf your Leader has the \"Blackbeard Pirates\" type, this Character gains +1000 power for every 4 cards in your trash."
+},
+"OP09-089": {
+"name": "Stronger",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 1,
+"power": 0,
+"counter": 2000,
+"life": null,
+"attr": "Wisdom",
+"traits": "Animal Blackbeard Pirates",
+"text": "[Activate: Main] You may trash 1 card from your hand and trash this Character: If your Leader has the \"Blackbeard Pirates\" type, draw 1 card. Then, give up to 1 of your opponent's Characters –2 cost during this turn."
+},
+"OP09-090": {
+"name": "Doc Q",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 2,
+"power": 0,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Blackbeard Pirates",
+"text": "[Activate: Main] You may rest this Character: If your Leader has the \"Blackbeard Pirates\" type, K.O. up to 1 of your opponent's Characters with a cost of 1 or less.[On K.O.] Draw 1 card."
+},
 "OP09-093": {
 "name": "Marshall.D.Teach",
 "type": "Character",
@@ -4175,6 +4668,20 @@
 "traits": "Blackbeard Pirates",
 "text": "[Activate: Main] You may rest 1 of your DON!! cards and this Character: Look at 5 cards from the top of your deck; reveal up to 1 \"Blackbeard Pirates\" type card and add it to your hand. Then, place the rest at the bottom of your deck in any order."
 },
+"OP09-096": {
+"name": "My Era...Begins!!",
+"type": "Event",
+"colors": [
+"Black"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "Blackbeard Pirates",
+"text": "[Main] Look at 3 cards from the top of your deck; reveal up to 1 \"Blackbeard Pirates\" type card other than [My Era...Begins!!] and add it to your hand. Then, trash the rest.\n[Trigger] Activate this card's [Main] effect."
+},
 "OP09-097": {
 "name": "Black Vortex",
 "type": "Event",
@@ -4188,6 +4695,34 @@
 "attr": "",
 "traits": "Blackbeard Pirates",
 "text": "[Counter] Negate the effect of up to 1 of your opponent's Leader or Character cards and give that card 4000 power during this turn.\n[Trigger] Negate the effect of up to 1 of your opponent's Leader or Character cards during this turn."
+},
+"OP09-099": {
+"name": "Fullalead",
+"type": "Stage",
+"colors": [
+"Black"
+],
+"cost": 1,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "Blackbeard Pirates",
+"text": "[Activate: Main] You may trash 1 card from your hand and rest this Stage: Look at 3 cards from the top of your deck; reveal up to 1 \"Blackbeard Pirates\" type card and add it to your hand. Then, place the rest at the bottom of your deck in any order."
+},
+"OP09-104": {
+"name": "Sabo",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 7,
+"power": 7000,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Revolutionary Army",
+"text": "[On Play] Add up to 1 \"Revolutionary Army\" type Character card from your hand to the top of your Life cards face-up. Then, if you have 2 or more Life cards, add 1 card from the top or bottom of your Life cards to your hand.\n[Trigger] If your Leader is multicolored, draw 2 cards."
 },
 "OP09-118": {
 "name": "Gol.D.Roger",
@@ -4245,6 +4780,20 @@
 "attr": "Special",
 "traits": "Donquixote Pirates Punk Hazard",
 "text": "[Activate: Main] You may rest this Character: Give up to 2 rested DON!! cards to your Leader or 1 of your Characters. Then, give up to 1 of your opponent's Characters 1000 power during this turn."
+},
+"OP10-018": {
+"name": "Ten-Layer Igloo",
+"type": "Event",
+"colors": [
+"Red"
+],
+"cost": 2,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "Donquixote Pirates Punk Hazard",
+"text": "[Counter] Up to 1 of your Leader or Character cards gains +3000 power during this battle. Then, give up to 1 of your opponent's Leader or Character cards 2000 power during this turn.\n[Trigger] Up to 1 of your Leader or Character cards gains +1000 power during this turn."
 },
 "OP10-020": {
 "name": "Gum-Gum UFO",
@@ -4343,6 +4892,20 @@
 "attr": "",
 "traits": "Donquixote Pirates The Seven Warlords of the Sea",
 "text": "[Main]/[Counter] Look at 3 cards from the top of your deck; reveal up to 1 \"Donquixote Pirates\" type card other than [I Do Not Forgive Those Who Laugh at My Family!!!] and add it to your hand. Then, place the rest at the bottom of your deck in any order."
+},
+"OP10-082": {
+"name": "Kuzan",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 5,
+"power": 5000,
+"counter": 0,
+"life": null,
+"attr": "Special",
+"traits": "Blackbeard Pirates Former Navy",
+"text": "This Character cannot be removed from the field by your opponent's effects.\n[Activate: Main] You may trash this Character: Draw 1 card. Then, play up to 1 \"Blackbeard Pirates\" type Character card with a cost of 5 or less other than [Kuzan] from your trash."
 },
 "OP10-098": {
 "name": "Liberation",
@@ -4597,6 +5160,20 @@
 "traits": "Big Mom Pirates",
 "text": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 \"Big Mom Pirates\" type card with a cost of 2 or more and add it to your hand. Then, place the rest at the bottom of your deck in any order.[Activate: Main] DON!! 1, You may rest this Character: Look at 1 card from the top of your opponent's deck."
 },
+"OP11-083": {
+"name": "Caribou",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 1,
+"power": 2000,
+"counter": 2000,
+"life": null,
+"attr": "Special",
+"traits": "Caribou Pirates",
+"text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n[On Play] Trash 2 cards from your hand."
+},
 "OP11-101": {
 "name": "Capone\"Gang\"Bege",
 "type": "Character",
@@ -4835,6 +5412,20 @@
 "attr": "Strike",
 "traits": "Straw Hat Crew The Vinsmoke Family",
 "text": "[Activate: Main] [Once Per Turn] DON!! 1: Activate up to 1 \"Straw Hat Crew\" type Event with a base cost of 3 or less from your hand.\n[When Attacking] If the number of DON!! cards on your field is equal to or less than the number on your opponent's field, add up to 1 DON!! card from your DON!! deck and rest it."
+},
+"OP12-049": {
+"name": "Buggy",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 6,
+"power": 7000,
+"counter": 2000,
+"life": null,
+"attr": "Slash",
+"traits": "The Four Emperors Cross Guild",
+"text": ""
 },
 "OP12-060": {
 "name": "Boeuf Burst",
@@ -5078,20 +5669,6 @@
 "traits": "Revolutionary Army Dressrosa",
 "text": "If you have 4 or more Life cards, give this Leader 1000 power.\n[DON!! x1] If you have a Character with a cost of 8 or more, your Leader and all of your Characters gain +1000 power."
 },
-"OP13-007": {
-"name": "Ace & Sabo & Luffy",
-"type": "Character",
-"colors": [
-"Red"
-],
-"cost": 1,
-"power": 1000,
-"counter": 2000,
-"life": null,
-"attr": "Strike",
-"traits": "Goa Kingdom",
-"text": "[Activate: Main] You may give 1 of your active DON!! cards to 1 of your Leader or Character cards and trash this Character: Give up to 1 of your opponent's Characters 3000 power during this turn."
-},
 "OP13-016": {
 "name": "Monkey.D.Garp",
 "type": "Character",
@@ -5119,6 +5696,20 @@
 "attr": "Strike",
 "traits": "FILM Straw Hat Crew",
 "text": "[On Play] Set up to 2 of your DON!! cards as active.\n[End of Your Turn] If your Leader has the \"FILM\" or \"Straw Hat Crew\" type, set up to 1 of your DON!! cards as active."
+},
+"OP13-029": {
+"name": "Jinbe",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 6,
+"power": 7000,
+"counter": 2000,
+"life": null,
+"attr": "Strike",
+"traits": "FILM Fish-Man Straw Hat Crew",
+"text": ""
 },
 "OP13-031": {
 "name": "Trafalgar Law",
@@ -5359,6 +5950,20 @@
 "traits": "Fish-Man The Seven Warlords of the Sea The Sun Pirates",
 "text": "When a card is trashed from your hand by an effect, this Character gains [Rush] during this turn.\n[On Play] You may rest 2 of your DON!! cards: Draw 2 cards and return up to 1 Character with a cost of 7 or less to the owner's hand."
 },
+"OP14-069": {
+"name": "Donquixote Doflamingo",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 10,
+"power": 10000,
+"counter": 0,
+"life": null,
+"attr": "Special",
+"traits": "Donquixote Pirates The Seven Warlords of the Sea",
+"text": "[On Play] DON!! -3: Choose one:\n•If your Leader has the {Donquixote Pirates} type, K.O. up to 1 of your opponent's Characters with a cost of 8 or less.\n•Up to 3 of your opponent's Characters with a cost of 7 or less cannot be rested until the end of your opponent's next End Phase."
+},
 "OP14-077": {
 "name": "Penta-Chromatic String",
 "type": "Event",
@@ -5556,6 +6161,20 @@
 "traits": "Kuja Pirates",
 "text": "[Activate: Main] [Once Per Turn] Give up to 1 rested DON!! card to 1 of your {Kuja Pirates} type Leader or Character cards.\n[Trigger] If your Leader has the {Kuja Pirates} type, play this card."
 },
+"OP14-115": {
+"name": "Rindo",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 5,
+"power": 5000,
+"counter": 1000,
+"life": null,
+"attr": "Ranged",
+"traits": "Kuja Pirates",
+"text": "[Opponent's Turn] [On K.O.] Add up to 1 card from the top of your deck to the top of your Life cards. Then, you take 1 damage.\n[Trigger] If your Leader has the {Kuja Pirates} type, play this card."
+},
 "OP14-117": {
 "name": "Brick Bat",
 "type": "Event",
@@ -5584,63 +6203,6 @@
 "traits": "Kuja Pirates The Seven Warlords of the Sea",
 "text": "[Counter] If you have 2 or less Life cards, up to 1 of your opponent's active Characters cannot attack during this turn.\n[Trigger] Play up to 1 Character card with 6000 power or less and a [Trigger] from your hand."
 },
-"OP15-001": {
-"name": "Krieg",
-"type": "Leader",
-"colors": [
-"Green",
-"Red"
-],
-"cost": null,
-"power": 5000,
-"counter": 0,
-"life": 4,
-"attr": "Slash",
-"traits": "Krieg Pirates East Blue",
-"text": "[DON!! x1] [Opponent's Turn] If the only Characters on your field are {East Blue} type Characters, give all of your opponent's Characters -2000 power.\n[Activate: Main] [Once Per Turn] Rest up to 1 of your opponent's Characters that has 2 or more DON!! cards given."
-},
-"OP15-003": {
-"name": "Alvida",
-"type": "Character",
-"colors": [
-"Red"
-],
-"cost": 5,
-"power": 6000,
-"counter": 1000,
-"life": null,
-"attr": "Strike",
-"traits": "East Blue Alvida Pirates",
-"text": "If this Character would be K.O.'d, you may trash 1 Character card with a power of 6000 or less from your hand instead.\n[Activate: Main] [Once Per Turn] You may give 1 of your opponent's rested DON!! cards to 1 of your opponent's Characters: Give up to 1 rested DON!! card to its owner's Leader or 1 of their Characters."
-},
-"OP15-007": {
-"name": "Gin",
-"type": "Character",
-"colors": [
-"Red"
-],
-"cost": 6,
-"power": 7000,
-"counter": 1000,
-"life": null,
-"attr": "Strike",
-"traits": "Krieg Pirates East Blue",
-"text": "[On Play] If your Leader has the {East Blue} type, play up to 1 Character card with a cost of 5 or less from your hand."
-},
-"OP15-008": {
-"name": "Krieg",
-"type": "Character",
-"colors": [
-"Red"
-],
-"cost": 8,
-"power": 9000,
-"counter": 0,
-"life": null,
-"attr": "Slash",
-"traits": "Krieg Pirates East Blue",
-"text": "[On Play] Give up to 3 of your opponent's rested DON!! cards to 1 of your opponent's Characters. Then, this Character gains [Rush] during this turn.\n[Activate: Main] [Once Per Turn] If this Character was played on this turn, give all of your opponent's Characters -1000 power during this turn for every DON!! card given to that Character."
-},
 "OP15-009": {
 "name": "Koby",
 "type": "Character",
@@ -5654,90 +6216,6 @@
 "attr": "Strike",
 "traits": "Navy East Blue",
 "text": "If your Character with 7000 base power or less would be removed from the field by your opponent's effect, you may give your Leader -2000 power during this turn instead."
-},
-"OP15-011": {
-"name": "Pearl",
-"type": "Character",
-"colors": [
-"Red"
-],
-"cost": 4,
-"power": 4000,
-"counter": 1000,
-"life": null,
-"attr": "Strike",
-"traits": "Krieg Pirates East Blue",
-"text": "[Opponent's Turn] If your Leader has the {East Blue} type, this Character gains [Blocker] and +2000 power. [On K.O.] If your Leader has the {East Blue} type, K.O. up to 1 of your opponent's Characters with 6000 base power or less."
-},
-"OP15-017": {
-"name": "Morgan",
-"type": "Character",
-"colors": [
-"Red"
-],
-"cost": 5,
-"power": 6000,
-"counter": 1000,
-"life": null,
-"attr": "Slash",
-"traits": "Navy East Blue",
-"text": "[Activate: Main] [Once Per Turn] You may give 1 of your opponent's rested DON!! cards to 1 of your opponent's Characters: Give up to 1 rested DON!! card to its owner's Leader or 1 of their Characters."
-},
-"OP15-023": {
-"name": "Arlong",
-"type": "Character",
-"colors": [
-"Green"
-],
-"cost": 4,
-"power": 5000,
-"counter": 1000,
-"life": null,
-"attr": "",
-"traits": "Fish-Man Arlong Pirates East Blue",
-"text": "[On K.O.] Up to 2 of your opponent's rested cards will not become active in your opponent's next Refresh Phase.\n[Activate: Main] [Once Per Turn] You may give 1 of your opponent's rested DON!! cards to 1 of your opponent's Characters: Give up to 1 DON!! card from its owner's cost area to its owner's Leader or 1 of their Characters."
-},
-"OP15-025": {
-"name": "Kuro",
-"type": "Character",
-"colors": [
-"Green"
-],
-"cost": 7,
-"power": 7000,
-"counter": 1000,
-"life": null,
-"attr": "Slash",
-"traits": "East Blue Black Cat Pirates",
-"text": "[Blocker]\n[On Play] Give up to 2 DON!! cards from your opponent's cost area to 1 of your opponent's Characters. Then, at the end of this turn, up to 1 rested Character with 3 or more DON!! cards given will not become active in your opponent's next Refresh Phase."
-},
-"OP15-026": {
-"name": "Jango",
-"type": "Character",
-"colors": [
-"Green"
-],
-"cost": 1,
-"power": 2000,
-"counter": 1000,
-"life": null,
-"attr": "Slash",
-"traits": "East Blue Black Cat Pirates",
-"text": "[On Play] Look at 3 cards from the top of your deck; reveal up to 1 {East Blue} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.\n[Activate: Main] You may trash this Character: Give up to 1 of your opponent's rested DON!! cards to 1 of your opponent's Characters."
-},
-"OP15-028": {
-"name": "Meowban Brothers",
-"type": "Character",
-"colors": [
-"Green"
-],
-"cost": 1,
-"power": 2000,
-"counter": 2000,
-"life": null,
-"attr": "Slash",
-"traits": "East Blue Black Cat Pirates",
-"text": "[On Play] If your Leader has the {East Blue} type, give up to 1 DON!! card from your opponent's cost area to 1 of your opponent's Characters."
 },
 "OP15-032": {
 "name": "Brook",
@@ -5766,34 +6244,6 @@
 "attr": "Strike",
 "traits": "Animal",
 "text": "If your Character with 7000 base power or less would be removed from the field by your opponent's effect, you may rest 2 of your cards instead."
-},
-"OP15-037": {
-"name": "The Outcome Will Tell Us Who's Strong and Who's Weak",
-"type": "Event",
-"colors": [
-"Green"
-],
-"cost": 1,
-"power": null,
-"counter": null,
-"life": null,
-"attr": "",
-"traits": "Krieg Pirates East Blue",
-"text": "[Main] Look at 5 cards from the top of your deck; reveal up to 1 {East Blue} type card other than [The Outcome Will Tell Us Who's Strong and Who's Weak] and add it to your hand. Then, place the rest at the bottom of your deck in any order. [Trigger] Draw 1 card."
-},
-"OP15-038": {
-"name": "It's an Order! Do Not Defy Me!!!",
-"type": "Event",
-"colors": [
-"Green"
-],
-"cost": 1,
-"power": null,
-"counter": 0,
-"life": null,
-"attr": "",
-"traits": "Krieg Pirates East Blue",
-"text": "[Main] Up to 1 of your opponent's rested Characters with a cost of 8 or less that has 2 or more DON!! cards given will not become active in your opponent's next Refresh Phase.[Counter] Up to 1 of your [Krieg] cards gains +4000 power during this battle."
 },
 "OP15-058": {
 "name": "Enel",
@@ -6032,6 +6482,20 @@
 "attr": "Slash",
 "traits": "Sky Island Shandian Warrior Jaya",
 "text": "[On Play] You may trash 1 card from your hand: Look at 5 cards from the top of your deck; reveal up to a total of 2 [Mont Blanc Noland] or {Shandian Warrior} type cards and add them to your hand. Then, place the rest at the bottom of your deck in any order."
+},
+"OP15-103": {
+"name": "Genbo",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 3,
+"power": 4000,
+"counter": 1000,
+"life": null,
+"attr": "Ranged",
+"traits": "Sky Island Shandian Warrior",
+"text": "[Trigger] Draw 1 card. Then, if you have 2 or less Life cards, play this card."
 },
 "OP15-108": {
 "name": "Nami",
@@ -6356,20 +6820,6 @@
 "traits": "Navy",
 "text": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 {Navy} type card, add it to your hand and place the rest at the bottom of your deck in any order. Then, trash 1 card from your hand."
 },
-"OP16-068": {
-"name": "Trafalgar Law",
-"type": "Character",
-"colors": [
-"Purple"
-],
-"cost": 4,
-"power": 3000,
-"counter": 1000,
-"life": null,
-"attr": "Wisdom",
-"traits": "Donquixote Pirates",
-"text": "[On Play] Add up to 1 DON!! card from your DON!! deck and set it as active.\n[When Attacking] If your Leader has the {Donquixote Pirates} type, this Character gains +3000 power during this turn."
-},
 "OP16-077": {
 "name": "\"Buddha\" Sengoku",
 "type": "Event",
@@ -6468,6 +6918,20 @@
 "attr": "Slash",
 "traits": "Blackbeard Pirates Impel Down",
 "text": "[On Play] You may trash 1 card from your hand: Add up to 1 {Blackbeard Pirates} type card with a cost of 6 or less from your trash to the top of your Life cards face-up.\n[Trigger] Draw 2 cards."
+},
+"OP16-109": {
+"name": "Doc Q",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 1,
+"power": 0,
+"counter": 2000,
+"life": null,
+"attr": "Special",
+"traits": "Blackbeard Pirates",
+"text": "[On K.O.] If your Leader has the {Blackbeard Pirates} type, draw 1 card and K.O. up to 2 of your opponent's Characters with a cost of 1 or less.\n[Trigger] Activate this card's [On K.O.] effect."
 },
 "OP16-110": {
 "name": "Vasco Shot",
@@ -6608,20 +7072,6 @@
 "attr": "Slash",
 "traits": "The Four Emperors Red-Haired Pirates",
 "text": "[Rush] (This card can attack on the turn in which it is played.)\n[On Play] Set up to 2 of your DON!! cards as active. Then, rest all of your opponent's Characters."
-},
-"OP17-023": {
-"name": "Nami",
-"type": "Character",
-"colors": [
-"Green"
-],
-"cost": 1,
-"power": 1000,
-"counter": 2000,
-"life": null,
-"attr": "Wisdom",
-"traits": "East Blue Straw Hat Crew",
-"text": "If one of your {East Blue} or {Straw Hat Crew} type Characters would be K.O.'d, you may rest this Character instead."
 },
 "OP17-027": {
 "name": "Benn.Beckman",
@@ -7435,34 +7885,6 @@
 "traits": "Big Mom Pirates",
 "text": "[On Play] You may trash 1 card with a [Trigger] from your hand: Draw 3 cards.\n[Trigger] Look at 5 cards from the top of your deck; reveal up to 1 {Big Mom Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order."
 },
-"OP17-110": {
-"name": "Charlotte Perospero",
-"type": "Character",
-"colors": [
-"Yellow"
-],
-"cost": 7,
-"power": 4000,
-"counter": 1000,
-"life": null,
-"attr": "Special",
-"traits": "Big Mom Pirates",
-"text": "[Your Turn] [On Play] Play up to 1 {Big Mom Pirates} type Character card with a cost of 6 or less from your hand. Then, this Character gains [Rush] during this turn.\n[Trigger] Play this card."
-},
-"OP17-111": {
-"name": "Charlotte Mont-d'or",
-"type": "Character",
-"colors": [
-"Yellow"
-],
-"cost": 3,
-"power": 4000,
-"counter": 1000,
-"life": null,
-"attr": "Special",
-"traits": "Big Mom Pirates",
-"text": "[On Play] You may reveal 2 cards with a [Trigger] from your hand: K.O. up to 2 of your opponent's Characters with a cost of 1 or less.\n[Trigger] Play this card."
-},
 "OP17-112": {
 "name": "Charlotte Linlin",
 "type": "Character",
@@ -7533,6 +7955,20 @@
 "traits": "Giant Elbaph",
 "text": "This Character gains +12 cost, and if it is your opponent's turn, this Character gains +3000 power.\n[On Play] K.O. your opponent's Characters with a total cost of 4 or less."
 },
+"P-046": {
+"name": "Yamato",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 1,
+"power": 2000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "Land of Wano",
+"text": "[On Play] You may place all cards in your hand at the bottom of your deck in any order. If you do, draw cards equal to the number you placed at the bottom of your deck."
+},
 "P-084": {
 "name": "Buggy",
 "type": "Character",
@@ -7575,19 +8011,19 @@
 "traits": "Heart Pirates",
 "text": "[Blocker]\n[On Play] If the number of DON!! cards on your field is equal to or less than the number on your opponent's field, add up to 1 DON!! card from your DON!! deck and rest it."
 },
-"P-111": {
-"name": "Nico Robin",
-"type": "Character",
+"P-117": {
+"name": "Nami",
+"type": "Leader",
 "colors": [
-"Green"
+"Blue"
 ],
-"cost": 3,
-"power": 4000,
-"counter": 1000,
-"life": null,
-"attr": "Strike",
-"traits": "Straw Hat Crew",
-"text": "[Once Per Turn] If your {Straw Hat Crew} type Character would be removed from the field by your opponent's effect, you may rest 1 of your DON!! cards instead."
+"cost": null,
+"power": 5000,
+"counter": 0,
+"life": 5,
+"attr": "Wisdom",
+"traits": "East Blue",
+"text": "Under the rules of this game, you can only include \"East Blue\" type cards in your deck and when your deck is reduced to 0, you win the game instead of losing.\n[DON!! x1] When this Leader's attack deals damage to your opponent's Life, you may trash 1 card from the top of your deck."
 },
 "PRB02-003": {
 "name": "Lucky.Roux",
@@ -7602,6 +8038,34 @@
 "attr": "Ranged",
 "traits": "Red-Haired Pirates",
 "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)[On Play] You may trash 1 Character card with 6000 power or more from your hand: Draw 2 cards."
+},
+"PRB02-005": {
+"name": "Monkey.D.Luffy",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 4,
+"power": 5000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "Straw Hat Crew Supernovas",
+"text": "[Your Turn] [On Play] If your Leader is multicolored and your opponent has 7 or less DON!! cards on their field, your opponent rests 1 of their active DON!! cards at the start of their next Main Phase."
+},
+"PRB02-006": {
+"name": "Roronoa Zoro",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 4,
+"power": 4000,
+"counter": 2000,
+"life": null,
+"attr": "Slash",
+"traits": "Straw Hat Crew Supernovas",
+"text": "[Opponent's Turn] If this Character would be rested by your opponent's Character's effect, you may rest 1 of your other Characters instead.[Blocker]"
 },
 "PRB02-008": {
 "name": "Marco",
@@ -7631,6 +8095,20 @@
 "traits": "The Seven Warlords of the Sea Thriller Bark Pirates",
 "text": "[On Play] If your Leader has the \"Thriller Bark Pirates\" type, play up to 1 Character card with a cost of 4 or less from your trash rested. Then, give up to 1 rested DON!! card to your Leader or 1 of your Characters."
 },
+"PRB02-015": {
+"name": "Shiryu",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 4,
+"power": 5000,
+"counter": 1000,
+"life": null,
+"attr": "Slash",
+"traits": "Blackbeard Pirates",
+"text": "If your Leader has the \"Blackbeard Pirates\" type, this Character gains [Blocker] and +4 cost.[On K.O.] If your Leader has the \"Blackbeard Pirates\" type, K.O. up to 1 of your opponent's Characters with a base cost of 4 or less."
+},
 "ST01-011": {
 "name": "Brook",
 "type": "Character",
@@ -7658,34 +8136,6 @@
 "attr": "Slash",
 "traits": "Heart Pirates Supernovas",
 "text": "[On Play] Set up to 1 of your \"Supernovas\" or \"Heart Pirates\" type rested Characters with a cost of 5 or less as active."
-},
-"ST04-017": {
-"name": "Onigashima Island",
-"type": "Stage",
-"colors": [
-"Purple"
-],
-"cost": 3,
-"power": null,
-"counter": 0,
-"life": null,
-"attr": "NULL",
-"traits": "Animal Kingdom Pirates",
-"text": "[Activate: Main] You may rest this Stage: If your Leader has the {Animal Kingdom Pirates} type, add up to 1 DON!! card from your DON!! deck and rest it."
-},
-"ST07-007": {
-"name": "Charlotte Brulee",
-"type": "Character",
-"colors": [
-"Yellow"
-],
-"cost": 3,
-"power": 1000,
-"counter": 1000,
-"life": null,
-"attr": "Special",
-"traits": "Big Mom Pirates",
-"text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.) [Trigger] Play this card."
 },
 "ST07-015": {
 "name": "Soul Pocus",
@@ -7771,6 +8221,20 @@
 "attr": "Slash",
 "traits": "FILM The Four Emperors Red-Haired Pirates",
 "text": "[On Play] K.O. up to 1 of your opponent's rested Characters."
+},
+"ST17-004": {
+"name": "Boa Hancock",
+"type": "Character",
+"colors": [
+"Blue"
+],
+"cost": 4,
+"power": 6000,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "Kuja Pirates The Seven Warlords of the Sea",
+"text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n\n[On Play] Look at 3 cards from the top of your deck and place them at the top or bottom of your deck in any order. Then, give up to 1 rested DON!! card to 1 of your \"The Seven Warlords of the Sea\" type Leader or Character cards."
 },
 "ST18-001": {
 "name": "Uso-Hachi",
@@ -7954,6 +8418,48 @@
 "traits": "Cross Guild",
 "text": "If you have 2 or more Characters with a base cost of 5 or more, this Character gains [Blocker] and +1 cost.\n(After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n[On K.O.] If your Leader is [Buggy] and you have 3 or less cards in your hand, draw 1 card."
 },
+"ST27-003": {
+"name": "Kuzan",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 6,
+"power": 6000,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Blackbeard Pirates Former Navy",
+"text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n[On K.O.] Play up to 1 \"Blackbeard Pirates\" type Character card with a cost of 5 or less from your trash rested."
+},
+"ST27-005": {
+"name": "Marshall.D.Teach",
+"type": "Character",
+"colors": [
+"Black"
+],
+"cost": 7,
+"power": 8000,
+"counter": 0,
+"life": null,
+"attr": "Special",
+"traits": "Blackbeard Pirates The Four Emperors",
+"text": "[Activate:Main] You may rest this Character: K.O. up to 1 Character with a cost of 3 or less.\n[On K.O.] Add up to 1 black card from your trash to your hand."
+},
+"ST29-015": {
+"name": "Raw Heat Strike",
+"type": "Event",
+"colors": [
+"Yellow"
+],
+"cost": 1,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "Straw Hat Crew Egghead",
+"text": "[Counter] Up to 1 of your Leader or Character cards gains +2000 power during this battle. Then, if you have 1 or less Life cards, give up to 1 of your opponent's Leader or Character cards -2000 power during this turn."
+},
 "ST30-001": {
 "name": "Luffy & Ace",
 "type": "Leader",
@@ -8094,6 +8600,20 @@
 "attr": "Slash",
 "traits": "Land of Wano Kouzuki Clan",
 "text": "[On Play] Draw 1 card and up to 1 of your opponent's Characters with a base cost of 6 or less cannot be rested until the end of your opponent's next End Phase."
+},
+"ST32-005": {
+"name": "Roronoa Zoro",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": 2000,
+"counter": 2000,
+"life": null,
+"attr": "Slash",
+"traits": "Straw Hat Crew Supernovas",
+"text": "[Rush: Character] (This card can attack Characters on the turn in which it is played.)[On Play] If your Leader has the attribute, rest up to 1 of your opponent's Characters with a cost of 2 or less."
 },
 "ST33-004": {
 "name": "Borsalino",
