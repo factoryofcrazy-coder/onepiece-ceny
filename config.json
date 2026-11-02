@@ -21,7 +21,7 @@
     "shipping: cena je doprava na SK v EUR; cost null = cenu ukáže až košík obchodu (doplň ručne), free_from = doprava zdarma od (EUR).",
     "default_shipping: odhad dopravy (EUR) pre obchody, kde cena dopravy nie je známa – používa sa pri porovnaní s inými obchodmi.",
     "shipping_compare_min: dopravu pripočítaj pri porovnaní s inými obchodmi len pri produktoch od tejto ceny (packy sa porovnávajú bez dopravy). Packy nikdy nedostanú @here.",
-    "import_vat / import_fee: obchod mimo EÚ – k cene sa pripočíta doprava (cost, odhad), 23 % DPH z tovaru aj dopravy a poplatok kuriéra za preclenie (import_fee). Clo na zberateľské karty je 0 %.",
+    "import_vat / import_fee: obchod mimo EÚ – k cene sa pripočíta doprava (cost, odhad), 23 % DPH z tovaru aj dopravy a poplatok kuriéra za preclenie (import_fee). Clo: do 150 € tovaru paušál 3 € (od 1. 7. 2026), nad 150 € 2,7 %; FedEx účtuje za vyclenie 2,5 % (min. 15 €) + DPH → import_fee ≈ 22 €.",
     "preorders: každá nová predobjednávka (všetky sealed typy, vo všetkých sledovaných obchodoch) príde samostatnou správou; mention_preorders: @here pri predobjednávke boxu/casu. Produkt z nevydanej edície, ktorý sa dá objednať, sa berie ako predobjednávka.",
     "exclude_shops: obchody, z ktorých nechodia upozornenia na Discord (len na stránke). Dovoz z Japonska (Samurai Sword Tokyo) sa na Discord neposiela nikdy.",
     "pokemon: nastavenia pre Pokémon (python onepiece_ceny.py --game pokemon). alerts sa pridávajú k spoločným, watchlist a digest sú vlastné. Upozornenia idú len keď je nastavený DISCORD_WEBHOOK_URL_POKEMON (GitHub Secrets) alebo discord_webhook_pokemon.txt."
@@ -185,12 +185,27 @@
       "free_from": null
     },
     "samurai": {
-      "method": "FedEx z Japonska 9000 ¥ + 23 % DPH a preclenie",
-      "cost": 9000,
+      "method": "FedEx z Japonska (~7 800 ¥ za 1 box) + 23 % DPH, clo 3 € a poplatok FedEx 18,45 € – pri 3 boxoch ≈ 95 €/box, pri 6 ≈ 83 €/box",
+      "cost": 7800,
       "free_from": null,
       "import_vat": 0.23,
-      "import_fee": 10,
+      "import_fee": 22,
       "cost_currency": "JPY"
+    },
+    "crispycards": {
+      "method": "do SK (cena v košíku)",
+      "cost": null,
+      "free_from": null
+    },
+    "underpaid": {
+      "method": "DHL Paket EU",
+      "cost": 12.99,
+      "free_from": null
+    },
+    "cardbinder": {
+      "method": "do SK z Holandska (cena v košíku)",
+      "cost": null,
+      "free_from": null
     }
   },
   "pokemon": {

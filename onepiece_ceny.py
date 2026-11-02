@@ -32,7 +32,7 @@ from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2026-10-20a"
+VERSION = "2026-11-02a"
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
 DATA_REL = "data"                       # Pokémon: data/pokemon
@@ -125,6 +125,14 @@ SHOPS = {
                    "urls": ["https://samuraiswordtokyo.com/wp-json/wc/store/v1/products?search=one%20piece%20booster%20box"]},
     "yonko":      {"label": "Yonko TCG (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
                    "urls": ["https://yonko-tcg.de/collections/one-piece"]},
+    # Ďalšie EÚ obchody s japonskými boxmi (Shopify, posielajú na SK – bez cla a DPH navyše)
+    "crispycards": {"label": "CrispyCards (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
+                    "urls": ["https://crispycards.de/collections/one-piece"]},
+    "underpaid":  {"label": "Underpaid Collectibles (DE)", "parser": "shopify", "currency": "EUR", "delay": 2,
+                   "urls": ["https://underpaidcollectibles.com/collections/one-piece-sammelkarten"]},
+    # Card-Binder: názvy produktov bez „One Piece“ (kolekcia je len One Piece → all)
+    "cardbinder": {"label": "Card-Binder (NL)", "parser": "shopify", "currency": "EUR", "delay": 2, "all": True,
+                   "urls": ["https://card-binder.com/collections/one-piece-booster-boxes"]},
     # Rakúske obchody – posielajú len v rámci AT (objednať na rakúsku adresu / výdajné miesto pri BA, ButtiCards osobne vo Viedni)
     "funkelpappe": {"label": "Funkelpappe (AT)", "parser": "shopify", "currency": "EUR", "delay": 2,
                     "urls": ["https://funkelpappe.at/collections/one-piece"]},
@@ -164,7 +172,8 @@ SET_NAMES = {
     "carrying on his will": "OP13", "azure sea": "OP14", "kami's island": "OP15",
     "kami´s island": "OP15", "kamis island": "OP15", "time of battle": "OP16",
     "strongest warriors": "OP17", "dominance of god": "OP18",
-    "memorial collection": "EB01", "anime 25th": "EB02",
+    "memorial collection": "EB01", "anime 25th": "EB02", "25th collection": "EB02",
+    "the best volume 2": "PRB02", "the best volume 1": "PRB01",
     "heroines edition vol. 2": "EB05", "heroines edition vol.2": "EB05", "heroines edition 2": "EB05",
     "heroines edition": "EB03", "egghead crisis": "EB04",
     "the best vol. 2": "PRB02", "the best vol.2": "PRB02", "the best 2": "PRB02", "the best": "PRB01",
