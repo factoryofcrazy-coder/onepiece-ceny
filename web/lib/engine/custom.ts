@@ -1,7 +1,7 @@
 // Efekty, ktoré sa nedajú pekne poskladať z DSL kociek. Každý handler sa správa ako krok:
 // vráti true (hotovo) alebo false (čaká na odpoveď hráča – nastaví prompt a f.sub).
 import type { EffectCtx, Frame } from "./engine";
-import { addMod, cost, def, draw, fieldOf, hasKw, info, other, pl, power } from "./engine";
+import { addMod, candidates, cost, def, draw, fieldOf, hasKw, info, moveTo, other, pl, power, startAbility } from "./engine";
 import type { GameState } from "./types";
 
 type Handler = { run: (s: GameState, f: Frame, arg?: any) => boolean; canPay?: (s: GameState, c: EffectCtx, arg?: any) => boolean };
@@ -9,6 +9,68 @@ type Handler = { run: (s: GameState, f: Frame, arg?: any) => boolean; canPay?: (
 const activeField = (s: GameState, p: 0 | 1) => fieldOf(s, p).filter((i) => !s.cards[i].rested);
 
 export const CUSTOM: Record<string, Handler> = {
+  // „Activate the [Main] effect of up to 1 Event … from your hand/trash“ (OP12-041 Sanji, EB03-031 Reiju)
+  useEvent: {
+    run(s, f, arg) {
+      const p = f.controller;
+      const x = pl(s, p);
+      if (f.sub?.done) {
+        const iid = f.sub.pick?.[0];
+        f.sub = undefined;
+        if (!iid) return true;
+        const k = def(s, iid).abilities.findIndex((a) => a.when === "main");
+        if (k < 0) return true;
+        x.hand = x.hand.filter((i) => i !== iid);
+        x.trash = x.trash.filter((i) => i !== iid);
+        info(s, `${def(s, f.source).name}: aktivuje [Main] eventu ${def(s, iid).name}.`);
+        startAbility(s, iid, p, k, "mainEvent");
+        return true;
+      }
+      const opts = candidates(s, { ...(arg?.f ?? {}), zone: arg?.zone ?? "hand", type: "Event" }, { src: f.source, p, vars: f.vars } as any).filter((i) =>
+        def(s, i).abilities.some((a) => a.when === "main"),
+      );
+      if (!opts.length) return true;
+      s.prompt = { kind: "choose", p, label: `Ktorého eventu [Main] aktivuješ? (${arg?.zone === "trash" ? "z trashu" : "z ruky"})`, options: opts, min: 0, max: 1, zone: arg?.zone ?? "hand" };
+      f.sub = { awaiting: true };
+      return false;
+    },
+  },
+
+  // OP11-101 Bege: postava, ktorú by súper odstránil, ide namiesto toho navrch Life lícom dole
+  saveToLife: {
+    run(s, f) {
+      if (f.parentSave) {
+        moveTo(s, f.parentSave, "lifeTop", false);
+        info(s, `${def(s, f.parentSave).name} ide namiesto odstránenia navrch Life.`);
+      }
+      return true;
+    },
+  },
+
+  // ST36-005 Kid: útok sa presunie na túto postavu (ak má base power ≥ 5000)
+  redirectToSelf: {
+    run(s, f) {
+      if (!s.battle || s.battle.target === f.source) return true;
+      if (def(s, f.source).power < 5000) return true;
+      s.battle.target = f.source;
+      info(s, `Útok sa presúva na ${def(s, f.source).name}.`);
+      return true;
+    },
+  },
+
+  // P-046 Yamato: celú ruku pod balíček, potom potiahni toľko kariet
+  handToBottomRedraw: {
+    run(s, f) {
+      const x = pl(s, f.controller);
+      const n = x.hand.length;
+      x.deck.push(...x.hand);
+      x.hand = [];
+      draw(s, f.controller, n);
+      info(s, `Vrátil ${n} kariet pod balíček a potiahol ${n}.`);
+      return true;
+    },
+  },
+
   // OP13-001 Luffy: daj do rest ľubovoľný počet DON!!, za každý +2000 leaderovi alebo 1 postave Straw Hat Crew
   restAnyDonForPower: {
     run(s, f, arg) {

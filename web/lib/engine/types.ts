@@ -206,7 +206,7 @@ export type CardFlag =
   | "battleSaveDiscard" // ak by bola K.O. v súboji, môžeš namiesto toho vyhodiť 1 kartu z ruky
   | "marked"; // pomocná značka pre efekty (napr. Krieg)
 
-export type PlayerFlag = "noPlayChars" | "noPlayChars5" | "noDrawByEffect" | "noActiveDonByCharEffect" | "lawDiscount2" | "restDonAtMainStart";
+export type PlayerFlag = "noPlayChars" | "noPlayChars5" | "noDrawByEffect" | "noActiveDonByCharEffect" | "lawDiscount2" | "restDonAtMainStart" | "noOnPlay";
 
 export type CardDef = {
   code: string;
