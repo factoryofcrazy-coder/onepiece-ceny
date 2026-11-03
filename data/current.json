@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-03T19:14:56Z",
+ "updated": "2026-11-03T19:23:05Z",
  "fx": {
   "CZK": 24.343,
   "USD": 1.1179,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-11-03T17:23:07Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -553,7 +553,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-11-03T17:23:07Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -598,7 +598,7 @@
      "price": 185.0,
      "currency": "EUR",
      "eur": 185.0,
-     "inStock": true,
+     "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.pikazard.eu/user/shop/related/3996-2_op15-2.png?6a56546f"
     },
     {
@@ -640,7 +640,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -1869,7 +1869,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -2235,7 +2235,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -2624,7 +2624,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -2847,7 +2847,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -2997,7 +2997,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-11-03T17:23:07Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3570,7 +3570,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3716,7 +3716,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-11-03T17:23:07Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3740,7 +3740,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3787,20 +3787,11 @@
      "eur": 41.99,
      "inStock": false,
      "img": "https://cdn.xzone.sk/p/starter-decky/karetni-hra-one-piece-tcg-premium-card-collection-best-selection-vol6/karetni-hra-one-piece-tcg-premium-card-collection-best-selection-vol6-booklet-12-premiovych-karet-150w.png"
-    },
-    {
-     "name": "Kartová hra One Piece TCG -The World's Strongest Warriors Booster Box (24 boosterov)",
-     "url": "https://www.xzone.sk/karetni-hra-one-piece-tcg-the-worlds-strongest-warriors-booster-box-24-boosteru",
-     "price": 162.9,
-     "currency": "EUR",
-     "eur": 162.9,
-     "inStock": false,
-     "img": "https://cdn.xzone.sk/p/one-piece-tcg/karetni-hra-one-piece-tcg-the-worlds-strongest-warriors-booster-box/karetni-hra-one-piece-tcg-the-worlds-strongest-warriors-booster-box-24-boosteru-150w.png"
     }
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3851,7 +3842,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-11-03T17:23:07Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3985,7 +3976,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-11-03T17:23:07Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -4288,7 +4279,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -4807,7 +4798,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -5417,7 +5408,7 @@
   },
   "funkelpappe": {
    "ts": "2026-11-03T19:14:56Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece TCG OP-17 The World's Strongest Warriors Booster Display – Japanisch",
@@ -5491,10 +5482,13 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/1050/1786/8620/files/OP-OP13COHW-BD-JPN.png?v=1782678633"
     }
-   ]
+   ],
+   "error": "HTTP Error 429: Too Many Requests",
+   "fails": 1,
+   "warned": false
   },
   "mikis": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -5644,7 +5638,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -5823,7 +5817,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-11-03T17:23:07Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -5901,7 +5895,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-11-03T17:23:07Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -6105,7 +6099,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -6417,7 +6411,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -6846,7 +6840,7 @@
    ]
   },
   "crispycards": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -8518,7 +8512,7 @@
    ]
   },
   "underpaid": {
-   "ts": "2026-11-03T19:14:56Z",
+   "ts": "2026-11-03T19:23:05Z",
    "ok": true,
    "items": [
     {
@@ -9317,7 +9311,7 @@
   },
   "cardbinder": {
    "ts": "2026-11-03T19:14:56Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "The Best Volume 2 Japanese Booster Box",
@@ -9814,7 +9808,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-PRB01-The-Best-Volume-one-Booster-Box-English.webp?v=1759844795"
     }
-   ]
+   ],
+   "error": "HTTP Error 429: Too Many Requests",
+   "fails": 1,
+   "warned": false
   }
  }
 }
