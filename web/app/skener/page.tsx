@@ -106,6 +106,18 @@ export default function ScannerPage() {
   const [added, setAdded] = useState(false);
   const [engine, setEngine] = useState("");
   const [mode, setMode] = useState<"scan" | "review">("scan");
+  // jazyk skenovaných kariet – model EN/JP nerozlíši (rovnaká kresba), preto prepínač; pamätá sa
+  const [lang, setLangState] = useState<"EN" | "JP">("EN");
+  const langRef = useRef<"EN" | "JP">("EN");
+  useEffect(() => {
+    const l = localStorage.getItem("op-scan-lang");
+    if (l === "JP" || l === "EN") (setLangState(l), (langRef.current = l));
+  }, []);
+  const setLang = (l: "EN" | "JP") => {
+    setLangState(l);
+    langRef.current = l;
+    localStorage.setItem("op-scan-lang", l);
+  };
   const [cam, setCam] = useState<{ torch: boolean; zoom: { min: number; max: number } | null }>({ torch: false, zoom: null });
   const [torchOn, setTorchOn] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -143,7 +155,7 @@ export default function ScannerPage() {
       ].filter((x, i, a) => x !== id && a.indexOf(x) === i);
       const key = Date.now();
       const unsure = avg < T_SURE || (top[1] && top[0].score - top[1].score < 0.04);
-      setList((l) => [{ key, id, score: avg, alts, ok: false, unsure: !!unsure }, ...l]);
+      setList((l) => [{ key, id, score: avg, alts, ok: false, unsure: !!unsure, lang: langRef.current }, ...l]);
       // záber z kamery (výrez rámika) na neskoršiu kontrolu
       lastCanvas.current
         ?.convertToBlob({ type: "image/jpeg", quality: 0.8 })
@@ -208,8 +220,18 @@ export default function ScannerPage() {
     // video je object-fit: cover → prepočet z obrazovky do pixelov videa
     const s = Math.max(vr.width / v.videoWidth, vr.height / v.videoHeight);
     const ox = (vr.width - v.videoWidth * s) / 2, oy = (vr.height - v.videoHeight * s) / 2;
-    const sx = (fr.left - vr.left - ox) / s, sy = (fr.top - vr.top - oy) / s;
-    const sw = fr.width / s, sh = fr.height / s;
+    let sx = (fr.left - vr.left - ox) / s, sy = (fr.top - vr.top - oy) / s;
+    let sw = fr.width / s, sh = fr.height / s;
+    // výrez vždy v pomere karty (63 : 88) – inak by sa karta pre model natiahla
+    if (sw / sh > CARD_RATIO) {
+      const w2 = sh * CARD_RATIO;
+      sx += (sw - w2) / 2;
+      sw = w2;
+    } else {
+      const h2 = sw / CARD_RATIO;
+      sy += (sh - h2) / 2;
+      sh = h2;
+    }
     const cv = new OffscreenCanvas(IW, IH);
     const ctx = cv.getContext("2d", { willReadFrequently: true })!;
     ctx.drawImage(v, sx, sy, sw, sh, 0, 0, IW, IH);
@@ -657,6 +679,13 @@ export default function ScannerPage() {
               <span className="scan-pill">
                 {count} {plural(count)} · <b>{eur(total)}</b>
               </span>
+              <span className="scan-lang" role="radiogroup" aria-label="Jazyk kariet">
+                {(["EN", "JP"] as const).map((l) => (
+                  <button key={l} role="radio" aria-checked={lang === l} className={lang === l ? "on" : ""} onClick={() => setLang(l)}>
+                    {l}
+                  </button>
+                ))}
+              </span>
               <button className="scan-done" onClick={finish} disabled={!list.length}>
                 Hotovo
               </button>
@@ -672,7 +701,7 @@ export default function ScannerPage() {
                       {lastCard.v ? ` · ${lastCard.v}` : ""}
                     </span>
                   </div>
-                  <b className="scan-toast-price">{eur(price(lastCard.id))}</b>
+                  <b className="scan-toast-price">{eur(price(lastCard.id, last.lang ?? "EN"))}</b>
                 </div>
               ) : curCard && !sure ? (
                 <div className="scan-toast">

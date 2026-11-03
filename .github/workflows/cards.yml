@@ -32,7 +32,17 @@ jobs:
         with:
           node-version: 22
       - run: npm ci --no-audit --no-fund
+      - name: Odložiť včerajšiu databázu (na report zbierky)
+        run: cp ../docs/data/cards.json /tmp/cards-old.json || true
       - run: npm run build:cards
+      - name: Report zbierky na Discord
+        if: ${{ github.event_name != 'push' }}
+        continue-on-error: true
+        env:
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          REPORT_USERS: hobo
+        run: python3 ../tools/collection_report.py --old /tmp/cards-old.json --new ../docs/data/cards.json
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"

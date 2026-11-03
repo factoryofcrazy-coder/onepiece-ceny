@@ -45,6 +45,18 @@ function toTensor(rgba) {
 }
 
 function search(z, k) {
+  // index môže mať pre jednu kartu viac záznamov (obrázok OPTCG + oficiálny Bandai) → zlúčiť podľa ID
+  const raw = searchRaw(z, k * 3), seen = new Set(), out = [];
+  for (const h of raw) {
+    if (seen.has(h.id)) continue;
+    seen.add(h.id);
+    out.push(h);
+    if (out.length === k) break;
+  }
+  return out;
+}
+
+function searchRaw(z, k) {
   // kosínus voči int8 indexu (index aj z sú normalizované; int8 škála 127)
   const best = []; // [score, i] zoradené zostupne, dĺžka k
   for (let i = 0, o = 0; i < n; i++, o += dim) {

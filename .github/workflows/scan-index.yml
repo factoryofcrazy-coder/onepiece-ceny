@@ -1,0 +1,40 @@
+name: Index skenera kariet
+
+# Doplní nové karty do indexu skenera (web/public/scan/op-index.*) – po novom sete ich skener hneď pozná.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 5 * * 1"   # pondelok ráno (databáza kariet sa obnovuje denne o 3:41)
+  push:
+    branches: [main]
+    paths:
+      - "tools/scan_index.py"
+      - ".github/workflows/scan-index.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch
+  cancel-in-progress: false
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet onnxruntime opencv-python-headless numpy
+      - run: python3 tools/scan_index.py --max 600 --no-official   # oficiálne obrázky Bandai až po vyhodnotení
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/public/scan/op-index.bin web/public/scan/op-index.json
+          git diff --cached --quiet && exit 0
+          git commit -m "index skenera: nové karty $(date -u +'%Y-%m-%d')"
+          for i in 1 2 3; do git pull --rebase -X theirs -q && git push && exit 0; sleep 5; done
+          exit 1
