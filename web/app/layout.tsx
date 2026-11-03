@@ -6,12 +6,16 @@ import { cookies } from "next/headers";
 import { TcgProvider } from "@/lib/tcg";
 import { parseTcg, TCG_COOKIE } from "@/lib/tcg-shared";
 import Footer from "@/components/Footer";
+import TabBar from "@/components/TabBar";
 
 export const metadata: Metadata = {
   title: "Grand Line Tracker",
   description: "One Piece a Pokémon TCG – ceny v SK/CZ obchodoch, kolekcia, master sety a deckbuilder",
+  applicationName: "Grand Line Tracker",
+  // iPhone: „Pridať na plochu“ → appka cez celú obrazovku
+  appleWebApp: { capable: true, title: "Grand Line", statusBarStyle: "black-translucent" },
 };
-export const viewport: Viewport = { themeColor: "#06121f", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#06121f", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const tcg = parseTcg((await cookies()).get(TCG_COOKIE)?.value);
@@ -31,6 +35,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Nav />
             <main className="wrap">{children}</main>
             <Footer />
+            <TabBar />
           </AuthProvider>
         </TcgProvider>
       </body>

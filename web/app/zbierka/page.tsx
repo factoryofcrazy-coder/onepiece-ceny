@@ -3,10 +3,10 @@ import PkCollection from "@/components/pk/PkCollection";
 import { useTcg } from "@/lib/tcg";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
+import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OtherGameHint, OwnerPicker } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { Card, eur, setKind, useCards, usePrices } from "@/lib/data";
+import { Card, eur, setKind, useCards, usePrices, cardEur } from "@/lib/data";
 
 type Item = { card: Card; n: number; unit: number | null; total: number };
 
@@ -32,7 +32,7 @@ function OpCollection() {
       if (!(n > 0)) continue;
       const card = data.byId.get(id);
       if (!card) continue;
-      const unit = card.usd != null ? card.usd / usd : null;
+      const unit = cardEur(card, usd);
       out.push({ card, n, unit, total: (unit ?? 0) * n });
     }
     return out;
@@ -93,9 +93,15 @@ function OpCollection() {
             <small>€</small>
           </div>
           <p className="muted">
-            {stats.pieces} kusov, {items.length} rôznych kariet zo {stats.sets.length} setov. Ceny z TCGplayer, prepočítané na eurá
+            {stats.pieces} kusov, {items.length} rôznych kariet zo {stats.sets.length} setov. Ceny: Cardmarket trend, kde chýba,
+            TCGplayer prepočítaný na eurá
             {stats.unpriced > 0 && <>; {stats.unpriced} kariet zatiaľ nemá cenu</>}.
           </p>
+          {mine && (
+            <p className="tiny muted">
+              Prihlásený ako <b>{user.email}</b>
+            </p>
+          )}
           <div className="row gap wrapr vault-actions">
             <OwnerPicker value={viewing} onChange={setOwner} />
             {mine && (
@@ -129,8 +135,9 @@ function OpCollection() {
         <div className="empty">
           {mine ? (
             <>
-              Zbierka je zatiaľ prázdna. Pridaj karty v <Link href="/karty">Kartách</Link> alebo ich{" "}
-              <Link href="/import">naimportuj z HoloDex</Link>.
+              Zbierka je zatiaľ prázdna. Pridaj karty v <Link href="/karty">Kartách</Link>, naskenuj ich{" "}
+              <Link href="/skener">Skenerom</Link> alebo ich <Link href="/import">naimportuj z HoloDex</Link>.
+              <OtherGameHint qty={qty} game="onepiece" />
             </>
           ) : (
             "Tento kamoš zatiaľ nemá v zbierke žiadne karty."

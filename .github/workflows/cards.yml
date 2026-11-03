@@ -1,0 +1,44 @@
+name: Databáza kariet
+
+# docs/data/cards.json → /api/cards ho číta z GitHub Pages (rýchlo) namiesto zostavovania naživo (~10 s)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "web/lib/cards-build.ts"
+      - "web/scripts/build-cards.ts"
+      - ".github/workflows/cards.yml"
+  schedule:
+    - cron: "41 3 * * *"   # denne
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch            # rovnaká skupina ako Fetch cien – nebijú sa o push
+  cancel-in-progress: false
+
+jobs:
+  cards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build:cards
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ../docs/data/cards.json
+          git diff --cached --quiet && exit 0
+          git commit -m "databáza kariet $(date -u +'%Y-%m-%d')"
+          for i in 1 2 3; do git pull --rebase -X theirs -q && git push && exit 0; sleep 5; done
+          exit 1

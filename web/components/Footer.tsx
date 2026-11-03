@@ -12,7 +12,7 @@ export default function Footer() {
         </>
       ) : (
         <>
-          Ceny zo SK, CZ, DE, AT a JP obchodov. Karty a ich ceny z optcgapi.com (TCGplayer). Neoficiálna stránka, nie
+          Ceny zo SK, CZ, DE, AT a JP obchodov. Karty z optcgapi.com, ceny kariet z Cardmarketu (inak TCGplayer). Neoficiálna stránka, nie
           je spojená s Bandai.
         </>
       )}

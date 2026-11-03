@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { CardImg, CardModal, ColorDots, DataError, Loading, NeedLogin } from "@/components/ui";
 import { loadProfiles, useAuth } from "@/lib/auth";
 import { ownedByCode, useCollection } from "@/lib/collection";
-import { Card, COLOR_SK, COLORS, eur, TYPE_SK, useCards, usePrices } from "@/lib/data";
+import { Card, COLOR_SK, COLORS, eur, TYPE_SK, useCards, usePrices, cardEur } from "@/lib/data";
 import { sb } from "@/lib/supabase";
 import type { Deck } from "../page";
 
@@ -119,8 +119,8 @@ export default function DeckEditor() {
     .map((e) => ({ ...e, miss: Math.max(0, e.n - (owned[e.code] ?? 0)) }))
     .filter((e) => e.miss > 0);
   if (leader && !(owned[leader.code] > 0)) missing.unshift({ code: leader.code, n: 1, c: leader, miss: 1 });
-  const missCost = missing.reduce((s, e) => s + e.miss * ((e.c?.usd ?? 0) / usd), 0);
-  const deckCost = entries.reduce((s, e) => s + e.n * ((e.c?.usd ?? 0) / usd), 0) + (leader?.usd ?? 0) / usd;
+  const missCost = missing.reduce((s, e) => s + e.miss * (cardEur(e.c, usd) ?? 0), 0);
+  const deckCost = entries.reduce((s, e) => s + e.n * (cardEur(e.c, usd) ?? 0), 0) + (cardEur(leader, usd) ?? 0);
 
   // ---------- krivka
   const curve = Array.from({ length: 11 }, (_, i) =>
@@ -314,7 +314,7 @@ export default function DeckEditor() {
                   {missing.map((e) => (
                     <li key={e.code}>
                       {e.miss}× {e.c?.name ?? e.code} <span className="muted">{e.code}</span>{" "}
-                      {e.c?.usd != null && <span className="muted">· {eur(e.c.usd / usd)}/ks</span>}
+                      {cardEur(e.c, usd) != null && <span className="muted">· {eur(cardEur(e.c, usd))}/ks</span>}
                     </li>
                   ))}
                 </ul>

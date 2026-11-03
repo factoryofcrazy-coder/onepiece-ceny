@@ -1,186 +1,39 @@
-// Databáza kariet z OPTCG API (zadarmo, bez kľúča). Vercel CDN odpoveď drží 24 h.
+// Databáza kariet. Najprv hotový súbor z GitHub Pages (docs/data/cards.json, generuje ho denne GitHub Action –
+// rýchle), inak zostavenie naživo z OPTCG API (pomalé, ~10 s). Vercel CDN odpoveď drží 24 h.
+import { OLD_SITE } from "@/lib/config";
+import { buildCards } from "@/lib/cards-build";
+
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const API = "https://optcgapi.com/api/";
-const SOURCES = ["allSetCards/", "allSTCards/"];
+const MAX_AGE_H = 72; // starší súbor z Pages → radšej zostav naživo
 
-type Raw = Record<string, any>;
-
-const num = (v: any) => {
-  if (v === null || v === undefined || v === "" || v === "-" || v === "NULL") return null;
-  const n = parseInt(String(v).replace(/,/g, ""), 10);
-  return isNaN(n) ? null : n;
-};
-const money = (v: any) => {
-  const n = parseFloat(v);
-  return isNaN(n) || n <= 0 ? null : Math.round(n * 100) / 100; // 0 = cena neznáma
-};
-const str = (v: any) => (typeof v === "string" ? v.trim() : v == null ? "" : String(v));
-
-function splitName(raw: string) {
-  // "Roronoa Zoro (001)" -> ["Roronoa Zoro", ""]; "Kouzuki Oden (Alternate Art)" -> ["Kouzuki Oden", "Alternate Art"]
-  const labels: string[] = [];
-  const name = raw
-    .replace(/\s*\(([^()]*)\)/g, (_, inner: string) => {
-      const t = inner.trim();
-      if (!/^\d{1,3}$/.test(t) && !/^[A-Z]{1,4}\d{0,2}-\d{3}$/.test(t)) labels.push(t);
-      return "";
-    })
-    .replace(/\s*\[([^\[\]]*)\]/g, (_, inner: string) => (labels.push(inner.trim()), "")) // promo: [Winner], [Finalist]
-    .replace(/\s+-\s+[A-Z]{1,4}\d{0,2}-\d{3}$/, "") // "Jinbe - EB04-015" → "Jinbe"
-    .replace(/\s+/g, " ")
-    .trim();
-  return [name || raw.trim(), labels.join(" · ")];
-}
-
-// OPTCG API spája niektoré sety ("OP14-EB04") → rozdelí sa podľa kódu karty: OP14-001 → OP-14, EB04-001 → EB-04
-function setOf(rawSet: string, code: string, rawName: string): [string, string] {
-  if (!/^OP\d+-EB\d+$/.test(rawSet)) return [rawSet, rawName];
-  const m = code.match(/^(OP|EB)(\d+)-/);
-  if (!m) return [rawSet.replace(/^OP(\d+)-.*$/, "OP-$1"), rawName]; // reprinty (ST/P…) → hlavný OP set
-  const id = `${m[1]}-${m[2]}`;
-  return [id, m[1] === "EB" ? `Extra Booster ${id}` : rawName];
-}
-
-function normalize(c: Raw) {
-  const id = str(c.card_image_id) || str(c.card_set_id);
-  if (!id) return null;
-  const code = str(c.card_set_id) || id.split("_")[0];
-  const [name, label] = splitName(str(c.card_name));
-  const variant = id !== code;
-  const [set, setName] = setOf(str(c.set_id), code, str(c.set_name));
-  return {
-    id,
-    code,
-    name,
-    v: variant ? label || "Parallel" : "",
-    set,
-    setName,
-    rarity: str(c.rarity),
-    type: str(c.card_type),
-    colors: str(c.card_color).split(/[\s/,]+/).filter(Boolean),
-    cost: num(c.card_cost),
-    power: num(c.card_power),
-    counter: num(c.counter_amount),
-    life: num(c.life),
-    attr: str(c.attribute),
-    traits: str(c.sub_types),
-    text: str(c.card_text),
-    img: str(c.card_image),
-    usd: money(c.market_price),
-  };
-}
-
-async function get(path: string): Promise<Raw[]> {
-  for (let i = 0; i < 2; i++) {
-    try {
-      const r = await fetch(API + path, {
-        headers: { Accept: "application/json", "User-Agent": "grand-line-tracker/1.0" },
-        cache: "no-store",
-        signal: AbortSignal.timeout(25000),
-      });
-      if (r.ok) {
-        const d = await r.json();
-        if (Array.isArray(d)) return d;
-      }
-    } catch {}
+async function fromPages(anyAge = false) {
+  try {
+    const r = await fetch(OLD_SITE + "data/cards.json", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!r.ok) return null;
+    const d = await r.json();
+    const age = (Date.now() - new Date(d.updated).getTime()) / 3.6e6;
+    return Array.isArray(d.cards) && d.cards.length > 300 && (anyAge || age < MAX_AGE_H) ? d : null;
+  } catch {
+    return null;
   }
-  return [];
-}
-
-// Promo karty: hromadný zoznam (allPromoCards) na OPTCG API občas padá → záloha karta po karte (P-001, P-002…).
-async function getPromos(): Promise<Raw[]> {
-  const all = await get("allPromoCards/");
-  if (all.length > 50) return all;
-  const out: Raw[] = [];
-  const one = async (n: number) => {
-    try {
-      const r = await fetch(`${API}promos/card/P-${String(n).padStart(3, "0")}/`, {
-        headers: { Accept: "application/json", "User-Agent": "grand-line-tracker/1.0" },
-        cache: "no-store",
-        signal: AbortSignal.timeout(9000),
-      });
-      if (!r.ok) return [];
-      const d = await r.json();
-      return Array.isArray(d) ? (d as Raw[]) : [];
-    } catch {
-      return [];
-    }
-  };
-  for (let start = 1; start <= 400; start += 25) {
-    const batch = await Promise.all(Array.from({ length: 25 }, (_, i) => one(start + i)));
-    const found = batch.flat();
-    out.push(...found);
-    if (!found.length) break; // celá dávka prázdna → koniec promo čísel
-  }
-  return out;
-}
-
-// DON!! karty majú vlastný zoznam a iné polia (don_id, optcg_don_name) → vlastný set „DON“.
-function normalizeDon(c: Raw) {
-  const n = parseInt(String(c.don_id ?? str(c.card_image_id).replace(/\D/g, "")), 10);
-  if (!n) return null;
-  const id = `DON-${String(n).padStart(3, "0")}`;
-  const raw = str(c.card_name) || str(c.optcg_don_name) || "DON!! Card";
-  const theme = raw.replace(/^DON!!\s*Card\s*/i, "").replace(/^\/\/\s*/, "").replace(/^\((.*)\)$/, "$1").trim();
-  return {
-    id,
-    code: id,
-    name: theme ? `DON!! ${theme}` : "DON!!",
-    v: "",
-    set: "DON",
-    setName: "DON!! karty",
-    rarity: str(c.rarity),
-    type: "DON",
-    colors: [] as string[],
-    cost: null,
-    power: null,
-    counter: null,
-    life: null,
-    attr: "",
-    traits: [str(c.set_id), str(c.set_name)].filter(Boolean).join(" "), // z akého produktu je
-    text: str(c.card_text),
-    img: str(c.card_image),
-    usd: money(c.market_price),
-  };
 }
 
 export async function GET() {
-  const [setCards, stCards, promos, dons] = await Promise.all([...SOURCES.map(get), getPromos(), get("allDonCards/")]);
-  const lists = [setCards, stCards, promos];
-  const cards = new Map<string, ReturnType<typeof normalize>>();
-  const sets = new Map<string, string>();
-  for (const list of lists)
-    for (const raw of list) {
-      const c = normalize(raw);
-      if (!c || cards.has(c.id)) continue;
-      cards.set(c.id, c);
-      if (c.set && !sets.has(c.set)) sets.set(c.set, c.setName || c.set);
-    }
-  for (const raw of dons) {
-    const d = normalizeDon(raw);
-    if (!d || cards.has(d.id)) continue;
-    cards.set(d.id, d as any);
-    if (!sets.has("DON")) sets.set("DON", "DON!! karty");
+  try {
+    // 1) čerstvý súbor z Pages, 2) zostavenie naživo, 3) OPTCG API nejde → aj starší súbor z Pages
+    const data =
+      (await fromPages()) ??
+      (await buildCards().catch(async (e) => {
+        const old = await fromPages(true);
+        if (old) return old;
+        throw e;
+      }));
+    return Response.json(data, {
+      headers: { "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=172800" },
+    });
+  } catch (e: any) {
+    return Response.json({ error: String(e?.message ?? e) }, { status: 502, headers: { "Cache-Control": "no-store" } });
   }
-  if (cards.size < 300)
-    return Response.json(
-      { error: `OPTCG API vrátilo len ${cards.size} kariet` },
-      { status: 502, headers: { "Cache-Control": "no-store" } },
-    );
-  const native = (c: any) => (c.code.replace(/-\d+$/, "").replace(/^([A-Z]+)(\d+)$/, "$1-$2") === c.set ? 0 : 1);
-  const out = [...cards.values()].sort(
-    (a: any, b: any) =>
-      a.set.localeCompare(b.set) || native(a) - native(b) || a.code.localeCompare(b.code) || a.id.localeCompare(b.id),
-  );
-  return Response.json(
-    {
-      updated: new Date().toISOString(),
-      source: "optcgapi.com",
-      sets: [...sets].map(([id, name]) => ({ id, name })),
-      cards: out,
-    },
-    { headers: { "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=172800" } },
-  );
 }

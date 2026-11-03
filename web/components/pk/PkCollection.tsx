@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Bar, CardImg, CountUp, Foil, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
+import { Bar, CardImg, CountUp, Foil, Loading, NeedLogin, OtherGameHint, OwnerPicker } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
 import { eur } from "@/lib/data";
@@ -124,6 +124,7 @@ export default function PkCollection() {
           {mine ? (
             <>
               Pokémon zbierka je zatiaľ prázdna. Pridaj karty v <Link href="/karty">Kartách</Link>.
+              <OtherGameHint qty={qty} game="pokemon" />
             </>
           ) : (
             "Tento kamoš zatiaľ nemá v zbierke žiadne Pokémon karty."
