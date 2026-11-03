@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CardImg, CardModal, ColorDots, DataError, Loading, NeedLogin } from "@/components/ui";
+import { CardImg, CardModal, ColorDots, DataError, Loading, NeedLogin, FilterBar } from "@/components/ui";
 import { loadProfiles, useAuth } from "@/lib/auth";
 import { ownedByCode, useCollection } from "@/lib/collection";
 import { Card, COLOR_SK, COLORS, eur, TYPE_SK, useCards, usePrices, cardEur } from "@/lib/data";
@@ -344,7 +344,7 @@ export default function DeckEditor() {
         </section>
 
         <section>
-          <div className="filters">
+          <FilterBar>
             <label className="field grow">
               <span>{leader ? "Hľadať kartu" : "Hľadať leadera"}</span>
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="meno, kód, typ, text…" />
@@ -388,7 +388,7 @@ export default function DeckEditor() {
                 </label>
               </>
             )}
-          </div>
+          </FilterBar>
           <p className="muted small">{poolSorted.length} kariet · klik = pridať, pravý klik / ⓘ = detail</p>
           <div className="cgrid small-cards">
             {poolSorted.slice(0, 240).map((c) => {

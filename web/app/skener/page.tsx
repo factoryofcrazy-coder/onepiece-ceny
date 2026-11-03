@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DataError, Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { Card, cardEur, eur, priceSource, useCards, usePrices } from "@/lib/data";
+import { Card, cardEur, eur, priceSource, thumb, useCards, usePrices } from "@/lib/data";
 import { useTcg } from "@/lib/tcg";
 
 // verzia súborov v /public/scan (zvýš pri novom modeli/indexe → obíde cache)
@@ -494,7 +494,7 @@ export default function ScannerPage() {
                         <figcaption>tvoj záber</figcaption>
                       </figure>
                       <figure>
-                        {c?.img && <img src={c.img} alt={c.name} />}
+                        {c?.img && <img src={thumb(c.img, 300)} alt={c.name} />}
                         <figcaption>nájdená</figcaption>
                       </figure>
                     </div>
@@ -555,7 +555,7 @@ export default function ScannerPage() {
                                 const ac = cards.byId.get(a);
                                 return (
                                   <button key={a} onClick={() => change(x.key, a)}>
-                                    {ac?.img && <img src={ac.img} alt="" loading="lazy" />}
+                                    {ac?.img && <img src={thumb(ac.img, 200)} alt="" loading="lazy" />}
                                     <span>{ac?.code === c?.code ? ac?.v || "Základná" : ac?.name}</span>
                                     <span className="muted">{eur(price(a))}</span>
                                   </button>
@@ -575,7 +575,7 @@ export default function ScannerPage() {
                           <div className="rv-pick">
                             {found.map((fc) => (
                               <button key={fc.id} onClick={() => change(x.key, fc.id)}>
-                                {fc.img && <img src={fc.img} alt="" loading="lazy" />}
+                                {fc.img && <img src={thumb(fc.img, 200)} alt="" loading="lazy" />}
                                 <span>
                                   {fc.name} {fc.v ? `· ${fc.v}` : ""}
                                 </span>
@@ -664,7 +664,7 @@ export default function ScannerPage() {
             <div className="scan-bottom">
               {fresh && lastCard ? (
                 <div className="scan-toast ok" key={last.key}>
-                  {lastCard.img && <img src={lastCard.img} alt="" />}
+                  {lastCard.img && <img src={thumb(lastCard.img, 120)} alt="" />}
                   <div>
                     <b>{lastCard.name}</b>
                     <span>
@@ -736,7 +736,7 @@ export default function ScannerPage() {
               const c = cards.byId.get(x.id);
               return (
                 <li key={x.key}>
-                  {c?.img && <img src={c.img} alt="" loading="lazy" />}
+                  {c?.img && <img src={thumb(c.img, 120)} alt="" loading="lazy" />}
                   <div className="grow">
                     <div className="row between gap">
                       <b>{c?.name ?? x.id}</b>

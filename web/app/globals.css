@@ -649,3 +649,86 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 }
 .other-game { margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; color: var(--text); }
 @media (max-width: 720px) { .scan-head { margin-top: 12px; } .scan-head h1 { font-size: 28px; } .scan-cam { margin-top: 10px; } }
+
+/* --- účet v hlavičke --- */
+.login-btn { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px 0 10px; border-radius: 999px; border: 1px solid var(--stroke-2); color: var(--text); font-weight: 700; font-size: 14px; background: var(--surface); transition: border-color .2s, background .2s; }
+.login-btn:hover { text-decoration: none; border-color: var(--gold); background: rgba(242, 184, 75, .08); }
+.login-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+@media (max-width: 720px) { .login-btn { width: 38px; padding: 0; justify-content: center; } .login-btn span { display: none; } }
+.acct { position: relative; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; font: 800 16px var(--display); color: var(--ink); background: linear-gradient(145deg, #8ee3e3, var(--foam)); box-shadow: 0 0 0 3px rgba(94, 200, 200, .18); transition: transform .2s var(--ease); }
+.avatar:hover { transform: scale(1.06); }
+.acct-scrim { position: fixed; inset: 0; z-index: 44; }
+.acct-menu { position: absolute; right: 0; top: calc(100% + 10px); z-index: 45; min-width: 220px; display: flex; flex-direction: column; padding: 6px; background: rgba(12, 34, 54, .98); border: 1px solid var(--stroke-2); border-radius: 16px; box-shadow: 0 20px 50px -12px rgba(0, 0, 0, .7); animation: pop .2s var(--ease) both; }
+.acct-who { display: flex; flex-direction: column; padding: 10px 12px 12px; border-bottom: 1px solid var(--stroke); margin-bottom: 4px; }
+.acct-menu a, .acct-menu button { text-align: left; padding: 11px 12px; border-radius: 10px; color: var(--text); font: 600 14px var(--body); background: none; border: 0; cursor: pointer; }
+.acct-menu a:hover, .acct-menu button:hover { background: rgba(94, 200, 200, .08); text-decoration: none; }
+.acct-menu button { color: var(--bad); }
+
+/* --- detail karty: cena hore, na mobile panel zdola --- */
+.mbox.cd { grid-template-columns: minmax(0, 300px) 1fr; grid-template-areas: "art head" "art price" "art rest"; grid-template-rows: auto auto 1fr; gap: 0 28px; padding: 26px; max-width: 860px; }
+.cd-art { grid-area: art; }
+.cd-head { grid-area: head; padding-right: 40px; }
+.cd-price { grid-area: price; }
+.cd-rest { grid-area: rest; display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.cd-grip { display: none; }
+.mbox .x { width: 36px; height: 36px; top: 14px; right: 14px; border-radius: 50%; display: grid; place-items: center; background: rgba(6, 18, 31, .6); border: 1px solid var(--stroke); }
+.mbox .x svg { width: 16px; height: 16px; stroke: var(--text); stroke-width: 2.4; stroke-linecap: round; }
+.mbox .x:hover { border-color: var(--stroke-2); }
+.cd-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chip { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; font: 700 11.5px var(--body); letter-spacing: .02em; color: var(--muted); background: rgba(138, 160, 184, .12); }
+.chip.hot { color: #ffd0d4; background: rgba(230, 57, 70, .2); }
+.cd-head h2 { font-size: clamp(24px, 3vw, 32px); margin: 0 0 6px; letter-spacing: -.03em; }
+.cd-head p { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.cd-price { margin-top: 18px; padding: 16px; border-radius: var(--r-md); background: linear-gradient(135deg, rgba(242, 184, 75, .12), rgba(242, 184, 75, .03)); border: 1px solid rgba(242, 184, 75, .25); }
+.cd-pmain { display: flex; flex-direction: column; }
+.cd-plabel { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--gold); opacity: .85; }
+.cd-pmain b { font: 800 clamp(30px, 4vw, 38px)/1.1 var(--display); letter-spacing: -.03em; color: var(--text); font-variant-numeric: tabular-nums; }
+.cd-psub { font-size: 13px; color: var(--muted); }
+.cd-palt { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; font-size: 13.5px; font-weight: 600; }
+.cd-palt i { font-style: normal; color: var(--muted); font-weight: 500; margin-right: 4px; }
+.cd-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+.cd-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px; }
+.cd-stats div { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--stroke); }
+.cd-stats span { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.cd-stats b { font: 800 18px var(--display); font-variant-numeric: tabular-nums; }
+.cd-stats b.small { font-size: 14px; }
+.cd-traits { margin: 0; font-size: 13px; color: var(--muted); }
+.mbox.cd .ctext { margin: 0; line-height: 1.55; }
+@media (max-width: 640px) {
+  .modal:has(.cd) { align-items: end; padding: 0; }
+  .mbox.cd { grid-template-columns: 112px 1fr; grid-template-areas: "art head" "price price" "rest rest"; gap: 0 14px; padding: 22px 16px max(20px, env(safe-area-inset-bottom)); border-radius: 24px 24px 0 0; max-height: 88vh; animation: sheet-up .35s var(--ease) both; }
+  .mbox.cd .foil.big { max-width: 112px; margin: 0; }
+  .cd-grip { display: block; position: absolute; top: 8px; left: 50%; width: 40px; height: 4px; margin-left: -20px; border-radius: 4px; background: var(--stroke-2); }
+  .cd-head { padding-right: 34px; align-self: center; }
+  .cd-head h2 { font-size: 22px; }
+  .mbox .x { top: 16px; right: 12px; }
+  .cd-price { margin-top: 14px; }
+}
+@keyframes sheet-up { from { transform: translateY(40%); opacity: 0; } }
+
+/* --- drobnosti: karty, ceny, interakcie --- */
+.ccell .foil { transition: transform .25s var(--ease), box-shadow .25s; }
+@media (hover: hover) { .ccell:hover .foil { transform: translateY(-4px); box-shadow: 0 18px 30px -16px rgba(0, 0, 0, .9); } }
+.ccell:active .foil { transform: scale(.97); }
+.cmeta .small:first-child { color: var(--muted); font-weight: 600; letter-spacing: .01em; }
+.cprice, .vtotal, .rv-price, .scan-total { font-variant-numeric: tabular-nums; }
+.pcard { border-color: var(--stroke); background: linear-gradient(180deg, rgba(20, 50, 78, .55), rgba(12, 34, 54, .7)); }
+.pcard:hover { border-color: var(--stroke-2); transform: translateY(-2px); }
+.btn { border-radius: 12px; }
+.btn.ghost { border-color: var(--stroke-2); }
+:focus-visible { outline-offset: 3px; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(138, 180, 220, .18); border-radius: 10px; border: 3px solid transparent; background-clip: padding-box; }
+
+/* --- filtre na mobile: vyhľadávanie + „Filtre“, zvyšok sa rozbalí --- */
+.filters-toggle { display: none; }
+@media (max-width: 720px) {
+  .filters-toggle { display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--stroke-2); background: var(--surface-2); color: var(--text); font: 700 13px var(--body); cursor: pointer; flex: none; }
+  .filters-toggle svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
+  .filters.open .filters-toggle { border-color: var(--gold); color: var(--gold); }
+  .filters:not(.open) > .field:not(.grow):not(.keep), .filters:not(.open) > .check, .filters:not(.open) > :not(label):not(.filters-toggle) { display: none; }
+  .filters .field.grow { flex: 1 1 0; min-width: 0; }
+  .filters .field.keep { flex: 1 1 100%; }
+  .filters .field.keep select { flex: 1; }
+}

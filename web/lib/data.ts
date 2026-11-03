@@ -149,3 +149,11 @@ export function sortSets<T extends { id: string }>(sets: T[]) {
     return x[0] - y[0] || x[1] - y[1] || a.id.localeCompare(b.id);
   });
 }
+
+/** Zmenšený náhľad obrázka karty (wsrv.nl – bezplatný resize proxy na Cloudflare, cache 1 rok).
+ *  Obrázky z OPTCG API majú 150–280 kB; náhľad 200 px ~25 kB. Iné zdroje (TCGdex) ostávajú bez zmeny. */
+export function thumb(url: string | null | undefined, w: number) {
+  if (!url) return "";
+  if (!/^https:\/\/optcgapi\.com\//.test(url)) return url;
+  return `https://wsrv.nl/?url=${encodeURIComponent(url.replace(/^https:\/\//, ""))}&w=${w}&output=webp&q=72`;
+}
