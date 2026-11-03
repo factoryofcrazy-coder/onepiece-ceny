@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-03T19:23:05Z",
+ "updated": "2026-11-03T21:05:14Z",
  "fx": {
   "CZK": 24.343,
   "USD": 1.1179,
@@ -640,7 +640,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -1869,7 +1869,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -2235,7 +2235,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -2624,7 +2624,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -2847,7 +2847,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -3570,7 +3570,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -3740,7 +3740,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -3791,7 +3791,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -4279,7 +4279,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -4798,7 +4798,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -5407,8 +5407,8 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-11-03T19:14:56Z",
-   "ok": false,
+   "ts": "2026-11-03T21:05:14Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece TCG OP-17 The World's Strongest Warriors Booster Display – Japanisch",
@@ -5482,13 +5482,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/1050/1786/8620/files/OP-OP13COHW-BD-JPN.png?v=1782678633"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "mikis": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -5638,7 +5635,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -6099,7 +6096,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -6411,7 +6408,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -6840,7 +6837,7 @@
    ]
   },
   "crispycards": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -8512,7 +8509,7 @@
    ]
   },
   "underpaid": {
-   "ts": "2026-11-03T19:23:05Z",
+   "ts": "2026-11-03T21:05:14Z",
    "ok": true,
    "items": [
     {
@@ -9310,8 +9307,8 @@
    ]
   },
   "cardbinder": {
-   "ts": "2026-11-03T19:14:56Z",
-   "ok": false,
+   "ts": "2026-11-03T21:05:14Z",
+   "ok": true,
    "items": [
     {
      "name": "The Best Volume 2 Japanese Booster Box",
@@ -9808,10 +9805,7 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-PRB01-The-Best-Volume-one-Booster-Box-English.webp?v=1759844795"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   }
  }
 }
