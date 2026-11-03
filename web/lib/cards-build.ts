@@ -1,4 +1,5 @@
-// Zostavenie databázy One Piece kariet z OPTCG API (zadarmo, bez kľúča).
+import { cardmarketPrices } from "./cardmarket";
+// Zostavenie databázy One Piece kariet z OPTCG API (zadarmo, bez kľúča) + ceny z Cardmarketu (lib/cardmarket.ts).
 // Používa ho /api/cards (záloha) aj skript scripts/build-cards.ts (denne cez GitHub Actions → docs/data/cards.json).
 
 const API = "https://optcgapi.com/api/";
@@ -169,9 +170,21 @@ export async function buildCards() {
     (a: any, b: any) =>
       a.set.localeCompare(b.set) || native(a) - native(b) || a.code.localeCompare(b.code) || a.id.localeCompare(b.id),
   );
+  // Cardmarket (EN + JP ceny) – keď nejde, ostanú len TCGplayer ceny
+  let cmCount = 0;
+  try {
+    const cm = await cardmarketPrices(out as any);
+    for (const c of out as any[]) {
+      const f = cm.get(c.id);
+      if (f) Object.assign(c, f), cmCount++;
+    }
+  } catch (e: any) {
+    console.error("Cardmarket ceny zlyhali:", e?.message ?? e);
+  }
   return {
     updated: new Date().toISOString(),
-    source: "optcgapi.com",
+    source: cmCount ? "optcgapi.com + cardmarket.com" : "optcgapi.com",
+    cmCards: cmCount,
     sets: [...sets].map(([id, name]) => ({ id, name })),
     cards: out,
   };

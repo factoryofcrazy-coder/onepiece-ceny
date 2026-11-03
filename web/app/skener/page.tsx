@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DataError, Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { Card, cardEur, eur, useCards, usePrices } from "@/lib/data";
+import { Card, cardEur, eur, priceSource, useCards, usePrices } from "@/lib/data";
 import { useTcg } from "@/lib/tcg";
 
 // verzia súborov v /public/scan (zvýš pri novom modeli/indexe → obíde cache)
@@ -345,9 +345,10 @@ export default function ScannerPage() {
   if (error) return <DataError error={error} file="cards" />;
   if (!cards) return <Loading what="Načítavam karty" />;
 
-  const price = (id: string) => cardEur(cards.byId.get(id), usd);
+  const price = (id: string, lang: "EN" | "JP" = "EN") => cardEur(cards.byId.get(id), usd, lang);
+  const xp = (x: Scanned) => price(x.id, x.lang ?? "EN"); // cena podľa jazyka naskenovanej karty
   const n = (x: Scanned) => x.qty ?? 1;
-  const total = list.reduce((s, x) => s + (price(x.id) ?? 0) * n(x), 0);
+  const total = list.reduce((s, x) => s + (xp(x) ?? 0) * n(x), 0);
   const count = list.reduce((s, x) => s + n(x), 0);
   const cur = live?.top[0];
   const curCard = cur && cur.score >= T_SHOW ? cards.byId.get(cur.id) : undefined;
@@ -366,7 +367,7 @@ export default function ScannerPage() {
   const remove = (key: number) => setList((l) => l.filter((x) => x.key !== key));
   const confirmed = list.filter((x) => x.ok);
   const toCheck = list.filter((x) => !x.ok);
-  const totalOk = confirmed.reduce((s, x) => s + (price(x.id) ?? 0) * n(x), 0);
+  const totalOk = confirmed.reduce((s, x) => s + (xp(x) ?? 0) * n(x), 0);
   const countOk = confirmed.reduce((s, x) => s + n(x), 0);
   const patch = (key: number, p: Partial<Scanned>) => setList((l) => l.map((x) => (x.key === key ? { ...x, ...p } : x)));
 
@@ -374,7 +375,7 @@ export default function ScannerPage() {
   const rows = (xs: Scanned[]) =>
     xs.map((x) => {
       const c = cards.byId.get(x.id);
-      return { qty: n(x), name: c?.name ?? x.id, code: c?.code ?? x.id, v: c?.v || "", rarity: c?.rarity ?? "", lang: x.lang ?? "EN", cond: x.cond ?? "NM", eur: price(x.id) };
+      return { qty: n(x), name: c?.name ?? x.id, code: c?.code ?? x.id, v: c?.v || "", rarity: c?.rarity ?? "", lang: x.lang ?? "EN", cond: x.cond ?? "NM", eur: xp(x), src: priceSource(c, x.lang ?? "EN") };
     });
   const share = async () => {
     const xs = confirmed.length ? confirmed : list;
@@ -382,7 +383,7 @@ export default function ScannerPage() {
       (r) => `${r.qty}× ${r.name} ${r.code}${r.v ? ` (${r.v})` : ""} · ${r.lang} ${r.cond} · ${eur(r.eur)}`,
     );
     const sum = rows(xs).reduce((s, r) => s + (r.eur ?? 0) * r.qty, 0);
-    const text = `${lines.join("\n")}\nSpolu ${rows(xs).reduce((s, r) => s + r.qty, 0)} kariet · ${eur(sum)}\n(ceny TCGplayer, Grand Line Tracker)`;
+    const text = `${lines.join("\n")}\nSpolu ${rows(xs).reduce((s, r) => s + r.qty, 0)} kariet · ${eur(sum)}\n(ceny Cardmarket trend, Grand Line Tracker)`;
     try {
       if (navigator.share) await navigator.share({ title: "Moje One Piece karty", text });
       else {
@@ -394,8 +395,8 @@ export default function ScannerPage() {
   const csv = () => {
     const xs = confirmed.length ? confirmed : list;
     const esc = (v: any) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-    const head = ["Počet", "Meno", "Kód", "Verzia", "Rarita", "Jazyk", "Stav", "Cena EUR"];
-    const body = rows(xs).map((r) => [r.qty, r.name, r.code, r.v, r.rarity, r.lang, r.cond, r.eur?.toFixed(2) ?? ""].map(esc).join(";"));
+    const head = ["Počet", "Meno", "Kód", "Verzia", "Rarita", "Jazyk", "Stav", "Cena EUR", "Zdroj ceny"];
+    const body = rows(xs).map((r) => [r.qty, r.name, r.code, r.v, r.rarity, r.lang, r.cond, r.eur?.toFixed(2) ?? "", r.src].map(esc).join(";"));
     const blob = new Blob(["\ufeff" + [head.map(esc).join(";"), ...body].join("\r\n")], { type: "text/csv;charset=utf-8" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -451,8 +452,8 @@ export default function ScannerPage() {
           </button>
         </div>
         <p className="muted small">
-          Porovnaj svoj záber s nájdenou kartou. Ak nesedí verzia alebo karta, ťukni na <b>Zmeniť</b>. Jazyk a stav sa
-          zatiaľ ukladajú len do exportu – cena je za anglickú kartu v NM stave (TCGplayer).
+          Porovnaj svoj záber s nájdenou kartou. Ak nesedí verzia alebo karta, ťukni na <b>Zmeniť</b>. Ceny sú Cardmarket
+          trend (EN alebo JP podľa jazyka karty), kde chýba, TCGplayer. Stav karty sa zatiaľ ukladá len do exportu.
         </p>
         {added && <div className="rv-done">Pridané do zbierky ✓</div>}
         {list.length === 0 ? (
@@ -506,9 +507,10 @@ export default function ScannerPage() {
                         {debug ? ` · ${x.score.toFixed(2)}` : ""}
                       </span>
                       <b className="rv-price">
-                        {eur(price(x.id))}
-                        {n(x) > 1 && <span className="small muted"> × {n(x)} = {eur((price(x.id) ?? 0) * n(x))}</span>}
+                        {eur(xp(x))}
+                        {n(x) > 1 && <span className="small muted"> × {n(x)} = {eur((xp(x) ?? 0) * n(x))}</span>}
                       </b>
+                      <span className="tiny muted">{priceSource(c, x.lang ?? "EN") || "cena nie je známa"}</span>
                       <div className="rv-opts">
                         <span className="rv-qty" role="group" aria-label="Počet kusov">
                           <button onClick={() => patch(x.key, { qty: Math.max(1, n(x) - 1) })} aria-label="Menej">
@@ -738,10 +740,11 @@ export default function ScannerPage() {
                   <div className="grow">
                     <div className="row between gap">
                       <b>{c?.name ?? x.id}</b>
-                      <b>{eur(price(x.id))}</b>
+                      <b>{eur(xp(x))}</b>
                     </div>
                     <div className="small muted">
                       {c?.code} {c?.v ? `· ${c.v}` : ""} · {c?.rarity}
+                      {x.lang === "JP" ? " · JP" : ""}
                       {x.unsure && !x.ok ? " · skontroluj" : ""}
                     </div>
                   </div>

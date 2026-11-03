@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CardImg, CardModal, DataError, Foil, Loading, OwnerPicker, Qty } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { Card, COLOR_SK, COLORS, eur, SET_KIND_SK, SET_KINDS, setKind, sortSets, TYPE_SK, useCards, usePrices } from "@/lib/data";
+import { Card, COLOR_SK, COLORS, eur, SET_KIND_SK, SET_KINDS, setKind, sortSets, TYPE_SK, useCards, usePrices, cardEur } from "@/lib/data";
 
 const PAGE = 120;
 
@@ -63,7 +63,7 @@ function OpCardsPage() {
           c.traits.toLowerCase().includes(s) ||
           c.text.toLowerCase().includes(s)),
     );
-    if (sort === "price") out.sort((a, b) => (b.usd ?? -1) - (a.usd ?? -1));
+    if (sort === "price") out.sort((a, b) => (cardEur(b, usd) ?? -1) - (cardEur(a, usd) ?? -1));
     else if (sort === "name") out.sort((a, b) => a.name.localeCompare(b.name));
     return out;
   }, [data, set, q, color, type, rarity, variant, own, qty, sort]);
@@ -72,7 +72,7 @@ function OpCardsPage() {
   if (!data) return <Loading what="Načítavam karty" shape="cards" />;
 
   const owned = list.filter((c) => qty[c.id] > 0);
-  const value = owned.reduce((s, c) => s + (c.usd ?? 0) * qty[c.id], 0) / usd;
+  const value = owned.reduce((s, c) => s + (cardEur(c, usd) ?? 0) * qty[c.id], 0);
 
   return (
     <>
@@ -191,7 +191,7 @@ function OpCardsPage() {
               </Foil>
               <div className="cmeta">
                 <span className="small">{c.code}</span>
-                <span className="small muted cprice">{c.usd != null ? eur(c.usd / usd) : ""}</span>
+                <span className="small muted cprice">{cardEur(c, usd) != null ? eur(cardEur(c, usd)) : ""}</span>
                 {c.v && <span className="tag tiny">{c.v}</span>}
               </div>
               {viewing && <Qty n={n} onSet={mine ? (v) => setQty(c.id, v) : undefined} disabled={!mine} />}

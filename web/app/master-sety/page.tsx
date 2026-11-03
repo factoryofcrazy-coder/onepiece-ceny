@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { Bar, DataError, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { eur, SET_KINDS, SetKind, setKind, sortSets, useCards, usePrices } from "@/lib/data";
+import { eur, SET_KINDS, SetKind, setKind, sortSets, useCards, usePrices, cardEur } from "@/lib/data";
 
 type Row = {
   id: string;
@@ -42,7 +42,7 @@ function OpMasterSets() {
         m.set(c.set, r);
       }
       const n = qty[c.id] ?? 0;
-      const price = (c.usd ?? 0) / usd;
+      const price = cardEur(c, usd) ?? 0;
       r.all++;
       if (n) r.allHave++;
       else r.missingCost += price;

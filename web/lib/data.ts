@@ -19,7 +19,10 @@ export type Card = {
   traits: string;
   text: string;
   img: string;
-  usd: number | null;
+  usd: number | null; // TCGplayer market price (USA, EN)
+  cm?: number; // Cardmarket trend v EUR (EN) – hlavná cena, keď je
+  cmLow?: number; // Cardmarket najnižšia ponuka (EN)
+  cmJp?: number; // Cardmarket trend v EUR (japonská verzia)
 };
 export type CardsDb = { updated: string; sets: { id: string; name: string }[]; cards: Card[]; byId: Map<string, Card> };
 
@@ -39,7 +42,7 @@ export type PricesDb = {
 };
 
 // zvýš pri zmene formátu dát z /api/* → obíde sa stará CDN cache
-const DATA_VERSION = "5";
+const DATA_VERSION = "6";
 const cache: Record<string, Promise<any>> = {};
 
 export function load<T>(file: string, prep?: (d: any) => T): Promise<T> {
@@ -107,9 +110,18 @@ export function eur(v: number | null | undefined, digits = 2) {
   return v.toLocaleString("sk-SK", { minimumFractionDigits: digits, maximumFractionDigits: digits }) + " €";
 }
 
-/** Cena karty v EUR (OPTCG API dáva TCGplayer market price v USD). */
-export function cardEur(c: Card | undefined, usdRate = 1.12) {
-  return c?.usd != null ? c.usd / usdRate : null;
+/** Cena karty v EUR: Cardmarket trend (európsky trh), inak TCGplayer market price prepočítaná z USD.
+ *  lang "JP" → Cardmarket cena japonskej verzie (bez náhrady – JP karty sa cenou líšia). */
+export function cardEur(c: Card | undefined, usdRate = 1.12, lang: "EN" | "JP" = "EN") {
+  if (!c) return null;
+  if (lang === "JP") return c.cmJp ?? null;
+  return c.cm ?? (c.usd != null ? c.usd / usdRate : null);
+}
+/** Odkiaľ je cena – na zobrazenie pri cene. */
+export function priceSource(c: Card | undefined, lang: "EN" | "JP" = "EN") {
+  if (!c) return "";
+  if (lang === "JP") return c.cmJp != null ? "Cardmarket JP" : "";
+  return c.cm != null ? "Cardmarket" : c.usd != null ? "TCGplayer" : "";
 }
 
 /** Setový kód z ID karty: OP01-001 → OP-01, ST10-002 → ST-10, EB01 → EB-01, PRB01 → PRB-01 */

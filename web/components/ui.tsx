@@ -243,10 +243,23 @@ export function CardModal({
             )}
           </dl>
           {card.text && <p className="ctext">{card.text}</p>}
-          <p>
-            Trhová cena: <b>{card.usd != null ? eur(card.usd / usd) : "–"}</b>{" "}
-            <span className="muted small">(TCGplayer ${card.usd ?? "–"})</span>
-          </p>
+          <dl className="cprices">
+            <dt>Cardmarket</dt>
+            <dd>
+              <b>{card.cm != null ? eur(card.cm) : "–"}</b>
+              {card.cmLow != null && <span className="muted small"> · od {eur(card.cmLow)}</span>}
+            </dd>
+            {card.cmJp != null && (
+              <>
+                <dt>Cardmarket JP</dt>
+                <dd>{eur(card.cmJp)}</dd>
+              </>
+            )}
+            <dt>TCGplayer (USA)</dt>
+            <dd>
+              {card.usd != null ? eur(card.usd / usd) : "–"} <span className="muted small">(${card.usd ?? "–"})</span>
+            </dd>
+          </dl>
           <p className="row gap">
             <a
               className="btn ghost sm"

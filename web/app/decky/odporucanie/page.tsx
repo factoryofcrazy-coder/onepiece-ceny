@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { Bar, CardImg, ColorDots, DataError, Foil, Loading, NeedLogin } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { ownedByCode, useCollection } from "@/lib/collection";
-import { Card, eur, MetaDeck, useCards, useMeta, usePrices } from "@/lib/data";
+import { Card, eur, MetaDeck, useCards, useMeta, usePrices, cardEur } from "@/lib/data";
 import { sb } from "@/lib/supabase";
 
 type Missing = { code: string; n: number; card?: Card; unit: number | null };
@@ -43,7 +43,7 @@ export default function Recommend() {
   // najlacnejšia verzia každej karty (na dokúpenie)
   const cheapest = useMemo(() => {
     const m = new Map<string, Card>();
-    const price = (c: Card) => c.usd ?? (c.v ? 1e9 : 1e8); // bez ceny: radšej základná verzia
+    const price = (c: Card) => cardEur(c) ?? (c.v ? 1e9 : 1e8); // bez ceny: radšej základná verzia
     cards?.cards.forEach((c) => {
       const cur = m.get(c.code);
       if (!cur || price(c) < price(cur)) m.set(c.code, c);
@@ -60,7 +60,7 @@ export default function Recommend() {
       have += lead;
       if (!lead) {
         const c = cheapest.get(deck.leader);
-        missing.push({ code: deck.leader, n: 1, card: c, unit: c?.usd != null ? c.usd / usd : null });
+        missing.push({ code: deck.leader, n: 1, card: c, unit: cardEur(c, usd) });
       }
       for (const [code, n] of Object.entries(deck.cards)) {
         total += n;
@@ -69,7 +69,7 @@ export default function Recommend() {
         if (h < n) {
           const c = cheapest.get(code);
           if (!c) unknown += n - h;
-          missing.push({ code, n: n - h, card: c, unit: c?.usd != null ? c.usd / usd : null });
+          missing.push({ code, n: n - h, card: c, unit: cardEur(c, usd) });
         }
       }
       const missingCost = missing.reduce((s, m) => s + m.n * (m.unit ?? 0), 0);

@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { Card, eur, setKind, useCards, usePrices } from "@/lib/data";
+import { Card, eur, setKind, useCards, usePrices, cardEur } from "@/lib/data";
 
 type Item = { card: Card; n: number; unit: number | null; total: number };
 
@@ -32,7 +32,7 @@ function OpCollection() {
       if (!(n > 0)) continue;
       const card = data.byId.get(id);
       if (!card) continue;
-      const unit = card.usd != null ? card.usd / usd : null;
+      const unit = cardEur(card, usd);
       out.push({ card, n, unit, total: (unit ?? 0) * n });
     }
     return out;

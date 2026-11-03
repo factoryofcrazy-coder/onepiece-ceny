@@ -457,6 +457,12 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .pk-vars { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
 .pk-vars .vchip { display: inline-flex; align-items: center; gap: 8px; padding: 4px 6px 4px 10px; border-radius: 10px; background: var(--sea-2); border: 1px solid var(--line); font-size: 13px; }
 
+/* ceny v detaile karty */
+.cprices { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 10px 0; font-size: 14px; }
+.cprices dt { color: var(--muted); }
+.cprices dd { margin: 0; }
+.cprices dd b { color: var(--gold); }
+
 /* ---------- Skener kariet (/skener) ---------- */
 .scan-page { max-width: 760px; margin: 18px auto 40px; }
 .scan-head h1 { font-size: clamp(28px, 6vw, 40px); margin: 0; }

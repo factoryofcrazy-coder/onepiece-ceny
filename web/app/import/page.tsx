@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { CardImg, DataError, Loading, NeedLogin } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
-import { Card, eur, useCards, usePrices } from "@/lib/data";
+import { Card, eur, useCards, usePrices, cardEur } from "@/lib/data";
 import { HdRow, matchRows, readHolodex } from "@/lib/holodex";
 import { sb } from "@/lib/supabase";
 
@@ -100,7 +100,7 @@ export default function ImportPage() {
   const guesses = matches.map((m, i) => ({ m, i })).filter(({ m, i }) => m.card && !m.sure && !override[i]);
   const count = (s: Status) => plan?.filter((p) => p.status === s).length ?? 0;
   const changes = plan?.filter((p) => p.after !== p.before || p.oldHd !== p.newHd) ?? [];
-  const value = plan?.reduce((s, p) => s + p.newHd * ((p.card?.usd ?? 0) / usd), 0) ?? 0;
+  const value = plan?.reduce((s, p) => s + p.newHd * (cardEur(p.card, usd) ?? 0), 0) ?? 0;
 
   const onFile = async (f?: File) => {
     if (!f) return;
