@@ -97,12 +97,15 @@ export function OwnerPicker({ value, onChange }: { value: string | null; onChang
   useEffect(() => {
     if (user) loadProfiles().then(setList);
   }, [user]);
-  if (!user || list.length < 2) return null;
+  // vlastná kolekcia je v zozname vždy – aj keď účtu chýba riadok v profiles (inak by select ukázal cudzie meno)
+  const me = list.find((p) => p.id === user?.id);
+  const all = user ? [{ id: user.id, username: me?.username ?? user.email?.split("@")[0] ?? "ja" }, ...list.filter((p) => p.id !== user.id)] : [];
+  if (!user || all.length < 2) return null;
   return (
     <label className="field">
       <span>Kolekcia</span>
       <select value={value ?? user.id} onChange={(e) => onChange(e.target.value)}>
-        {list.map((p) => (
+        {all.map((p) => (
           <option key={p.id} value={p.id}>
             {p.id === user.id ? `Moja (${p.username})` : p.username}
           </option>

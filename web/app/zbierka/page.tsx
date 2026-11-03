@@ -93,9 +93,15 @@ function OpCollection() {
             <small>€</small>
           </div>
           <p className="muted">
-            {stats.pieces} kusov, {items.length} rôznych kariet zo {stats.sets.length} setov. Ceny z TCGplayer, prepočítané na eurá
+            {stats.pieces} kusov, {items.length} rôznych kariet zo {stats.sets.length} setov. Ceny: Cardmarket trend, kde chýba,
+            TCGplayer prepočítaný na eurá
             {stats.unpriced > 0 && <>; {stats.unpriced} kariet zatiaľ nemá cenu</>}.
           </p>
+          {mine && (
+            <p className="tiny muted">
+              Prihlásený ako <b>{user.email}</b>
+            </p>
+          )}
           <div className="row gap wrapr vault-actions">
             <OwnerPicker value={viewing} onChange={setOwner} />
             {mine && (

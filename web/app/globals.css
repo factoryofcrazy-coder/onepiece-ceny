@@ -197,7 +197,7 @@ textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, monospace; fo
 .cimg { width: 100%; aspect-ratio: 600 / 838; object-fit: cover; border-radius: 4.5% / 3.2%; background: var(--sea-2); display: block; }
 .cimg.ph { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 8px; gap: 4px; font-size: 12px; color: var(--muted); border: 1px solid var(--line); }
 .cmeta { display: flex; justify-content: space-between; gap: 4px 6px; align-items: center; flex-wrap: wrap; }
-.cprice { white-space: nowrap; margin-left: auto; }
+.cprice { white-space: nowrap; margin-left: auto; color: var(--gold); font-weight: 700; }
 .cmeta .tag { margin-left: 0; }
 
 /* náklon + lesk karty */

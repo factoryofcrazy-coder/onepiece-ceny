@@ -191,7 +191,7 @@ function OpCardsPage() {
               </Foil>
               <div className="cmeta">
                 <span className="small">{c.code}</span>
-                <span className="small muted cprice">{cardEur(c, usd) != null ? eur(cardEur(c, usd)) : ""}</span>
+                <span className="small cprice">{cardEur(c, usd) != null ? eur(cardEur(c, usd)) : ""}</span>
                 {c.v && <span className="tag tiny">{c.v}</span>}
               </div>
               {viewing && <Qty n={n} onSet={mine ? (v) => setQty(c.id, v) : undefined} disabled={!mine} />}
