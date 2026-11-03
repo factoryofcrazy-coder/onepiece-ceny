@@ -52,7 +52,13 @@ const thumbDiff = (a: Float32Array, b: Float32Array) => {
 
 type Hit = { id: string; score: number };
 // shot = záber z kamery v momente rozpoznania (na kontrolu), ok = potvrdené používateľom, unsure = skener si nebol istý
-type Scanned = { key: number; id: string; score: number; alts: string[]; shot?: string; ok: boolean; unsure: boolean };
+type Scanned = {
+  key: number; id: string; score: number; alts: string[]; shot?: string; ok: boolean; unsure: boolean;
+  qty?: number; lang?: "EN" | "JP"; cond?: Cond;
+};
+type Cond = "NM" | "LP" | "MP" | "HP" | "DMG";
+const CONDS: Cond[] = ["NM", "LP", "MP", "HP", "DMG"];
+const COND_SK: Record<Cond, string> = { NM: "Near Mint", LP: "Light Played", MP: "Moderately Played", HP: "Heavily Played", DMG: "Poškodená" };
 const T_SURE = 0.5; // pod týmto priemerným skóre alebo pri tesnom druhom kandidátovi → „Skontroluj“
 const STORE = "op-scan-list"; // zoznam prežije zatvorenie stránky (bez záberov)
 
@@ -100,6 +106,9 @@ export default function ScannerPage() {
   const [added, setAdded] = useState(false);
   const [engine, setEngine] = useState("");
   const [mode, setMode] = useState<"scan" | "review">("scan");
+  const [cam, setCam] = useState<{ torch: boolean; zoom: { min: number; max: number } | null }>({ torch: false, zoom: null });
+  const [torchOn, setTorchOn] = useState(false);
+  const [zoom, setZoom] = useState(1);
   const [edit, setEdit] = useState<number | null>(null); // kľúč karty, pri ktorej je otvorená zmena
   const [q, setQ] = useState("");
 
@@ -211,6 +220,22 @@ export default function ScannerPage() {
     w.postMessage({ type: "scan", seq: ++seq.current, pixels: px }, [px.buffer]);
   }, []);
 
+  const camSet = useCallback((c: Record<string, any>) => {
+    const track = streamRef.current?.getVideoTracks()[0];
+    track?.applyConstraints({ advanced: [c] } as any).catch(() => {});
+  }, []);
+  const toggleTorch = () => {
+    camSet({ torch: !torchOn });
+    setTorchOn(!torchOn);
+  };
+  const nextZoom = () => {
+    if (!cam.zoom) return;
+    const steps = [1, 1.5, 2].filter((z) => z >= cam.zoom!.min && z <= cam.zoom!.max);
+    const z = steps[(steps.indexOf(zoom) + 1) % steps.length] ?? 1;
+    camSet({ zoom: z });
+    setZoom(z);
+  };
+
   const stop = useCallback(() => {
     lock.current = null;
     hist.current = [];
@@ -229,6 +254,12 @@ export default function ScannerPage() {
         audio: false,
       });
       streamRef.current = stream;
+      // baterka a zoom – len kde ich kamera podporuje (hlavne Android Chrome)
+      const track = stream.getVideoTracks()[0];
+      const caps: any = track.getCapabilities?.() ?? {};
+      setCam({ torch: !!caps.torch, zoom: caps.zoom && caps.zoom.max > 1 ? { min: caps.zoom.min, max: caps.zoom.max } : null });
+      setTorchOn(false);
+      setZoom(1);
       const v = videoRef.current!;
       v.srcObject = stream;
       await v.play();
@@ -315,7 +346,9 @@ export default function ScannerPage() {
   if (!cards) return <Loading what="Načítavam karty" />;
 
   const price = (id: string) => cardEur(cards.byId.get(id), usd);
-  const total = list.reduce((s, x) => s + (price(x.id) ?? 0), 0);
+  const n = (x: Scanned) => x.qty ?? 1;
+  const total = list.reduce((s, x) => s + (price(x.id) ?? 0) * n(x), 0);
+  const count = list.reduce((s, x) => s + n(x), 0);
   const cur = live?.top[0];
   const curCard = cur && cur.score >= T_SHOW ? cards.byId.get(cur.id) : undefined;
   const sure = !!lock.current && !!cur && cur.id === lock.current.id;
@@ -333,10 +366,46 @@ export default function ScannerPage() {
   const remove = (key: number) => setList((l) => l.filter((x) => x.key !== key));
   const confirmed = list.filter((x) => x.ok);
   const toCheck = list.filter((x) => !x.ok);
-  const totalOk = confirmed.reduce((s, x) => s + (price(x.id) ?? 0), 0);
+  const totalOk = confirmed.reduce((s, x) => s + (price(x.id) ?? 0) * n(x), 0);
+  const countOk = confirmed.reduce((s, x) => s + n(x), 0);
+  const patch = (key: number, p: Partial<Scanned>) => setList((l) => l.map((x) => (x.key === key ? { ...x, ...p } : x)));
+
+  // export: text na zdieľanie (Messenger, WhatsApp…) a CSV (Excel, Cardmarket)
+  const rows = (xs: Scanned[]) =>
+    xs.map((x) => {
+      const c = cards.byId.get(x.id);
+      return { qty: n(x), name: c?.name ?? x.id, code: c?.code ?? x.id, v: c?.v || "", rarity: c?.rarity ?? "", lang: x.lang ?? "EN", cond: x.cond ?? "NM", eur: price(x.id) };
+    });
+  const share = async () => {
+    const xs = confirmed.length ? confirmed : list;
+    const lines = rows(xs).map(
+      (r) => `${r.qty}× ${r.name} ${r.code}${r.v ? ` (${r.v})` : ""} · ${r.lang} ${r.cond} · ${eur(r.eur)}`,
+    );
+    const sum = rows(xs).reduce((s, r) => s + (r.eur ?? 0) * r.qty, 0);
+    const text = `${lines.join("\n")}\nSpolu ${rows(xs).reduce((s, r) => s + r.qty, 0)} kariet · ${eur(sum)}\n(ceny TCGplayer, Grand Line Tracker)`;
+    try {
+      if (navigator.share) await navigator.share({ title: "Moje One Piece karty", text });
+      else {
+        await navigator.clipboard.writeText(text);
+        alert("Zoznam je skopírovaný – vlož ho do správy.");
+      }
+    } catch {}
+  };
+  const csv = () => {
+    const xs = confirmed.length ? confirmed : list;
+    const esc = (v: any) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const head = ["Počet", "Meno", "Kód", "Verzia", "Rarita", "Jazyk", "Stav", "Cena EUR"];
+    const body = rows(xs).map((r) => [r.qty, r.name, r.code, r.v, r.rarity, r.lang, r.cond, r.eur?.toFixed(2) ?? ""].map(esc).join(";"));
+    const blob = new Blob(["\ufeff" + [head.map(esc).join(";"), ...body].join("\r\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `one-piece-karty-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  };
   const addConfirmed = () => {
     const add: Record<string, number> = {};
-    confirmed.forEach((x) => (add[x.id] = (add[x.id] ?? 0) + 1));
+    confirmed.forEach((x) => (add[x.id] = (add[x.id] ?? 0) + n(x)));
     Object.entries(add).forEach(([id, n]) => setQty(id, (qty[id] ?? 0) + n));
     setList((l) => l.filter((x) => !x.ok)); // pridané zmiznú, nepotvrdené ostanú na kontrolu
     setAdded(true);
@@ -382,7 +451,8 @@ export default function ScannerPage() {
           </button>
         </div>
         <p className="muted small">
-          Porovnaj svoj záber s nájdenou kartou. Ak nesedí verzia alebo karta, ťukni na <b>Zmeniť</b>.
+          Porovnaj svoj záber s nájdenou kartou. Ak nesedí verzia alebo karta, ťukni na <b>Zmeniť</b>. Jazyk a stav sa
+          zatiaľ ukladajú len do exportu – cena je za anglickú kartu v NM stave (TCGplayer).
         </p>
         {added && <div className="rv-done">Pridané do zbierky ✓</div>}
         {list.length === 0 ? (
@@ -398,11 +468,19 @@ export default function ScannerPage() {
               <span className="small">
                 <b>{toCheck.length}</b> na kontrolu · <b>{confirmed.length}</b> potvrdených
               </span>
-              {toCheck.length > 0 && (
-                <button className="btn ghost sm" onClick={() => setList((l) => l.map((x) => ({ ...x, ok: true })))}>
-                  Potvrdiť všetky
+              <span className="row gap wrapr">
+                <button className="btn ghost sm" onClick={share}>
+                  Zdieľať
                 </button>
-              )}
+                <button className="btn ghost sm" onClick={csv}>
+                  CSV
+                </button>
+                {toCheck.length > 0 && (
+                  <button className="btn ghost sm" onClick={() => setList((l) => l.map((x) => ({ ...x, ok: true })))}>
+                    Potvrdiť všetky
+                  </button>
+                )}
+              </span>
             </div>
             <ul className="rv-list">
               {order.map((x) => {
@@ -427,7 +505,32 @@ export default function ScannerPage() {
                         {c?.v ? ` · ${c.v}` : ""} · {c?.rarity}
                         {debug ? ` · ${x.score.toFixed(2)}` : ""}
                       </span>
-                      <b className="rv-price">{eur(price(x.id))}</b>
+                      <b className="rv-price">
+                        {eur(price(x.id))}
+                        {n(x) > 1 && <span className="small muted"> × {n(x)} = {eur((price(x.id) ?? 0) * n(x))}</span>}
+                      </b>
+                      <div className="rv-opts">
+                        <span className="rv-qty" role="group" aria-label="Počet kusov">
+                          <button onClick={() => patch(x.key, { qty: Math.max(1, n(x) - 1) })} aria-label="Menej">
+                            −
+                          </button>
+                          <b>{n(x)}×</b>
+                          <button onClick={() => patch(x.key, { qty: Math.min(99, n(x) + 1) })} aria-label="Viac">
+                            +
+                          </button>
+                        </span>
+                        <select value={x.lang ?? "EN"} onChange={(e) => patch(x.key, { lang: e.target.value as any })} aria-label="Jazyk karty">
+                          <option value="EN">EN</option>
+                          <option value="JP">JP</option>
+                        </select>
+                        <select value={x.cond ?? "NM"} onChange={(e) => patch(x.key, { cond: e.target.value as Cond })} aria-label="Stav karty">
+                          {CONDS.map((c) => (
+                            <option key={c} value={c} title={COND_SK[c]}>
+                              {c}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                       <div className="rv-actions">
                         <button className={`btn sm ${x.ok ? "" : "ghost"}`} onClick={() => setOk(x.key, !x.ok)}>
                           {x.ok ? "✓ Potvrdené" : "✓ Sedí"}
@@ -492,7 +595,7 @@ export default function ScannerPage() {
         {list.length > 0 && (
           <div className="rv-foot">
             <div>
-              <span className="small muted">Potvrdené {confirmed.length} {plural(confirmed.length)}</span>
+              <span className="small muted">Potvrdené {countOk} {plural(countOk)}</span>
               <b className="scan-total">{eur(totalOk)}</b>
             </div>
             {user ? (
@@ -532,11 +635,25 @@ export default function ScannerPage() {
         {state === "on" && (
           <>
             <div className="scan-top">
-              <button className="scan-round" onClick={stop} aria-label="Vypnúť kameru">
-                ×
-              </button>
+              <div className="row gap">
+                <button className="scan-round" onClick={stop} aria-label="Vypnúť kameru">
+                  ×
+                </button>
+                {cam.torch && (
+                  <button className={`scan-round ${torchOn ? "on" : ""}`} onClick={toggleTorch} aria-label="Baterka" aria-pressed={torchOn}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                      <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
+                    </svg>
+                  </button>
+                )}
+                {cam.zoom && (
+                  <button className="scan-round scan-zoom" onClick={nextZoom} aria-label="Priblíženie">
+                    {zoom}×
+                  </button>
+                )}
+              </div>
               <span className="scan-pill">
-                {list.length} {plural(list.length)} · <b>{eur(total)}</b>
+                {count} {plural(count)} · <b>{eur(total)}</b>
               </span>
               <button className="scan-done" onClick={finish} disabled={!list.length}>
                 Hotovo
@@ -601,7 +718,7 @@ export default function ScannerPage() {
         <>
           <div className="scan-sum row between wrapr gap">
             <div>
-              <b>{list.length}</b> {plural(list.length)} · spolu <b className="scan-total">{eur(total)}</b>
+              <b>{count}</b> {plural(count)} · spolu <b className="scan-total">{eur(total)}</b>
             </div>
             <div className="row gap">
               <button className="btn ghost sm" onClick={() => confirm("Vymazať naskenované karty?") && setList([])}>

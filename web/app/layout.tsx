@@ -10,8 +10,11 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "Grand Line Tracker",
   description: "One Piece a Pokémon TCG – ceny v SK/CZ obchodoch, kolekcia, master sety a deckbuilder",
+  applicationName: "Grand Line Tracker",
+  // iPhone: „Pridať na plochu“ → appka cez celú obrazovku
+  appleWebApp: { capable: true, title: "Grand Line", statusBarStyle: "black-translucent" },
 };
-export const viewport: Viewport = { themeColor: "#06121f", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#06121f", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const tcg = parseTcg((await cookies()).get(TCG_COOKIE)?.value);
