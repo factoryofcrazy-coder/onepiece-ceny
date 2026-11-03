@@ -732,3 +732,14 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
   .filters .field.keep { flex: 1 1 100%; }
   .filters .field.keep select { flex: 1; }
 }
+
+/* skener: prepínač jazyka kariet v kamere */
+.scan-lang { display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px; background: rgba(6, 18, 31, .75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, .12); }
+.scan-lang button { border: 0; background: none; color: var(--muted); font: 800 12px var(--body); padding: 6px 10px; border-radius: 999px; cursor: pointer; }
+.scan-lang button.on { background: var(--text); color: var(--ink); }
+@media (max-width: 420px) { .scan-top { gap: 6px; } .scan-pill { padding: 7px 10px; font-size: 13px; } }
+
+/* rámik skenera vždy presne v pomere karty (aj na úzkych vysokých displejoch) */
+.scan-cam { container-type: size; }
+.scan-frame { height: min(80cqh, calc(88cqw / 0.716)) !important; width: auto; max-width: none !important; aspect-ratio: 63 / 88; }
+@media (max-width: 720px) { .scan-frame { height: min(74cqh, calc(90cqw / 0.716)) !important; } }
