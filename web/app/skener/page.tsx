@@ -51,7 +51,10 @@ const thumbDiff = (a: Float32Array, b: Float32Array) => {
 };
 
 type Hit = { id: string; score: number };
-type Scanned = { key: number; id: string; score: number; alts: string[] };
+// shot = záber z kamery v momente rozpoznania (na kontrolu), ok = potvrdené používateľom, unsure = skener si nebol istý
+type Scanned = { key: number; id: string; score: number; alts: string[]; shot?: string; ok: boolean; unsure: boolean };
+const T_SURE = 0.5; // pod týmto priemerným skóre alebo pri tesnom druhom kandidátovi → „Skontroluj“
+const STORE = "op-scan-list"; // zoznam prežije zatvorenie stránky (bez záberov)
 
 function beep() {
   try {
@@ -87,6 +90,7 @@ export default function ScannerPage() {
   const recent = useRef<Record<string, number>>({}); // id → čas pridania (proti dvojitému pridaniu)
   const lastThumb = useRef<Float32Array | null>(null);
   const lastTick = useRef(0);
+  const lastCanvas = useRef<OffscreenCanvas | null>(null);
 
   const [state, setState] = useState<"off" | "loading" | "on" | "error">("off");
   const [msg, setMsg] = useState("");
@@ -95,6 +99,22 @@ export default function ScannerPage() {
   const [debug, setDebug] = useState(false);
   const [added, setAdded] = useState(false);
   const [engine, setEngine] = useState("");
+  const [mode, setMode] = useState<"scan" | "review">("scan");
+  const [edit, setEdit] = useState<number | null>(null); // kľúč karty, pri ktorej je otvorená zmena
+  const [q, setQ] = useState("");
+
+  // zoznam v localStorage – načítanie raz, ukladanie pri každej zmene
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORE) || "[]");
+      if (Array.isArray(saved) && saved.length) setList(saved);
+    } catch {}
+  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORE, JSON.stringify(list.map(({ shot, ...x }) => x)));
+    } catch {}
+  }, [list]);
 
   // varianty podľa herného kódu (na rýchlu opravu: základná ↔ parallel ↔ alt art)
   const byCode = useMemo(() => {
@@ -104,7 +124,7 @@ export default function ScannerPage() {
   }, [cards]);
 
   const accept = useCallback(
-    (top: Hit[]) => {
+    (top: Hit[], avg: number) => {
       const id = top[0].id;
       const c = cards?.byId.get(id);
       // alternatívy: iné varianty toho istého kódu + ďalší kandidáti modelu
@@ -112,7 +132,17 @@ export default function ScannerPage() {
         ...(c ? (byCode.get(c.code) ?? []).map((x) => x.id) : []),
         ...top.slice(1, 4).map((h) => h.id),
       ].filter((x, i, a) => x !== id && a.indexOf(x) === i);
-      setList((l) => [{ key: Date.now(), id, score: top[0].score, alts }, ...l]);
+      const key = Date.now();
+      const unsure = avg < T_SURE || (top[1] && top[0].score - top[1].score < 0.04);
+      setList((l) => [{ key, id, score: avg, alts, ok: false, unsure: !!unsure }, ...l]);
+      // záber z kamery (výrez rámika) na neskoršiu kontrolu
+      lastCanvas.current
+        ?.convertToBlob({ type: "image/jpeg", quality: 0.8 })
+        .then((b) => {
+          const shot = URL.createObjectURL(b);
+          setList((l) => l.map((x) => (x.key === key ? { ...x, shot } : x)));
+        })
+        .catch(() => {});
       beep();
     },
     [cards, byCode],
@@ -153,7 +183,7 @@ export default function ScannerPage() {
       if (now - (recent.current[best.id] ?? -1e9) < REPEAT_MS) return;
       recent.current[best.id] = now;
       lock.current = { id: best.id, thumb: thumb ?? new Float32Array(TW * TH), since: now, goneSince: 0 };
-      accept(top);
+      accept(top, avg);
     },
     [accept],
   );
@@ -176,6 +206,7 @@ export default function ScannerPage() {
     ctx.drawImage(v, sx, sy, sw, sh, 0, 0, IW, IH);
     const px = ctx.getImageData(0, 0, IW, IH).data;
     lastThumb.current = makeThumb(px);
+    lastCanvas.current = cv;
     busy.current = true;
     w.postMessage({ type: "scan", seq: ++seq.current, pixels: px }, [px.buffer]);
   }, []);
@@ -259,6 +290,15 @@ export default function ScannerPage() {
     };
   }, [onResult, state]);
 
+  // návrat z kontroly → po vykreslení <video> znova zapni kameru
+  const resume = useRef(false);
+  useEffect(() => {
+    if (mode === "scan" && resume.current) {
+      resume.current = false;
+      start();
+    }
+  }, [mode, start]);
+
   useEffect(() => () => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
     workerRef.current?.terminate();
@@ -280,22 +320,197 @@ export default function ScannerPage() {
   const curCard = cur && cur.score >= T_SHOW ? cards.byId.get(cur.id) : undefined;
   const sure = !!lock.current && !!cur && cur.id === lock.current.id;
 
-  const change = (key: number, id: string) =>
+  const change = (key: number, id: string) => {
     setList((l) =>
-      l.map((x) => (x.key === key ? { ...x, id, alts: [x.id, ...x.alts.filter((a) => a !== id)] } : x)),
+      l.map((x) =>
+        x.key === key ? { ...x, id, ok: true, unsure: false, alts: [x.id, ...x.alts.filter((a) => a !== id)] } : x,
+      ),
     );
-  const addAll = () => {
-    const add: Record<string, number> = {};
-    list.forEach((x) => (add[x.id] = (add[x.id] ?? 0) + 1));
-    Object.entries(add).forEach(([id, n]) => setQty(id, (qty[id] ?? 0) + n));
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2500);
+    setEdit(null);
+    setQ("");
   };
+  const setOk = (key: number, ok: boolean) => setList((l) => l.map((x) => (x.key === key ? { ...x, ok } : x)));
+  const remove = (key: number) => setList((l) => l.filter((x) => x.key !== key));
+  const confirmed = list.filter((x) => x.ok);
+  const toCheck = list.filter((x) => !x.ok);
+  const totalOk = confirmed.reduce((s, x) => s + (price(x.id) ?? 0), 0);
+  const addConfirmed = () => {
+    const add: Record<string, number> = {};
+    confirmed.forEach((x) => (add[x.id] = (add[x.id] ?? 0) + 1));
+    Object.entries(add).forEach(([id, n]) => setQty(id, (qty[id] ?? 0) + n));
+    setList((l) => l.filter((x) => !x.ok)); // pridané zmiznú, nepotvrdené ostanú na kontrolu
+    setAdded(true);
+    setTimeout(() => setAdded(false), 3000);
+  };
+  const finish = () => {
+    stop();
+    setMode("review");
+    window.scrollTo({ top: 0 });
+  };
+  const back = () => {
+    setEdit(null);
+    setMode("scan"); // kamera sa spustí až po vykreslení videa (efekt nižšie)
+    resume.current = true;
+  };
+  const plural = (n: number) => (n === 1 ? "karta" : n >= 2 && n <= 4 ? "karty" : "kariet");
+
+  // hľadanie inej karty (meno alebo kód)
+  const found =
+    q.trim().length >= 2
+      ? cards.cards
+          .filter((c) => {
+            const t = q.trim().toLowerCase();
+            return c.name.toLowerCase().includes(t) || c.id.toLowerCase().includes(t);
+          })
+          .slice(0, 12)
+      : [];
 
   const last = list[0];
   const lastCard = last ? cards.byId.get(last.id) : undefined;
   const fresh = !!last && Date.now() - last.key < 1800;
 
+  // ---------------------------------------------------------------- kontrola
+  if (mode === "review") {
+    // najprv nepotvrdené, z nich najprv tie, kde si skener nebol istý
+    const order = [...list].sort((a, b) => Number(a.ok) - Number(b.ok) || Number(b.unsure) - Number(a.unsure));
+    return (
+      <div className="scan-page rv">
+        <div className="row between wrapr gap">
+          <h1>Kontrola kariet</h1>
+          <button className="btn ghost sm" onClick={back}>
+            ← Skenovať ďalej
+          </button>
+        </div>
+        <p className="muted small">
+          Porovnaj svoj záber s nájdenou kartou. Ak nesedí verzia alebo karta, ťukni na <b>Zmeniť</b>.
+        </p>
+        {added && <div className="rv-done">Pridané do zbierky ✓</div>}
+        {list.length === 0 ? (
+          <div className="center muted">
+            Žiadne karty na kontrolu.{" "}
+            <button className="btn sm" onClick={back}>
+              Skenovať
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="rv-bar row between wrapr gap">
+              <span className="small">
+                <b>{toCheck.length}</b> na kontrolu · <b>{confirmed.length}</b> potvrdených
+              </span>
+              {toCheck.length > 0 && (
+                <button className="btn ghost sm" onClick={() => setList((l) => l.map((x) => ({ ...x, ok: true })))}>
+                  Potvrdiť všetky
+                </button>
+              )}
+            </div>
+            <ul className="rv-list">
+              {order.map((x) => {
+                const c = cards.byId.get(x.id);
+                return (
+                  <li key={x.key} className={`rv-item ${x.ok ? "ok" : x.unsure ? "warn" : ""}`}>
+                    <div className="rv-imgs">
+                      <figure>
+                        {x.shot ? <img src={x.shot} alt="Tvoj záber" /> : <div className="rv-noshot">bez záberu</div>}
+                        <figcaption>tvoj záber</figcaption>
+                      </figure>
+                      <figure>
+                        {c?.img && <img src={c.img} alt={c.name} />}
+                        <figcaption>nájdená</figcaption>
+                      </figure>
+                    </div>
+                    <div className="rv-info">
+                      {!x.ok && x.unsure && <span className="rv-badge">Skontroluj</span>}
+                      <b className="rv-name">{c?.name ?? x.id}</b>
+                      <span className="small muted">
+                        {c?.code}
+                        {c?.v ? ` · ${c.v}` : ""} · {c?.rarity}
+                        {debug ? ` · ${x.score.toFixed(2)}` : ""}
+                      </span>
+                      <b className="rv-price">{eur(price(x.id))}</b>
+                      <div className="rv-actions">
+                        <button className={`btn sm ${x.ok ? "" : "ghost"}`} onClick={() => setOk(x.key, !x.ok)}>
+                          {x.ok ? "✓ Potvrdené" : "✓ Sedí"}
+                        </button>
+                        <button className="btn ghost sm" onClick={() => (setEdit(edit === x.key ? null : x.key), setQ(""))}>
+                          Zmeniť
+                        </button>
+                        <button className="btn ghost sm danger" onClick={() => remove(x.key)}>
+                          Odstrániť
+                        </button>
+                      </div>
+                    </div>
+                    {edit === x.key && (
+                      <div className="rv-edit">
+                        {x.alts.length > 0 && (
+                          <>
+                            <span className="tiny muted">Iná verzia alebo podobná karta</span>
+                            <div className="rv-pick">
+                              {x.alts.slice(0, 8).map((a) => {
+                                const ac = cards.byId.get(a);
+                                return (
+                                  <button key={a} onClick={() => change(x.key, a)}>
+                                    {ac?.img && <img src={ac.img} alt="" loading="lazy" />}
+                                    <span>{ac?.code === c?.code ? ac?.v || "Základná" : ac?.name}</span>
+                                    <span className="muted">{eur(price(a))}</span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </>
+                        )}
+                        <input
+                          className="rv-search"
+                          placeholder="Hľadať inú kartu – meno alebo kód (napr. OP05-119)"
+                          value={q}
+                          onChange={(e) => setQ(e.target.value)}
+                          autoFocus
+                        />
+                        {found.length > 0 && (
+                          <div className="rv-pick">
+                            {found.map((fc) => (
+                              <button key={fc.id} onClick={() => change(x.key, fc.id)}>
+                                {fc.img && <img src={fc.img} alt="" loading="lazy" />}
+                                <span>
+                                  {fc.name} {fc.v ? `· ${fc.v}` : ""}
+                                </span>
+                                <span className="muted">
+                                  {fc.code} · {eur(price(fc.id))}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
+        {list.length > 0 && (
+          <div className="rv-foot">
+            <div>
+              <span className="small muted">Potvrdené {confirmed.length} {plural(confirmed.length)}</span>
+              <b className="scan-total">{eur(totalOk)}</b>
+            </div>
+            {user ? (
+              <button className="btn" disabled={!confirmed.length} onClick={addConfirmed}>
+                Pridať do zbierky
+              </button>
+            ) : (
+              <Link className="btn ghost" href="/login">
+                Prihlás sa a pridaj
+              </Link>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ---------------------------------------------------------------- skenovanie
   return (
     <div className={`scan-page ${state === "on" ? "live" : ""}`}>
       <div className="scan-head row between wrapr gap">
@@ -317,11 +532,14 @@ export default function ScannerPage() {
         {state === "on" && (
           <>
             <div className="scan-top">
-              <span className="scan-pill">
-                {list.length} {list.length === 1 ? "karta" : list.length >= 2 && list.length <= 4 ? "karty" : "kariet"} · <b>{eur(total)}</b>
-              </span>
               <button className="scan-round" onClick={stop} aria-label="Vypnúť kameru">
                 ×
+              </button>
+              <span className="scan-pill">
+                {list.length} {plural(list.length)} · <b>{eur(total)}</b>
+              </span>
+              <button className="scan-done" onClick={finish} disabled={!list.length}>
+                Hotovo
               </button>
             </div>
             <div className="scan-bottom">
@@ -358,7 +576,7 @@ export default function ScannerPage() {
             ) : (
               <>
                 <button className="btn" onClick={start}>
-                  Zapnúť kameru
+                  {list.length ? "Pokračovať v skenovaní" : "Zapnúť kameru"}
                 </button>
                 <p className="small">Vlož kartu do rámika – rozpozná sa sama, netreba fotiť.</p>
                 {msg && <p className="small badc">{msg}</p>}
@@ -379,66 +597,46 @@ export default function ScannerPage() {
         </div>
       )}
 
-      <div className="scan-sum row between wrapr gap">
-        <div>
-          <b>{list.length}</b> {list.length === 1 ? "karta" : list.length >= 2 && list.length <= 4 ? "karty" : "kariet"} ·{" "}
-          spolu <b className="scan-total">{eur(total)}</b>
-        </div>
-        <div className="row gap">
-          {list.length > 0 && (
-            <button className="btn ghost sm" onClick={() => setList([])}>
-              Vymazať
-            </button>
-          )}
-          {list.length > 0 &&
-            (user ? (
-              <button className="btn sm" onClick={addAll}>
-                {added ? "Pridané ✓" : "Pridať do zbierky"}
+      {list.length > 0 && (
+        <>
+          <div className="scan-sum row between wrapr gap">
+            <div>
+              <b>{list.length}</b> {plural(list.length)} · spolu <b className="scan-total">{eur(total)}</b>
+            </div>
+            <div className="row gap">
+              <button className="btn ghost sm" onClick={() => confirm("Vymazať naskenované karty?") && setList([])}>
+                Vymazať
               </button>
-            ) : (
-              <Link className="btn ghost sm" href="/login">
-                Prihlás sa a pridaj do zbierky
-              </Link>
-            ))}
-        </div>
-      </div>
-
-      <ul className="scan-list">
-        {list.map((x) => {
-          const c = cards.byId.get(x.id);
-          return (
-            <li key={x.key}>
-              {c?.img && <img src={c.img} alt="" loading="lazy" />}
-              <div className="grow">
-                <div className="row between gap">
-                  <b>{c?.name ?? x.id}</b>
-                  <b>{eur(price(x.id))}</b>
-                </div>
-                <div className="small muted">
-                  {c?.code} {c?.v ? `· ${c.v}` : ""} · {c?.rarity}
-                  {debug ? ` · ${x.score.toFixed(2)}` : ""}
-                </div>
-                {x.alts.length > 0 && (
-                  <div className="scan-alts">
-                    <span className="tiny muted">Iná verzia?</span>
-                    {x.alts.slice(0, 5).map((a) => {
-                      const ac = cards.byId.get(a);
-                      return (
-                        <button key={a} onClick={() => change(x.key, a)} title={ac?.name}>
-                          {ac?.code === c?.code ? ac?.v || "Základná" : `${ac?.name} ${ac?.code}`} · {eur(price(a), 0)}
-                        </button>
-                      );
-                    })}
+              <button className="btn sm" onClick={finish}>
+                Skontrolovať a potvrdiť
+              </button>
+            </div>
+          </div>
+          <ul className="scan-list">
+            {list.map((x) => {
+              const c = cards.byId.get(x.id);
+              return (
+                <li key={x.key}>
+                  {c?.img && <img src={c.img} alt="" loading="lazy" />}
+                  <div className="grow">
+                    <div className="row between gap">
+                      <b>{c?.name ?? x.id}</b>
+                      <b>{eur(price(x.id))}</b>
+                    </div>
+                    <div className="small muted">
+                      {c?.code} {c?.v ? `· ${c.v}` : ""} · {c?.rarity}
+                      {x.unsure && !x.ok ? " · skontroluj" : ""}
+                    </div>
                   </div>
-                )}
-              </div>
-              <button className="scan-x" aria-label="Odstrániť" onClick={() => setList((l) => l.filter((y) => y.key !== x.key))}>
-                ×
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+                  <button className="scan-x" aria-label="Odstrániť" onClick={() => remove(x.key)}>
+                    ×
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
     </div>
   );
 }

@@ -488,6 +488,8 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .scan-toast span { color: var(--muted); font-size: 12px; }
 .scan-toast-price { color: var(--gold); font-family: var(--display); font-size: 17px; white-space: nowrap; }
 @keyframes scan-up { from { opacity: 0; transform: translateY(12px); } }
+.scan-done { background: var(--foam); color: var(--ink); border: 0; border-radius: 999px; padding: 10px 18px; font: 800 15px var(--body); cursor: pointer; }
+.scan-done:disabled { opacity: .45; }
 .scan-hint { background: rgba(6, 18, 31, .7); border-radius: 999px; padding: 8px 16px; font-size: 14px; color: var(--text); }
 .scan-start { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 6px; text-align: center; padding: 20px; z-index: 4; background: rgba(2, 8, 15, .7); }
 .scan-debug { margin-top: 6px; color: var(--muted); font-family: ui-monospace, monospace; }
@@ -500,6 +502,32 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .scan-alts button { background: var(--sea); color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; font: 12px var(--body); cursor: pointer; }
 .scan-alts button:hover { border-color: var(--gold); }
 .scan-x { background: none; border: 0; color: var(--muted); font-size: 20px; cursor: pointer; padding: 0 4px; line-height: 1; }
+/* kontrola po skenovaní */
+.rv h1 { font-size: clamp(26px, 6vw, 36px); margin: 0; }
+.rv-done { background: rgba(94, 200, 200, .14); border: 1px solid var(--foam); color: var(--foam); border-radius: 12px; padding: 10px 14px; margin: 10px 0; font-weight: 700; }
+.rv-bar { margin: 12px 0; }
+.rv-list { list-style: none; margin: 0 0 110px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.rv-item { display: grid; grid-template-columns: auto 1fr; gap: 12px; background: rgba(12, 34, 54, .6); border: 1px solid var(--line); border-radius: 14px; padding: 10px; animation: page-in .3s var(--ease) both; }
+.rv-item.warn { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
+.rv-item.ok { border-color: rgba(94, 200, 200, .5); opacity: .85; }
+.rv-imgs { display: flex; gap: 6px; }
+.rv-imgs figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.rv-imgs img, .rv-noshot { width: clamp(84px, 24vw, 120px); aspect-ratio: 63 / 88; object-fit: cover; border-radius: 6px; background: var(--sea); }
+.rv-noshot { display: grid; place-items: center; font-size: 11px; color: var(--muted); }
+.rv-imgs figcaption { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.rv-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.rv-badge { align-self: flex-start; background: rgba(242, 184, 75, .16); color: var(--gold); border-radius: 999px; padding: 2px 9px; font-size: 11px; font-weight: 800; }
+.rv-name { font-family: var(--display); font-size: 17px; line-height: 1.15; }
+.rv-price { color: var(--gold); font-family: var(--display); font-size: 20px; margin-top: 2px; }
+.rv-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 6px; }
+.rv-edit { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 10px; }
+.rv-pick { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.rv-pick button { flex: none; width: 96px; display: flex; flex-direction: column; gap: 2px; background: var(--sea); border: 1px solid var(--line); border-radius: 10px; padding: 5px; color: var(--text); font: 11px/1.25 var(--body); cursor: pointer; text-align: left; }
+.rv-pick button:hover { border-color: var(--gold); }
+.rv-pick img { width: 100%; border-radius: 5px; }
+.rv-search { width: 100%; background: var(--sea); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; color: var(--text); font: 15px var(--body); }
+.rv-foot { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px max(16px, calc((100vw - 760px) / 2)) max(12px, env(safe-area-inset-bottom)); background: rgba(6, 18, 31, .92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); }
+.rv-foot > div { display: flex; flex-direction: column; }
 /* mobil: kamera cez celú šírku a takmer celú výšku – ako natívna appka */
 @media (max-width: 700px) {
   .scan-page { margin-top: 0; }
