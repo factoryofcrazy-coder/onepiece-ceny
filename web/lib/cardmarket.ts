@@ -14,6 +14,19 @@ type CmProduct = { idProduct: number; name: string; idExpansion: number };
 type CmPrice = { idProduct: number; trend: number | null; avg7: number | null; avg: number | null; low: number | null };
 type CardLike = { id: string; code: string; set: string; usd: number | null };
 export type CmFields = { cm?: number; cmLow?: number; cmJp?: number };
+/** Verzia karty, ktorú má len Cardmarket (promo, pre-release, judge…) – v OPTCG API chýba. */
+export type CmExtra = { id: string; code: string; label: string; cm?: number; cmLow?: number; idProduct: number; name: string };
+
+/** Druh promo expanzie podľa názvov jej zapečatených produktov. */
+function promoLabel(names: string[]) {
+  const t = names.join(" | ");
+  if (/Pre-Errata/i.test(t)) return "Pre-Errata";
+  if (/Pre-Release/i.test(t)) return "Pre-Release";
+  if (/Release Event/i.test(t)) return "Release Event";
+  if (/Judge/i.test(t)) return "Judge";
+  if (/Championship|Regional|Treasure Cup|Tournament/i.test(t)) return "Turnajové promo";
+  return "Promo";
+}
 
 const CODE_RX = /\(([A-Z]{1,4}\d{0,2}-\d{3})\)/;
 const JP_RX = /Non-English|Asia Region|Japanese|Chinese/i;
@@ -45,7 +58,7 @@ function* permutations(n: number, k: number, used: boolean[] = [], cur: number[]
     }
 }
 
-export async function cardmarketPrices(cards: CardLike[]): Promise<Map<string, CmFields>> {
+export async function cardmarketPrices(cards: CardLike[]): Promise<{ prices: Map<string, CmFields>; extras: CmExtra[] }> {
   const [pl, pg, ns] = await Promise.all([
     getJson(`productList/products_singles_${GAME}.json`),
     getJson(`priceGuide/price_guide_${GAME}.json`),
@@ -59,7 +72,9 @@ export async function cardmarketPrices(cards: CardLike[]): Promise<Map<string, C
 
   // jazyk expanzie podľa zapečatených produktov
   const votes = new Map<number, [number, number]>();
+  const sealed = new Map<number, string[]>();
   for (const p of ns.products as CmProduct[]) {
+    sealed.set(p.idExpansion, [...(sealed.get(p.idExpansion) ?? []), p.name]);
     const v = votes.get(p.idExpansion) ?? [0, 0];
     v[JP_RX.test(p.name) ? 1 : 0]++;
     votes.set(p.idExpansion, v);
@@ -84,6 +99,7 @@ export async function cardmarketPrices(cards: CardLike[]): Promise<Map<string, C
   for (const c of cards) sets.set(c.set, [...(sets.get(c.set) ?? []), c]);
 
   const en = new Map<string, number>(), jp = new Map<string, number>();
+  const used = new Set<number>(); // produkty priradené k našim verziám (aj tie odmietnuté poistkou)
   for (const [S, cs] of sets) {
     if (S === "P" || S === "DON") continue;
     const codes = new Set(cs.map((c) => c.code));
@@ -118,6 +134,7 @@ export async function cardmarketPrices(cards: CardLike[]): Promise<Map<string, C
           }
         }
         best!.forEach((j, i) => {
+          used.add(prods[j]);
           const u = ours[i].eur, t = tr(prods[j]);
           if (u && t && Math.max(u, t) >= 2 && Math.abs(Math.log(t / u)) > Math.log(4)) return; // poistka
           en.set(ours[i].id, prods[j]);
@@ -131,7 +148,7 @@ export async function cardmarketPrices(cards: CardLike[]): Promise<Map<string, C
         const allPriced = ours.every((o) => o.eur != null);
         const o = allPriced ? [...ours].sort((a, b) => a.eur! - b.eur!) : ours;
         const p = allPriced ? [...jprods].sort((a, b) => (tr(a) ?? 0) - (tr(b) ?? 0)) : jprods;
-        for (let i = 0; i < k; i++) jp.set(o[i].id, p[i]);
+        for (let i = 0; i < k; i++) jp.set(o[i].id, p[i]), used.add(p[i]);
       }
     }
   }
@@ -152,5 +169,28 @@ export async function cardmarketPrices(cards: CardLike[]): Promise<Map<string, C
     }
     if (f.cm || f.cmJp) out.set(c.id, f);
   }
-  return out;
+
+  // verzie, ktoré má len Cardmarket: nepriradené produkty s kódom našej karty z nejaponských expanzií
+  // (promo/pre-release/judge…; P-xxx promo sa nepárujú vôbec, tie by sa zdvojili)
+  const codes = new Set(cards.map((c) => c.code));
+  const extras: CmExtra[] = [];
+  const perCode = new Map<string, number>();
+  for (const p of pl.products as CmProduct[]) {
+    const m = p.name.match(CODE_RX);
+    if (!m || !codes.has(m[1]) || m[1].startsWith("P-") || used.has(p.idProduct) || lang(p.idExpansion) === "JP") continue;
+    const t = tr(p.idProduct);
+    if (!t) continue;
+    const label = promoLabel(sealed.get(p.idExpansion) ?? []);
+    perCode.set(m[1], (perCode.get(m[1]) ?? 0) + 1);
+    extras.push({
+      id: `${m[1]}_cm${p.idProduct}`,
+      code: m[1],
+      label,
+      cm: r2(t),
+      cmLow: r2(price.get(p.idProduct)?.low),
+      idProduct: p.idProduct,
+      name: p.name.replace(CODE_RX, "").replace(/""/g, '"').trim(),
+    });
+  }
+  return { prices: out, extras };
 }

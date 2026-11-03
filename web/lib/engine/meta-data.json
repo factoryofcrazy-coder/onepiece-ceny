@@ -2775,6 +2775,34 @@
 "traits": "Land of Wano Kouzuki Clan",
 "text": "[Activate:Main] You may trash this Character: Play up to 1 [Land of Wano] type Character card with a cost of 5 or less other than [Kouzuki Hiyori] from your hand. Then, draw 1 card."
 },
+"EB01-052": {
+"name": "Viola",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 2,
+"power": 0,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Dressrosa",
+"text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)[On Play]Choose one:• Look at all of your opponent's Life cards and place them back in their Life area in any order.• Turn all of your Life cards face-down."
+},
+"EB01-059": {
+"name": "Kingdom Come",
+"type": "Event",
+"colors": [
+"Yellow"
+],
+"cost": 6,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "Sky Island",
+"text": "[Main] K.O. up to 1 of your opponent's Characters. Then, trash cards from the top of your Life cards until you have 1 Life card.[Trigger] K.O. up to 1 of your opponent's Characters with a cost equal to or less than the total of your and your opponent's Life cards."
+},
 "EB01-061": {
 "name": "Mr.2.Bon.Kurei",
 "type": "Character",
@@ -2802,6 +2830,20 @@
 "attr": "Wisdom",
 "traits": "Straw Hat Crew East Blue",
 "text": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 \"Straw Hat Crew\" type card other than [Nami] and add it to your hand. Then, place the rest at the bottom of your deck in any order."
+},
+"EB02-018": {
+"name": "Buggy",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 4,
+"power": 6000,
+"counter": 0,
+"life": null,
+"attr": "Slash",
+"traits": "Buggy Pirates East Blue",
+"text": "[On Play] If you have no other [Buggy] Characters, up to 1 of your Leader gains [Double Attack] during this turn.\n[Trigger] Rest up to 1 of your opponent's Characters with a cost of 4 or less."
 },
 "EB02-021": {
 "name": "Gum-Gum Giant Pistol",
@@ -3069,6 +3111,20 @@
 "attr": "",
 "traits": "Straw Hat Crew Punk Hazard",
 "text": "[Main] If your Leader is [Sanji], look at 3 cards from the top of your deck; reveal up to 1 [Sanji] or Event card and add it to your hand. Then, trash the rest.\n[Counter] You may trash 1 card from your hand: Up to 1 of your [Sanji] cards gains +4000 power during this battle."
+},
+"EB04-030": {
+"name": "Kaido",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 7,
+"power": 9000,
+"counter": 0,
+"life": null,
+"attr": "Strike",
+"traits": "Animal Kingdom Pirates The Four Emperors",
+"text": "If this Character would be K.O.'d, you may return 1 DON!! card from your field to your DON!! deck instead. [On Play] DON!! -2: If your Leader has the {Animal Kingdom Pirates} type, this Character gains Rush during this turn. Then, rest up to 1 of your opponent's Characters with a cost of 7 or less."
 },
 "EB04-031": {
 "name": "King",
@@ -3547,6 +3603,34 @@
 "traits": "Land of Wano Kouzuki Clan",
 "text": "[Main] You may rest 2 of your Characters: Draw 2 cards."
 },
+"OP01-057": {
+"name": "Paradise Waterfall",
+"type": "Event",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "Land of Wano Kouzuki Clan",
+"text": "[Counter] Up to 1 of your Leader or Character cards gains +2000 power during this battle. Then, set up to 1 of your Characters as active. [Trigger] K.O. up to 1 of your opponent's rested Characters with a cost of 4 or less.  This card has been officially errata'd."
+},
+"OP01-094": {
+"name": "Kaido",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 10,
+"power": 12000,
+"counter": 0,
+"life": null,
+"attr": "Strike",
+"traits": "Animal Kingdom Pirates The Four Emperors",
+"text": "[On Play] DON!! -6 (You may return the specified number of DON!! cards from your field to your DON!! deck.): If your Leader has the \"Animal Kingdom Pirates\" type, K.O. all Characters other than this Character."
+},
 "OP02-010": {
 "name": "Dogura",
 "type": "Character",
@@ -3560,6 +3644,48 @@
 "attr": "Slash",
 "traits": "Mountain Bandits",
 "text": "[Activate:Main] You may rest this Character: Play up to 1 red Character other than [Dogura] with a cost of 1 from your hand."
+},
+"OP02-021": {
+"name": "Seaquake",
+"type": "Event",
+"colors": [
+"Red"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "The Four Emperors Whitebeard Pirates",
+"text": "[Main] If your Leader's type includes \"Whitebeard Pirates\", K.O. up to 1 of your opponent's Characters with 3000 power or less. [Trigger] Give up to 1 of your opponent's Leader or Character cards -3000 power during this turn."
+},
+"OP02-022": {
+"name": "Whitebeard Pirates",
+"type": "Event",
+"colors": [
+"Red"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "Whitebeard Pirates",
+"text": "[Main] Look at 5 cards from the top of your deck; reveal up to 1 Character card with a type including \"Whitebeard Pirates\" and add it to your hand. Then, place the rest at the bottom of your deck in any order. [Trigger] Activate this card's [Main] effect."
+},
+"OP02-024": {
+"name": "Moby Dick",
+"type": "Stage",
+"colors": [
+"Red"
+],
+"cost": 2,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "NULL",
+"traits": "Whitebeard Pirates",
+"text": "[Your Turn] If you have 1 or less Life cards, your [Edward.Newgate] and all your Characters with a type including \"Whitebeard Pirates\" gain +2000 power. [Trigger] Play this card."
 },
 "OP02-051": {
 "name": "Emporio.Ivankov",
@@ -3617,6 +3743,20 @@
 "traits": "Navy",
 "text": "[Main] Give up to 1 of your opponent's Characters -5 cost during this turn. [Trigger] K.O. up to 1 of your opponent's Characters with a cost of 3 or less."
 },
+"OP03-003": {
+"name": "Izo",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 1,
+"power": 2000,
+"counter": 1000,
+"life": null,
+"attr": "Ranged",
+"traits": "Land of Wano Whitebeard Pirates",
+"text": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 card with a type including \"Whitebeard Pirates\" other than [Izo] and add it to your hand. Then, place the rest at the bottom of your deck in any order."
+},
 "OP03-008": {
 "name": "Buggy",
 "type": "Character",
@@ -3630,6 +3770,49 @@
 "attr": "Slash",
 "traits": "Buggy Pirates",
 "text": "This Character cannot be K.O.'d in battle by \"Slash\" attribute cards. [On Play] Look at 5 cards from the top of your deck; reveal up to 1 red Event and add it to your hand. Then, place the rest at the bottom of your deck in any order."
+},
+"OP03-022": {
+"name": "Arlong",
+"type": "Leader",
+"colors": [
+"Green",
+"Yellow"
+],
+"cost": null,
+"power": 5000,
+"counter": null,
+"life": 4,
+"attr": "Slash",
+"traits": "Fish-Man Arlong Pirates East Blue",
+"text": "[DON!! x2] [When Attacking (1) (You may rest the specified number of DON!! cards in your cost area.): Play up to 1 Character card with a cost of 4 or less and a [Trigger] from your hand."
+},
+"OP03-026": {
+"name": "Kuroobi",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 4,
+"power": 3000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "Fish-Man Arlong Pirates East Blue",
+"text": "[On Play] If your Leader has the [East Blue] type, rest up to 1 of your opponent's Characters. [Trigger] Play this card."
+},
+"OP03-033": {
+"name": "Hatchan",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 4,
+"power": 4000,
+"counter": 2000,
+"life": null,
+"attr": "Slash",
+"traits": "Fish-Man Arlong Pirates East Blue",
+"text": "[Trigger] If your Leader has the [East Blue] type, play this card."
 },
 "OP03-044": {
 "name": "Kaya",
@@ -3757,6 +3940,20 @@
 "traits": "Big Mom Pirates",
 "text": "[On Play] If your Leader has the [Big Mom Pirates] type, add up to 1 card from the top of your deck to the top of your Life cards. Then, trash up to 1 card from the top of your opponent's Life cards."
 },
+"OP03-123": {
+"name": "Charlotte Katakuri",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 8,
+"power": 8000,
+"counter": 0,
+"life": null,
+"attr": "Strike",
+"traits": "Big Mom Pirates",
+"text": "[On Play] Add up to 1 Character with a cost of 8 or less to the top or bottom of the owner's Life cards face-up."
+},
 "OP04-016": {
 "name": "Bad Manners Kick Course",
 "type": "Event",
@@ -3869,6 +4066,20 @@
 "traits": "Straw Hat Crew",
 "text": "[When Attacking] If you have 3 or less Life cards, add up to 1 DON!! card from your DON!! deck and set it as active."
 },
+"OP05-073": {
+"name": "Miss Doublefinger",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 4,
+"power": 4000,
+"counter": 2000,
+"life": null,
+"attr": "Slash",
+"traits": "Baroque Works",
+"text": "[On Play] You may trash 1 card from your hand: Add up to 1 DON!! card from your DON!! deck and rest it. [Trigger] DON!! -1 (You may return the specified number of DON!! cards from your field to your DON!! deck.): Play this card."
+},
 "OP05-077": {
 "name": "Gamma Knife",
 "type": "Event",
@@ -3896,6 +4107,20 @@
 "attr": "Special",
 "traits": "Sky Island",
 "text": "[Opponent's Turn][Once Per Turn] When your number of Life cards becomes 0, add 1 card from the top of your deck to the top of your Life cards. Then, trash 1 card from your hand."
+},
+"OP05-114": {
+"name": "El Thor",
+"type": "Event",
+"colors": [
+"Yellow"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "Sky Island",
+"text": "[Counter] Up to 1 of your Leader or Character cards gains +2000 power during this battle. Then, if your opponent has 2 or less Life cards, that card gains an additional +2000 power during this battle. [Trigger] K.O. up to 1 of your opponent's Characters with a cost equal to or less than the number of your opponent's Life Cards."
 },
 "OP05-117": {
 "name": "Upper Yard",
@@ -4022,6 +4247,20 @@
 "attr": "Strike",
 "traits": "Thriller Bark Pirates",
 "text": "[DON!! x2][Your Turn] This Character gains +1000 power for every 5 cards in your trash."
+},
+"OP06-104": {
+"name": "Kikunojo",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 4,
+"power": 6000,
+"counter": 0,
+"life": null,
+"attr": "Slash",
+"traits": "Land of Wano The Akazaya Nine",
+"text": "[On K.O.] If your opponent has 3 or less Life cards, add up to 1 card from the top of your deck to the top of your Life cards.\n[Trigger] If your opponent has 3 or less Life cards, play this card."
 },
 "OP06-106": {
 "name": "Kouzuki Hiyori",
@@ -4318,6 +4557,20 @@
 "traits": "Big Mom Pirates",
 "text": "[Activate:Main] You may trash this Character: If your Leader has the {Big Mom Pirates} type, play up to 1 [Charlotte Katakuri] from your hand with a cost of 3 or more that is equal to or less than the number of DON!! cards on your opponent's field."
 },
+"OP08-074": {
+"name": "Black Maria",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 3,
+"power": 2000,
+"counter": 2000,
+"life": null,
+"attr": "Special",
+"traits": "Animal Kingdom Pirates",
+"text": "[Activate:Main] [Once Per Turn] If you have no other [Black Maria] Characters, add up to 5 DON!! cards from your DON!! deck and rest them. Then, at the end of this turn, return DON!! cards from your field to your DON!! deck until you have the same number of DON!! cards on your field as your opponent."
+},
 "OP08-077": {
 "name": "Conquest of the Sea",
 "type": "Event",
@@ -4513,6 +4766,21 @@
 "attr": "",
 "traits": "Cross Guild",
 "text": "[Activate: Main] You may place 2 cards from your hand at the bottom of your deck in any order and rest this Stage: If your Leader has the \"Cross Guild\" type, draw 2 cards."
+},
+"OP09-062": {
+"name": "Nico Robin",
+"type": "Leader",
+"colors": [
+"Purple",
+"Yellow"
+],
+"cost": null,
+"power": 5000,
+"counter": null,
+"life": 4,
+"attr": "Strike",
+"traits": "Straw Hat Crew",
+"text": "[Banish] (When this card deals damage, the target card is trashed without activating its Trigger.)\n[When Attacking] You may trash 1 card with a [Trigger] from your hand: Add up to 1 DON!! card from your DON!! deck and rest it."
 },
 "OP09-072": {
 "name": "Franky",
@@ -5005,6 +5273,20 @@
 "traits": "Heart Pirates Supernovas Dressrosa",
 "text": "[On Play] Reveal up to 1 \"Supernovas\" type Character card from your hand and add it to the top of your Life cards face-down. Then, give up to 1 rested DON!! card to 1 of your \"Supernovas\" type Leader."
 },
+"OP11-003": {
+"name": "Usopp",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 5,
+"power": 6000,
+"counter": 2000,
+"life": null,
+"attr": "Ranged",
+"traits": "Straw Hat Crew",
+"text": ""
+},
 "OP11-012": {
 "name": "Franky",
 "type": "Character",
@@ -5243,6 +5525,20 @@
 "attr": "Slash",
 "traits": "Former Roger Pirates",
 "text": "Under the rules of this game, you cannot include cards with a cost of 5 or more in your deck.\n[Activate: Main] [Once Per Turn] You may reveal 2 Events from your hand: Up to 1 of your Characters with 4000 base power or less gains +2000 power during this turn."
+},
+"OP12-002": {
+"name": "Edward.Newgate",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 5,
+"power": 6000,
+"counter": 2000,
+"life": null,
+"attr": "Special",
+"traits": "Whitebeard Pirates",
+"text": ""
 },
 "OP12-006": {
 "name": "Shakuyaku",
@@ -5669,6 +5965,20 @@
 "traits": "Revolutionary Army Dressrosa",
 "text": "If you have 4 or more Life cards, give this Leader 1000 power.\n[DON!! x1] If you have a Character with a cost of 8 or more, your Leader and all of your Characters gain +1000 power."
 },
+"OP13-007": {
+"name": "Ace & Sabo & Luffy",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 1,
+"power": 1000,
+"counter": 2000,
+"life": null,
+"attr": "Strike",
+"traits": "Goa Kingdom",
+"text": "[Activate: Main] You may give 1 of your active DON!! cards to 1 of your Leader or Character cards and trash this Character: Give up to 1 of your opponent's Characters 3000 power during this turn."
+},
 "OP13-016": {
 "name": "Monkey.D.Garp",
 "type": "Character",
@@ -5879,6 +6189,20 @@
 "traits": "Straw Hat Crew Supernovas",
 "text": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 {Supernovas} type card other than [Monkey.D.Luffy] and add it to your hand. Then, place the rest at the bottom of your deck in any order.\n[When Attacking] Give up to 1 of your opponent's Characters -1000 power during this turn."
 },
+"OP14-018": {
+"name": "Time for the Counterattack",
+"type": "Event",
+"colors": [
+"Red"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "Heart Pirates Supernovas The Seven Warlords of the Sea",
+"text": "[Counter] If there is a Character with 8000 power or more, up to 1 of your Leader or Character cards gains +4000 power during this battle.\n[Trigger] Play up to 1 red Character card with 2000 power or less from your hand."
+},
 "OP14-019": {
 "name": "I Have a Plan to Take Down One of the Four Emperors!!",
 "type": "Event",
@@ -5892,6 +6216,20 @@
 "attr": "",
 "traits": "Heart Pirates Supernovas The Seven Warlords of the Sea",
 "text": "[Main] Look at 4 cards from the top of your deck; reveal up to 1 {Supernovas} or {Straw Hat Crew} type Character card and add it to your hand. Then, place the rest at the bottom of your deck in any order.[Trigger] Draw 1 card."
+},
+"OP14-020": {
+"name": "Dracule Mihawk",
+"type": "Leader",
+"colors": [
+"Green"
+],
+"cost": null,
+"power": 5000,
+"counter": null,
+"life": 5,
+"attr": "Slash",
+"traits": "The Seven Warlords of the Sea",
+"text": "If your opponent's Leader has the \"Slash\" attribute, this leader gains +1000 power.\n[Activate:Main] [Once Per Turn] You may rest 1 of your cards: If there is a Character with a cost of 5 or more, set up to 3 of your DON!! cards as active. Then, you cannot play character cards during this turn."
 },
 "OP14-022": {
 "name": "Usopp",
@@ -5907,6 +6245,20 @@
 "traits": "FILM Straw Hat Crew",
 "text": "[End of Your Turn] If your Leader has the {FILM} or {Straw Hat Crew} type, set up to 2 of your DON!! cards as active."
 },
+"OP14-023": {
+"name": "Kikunojo",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": 2000,
+"counter": 2000,
+"life": null,
+"attr": "Slash",
+"traits": "Land of Wano The Akazaya Nine",
+"text": "[End of Your Turn] Set this Character as active."
+},
 "OP14-031": {
 "name": "Nami",
 "type": "Character",
@@ -5920,6 +6272,34 @@
 "attr": "Special",
 "traits": "FILM Straw Hat Crew",
 "text": "[Blocker][On Play] Rest up to 2 of your opponent's Characters with a cost of 8 or less. Then, set up to 5 of your DON!! cards as active at the end of this turn."
+},
+"OP14-038": {
+"name": "I Never Bother to Remember the Faces of Trash",
+"type": "Event",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "The Seven Warlords of the Sea",
+"text": "[Main] You may rest 2 of your cards: Draw 1 card and rest up to 1 of your opponent's Characters with 7000 base power or less. [Counter] Your Leader gains +3000 power during this battle."
+},
+"OP14-039": {
+"name": "Coffin Boat",
+"type": "Stage",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "The Seven Warlords of the Sea East Blue",
+"text": "[On Play] If your Leader is [Dracule Mihawk], draw 1 card.\n[End of Your Turn] If your Leader is [Dracule Mihawk], set up to 1 of your DON!! cards as active."
 },
 "OP14-041": {
 "name": "Boa Hancock",
@@ -6203,6 +6583,63 @@
 "traits": "Kuja Pirates The Seven Warlords of the Sea",
 "text": "[Counter] If you have 2 or less Life cards, up to 1 of your opponent's active Characters cannot attack during this turn.\n[Trigger] Play up to 1 Character card with 6000 power or less and a [Trigger] from your hand."
 },
+"OP15-001": {
+"name": "Krieg",
+"type": "Leader",
+"colors": [
+"Green",
+"Red"
+],
+"cost": null,
+"power": 5000,
+"counter": 0,
+"life": 4,
+"attr": "Slash",
+"traits": "Krieg Pirates East Blue",
+"text": "[DON!! x1] [Opponent's Turn] If the only Characters on your field are {East Blue} type Characters, give all of your opponent's Characters -2000 power.\n[Activate: Main] [Once Per Turn] Rest up to 1 of your opponent's Characters that has 2 or more DON!! cards given."
+},
+"OP15-003": {
+"name": "Alvida",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 5,
+"power": 6000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "East Blue Alvida Pirates",
+"text": "If this Character would be K.O.'d, you may trash 1 Character card with a power of 6000 or less from your hand instead.\n[Activate: Main] [Once Per Turn] You may give 1 of your opponent's rested DON!! cards to 1 of your opponent's Characters: Give up to 1 rested DON!! card to its owner's Leader or 1 of their Characters."
+},
+"OP15-007": {
+"name": "Gin",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 6,
+"power": 7000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "Krieg Pirates East Blue",
+"text": "[On Play] If your Leader has the {East Blue} type, play up to 1 Character card with a cost of 5 or less from your hand."
+},
+"OP15-008": {
+"name": "Krieg",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 8,
+"power": 9000,
+"counter": 0,
+"life": null,
+"attr": "Slash",
+"traits": "Krieg Pirates East Blue",
+"text": "[On Play] Give up to 3 of your opponent's rested DON!! cards to 1 of your opponent's Characters. Then, this Character gains [Rush] during this turn.\n[Activate: Main] [Once Per Turn] If this Character was played on this turn, give all of your opponent's Characters -1000 power during this turn for every DON!! card given to that Character."
+},
 "OP15-009": {
 "name": "Koby",
 "type": "Character",
@@ -6216,6 +6653,90 @@
 "attr": "Strike",
 "traits": "Navy East Blue",
 "text": "If your Character with 7000 base power or less would be removed from the field by your opponent's effect, you may give your Leader -2000 power during this turn instead."
+},
+"OP15-011": {
+"name": "Pearl",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 4,
+"power": 4000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "Krieg Pirates East Blue",
+"text": "[Opponent's Turn] If your Leader has the {East Blue} type, this Character gains [Blocker] and +2000 power. [On K.O.] If your Leader has the {East Blue} type, K.O. up to 1 of your opponent's Characters with 6000 base power or less."
+},
+"OP15-017": {
+"name": "Morgan",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 5,
+"power": 6000,
+"counter": 1000,
+"life": null,
+"attr": "Slash",
+"traits": "Navy East Blue",
+"text": "[Activate: Main] [Once Per Turn] You may give 1 of your opponent's rested DON!! cards to 1 of your opponent's Characters: Give up to 1 rested DON!! card to its owner's Leader or 1 of their Characters."
+},
+"OP15-023": {
+"name": "Arlong",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 4,
+"power": 5000,
+"counter": 1000,
+"life": null,
+"attr": "",
+"traits": "Fish-Man Arlong Pirates East Blue",
+"text": "[On K.O.] Up to 2 of your opponent's rested cards will not become active in your opponent's next Refresh Phase.\n[Activate: Main] [Once Per Turn] You may give 1 of your opponent's rested DON!! cards to 1 of your opponent's Characters: Give up to 1 DON!! card from its owner's cost area to its owner's Leader or 1 of their Characters."
+},
+"OP15-025": {
+"name": "Kuro",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 7,
+"power": 7000,
+"counter": 1000,
+"life": null,
+"attr": "Slash",
+"traits": "East Blue Black Cat Pirates",
+"text": "[Blocker]\n[On Play] Give up to 2 DON!! cards from your opponent's cost area to 1 of your opponent's Characters. Then, at the end of this turn, up to 1 rested Character with 3 or more DON!! cards given will not become active in your opponent's next Refresh Phase."
+},
+"OP15-026": {
+"name": "Jango",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": 2000,
+"counter": 1000,
+"life": null,
+"attr": "Slash",
+"traits": "East Blue Black Cat Pirates",
+"text": "[On Play] Look at 3 cards from the top of your deck; reveal up to 1 {East Blue} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.\n[Activate: Main] You may trash this Character: Give up to 1 of your opponent's rested DON!! cards to 1 of your opponent's Characters."
+},
+"OP15-028": {
+"name": "Meowban Brothers",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": 2000,
+"counter": 2000,
+"life": null,
+"attr": "Slash",
+"traits": "East Blue Black Cat Pirates",
+"text": "[On Play] If your Leader has the {East Blue} type, give up to 1 DON!! card from your opponent's cost area to 1 of your opponent's Characters."
 },
 "OP15-032": {
 "name": "Brook",
@@ -6244,6 +6765,34 @@
 "attr": "Strike",
 "traits": "Animal",
 "text": "If your Character with 7000 base power or less would be removed from the field by your opponent's effect, you may rest 2 of your cards instead."
+},
+"OP15-037": {
+"name": "The Outcome Will Tell Us Who's Strong and Who's Weak",
+"type": "Event",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": null,
+"counter": null,
+"life": null,
+"attr": "",
+"traits": "Krieg Pirates East Blue",
+"text": "[Main] Look at 5 cards from the top of your deck; reveal up to 1 {East Blue} type card other than [The Outcome Will Tell Us Who's Strong and Who's Weak] and add it to your hand. Then, place the rest at the bottom of your deck in any order. [Trigger] Draw 1 card."
+},
+"OP15-038": {
+"name": "It's an Order! Do Not Defy Me!!!",
+"type": "Event",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "Krieg Pirates East Blue",
+"text": "[Main] Up to 1 of your opponent's rested Characters with a cost of 8 or less that has 2 or more DON!! cards given will not become active in your opponent's next Refresh Phase.[Counter] Up to 1 of your [Krieg] cards gains +4000 power during this battle."
 },
 "OP15-058": {
 "name": "Enel",
@@ -6581,6 +7130,20 @@
 "traits": "Straw Hat Crew Sky Island",
 "text": "If you have 6 or more DON!! cards on your field, this Character gains [Rush].\nWhen your opponent activates an Event or [Blocker], reveal up to 1 card from the top of your Life cards. This Character gains +1000 power during this turn per 1 cost on the revealed card."
 },
+"OP16-002": {
+"name": "Izo",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 1,
+"power": 2000,
+"counter": 1000,
+"life": null,
+"attr": "Ranged",
+"traits": "Land of Wano Whitebeard Pirates",
+"text": "[On Play] You may reveal 1 Character card with 8000 power from your hand: Draw 1 card."
+},
 "OP16-004": {
 "name": "Curiel",
 "type": "Character",
@@ -6594,6 +7157,20 @@
 "attr": "Ranged",
 "traits": "Whitebeard Pirates",
 "text": ""
+},
+"OP16-017": {
+"name": "LittleOars Jr.",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 4,
+"power": 8000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "Giant Whitebeard Pirates Allies",
+"text": "If you have no Characters with a type including \"Whitebeard Pirates\" and a cost of 8 or more give this Character -4000 power.\n\n[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)"
 },
 "OP16-021": {
 "name": "Moby Dick",
@@ -6820,6 +7397,20 @@
 "traits": "Navy",
 "text": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 {Navy} type card, add it to your hand and place the rest at the bottom of your deck in any order. Then, trash 1 card from your hand."
 },
+"OP16-068": {
+"name": "Trafalgar Law",
+"type": "Character",
+"colors": [
+"Purple"
+],
+"cost": 4,
+"power": 3000,
+"counter": 1000,
+"life": null,
+"attr": "Wisdom",
+"traits": "Donquixote Pirates",
+"text": "[On Play] Add up to 1 DON!! card from your DON!! deck and set it as active.\n[When Attacking] If your Leader has the {Donquixote Pirates} type, this Character gains +3000 power during this turn."
+},
 "OP16-077": {
 "name": "\"Buddha\" Sengoku",
 "type": "Event",
@@ -6989,6 +7580,20 @@
 "traits": "Blackbeard Pirates The Seven Warlords of the Sea",
 "text": "[Main] If you have 10 DON!! cards on your field, play up to 1 [Marshall.D.Teach] from your hand. Then, add up to 1 card from the top of your opponent's Life cards to the owner's hand.\n[Trigger] Draw 2 cards and trash 1 card from your hand."
 },
+"OP16-118": {
+"name": "Portgas.D.Ace",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 5,
+"power": 6000,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Whitebeard Pirates",
+"text": "The counter of all of your Character cards with 8000 power in your hand becomes +2000.\n[On Play]/[On K.O.] Look at 5 cards from the top of your deck; reveal up to 1 [Monkey.D.Luffy] or up to 1 card with a type including \"Whitebeard Pirates\" and add it to your hand. Then, place the rest a the bottom of your deck in any order."
+},
 "OP16-119": {
 "name": "Marshall.D.Teach",
 "type": "Character",
@@ -7002,6 +7607,90 @@
 "attr": "Special",
 "traits": "Blackbeard Pirates The Seven Warlords of the Sea",
 "text": "[On Play] Look at 3 cards from the top of your deck; add up to 1 card to the top of your Life cards. Then, place the rest at the bottom of your deck in any order.\n[Trigger] Negate the effect of up to 1 of your opponent's Characters during this turn. Then, K.O. up to 1 of your opponent's Characters with a cost of 5 or less."
+},
+"OP17-001": {
+"name": "Edward.Newgate",
+"type": "Leader",
+"colors": [
+"Red"
+],
+"cost": null,
+"power": 5000,
+"counter": 0,
+"life": 5,
+"attr": "Special",
+"traits": "The Four Emperors Whitebeard Pirates",
+"text": "[On Your Opponent's Attack] [Once Per Turn] You may trash 1 card from your hand: Up to 1 of your Leader or Characters gains +4000 power during this battle."
+},
+"OP17-002": {
+"name": "Atmos",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 4,
+"power": 6000,
+"counter": 0,
+"life": null,
+"attr": "Slash",
+"traits": "Whitebeard Pirates",
+"text": "[Opponent's Turn] This Character gains +3000 power."
+},
+"OP17-003": {
+"name": "Izo",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 4,
+"power": 6000,
+"counter": 0,
+"life": null,
+"attr": "Ranged",
+"traits": "Land of Wano Whitebeard Pirates",
+"text": "[Rush: Character]\n[On Play] If your Leader is [Edward.Newgate] or has the {Land of Wano} type, give up to 1 of your opponent's rested Characters -6000 power during this turn."
+},
+"OP17-004": {
+"name": "Inuarashi & Nekomamushi",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 3,
+"power": 2000,
+"counter": 2000,
+"life": null,
+"attr": "Slash",
+"traits": "Land of Wano Minks Whitebeard Pirates",
+"text": "[On Play] Up to 1 of your {Land of Wano} type Characters or up to 1 of your Characters with a type including \"Whitebeard Pirates\" gains [Rush] during this turn. (This card can attack on the turn in which it is played.)"
+},
+"OP17-005": {
+"name": "Edward.Newgate",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 10,
+"power": 12000,
+"counter": 0,
+"life": null,
+"attr": "Special",
+"traits": "The Four Emperors Whitebeard Pirates",
+"text": "If your opponent has a Character with 10000 power or more, give this card in your hand -4 cost.\n[On Play] Your monocolored Leader's base power becomes 8000 until the end of your opponent's next End Phase."
+},
+"OP17-008": {
+"name": "Jozu",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 6,
+"power": 8000,
+"counter": 0,
+"life": null,
+"attr": "Strike",
+"traits": "Whitebeard Pirates",
+"text": "[On Play] Your [Edward.Newgate] Leader's base power becomes 8000 until the end of your opponent's next End Phase."
 },
 "OP17-016": {
 "name": "Rakuyo",
@@ -7030,6 +7719,20 @@
 "attr": "",
 "traits": "The Four Emperors Whitebeard Pirates",
 "text": "[Counter] Up to 1 of your Leader with a type including \"Whitebeard Pirates\" or up to 1 of your Characters with a type including \"Whitebeard Pirates\" gains +2000 power during this battle. Then, give up to 1 of your opponent's Leader or Characters 2000 power during this turn."
+},
+"OP17-019": {
+"name": "I Don't Have Time to Chat with Snot-Nosed Brats",
+"type": "Event",
+"colors": [
+"Red"
+],
+"cost": 1,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "",
+"traits": "The Four Emperors Whitebeard Pirates",
+"text": "[Main] Look at 5 cards from the top of your deck; reveal up to 1 card with a type including \"Whitebeard Pirates\" and add it to your hand. Then, place the rest at the bottom of your deck in any order.\n\n[Trigger] Your Leader gains +1000 power during this turn."
 },
 "OP17-020": {
 "name": "Shanks",
@@ -7072,6 +7775,20 @@
 "attr": "Slash",
 "traits": "The Four Emperors Red-Haired Pirates",
 "text": "[Rush] (This card can attack on the turn in which it is played.)\n[On Play] Set up to 2 of your DON!! cards as active. Then, rest all of your opponent's Characters."
+},
+"OP17-023": {
+"name": "Nami",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": 1000,
+"counter": 2000,
+"life": null,
+"attr": "Wisdom",
+"traits": "East Blue Straw Hat Crew",
+"text": "If one of your {East Blue} or {Straw Hat Crew} type Characters would be K.O.'d, you may rest this Character instead."
 },
 "OP17-027": {
 "name": "Benn.Beckman",
@@ -7885,6 +8602,34 @@
 "traits": "Big Mom Pirates",
 "text": "[On Play] You may trash 1 card with a [Trigger] from your hand: Draw 3 cards.\n[Trigger] Look at 5 cards from the top of your deck; reveal up to 1 {Big Mom Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order."
 },
+"OP17-110": {
+"name": "Charlotte Perospero",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 7,
+"power": 4000,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Big Mom Pirates",
+"text": "[Your Turn] [On Play] Play up to 1 {Big Mom Pirates} type Character card with a cost of 6 or less from your hand. Then, this Character gains [Rush] during this turn.\n[Trigger] Play this card."
+},
+"OP17-111": {
+"name": "Charlotte Mont-d'or",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 3,
+"power": 4000,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Big Mom Pirates",
+"text": "[On Play] You may reveal 2 cards with a [Trigger] from your hand: K.O. up to 2 of your opponent's Characters with a cost of 1 or less.\n[Trigger] Play this card."
+},
 "OP17-112": {
 "name": "Charlotte Linlin",
 "type": "Character",
@@ -8010,6 +8755,20 @@
 "attr": "Slash",
 "traits": "Heart Pirates",
 "text": "[Blocker]\n[On Play] If the number of DON!! cards on your field is equal to or less than the number on your opponent's field, add up to 1 DON!! card from your DON!! deck and rest it."
+},
+"P-111": {
+"name": "Nico Robin",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 3,
+"power": 4000,
+"counter": 1000,
+"life": null,
+"attr": "Strike",
+"traits": "Straw Hat Crew",
+"text": "[Once Per Turn] If your {Straw Hat Crew} type Character would be removed from the field by your opponent's effect, you may rest 1 of your DON!! cards instead."
 },
 "P-117": {
 "name": "Nami",
@@ -8137,6 +8896,34 @@
 "traits": "Heart Pirates Supernovas",
 "text": "[On Play] Set up to 1 of your \"Supernovas\" or \"Heart Pirates\" type rested Characters with a cost of 5 or less as active."
 },
+"ST04-017": {
+"name": "Onigashima Island",
+"type": "Stage",
+"colors": [
+"Purple"
+],
+"cost": 3,
+"power": null,
+"counter": 0,
+"life": null,
+"attr": "NULL",
+"traits": "Animal Kingdom Pirates",
+"text": "[Activate: Main] You may rest this Stage: If your Leader has the {Animal Kingdom Pirates} type, add up to 1 DON!! card from your DON!! deck and rest it."
+},
+"ST07-007": {
+"name": "Charlotte Brulee",
+"type": "Character",
+"colors": [
+"Yellow"
+],
+"cost": 3,
+"power": 1000,
+"counter": 1000,
+"life": null,
+"attr": "Special",
+"traits": "Big Mom Pirates",
+"text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.) [Trigger] Play this card."
+},
 "ST07-015": {
 "name": "Soul Pocus",
 "type": "Event",
@@ -8207,6 +8994,20 @@
 "attr": "",
 "traits": "Straw Hat Crew",
 "text": "All of your black \"Straw Hat Crew\" type Characters gain +1 cost.\n[On Play] If your Leader has the \"Straw Hat Crew\" type, draw 1 card."
+},
+"ST15-004": {
+"name": "Thatch",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 1,
+"power": 2000,
+"counter": 2000,
+"life": null,
+"attr": "Slash",
+"traits": "Whitebeard Pirates",
+"text": "[On Play] If your Leader's type includes \"Whitebeard Pirates\", give up to 1 of your opponent's Characters 2000 power during this turn. Then, add 1 card from the top of your Life cards to your hand."
 },
 "ST16-004": {
 "name": "Shanks",
@@ -8347,6 +9148,20 @@
 "attr": "Slash Special",
 "traits": "Kid Pirates Supernovas",
 "text": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 \"Supernovas\" type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.\n[On Your Opponent's Attack] You may trash this Character: Set up to 1 of your DON!! cards as active."
+},
+"ST24-004": {
+"name": "Law & Bepo",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 10,
+"power": 11000,
+"counter": 0,
+"life": null,
+"attr": "Slash Strike",
+"traits": "Heart Pirates Minks Supernovas",
+"text": "[On Play] Rest up to 1 of your opponent's Characters and that Character will not become active in your opponent's next Refresh Phase. Then, if your opponent has 2 or more rested Characters, your Leader gains +2000 power until the end of your opponent's next End Phase."
 },
 "ST25-001": {
 "name": "Alvida",
@@ -8503,6 +9318,20 @@
 "traits": "Revolutionary Army Impel Down",
 "text": "[On Play] You may reveal 2 Character cards with 6000 power from your hand: Draw 3 cards and trash 2 cards from your hand."
 },
+"ST30-005": {
+"name": "Jozu",
+"type": "Character",
+"colors": [
+"Red"
+],
+"cost": 5,
+"power": 6000,
+"counter": 2000,
+"life": null,
+"attr": "Strike",
+"traits": "Whitebeard Pirates",
+"text": ""
+},
 "ST30-012": {
 "name": "Monkey.D.Luffy",
 "type": "Character",
@@ -8586,6 +9415,20 @@
 "attr": "",
 "traits": "Straw Hat Crew",
 "text": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 {Straw Hat Crew} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.[Activate: Main] You may rest this Stage: Give up to 1 rested DON!! card to 1 of your [Monkey.D.Luffy] cards."
+},
+"ST32-001": {
+"name": "Kin'emon",
+"type": "Character",
+"colors": [
+"Green"
+],
+"cost": 1,
+"power": 2000,
+"counter": 1000,
+"life": null,
+"attr": "Slash",
+"traits": "Land of Wano The Akazaya Nine",
+"text": "[On Play] You may rest your attribute Leader or 1 of your DON!! cards: Draw 2 cards and trash 1 card from your hand."
 },
 "ST32-002": {
 "name": "Kouzuki Oden",

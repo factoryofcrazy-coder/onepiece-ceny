@@ -10,7 +10,7 @@ const MAX_AGE_H = 72; // starší súbor z Pages → radšej zostav naživo
 
 async function fromPages(anyAge = false) {
   try {
-    const r = await fetch(OLD_SITE + "data/cards.json", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    const r = await fetch(process.env.CARDS_JSON_URL || OLD_SITE + "data/cards.json", { cache: "no-store", signal: AbortSignal.timeout(10000) });
     if (!r.ok) return null;
     const d = await r.json();
     const age = (Date.now() - new Date(d.updated).getTime()) / 3.6e6;
