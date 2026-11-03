@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { loadProfiles, Profile, useAuth } from "@/lib/auth";
 import type { Card } from "@/lib/data";
-import { COLOR_SK, eur, thumb } from "@/lib/data";
+import { cardEur, COLOR_SK, eur, thumb } from "@/lib/data";
 
 /** Kostra namiesto „Načítavam…“ – tvar zodpovedá obsahu, ktorý príde. */
 export function Loading({ what = "Načítavam", shape = "cards" }: { what?: string; shape?: "cards" | "rows" | "tiles" }) {
@@ -206,101 +206,108 @@ export function CardModal({
   useEffect(() => {
     const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", k);
-    return () => window.removeEventListener("keydown", k);
+    // pozadie sa pod otvoreným detailom neposúva
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", k);
+      document.body.style.overflow = prev;
+    };
   }, [onClose]);
+  const main = cardEur(card, usd);
+  const src = card.cm != null ? "Cardmarket trend" : card.usd != null ? "TCGplayer (USA)" : "";
+  const stats = [
+    ["Cost", card.cost],
+    ["Life", card.life],
+    ["Power", card.power],
+    ["Counter", card.counter != null ? `+${card.counter}` : null],
+  ].filter(([, v]) => v != null) as [string, string | number][];
   return (
     <div className="modal" onClick={onClose}>
-      <div className="mbox" onClick={(e) => e.stopPropagation()}>
-        <button className="x" onClick={onClose} aria-label="zavrieť">
-          ×
+      <div className="mbox cd" role="dialog" aria-modal="true" aria-label={card.name} onClick={(e) => e.stopPropagation()}>
+        <span className="cd-grip" aria-hidden />
+        <button className="x" onClick={onClose} aria-label="Zavrieť">
+          <svg viewBox="0 0 24 24" aria-hidden>
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
         </button>
-        <Foil holo={!!card.v} className="big">
-          <CardImg card={card} full eager />
-        </Foil>
-        <div className="mtext">
-          <h2>
-            {card.name} {card.v && <span className="tag">{card.v}</span>}
-          </h2>
-          <p className="muted">
-            {card.code} · {card.setName || card.set} · {card.rarity} · {card.type}
+        <div className="cd-art">
+          <Foil holo={!!card.v} className="big">
+            <CardImg card={card} full eager />
+          </Foil>
+        </div>
+        <div className="cd-head">
+          <div className="cd-tags">
+            <span className="chip">{card.set}</span>
+            {card.rarity && <span className="chip">{card.rarity}</span>}
+            {card.v && <span className="chip hot">{card.v}</span>}
+          </div>
+          <h2>{card.name}</h2>
+          <p className="muted small">
+            {card.code} · {TYPE_SK_UI[card.type] ?? card.type}
+            {card.colors.length > 0 && (
+              <>
+                {" · "}
+                <ColorDots colors={card.colors} /> {card.colors.map((c) => COLOR_SK[c] ?? c).join(" / ")}
+              </>
+            )}
           </p>
-          <p>
-            <ColorDots colors={card.colors} /> {card.colors.map((c) => COLOR_SK[c] ?? c).join(" / ")}
-          </p>
-          <dl className="stats">
-            {card.cost != null && (
-              <>
-                <dt>Cost</dt>
-                <dd>{card.cost}</dd>
-              </>
-            )}
-            {card.life != null && (
-              <>
-                <dt>Life</dt>
-                <dd>{card.life}</dd>
-              </>
-            )}
-            {card.power != null && (
-              <>
-                <dt>Power</dt>
-                <dd>{card.power}</dd>
-              </>
-            )}
-            {card.counter != null && (
-              <>
-                <dt>Counter</dt>
-                <dd>+{card.counter}</dd>
-              </>
-            )}
-            {card.attr && (
-              <>
-                <dt>Atribút</dt>
-                <dd>{card.attr}</dd>
-              </>
-            )}
-            {card.traits && (
-              <>
-                <dt>Typy</dt>
-                <dd>{card.traits}</dd>
-              </>
-            )}
-          </dl>
-          {card.text && <p className="ctext">{card.text}</p>}
-          <dl className="cprices">
-            <dt>Cardmarket</dt>
-            <dd>
-              <b>{card.cm != null ? eur(card.cm) : "–"}</b>
-              {card.cmLow != null && <span className="muted small"> · od {eur(card.cmLow)}</span>}
-            </dd>
+        </div>
+        <div className="cd-price">
+          <div className="cd-pmain">
+            <span className="cd-plabel">{src || "Cena"}</span>
+            <b>{main != null ? eur(main) : "–"}</b>
+            {card.cmLow != null && <span className="cd-psub">najlacnejšia ponuka od {eur(card.cmLow)}</span>}
+          </div>
+          <div className="cd-palt">
             {card.cmJp != null && (
-              <>
-                <dt>Cardmarket JP</dt>
-                <dd>{eur(card.cmJp)}</dd>
-              </>
+              <span>
+                <i>Japonská</i> {eur(card.cmJp)}
+              </span>
             )}
-            <dt>TCGplayer (USA)</dt>
-            <dd>
-              {card.usd != null ? eur(card.usd / usd) : "–"} <span className="muted small">(${card.usd ?? "–"})</span>
-            </dd>
-          </dl>
-          <p className="row gap">
+            {card.cm != null && card.usd != null && (
+              <span>
+                <i>TCGplayer</i> {eur(card.usd / usd)}
+              </span>
+            )}
+          </div>
+          <div className="cd-actions">
+            {qty !== undefined && <Qty n={qty} onSet={onSet} disabled={!onSet} />}
             <a
               className="btn ghost sm"
               target="_blank"
               rel="noreferrer"
-              href={`https://www.cardmarket.com/en/OnePiece/Products/Search?searchString=${encodeURIComponent(
-                card.code,
-              )}`}
+              href={`https://www.cardmarket.com/en/OnePiece/Products/Search?searchString=${encodeURIComponent(card.code)}`}
             >
               Cardmarket ↗
             </a>
-            {qty !== undefined && <Qty n={qty} onSet={onSet} disabled={!onSet} />}
-          </p>
+          </div>
+        </div>
+        <div className="cd-rest">
+          {stats.length > 0 && (
+            <div className="cd-stats">
+              {stats.map(([k, v]) => (
+                <div key={k}>
+                  <span>{k}</span>
+                  <b>{v}</b>
+                </div>
+              ))}
+              {card.attr && (
+                <div>
+                  <span>Atribút</span>
+                  <b className="small">{card.attr}</b>
+                </div>
+              )}
+            </div>
+          )}
+          {card.traits && <p className="cd-traits">{card.traits}</p>}
+          {card.text && <p className="ctext">{card.text}</p>}
         </div>
       </div>
     </div>
   );
 }
+const TYPE_SK_UI: Record<string, string> = { Character: "Postava", Leader: "Leader", Event: "Event", Stage: "Stage", DON: "DON!!" };
 
 export function Bar({ value, max }: { value: number; max: number }) {
   const p = max ? Math.min(100, (value / max) * 100) : 0;
@@ -324,5 +331,21 @@ export function OtherGameHint({ qty, game }: { qty: Record<string, number>; game
         Prepnúť na {to === "pokemon" ? "Pokémon" : "One Piece"}
       </button>
     </p>
+  );
+}
+
+/** Lišta filtrov. Na mobile ukáže len vyhľadávanie (+ polia s triedou „keep“) a tlačidlo Filtre, ktoré rozbalí zvyšok. */
+export function FilterBar({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`filters ${open ? "open" : ""}`}>
+      {children}
+      <button type="button" className="filters-toggle" onClick={() => setOpen(!open)} aria-expanded={open}>
+        <svg viewBox="0 0 24 24" aria-hidden>
+          <path d="M4 6h16M7 12h10M10 18h4" />
+        </svg>
+        {open ? "Menej" : "Filtre"}
+      </button>
+    </div>
   );
 }

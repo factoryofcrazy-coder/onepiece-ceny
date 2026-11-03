@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { GAME_PUBLIC } from "@/lib/config";
 import { TCGS, useTcg } from "@/lib/tcg";
@@ -33,6 +34,8 @@ export default function Nav() {
   const { user, profile, signOut, loading } = useAuth();
   const { tcg, setTcg } = useTcg();
   const router = useRouter();
+  const [menu, setMenu] = useState(false);
+  useEffect(() => setMenu(false), [path]);
   const links = tcg === "pokemon" ? PK_LINKS : LINKS;
   const pick = (t: typeof tcg) => {
     if (t === tcg) return;
@@ -84,15 +87,36 @@ export default function Nav() {
         </nav>
         <div className="who">
           {loading ? null : user ? (
-            <>
-              <span className="muted small">{profile?.username ?? user.email}</span>
-              <button className="btn ghost sm" onClick={signOut}>
-                Odhlásiť
+            <div className="acct">
+              <button className="avatar" onClick={() => setMenu(!menu)} aria-expanded={menu} aria-label="Účet">
+                {(profile?.username ?? user.email ?? "?").slice(0, 1).toUpperCase()}
               </button>
-            </>
+              {menu && (
+                <>
+                  <div className="acct-scrim" onClick={() => setMenu(false)} />
+                  <div className="acct-menu" role="menu">
+                    <div className="acct-who">
+                      <b>{profile?.username ?? "Môj účet"}</b>
+                      <span className="tiny muted">{user.email}</span>
+                    </div>
+                    <Link href="/zbierka" onClick={() => setMenu(false)}>
+                      Moja zbierka
+                    </Link>
+                    <Link href="/decky" onClick={() => setMenu(false)}>
+                      Moje decky
+                    </Link>
+                    <button onClick={() => (setMenu(false), signOut())}>Odhlásiť sa</button>
+                  </div>
+                </>
+              )}
+            </div>
           ) : (
-            <Link className="btn sm" href="/login">
-              Prihlásiť
+            <Link className="login-btn" href="/login" aria-label="Prihlásiť sa">
+              <svg viewBox="0 0 24 24" aria-hidden>
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21a8 8 0 0 1 16 0" />
+              </svg>
+              <span>Prihlásiť</span>
             </Link>
           )}
         </div>

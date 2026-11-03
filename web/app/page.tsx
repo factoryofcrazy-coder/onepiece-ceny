@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { CountUp, DataError, Loading } from "@/components/ui";
+import { CountUp, DataError, Loading, FilterBar } from "@/components/ui";
 import { OLD_SITE } from "@/lib/config";
 import { eur, Offer, usePrices } from "@/lib/data";
 import { Tcg, useTcg } from "@/lib/tcg";
@@ -116,8 +116,8 @@ export default function PricesPage() {
         <WantedBoard products={products} shops={data.shops} langs={tcg === "pokemon" ? ["EN", "DE", "JP"] : ["EN", "JP"]} />
       </section>
 
-      <div className="filters">
-        <label className="field">
+      <FilterBar>
+        <label className="field keep">
           <span>Typ</span>
           <select value={kind} onChange={(e) => setKind(e.target.value)}>
             <option value="*">Všetko</option>
@@ -155,7 +155,7 @@ export default function PricesPage() {
         <label className="check">
           <input type="checkbox" checked={ba} onChange={(e) => setBa(e.target.checked)} /> 📍 Osobne v BA
         </label>
-      </div>
+      </FilterBar>
 
       {failing.length > 0 && (
         <p className="small warnline">

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { CardImg, DataError, Foil, Loading, OwnerPicker, Qty } from "@/components/ui";
+import { CardImg, DataError, Foil, Loading, OwnerPicker, Qty, FilterBar } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
 import { eur } from "@/lib/data";
@@ -95,8 +95,8 @@ export default function PkCards() {
         </div>
       </div>
 
-      <div className="filters">
-        <label className={`field ${global ? "dimmed" : ""}`}>
+      <FilterBar>
+        <label className={`field keep ${global ? "dimmed" : ""}`}>
           <span>Set</span>
           <select value={set} onChange={(e) => (setSet(e.target.value), setGlobal(false))}>
             {bySeries.map(([series, list]) => (
@@ -167,7 +167,7 @@ export default function PkCards() {
             </label>
           </>
         )}
-      </div>
+      </FilterBar>
 
       {global ? (
         q.trim().length < 2 ? (
