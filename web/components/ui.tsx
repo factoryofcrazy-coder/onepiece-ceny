@@ -173,6 +173,7 @@ export function CardImg({
       <div className={`cimg ph ${className}`}>
         <b>{card.code}</b>
         <span>{card.name}</span>
+        {(card as any).v && <i>{(card as any).v}</i>}
       </div>
     );
   return (
@@ -238,7 +239,7 @@ export function CardModal({
         </div>
         <div className="cd-head">
           <div className="cd-tags">
-            <span className="chip">{card.set}</span>
+            <span className="chip">{card.set === "CM-PROMO" ? "Cardmarket" : card.set}</span>
             {card.rarity && <span className="chip">{card.rarity}</span>}
             {card.v && <span className="chip hot">{card.v}</span>}
           </div>

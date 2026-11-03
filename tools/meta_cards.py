@@ -20,7 +20,13 @@ for c in cards:
 need = set()
 for d in meta["decks"]:
     need.add(d["leader"]); need.update(d["cards"].keys())
-out_cards = {}
+# karty z predchádzajúcich týždňov sa nemažú – skripty a testy enginu sa na ne odkazujú,
+# aj keď z aktuálnych top deckov vypadnú
+try:
+    with open("web/lib/engine/meta-data.json", encoding="utf-8") as f:
+        out_cards = json.load(f).get("cards", {})
+except FileNotFoundError:
+    out_cards = {}
 missing = []
 for code in sorted(need):
     c = by.get(code)
@@ -29,7 +35,7 @@ for code in sorted(need):
     out_cards[code] = {k: c.get(k) for k in ("name", "type", "colors", "cost", "power", "counter", "life", "attr", "traits", "text")}
 out = {"updated": meta["updated"], "tournaments": meta["tournaments"], "missing": missing,
        "decks": [{k: d[k] for k in ("leader", "leaderName", "player", "placing", "tournament", "players", "date", "cards")} for d in meta["decks"]],
-       "cards": out_cards}
+       "cards": dict(sorted(out_cards.items()))}
 with open("web/lib/engine/meta-data.json", "w", encoding="utf-8") as f:
     json.dump(out, f, ensure_ascii=False, indent=0)
 print(len(meta["decks"]), "deckov,", len(out_cards), "kariet, chýba", missing)
