@@ -21,6 +21,7 @@ const LINKS = [
   { href: "/master-sety", label: "Master sety" },
   { href: "/decky", label: "Decky" },
   { href: "/skener", label: "Skener" },
+  { href: "/trhovisko", label: "Trhovisko" },
   ...(GAME_PUBLIC
     ? [
         { href: "/hra", label: "Hra" },

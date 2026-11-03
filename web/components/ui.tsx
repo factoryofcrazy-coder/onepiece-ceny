@@ -102,6 +102,7 @@ export function NeedLogin({ what }: { what: string }) {
 }
 
 /** Výber, čiu kolekciu pozerám (moju alebo kamoša). */
+const SHOW_OTHER_COLLECTIONS = false;
 export function OwnerPicker({ value, onChange }: { value: string | null; onChange: (id: string) => void }) {
   const { user } = useAuth();
   const [list, setList] = useState<Profile[]>([]);
@@ -111,7 +112,8 @@ export function OwnerPicker({ value, onChange }: { value: string | null; onChang
   // vlastná kolekcia je v zozname vždy – aj keď účtu chýba riadok v profiles (inak by select ukázal cudzie meno)
   const me = list.find((p) => p.id === user?.id);
   const all = user ? [{ id: user.id, username: me?.username ?? user.email?.split("@")[0] ?? "ja" }, ...list.filter((p) => p.id !== user.id)] : [];
-  if (!user || all.length < 2) return null;
+  // zbierky sú súkromné (každý vidí len svoju) – výber cudzej zbierky sa už neukazuje
+  if (!user || all.length < 2 || !SHOW_OTHER_COLLECTIONS) return null;
   return (
     <label className="field">
       <span>Kolekcia</span>
@@ -216,6 +218,13 @@ export function CardModal({
     };
   }, [onClose]);
   const main = cardEur(card, usd);
+  const { user: me } = useAuth();
+  const [trade, setTrade] = useState("");
+  const toTrade = async (kind: "offer" | "want") => {
+    const { addListing } = await import("@/lib/trades");
+    const err = await addListing({ card_id: card.id, kind });
+    setTrade(err ?? (kind === "offer" ? "Pridané do tvojej ponuky na trhovisku ✓" : "Pridané do hľadaných na trhovisku ✓"));
+  };
   const src = card.cm != null ? "Cardmarket trend" : card.usd != null ? "TCGplayer (USA)" : "";
   const stats = [
     ["Cost", card.cost],
@@ -283,6 +292,21 @@ export function CardModal({
               Cardmarket ↗
             </a>
           </div>
+          {me && (
+            <div className="cd-trade">
+              <button className="btn ghost sm" onClick={() => toTrade("offer")}>
+                Ponúkam na výmenu
+              </button>
+              <button className="btn ghost sm" onClick={() => toTrade("want")}>
+                Hľadám
+              </button>
+              {trade && (
+                <span className="small">
+                  {trade} <Link href="/trhovisko">Trhovisko →</Link>
+                </span>
+              )}
+            </div>
+          )}
         </div>
         <div className="cd-rest">
           {stats.length > 0 && (
