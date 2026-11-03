@@ -31,7 +31,7 @@ export async function GET() {
         throw e;
       }));
     return Response.json(data, {
-      headers: { "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=172800" },
+      headers: { "Cache-Control": "public, max-age=600, s-maxage=86400, stale-while-revalidate=172800" },
     });
   } catch (e: any) {
     return Response.json({ error: String(e?.message ?? e) }, { status: 502, headers: { "Cache-Control": "no-store" } });

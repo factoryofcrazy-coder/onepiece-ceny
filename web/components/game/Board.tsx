@@ -1130,7 +1130,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
 
       {hz && s.cards[hz.iid] && (
         <div className={`hzoom ${hz.side}`} style={{ left: hz.x, top: hz.y }} aria-hidden>
-          {card(hz.iid) && <CardImg card={card(hz.iid)!} eager />}
+          {card(hz.iid) && <CardImg card={card(hz.iid)!} eager full />}
           <div className="hztext">
             <PeekText s={s} iid={hz.iid} />
           </div>
@@ -1142,7 +1142,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
             <button className="x" onClick={() => setZoom(null)}>
               ×
             </button>
-            {card(zoom) && <CardImg card={card(zoom)!} className="big" />}
+            {card(zoom) && <CardImg card={card(zoom)!} className="big" full />}
             <div className="mtext">
               <PeekText s={s} iid={zoom} />
             </div>

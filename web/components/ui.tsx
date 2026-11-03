@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { loadProfiles, Profile, useAuth } from "@/lib/auth";
 import type { Card } from "@/lib/data";
-import { COLOR_SK, eur } from "@/lib/data";
+import { COLOR_SK, eur, thumb } from "@/lib/data";
 
 /** Kostra namiesto „Načítavam…“ – tvar zodpovedá obsahu, ktorý príde. */
 export function Loading({ what = "Načítavam", shape = "cards" }: { what?: string; shape?: "cards" | "rows" | "tiles" }) {
@@ -155,13 +155,19 @@ export function CardImg({
   card,
   className = "",
   eager = false,
+  full = false,
 }: {
   card: { img: string; name: string; code: string };
   className?: string;
   eager?: boolean;
+  /** veľký obrázok (detail karty) – inak zmenšený náhľad */
+  full?: boolean;
 }) {
-  const sources = [card.img].filter(Boolean);
+  // náhľad (wsrv.nl) → pri chybe pôvodný obrázok → zástupný blok
+  const small = full ? "" : thumb(card.img, 240);
+  const sources = [...new Set([small, card.img].filter(Boolean))];
   const [i, setI] = useState(0);
+  const srcSet = !full && i === 0 && small !== card.img ? `${small} 240w, ${thumb(card.img, 360)} 360w` : undefined;
   if (i >= sources.length)
     return (
       <div className={`cimg ph ${className}`}>
@@ -174,6 +180,9 @@ export function CardImg({
       key={sources[i]}
       className={`cimg ${className}`}
       src={sources[i]}
+      srcSet={srcSet}
+      sizes={srcSet ? "(max-width: 720px) 45vw, 180px" : undefined}
+      decoding="async"
       alt={`${card.name} ${card.code}`}
       loading={eager ? "eager" : "lazy"}
       onError={() => setI(i + 1)}
@@ -206,7 +215,7 @@ export function CardModal({
           ×
         </button>
         <Foil holo={!!card.v} className="big">
-          <CardImg card={card} />
+          <CardImg card={card} full eager />
         </Foil>
         <div className="mtext">
           <h2>
