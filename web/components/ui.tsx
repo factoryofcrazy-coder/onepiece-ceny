@@ -1,4 +1,5 @@
 "use client";
+import { useTcg } from "@/lib/tcg";
 import Link from "next/link";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { loadProfiles, Profile, useAuth } from "@/lib/auth";
@@ -84,8 +85,18 @@ export function DataError({ error, file }: { error: string; file: string }) {
 
 export function NeedLogin({ what }: { what: string }) {
   return (
-    <div className="empty">
-      {what} je len pre prihlásených. <Link href="/login">Prihlás sa</Link>.
+    <div className="empty need">
+      <span className="need-ic" aria-hidden>
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="11" width="16" height="10" rx="2" />
+          <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+        </svg>
+      </span>
+      <h2>{what} je pre prihlásených</h2>
+      <p>Prihlás sa a ukladaj si karty, decky aj zbierku – uvidíš ich na mobile aj na počítači.</p>
+      <Link className="btn" href="/login">
+        Prihlásiť sa
+      </Link>
     </div>
   );
 }
@@ -288,5 +299,21 @@ export function Bar({ value, max }: { value: number; max: number }) {
     <div className="bar" title={`${value} / ${max}`}>
       <i style={{ width: `${p}%` }} className={p >= 100 ? "full" : ""} />
     </div>
+  );
+}
+
+/** Prázdna zbierka v jednej hre, ale karty v druhej → ponúkni prepnutie (ľahko sa to pomýli). */
+export function OtherGameHint({ qty, game }: { qty: Record<string, number>; game: "onepiece" | "pokemon" }) {
+  const { setTcg } = useTcg();
+  const other = Object.entries(qty).filter(([id, n]) => n > 0 && (game === "onepiece" ? id.startsWith("pk:") : !id.startsWith("pk:"))).length;
+  if (!other) return null;
+  const to = game === "onepiece" ? "pokemon" : "onepiece";
+  return (
+    <p className="other-game">
+      V {to === "pokemon" ? "Pokémon" : "One Piece"} zbierke máš <b>{other}</b> {other === 1 ? "kartu" : other < 5 ? "karty" : "kariet"}.{" "}
+      <button className="btn sm" onClick={() => setTcg(to)}>
+        Prepnúť na {to === "pokemon" ? "Pokémon" : "One Piece"}
+      </button>
+    </p>
   );
 }

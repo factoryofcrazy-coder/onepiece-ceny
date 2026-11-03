@@ -3,7 +3,7 @@ import PkCollection from "@/components/pk/PkCollection";
 import { useTcg } from "@/lib/tcg";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
+import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OtherGameHint, OwnerPicker } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
 import { Card, eur, setKind, useCards, usePrices, cardEur } from "@/lib/data";
@@ -135,8 +135,9 @@ function OpCollection() {
         <div className="empty">
           {mine ? (
             <>
-              Zbierka je zatiaľ prázdna. Pridaj karty v <Link href="/karty">Kartách</Link> alebo ich{" "}
-              <Link href="/import">naimportuj z HoloDex</Link>.
+              Zbierka je zatiaľ prázdna. Pridaj karty v <Link href="/karty">Kartách</Link>, naskenuj ich{" "}
+              <Link href="/skener">Skenerom</Link> alebo ich <Link href="/import">naimportuj z HoloDex</Link>.
+              <OtherGameHint qty={qty} game="onepiece" />
             </>
           ) : (
             "Tento kamoš zatiaľ nemá v zbierke žiadne karty."

@@ -103,7 +103,9 @@ export default function PricesPage() {
     <>
       <section className="hero">
         <div className="hero-copy">
-          <h1>{tcg === "pokemon" ? "Pokémon boxy čo najbližšie k MSRP" : "Kde kúpiť box čo najbližšie k MSRP"}</h1>
+          <h1>
+            {tcg === "pokemon" ? "Pokémon boxy" : "Kde kúpiť box"} <em>čo najbližšie k MSRP</em>
+          </h1>
           <p className="muted">
             {Object.keys(data.shops).length} obchodov v SK, CZ, DE, AT a JP, aktualizované {ago(data.updated)}.{" "}
             <a href={tcg === "pokemon" ? OLD_SITE + "pokemon/" : OLD_SITE} target="_blank" rel="noreferrer">

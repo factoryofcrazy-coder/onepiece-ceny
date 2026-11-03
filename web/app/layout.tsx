@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { TcgProvider } from "@/lib/tcg";
 import { parseTcg, TCG_COOKIE } from "@/lib/tcg-shared";
 import Footer from "@/components/Footer";
+import TabBar from "@/components/TabBar";
 
 export const metadata: Metadata = {
   title: "Grand Line Tracker",
@@ -34,6 +35,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Nav />
             <main className="wrap">{children}</main>
             <Footer />
+            <TabBar />
           </AuthProvider>
         </TcgProvider>
       </body>
