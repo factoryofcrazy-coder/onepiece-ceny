@@ -458,20 +458,38 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .pk-vars .vchip { display: inline-flex; align-items: center; gap: 8px; padding: 4px 6px 4px 10px; border-radius: 10px; background: var(--sea-2); border: 1px solid var(--line); font-size: 13px; }
 
 /* ---------- Skener kariet (/skener) ---------- */
-.scan-page { max-width: 720px; margin: 18px auto 40px; }
-.scan-page h1 { font-size: clamp(28px, 6vw, 40px); margin: 0; }
-.scan-cam { position: relative; margin-top: 12px; border-radius: 16px; overflow: hidden; background: #02080f; border: 1px solid var(--line); height: min(68vh, 620px); display: grid; place-items: center; }
+.scan-page { max-width: 760px; margin: 18px auto 40px; }
+.scan-head h1 { font-size: clamp(28px, 6vw, 40px); margin: 0; }
+.scan-cam { position: relative; margin-top: 12px; border-radius: 20px; overflow: hidden; background: #02080f; border: 1px solid var(--line); height: min(80vh, 760px); display: grid; place-items: center; }
 .scan-cam video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .scan-cam.off video, .scan-cam.error video { visibility: hidden; }
-.scan-frame { position: relative; height: 78%; max-width: 86%; border-radius: 14px; box-shadow: 0 0 0 100vmax rgba(2, 8, 15, .55); outline: 2px solid rgba(232, 238, 245, .7); transition: outline-color .15s; z-index: 1; }
-.scan-frame.maybe { outline-color: var(--gold); }
-.scan-frame.sure { outline: 3px solid var(--foam); }
-.scan-tag { position: absolute; left: 50%; bottom: -12px; transform: translate(-50%, 100%); background: rgba(6, 18, 31, .92); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; white-space: nowrap; text-align: center; display: flex; flex-direction: column; font-size: 13px; }
-.scan-frame { margin-bottom: 40px; }
-.scan-tag b { font-family: var(--display); font-size: 15px; }
-.scan-tag span { color: var(--muted); }
-.scan-start { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 6px; text-align: center; padding: 20px; z-index: 2; background: rgba(2, 8, 15, .7); }
-.scan-stop { position: absolute; top: 10px; right: 10px; z-index: 2; background: rgba(6, 18, 31, .8); }
+/* rámik: stmavené okolie + rohové značky */
+.scan-frame { position: relative; height: 84%; max-width: 90%; border-radius: 18px; box-shadow: 0 0 0 100vmax rgba(2, 8, 15, .5); z-index: 1; transition: transform .25s var(--ease); --c: rgba(255, 255, 255, .9); }
+.scan-frame.maybe { --c: var(--gold); }
+.scan-frame.sure { --c: var(--foam); transform: scale(.985); }
+.scan-frame .c { position: absolute; width: 38px; height: 38px; border: 4px solid var(--c); transition: border-color .15s; }
+.scan-frame .tl { top: -2px; left: -2px; border-right: 0; border-bottom: 0; border-top-left-radius: 18px; }
+.scan-frame .tr { top: -2px; right: -2px; border-left: 0; border-bottom: 0; border-top-right-radius: 18px; }
+.scan-frame .bl { bottom: -2px; left: -2px; border-right: 0; border-top: 0; border-bottom-left-radius: 18px; }
+.scan-frame .br { bottom: -2px; right: -2px; border-left: 0; border-top: 0; border-bottom-right-radius: 18px; }
+.scan-frame.sure::after { content: ""; position: absolute; inset: 0; border-radius: 18px; background: rgba(94, 200, 200, .14); animation: scan-flash .5s var(--ease) both; }
+@keyframes scan-flash { from { opacity: 1; } to { opacity: 0; } }
+.scan-top { position: absolute; top: 0; left: 0; right: 0; padding: max(12px, env(safe-area-inset-top)) 12px 12px; display: flex; justify-content: space-between; align-items: center; z-index: 3; background: linear-gradient(rgba(2, 8, 15, .6), transparent); }
+.scan-pill { background: rgba(6, 18, 31, .75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, .12); border-radius: 999px; padding: 7px 14px; font-size: 14px; }
+.scan-pill b { color: var(--gold); }
+.scan-round { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .15); background: rgba(6, 18, 31, .75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #fff; font-size: 24px; line-height: 1; cursor: pointer; }
+.scan-bottom { position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 12px max(14px, env(safe-area-inset-bottom)); display: flex; justify-content: center; z-index: 3; background: linear-gradient(transparent, rgba(2, 8, 15, .7)); }
+.scan-toast { display: flex; align-items: center; gap: 10px; background: rgba(6, 18, 31, .85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px; padding: 8px 14px 8px 8px; min-width: min(340px, 92%); max-width: 100%; animation: scan-up .3s var(--ease) both; }
+.scan-toast:not(.ok) { padding-left: 14px; }
+.scan-toast.ok { border-color: rgba(94, 200, 200, .6); }
+.scan-toast img { width: 40px; border-radius: 4px; }
+.scan-toast div { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.scan-toast div b { font-family: var(--display); font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.scan-toast span { color: var(--muted); font-size: 12px; }
+.scan-toast-price { color: var(--gold); font-family: var(--display); font-size: 17px; white-space: nowrap; }
+@keyframes scan-up { from { opacity: 0; transform: translateY(12px); } }
+.scan-hint { background: rgba(6, 18, 31, .7); border-radius: 999px; padding: 8px 16px; font-size: 14px; color: var(--text); }
+.scan-start { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 6px; text-align: center; padding: 20px; z-index: 4; background: rgba(2, 8, 15, .7); }
 .scan-debug { margin-top: 6px; color: var(--muted); font-family: ui-monospace, monospace; }
 .scan-sum { margin: 14px 0 8px; }
 .scan-total { color: var(--gold); font-family: var(--display); font-size: 18px; }
@@ -482,3 +500,11 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .scan-alts button { background: var(--sea); color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; font: 12px var(--body); cursor: pointer; }
 .scan-alts button:hover { border-color: var(--gold); }
 .scan-x { background: none; border: 0; color: var(--muted); font-size: 20px; cursor: pointer; padding: 0 4px; line-height: 1; }
+/* mobil: kamera cez celú šírku a takmer celú výšku – ako natívna appka */
+@media (max-width: 700px) {
+  .scan-page { margin-top: 0; }
+  .scan-page.live .scan-head { display: none; }
+  .scan-cam { margin: 8px -16px 0; border-radius: 0; border: 0; height: calc(100svh - 112px); }
+  .scan-page.live .scan-cam { margin-top: 0; }
+  .scan-frame { height: 78%; max-width: 88%; }
+}

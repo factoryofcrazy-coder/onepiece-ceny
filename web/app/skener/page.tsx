@@ -14,9 +14,41 @@ const CARD_RATIO = 63 / 88;
 // prahy rozhodovania (kosínusová podobnosť) – doladiť podľa ladiaceho režimu
 // prázdny rámik dáva 0,30–0,42 → rozhoduje hlavne zhoda viacerých snímok za sebou
 const T_SHOW = 0.4; // od tohto skóre sa ukáže tip na kartu
-const T_ACCEPT = 0.45; // priemer pri 3 zhodách z 5 snímok
-const T_ACCEPT5 = 0.4; // priemer pri 5 zhodách z 5
+const T_ACCEPT = 0.42; // priemerné skóre víťaza za posledné okno
 const T_EMPTY = 0.36; // pod tým = v rámiku asi nie je karta
+const FRAME_MS = 140; // max ~7 snímok/s (WebGPU by inak bežal príliš rýchlo)
+const HOLD_MS = 700; // karta musí byť v rámiku stabilne aspoň toľko
+const WINDOW_MS = 1000; // hlasuje sa za poslednú sekundu (≥ 70 % snímok tá istá karta)
+const GONE_MS = 600; // po pridaní: karta musí zmiznúť aspoň na toľko, než sa pridá ďalšia
+const REPEAT_MS = 3000; // tá istá karta sa nepridá znova skôr
+const CHANGE = 0.12; // zmena obrazu (0–1), od ktorej je v rámiku „niečo iné“
+const TW = 12, TH = 16; // malý sivý náhľad na detekciu zmeny
+
+function makeThumb(px: Uint8ClampedArray) {
+  const t = new Float32Array(TW * TH);
+  for (let y = 0; y < TH; y++)
+    for (let x = 0; x < TW; x++) {
+      let s = 0;
+      for (let dy = 0; dy < 4; dy++)
+        for (let dx = 0; dx < 4; dx++) {
+          const sx = Math.floor(((x + dx / 4) * IW) / TW), sy = Math.floor(((y + dy / 4) * IH) / TH);
+          const i = (sy * IW + sx) * 4;
+          s += px[i] * 0.299 + px[i + 1] * 0.587 + px[i + 2] * 0.114;
+        }
+      t[y * TW + x] = s / 16 / 255;
+    }
+  // normalizácia jasu (autoexpozícia kamery nemá spúšťať „zmenu“)
+  let m = 0;
+  t.forEach((v) => (m += v));
+  m /= t.length;
+  for (let i = 0; i < t.length; i++) t[i] -= m;
+  return t;
+}
+const thumbDiff = (a: Float32Array, b: Float32Array) => {
+  let d = 0;
+  for (let i = 0; i < a.length; i++) d += Math.abs(a[i] - b[i]);
+  return d / a.length;
+};
 
 type Hit = { id: string; score: number };
 type Scanned = { key: number; id: string; score: number; alts: string[] };
@@ -50,9 +82,11 @@ export default function ScannerPage() {
   const streamRef = useRef<MediaStream | null>(null);
   const busy = useRef(false);
   const seq = useRef(0);
-  const hist = useRef<Hit[]>([]);
-  const lastAccepted = useRef<string | null>(null);
-  const emptyRun = useRef(0);
+  const hist = useRef<(Hit & { t: number })[]>([]);
+  const lock = useRef<{ id: string; thumb: Float32Array; since: number; goneSince: number } | null>(null);
+  const recent = useRef<Record<string, number>>({}); // id → čas pridania (proti dvojitému pridaniu)
+  const lastThumb = useRef<Float32Array | null>(null);
+  const lastTick = useRef(0);
 
   const [state, setState] = useState<"off" | "loading" | "on" | "error">("off");
   const [msg, setMsg] = useState("");
@@ -86,22 +120,40 @@ export default function ScannerPage() {
 
   const onResult = useCallback(
     (top: Hit[]) => {
+      const now = performance.now();
       const best = top[0];
+      const thumb = lastThumb.current;
+      // 1) zámok: po pridaní čakaj, kým karta z rámika zmizne (iný obraz alebo prázdno ≥ 0,6 s)
+      if (lock.current) {
+        const L = lock.current;
+        const empty = !best || best.score < T_EMPTY;
+        // posunutie tej istej karty v rámiku sa neráta – len iný obraz s inou kartou alebo prázdno
+        const changed = !!thumb && thumbDiff(thumb, L.thumb) > CHANGE && !!best && best.id !== L.id;
+        if (changed || empty) {
+          if (!L.goneSince) L.goneSince = now;
+          if (now - L.goneSince > GONE_MS) {
+            lock.current = null;
+            hist.current = [];
+          }
+        } else L.goneSince = 0;
+        if (lock.current) return;
+      }
       if (!best || best.score < T_EMPTY) {
-        // prázdny rámik → po chvíli sa smie znova pridať tá istá karta
-        if (++emptyRun.current >= 4) lastAccepted.current = null;
         hist.current = [];
         return;
       }
-      emptyRun.current = 0;
-      hist.current = [...hist.current.slice(-4), best];
-      const votes = hist.current.filter((h) => h.id === best.id);
-      const avg = votes.reduce((s, h) => s + h.score, 0) / votes.length;
-      const ok = (votes.length >= 3 && avg >= T_ACCEPT) || (votes.length >= 5 && avg >= T_ACCEPT5);
-      if (ok && lastAccepted.current !== best.id) {
-        lastAccepted.current = best.id;
-        accept(top);
-      }
+      // 2) hlasovanie za posledných HOLD_MS – karta musí byť v rámiku stabilne
+      hist.current = [...hist.current.filter((h) => now - h.t < WINDOW_MS), { ...best, t: now }];
+      const h = hist.current;
+      if (now - h[0].t < HOLD_MS || h.length < 3) return;
+      const votes = h.filter((x) => x.id === best.id);
+      const avg = votes.reduce((s, x) => s + x.score, 0) / votes.length;
+      const share = votes.length / h.length;
+      if (share < 0.7 || avg < T_ACCEPT) return;
+      if (now - (recent.current[best.id] ?? -1e9) < REPEAT_MS) return;
+      recent.current[best.id] = now;
+      lock.current = { id: best.id, thumb: thumb ?? new Float32Array(TW * TH), since: now, goneSince: 0 };
+      accept(top);
     },
     [accept],
   );
@@ -110,6 +162,9 @@ export default function ScannerPage() {
   const tick = useCallback(() => {
     const v = videoRef.current, f = frameRef.current, w = workerRef.current;
     if (!v || !f || !w || busy.current || v.readyState < 2) return;
+    const now = performance.now();
+    if (now - lastTick.current < FRAME_MS) return;
+    lastTick.current = now;
     const vr = v.getBoundingClientRect(), fr = f.getBoundingClientRect();
     // video je object-fit: cover → prepočet z obrazovky do pixelov videa
     const s = Math.max(vr.width / v.videoWidth, vr.height / v.videoHeight);
@@ -120,11 +175,14 @@ export default function ScannerPage() {
     const ctx = cv.getContext("2d", { willReadFrequently: true })!;
     ctx.drawImage(v, sx, sy, sw, sh, 0, 0, IW, IH);
     const px = ctx.getImageData(0, 0, IW, IH).data;
+    lastThumb.current = makeThumb(px);
     busy.current = true;
     w.postMessage({ type: "scan", seq: ++seq.current, pixels: px }, [px.buffer]);
   }, []);
 
   const stop = useCallback(() => {
+    lock.current = null;
+    hist.current = [];
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
     setState("off");
@@ -220,7 +278,7 @@ export default function ScannerPage() {
   const total = list.reduce((s, x) => s + (price(x.id) ?? 0), 0);
   const cur = live?.top[0];
   const curCard = cur && cur.score >= T_SHOW ? cards.byId.get(cur.id) : undefined;
-  const sure = !!cur && cur.id === lastAccepted.current;
+  const sure = !!lock.current && !!cur && cur.id === lock.current.id;
 
   const change = (key: number, id: string) =>
     setList((l) =>
@@ -234,9 +292,13 @@ export default function ScannerPage() {
     setTimeout(() => setAdded(false), 2500);
   };
 
+  const last = list[0];
+  const lastCard = last ? cards.byId.get(last.id) : undefined;
+  const fresh = !!last && Date.now() - last.key < 1800;
+
   return (
-    <div className="scan-page">
-      <div className="row between wrapr gap">
+    <div className={`scan-page ${state === "on" ? "live" : ""}`}>
+      <div className="scan-head row between wrapr gap">
         <h1>Skener</h1>
         <label className="small muted row gap">
           <input type="checkbox" checked={debug} onChange={(e) => setDebug(e.target.checked)} /> ladenie
@@ -245,18 +307,50 @@ export default function ScannerPage() {
 
       <div className={`scan-cam ${state}`}>
         <video ref={videoRef} playsInline muted />
-        <div className="scan-shade" />
         <div ref={frameRef} className={`scan-frame ${sure ? "sure" : curCard ? "maybe" : ""}`} style={{ aspectRatio: CARD_RATIO }}>
-          {state === "on" && curCard && (
-            <div className="scan-tag">
-              <b>{curCard.name}</b>
-              <span>
-                {curCard.code}
-                {curCard.v ? ` · ${curCard.v}` : ""} · {eur(price(curCard.id))}
-              </span>
-            </div>
-          )}
+          <i className="c tl" />
+          <i className="c tr" />
+          <i className="c bl" />
+          <i className="c br" />
         </div>
+
+        {state === "on" && (
+          <>
+            <div className="scan-top">
+              <span className="scan-pill">
+                {list.length} {list.length === 1 ? "karta" : list.length >= 2 && list.length <= 4 ? "karty" : "kariet"} · <b>{eur(total)}</b>
+              </span>
+              <button className="scan-round" onClick={stop} aria-label="Vypnúť kameru">
+                ×
+              </button>
+            </div>
+            <div className="scan-bottom">
+              {fresh && lastCard ? (
+                <div className="scan-toast ok" key={last.key}>
+                  {lastCard.img && <img src={lastCard.img} alt="" />}
+                  <div>
+                    <b>{lastCard.name}</b>
+                    <span>
+                      {lastCard.code}
+                      {lastCard.v ? ` · ${lastCard.v}` : ""}
+                    </span>
+                  </div>
+                  <b className="scan-toast-price">{eur(price(lastCard.id))}</b>
+                </div>
+              ) : curCard && !sure ? (
+                <div className="scan-toast">
+                  <div>
+                    <b>{curCard.name}</b>
+                    <span>{curCard.code} · drž kartu v rámiku…</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="scan-hint">{sure ? "Odlož kartu a prilož ďalšiu" : "Vlož kartu do rámika"}</div>
+              )}
+            </div>
+          </>
+        )}
+
         {state !== "on" && (
           <div className="scan-start">
             {state === "loading" ? (
@@ -271,11 +365,6 @@ export default function ScannerPage() {
               </>
             )}
           </div>
-        )}
-        {state === "on" && (
-          <button className="btn ghost sm scan-stop" onClick={stop}>
-            Vypnúť
-          </button>
         )}
       </div>
 
