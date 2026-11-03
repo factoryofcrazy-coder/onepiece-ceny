@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install --quiet onnxruntime opencv-python-headless numpy
-      - run: python3 tools/scan_index.py --max 600
+      - run: python3 tools/scan_index.py --max 600 --no-official   # oficiálne obrázky Bandai až po vyhodnotení
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
