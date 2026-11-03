@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-03T21:23:07Z",
+ "updated": "2026-11-03T23:02:04Z",
  "fx": {
   "CZK": 24.343,
   "USD": 1.1179,
@@ -640,7 +640,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -1869,7 +1869,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -2235,7 +2235,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -2624,7 +2624,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -2847,7 +2847,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -3570,7 +3570,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -3740,7 +3740,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -3791,7 +3791,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -4279,8 +4279,8 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-11-03T21:05:14Z",
-   "ok": false,
+   "ts": "2026-11-03T23:02:04Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game - OP13 Booster Display - JPN",
@@ -4795,13 +4795,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP-08_-_Two_Legends_Booster_Box_-_EN_cd4ac2e07120627d.webp?v=1791208428"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "yonko": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -5410,7 +5407,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -5488,7 +5485,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -5638,7 +5635,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -6099,7 +6096,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -6411,7 +6408,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -6840,7 +6837,7 @@
    ]
   },
   "crispycards": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -7183,7 +7180,7 @@
      "price": 8.99,
      "currency": "EUR",
      "eur": 8.99,
-     "inStock": true,
+     "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0950/2733/1402/files/OnePieceOP15AdventureonKami_sIslandBooster_ENG.webp?v=1776766361"
     },
     {
@@ -8512,7 +8509,7 @@
    ]
   },
   "underpaid": {
-   "ts": "2026-11-03T21:23:07Z",
+   "ts": "2026-11-03T23:02:04Z",
    "ok": true,
    "items": [
     {
@@ -9310,8 +9307,8 @@
    ]
   },
   "cardbinder": {
-   "ts": "2026-11-03T21:05:14Z",
-   "ok": false,
+   "ts": "2026-11-03T23:02:04Z",
+   "ok": true,
    "items": [
     {
      "name": "The Best Volume 2 Japanese Booster Box",
@@ -9808,10 +9805,7 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-PRB01-The-Best-Volume-one-Booster-Box-English.webp?v=1759844795"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   }
  }
 }
