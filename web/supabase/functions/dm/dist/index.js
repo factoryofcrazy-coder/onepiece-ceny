@@ -154,7 +154,7 @@ var timeOf = (v) => {
 function cleanText(v) {
   if (v == null) return "";
   if (typeof v !== "string") throw new HttpError(400, "Neplatn\xFD text spr\xE1vy.");
-  return v.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f​-‏‪-‮⁦-⁩]/g, "").trim();
+  return v.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2066-\u2069]/g, "").trim();
 }
 var normalize = (s) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 function snippet(text, q) {

@@ -53,7 +53,7 @@ const timeOf = (v: unknown) => {
 export function cleanText(v: unknown) {
   if (v == null) return "";
   if (typeof v !== "string") throw new HttpError(400, "Neplatný text správy.");
-  return v.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f​-‏‪-‮⁦-⁩]/g, "").trim();
+  return v.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2066-\u2069]/g, "").trim();
 }
 
 /** porovnávanie pri hľadaní: bez diakritiky a veľkých písmen */
