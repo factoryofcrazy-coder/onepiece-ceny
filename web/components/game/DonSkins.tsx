@@ -44,7 +44,7 @@ export default function DonSkins() {
         </div>
         <dl className="dskins-stats">
           <div>
-            <dt>Výhry proti botovi</dt>
+            <dt title="Stredný a Ťažký bot">Výhry proti botovi</dt>
             <dd>{st.botWins}</dd>
           </div>
           <div>
@@ -98,7 +98,7 @@ export default function DonSkins() {
           );
         })}
       </div>
-      {!user && <p className="small muted" style={{ margin: 0 }}>Online výhry sa rátajú, keď si prihlásený. Výhry proti botovi si pamätá tento prehliadač.</p>}
+      {!user && <p className="small muted" style={{ margin: 0 }}>Online výhry sa rátajú, keď si prihlásený. Výhry nad Stredným a Ťažkým botom si pamätá tento prehliadač.</p>}
     </section>
   );
 }

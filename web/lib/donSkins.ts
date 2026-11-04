@@ -79,6 +79,7 @@ export function cacheOnlineStats(onlineGames: number, onlineWins: number) {
 }
 
 /** zapíše dohranú hru proti botovi; vráti skiny, ktoré sa práve odomkli */
+/** Výhry nad Ľahkým botom sa do skinov nerátajú. */
 export function recordBotGame(won: boolean): DonSkin[] {
   const before = readLocalStats();
   const after = { ...before, botGames: before.botGames + 1, botWins: before.botWins + (won ? 1 : 0) };

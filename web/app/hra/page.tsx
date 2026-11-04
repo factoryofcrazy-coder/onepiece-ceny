@@ -12,7 +12,7 @@ import { GAME_PUBLIC } from "@/lib/config";
 import { CardImg, DataError, Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { Card, useCards } from "@/lib/data";
-import { botAction } from "@/lib/engine/bot";
+import { botAction, BotLevel, BOT_LEVELS } from "@/lib/engine/bot";
 import { buildDef } from "@/lib/engine/cards";
 import { applyAction, IllegalAction, newGame } from "@/lib/engine/engine";
 import type { Action, CardDef, GameState, P } from "@/lib/engine/types";
@@ -27,11 +27,11 @@ function GamePage() {
   const byCode = useMemo(() => byCodeOf(cards?.cards), [cards]);
   const decks = useMyDecks(user?.id, cards ? byCode : undefined);
   const [tab, setTab] = useState<Tab>("online");
-  const [local, setLocal] = useState<{ s: GameState; mode: "bot" | "local" } | null>(null);
+  const [local, setLocal] = useState<{ s: GameState; mode: "bot" | "local"; level: BotLevel } | null>(null);
 
   if (error) return <DataError error={error} file="cards" />;
   if (!cards || loading) return <Loading what="Pripravujem hru" shape="tiles" />;
-  if (local) return <LocalGame initial={local.s} mode={local.mode} byCode={byCode} onExit={() => setLocal(null)} />;
+  if (local) return <LocalGame initial={local.s} mode={local.mode} level={local.level} byCode={byCode} onExit={() => setLocal(null)} />;
 
   return (
     <div className="glob">
@@ -61,7 +61,7 @@ function GamePage() {
           </div>
         )
       ) : (
-        <Training decks={decks} byCode={byCode} onStart={(s, mode) => setLocal({ s, mode })} />
+        <Training decks={decks} byCode={byCode} onStart={(s, mode, level) => setLocal({ s, mode, level })} />
       )}
       <DonSkins />
       <p className="small muted" style={{ marginTop: 18 }}>
@@ -311,10 +311,19 @@ function deckStat(d: DeckOpt | undefined, byCode: Map<string, Card>) {
 }
 
 // ================================================================== tréning (bot / jedno zariadenie)
-function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<string, Card>; onStart: (s: GameState, mode: "bot" | "local") => void }) {
+function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<string, Card>; onStart: (s: GameState, mode: "bot" | "local", level: BotLevel) => void }) {
   const [a, setA] = useState(decks[0]?.id ?? "st26");
   const [b, setB] = useState("st01");
   const [mode, setMode] = useState<"bot" | "local">("bot");
+  const [level, setLevel] = useState<BotLevel>("medium");
+  useEffect(() => {
+    const saved = localStorage.getItem("bot-level");
+    if (saved === "easy" || saved === "medium" || saved === "hard") setLevel(saved);
+  }, []);
+  const pickLevel = (l: BotLevel) => {
+    setLevel(l);
+    localStorage.setItem("bot-level", l);
+  };
   const [err, setErr] = useState<string | null>(null);
   const { profile } = useAuth();
   // meno vystupuje v hláseniach enginu („Filip prehral…“), preto nie „Ty“
@@ -335,13 +344,14 @@ function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<st
       newGame(
         [
           { name: mode === "bot" ? myName : "Hráč 1", leader: da.leader, cards: da.cards },
-          { name: mode === "bot" ? "Bot" : "Hráč 2", leader: db.leader, cards: db.cards },
+          { name: mode === "bot" ? `Bot (${BOT_LEVELS.find((x) => x.id === level)!.label})` : "Hráč 2", leader: db.leader, cards: db.cards },
         ],
         defs,
         Math.floor(Math.random() * 2147483646) + 1,
         "rps", // kto začína, rozhodne kameň-papier-nožnice
       ),
       mode,
+      level,
     );
   };
   const leader = (d: DeckOpt) => byCode.get(d.leader);
@@ -372,6 +382,21 @@ function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<st
           <span className="small muted">{deckStat(db, byCode)}</span>
         </label>
       </div>
+      {mode === "bot" && (
+        <div className="bot-levels">
+          <div className="seg" role="radiogroup" aria-label="Obtiažnosť bota">
+            {BOT_LEVELS.map((l) => (
+              <button key={l.id} role="radio" aria-checked={level === l.id} className={level === l.id ? "on" : ""} onClick={() => pickLevel(l.id)}>
+                {l.label}
+              </button>
+            ))}
+          </div>
+          <span className="small muted">
+            {BOT_LEVELS.find((l) => l.id === level)!.hint}
+            {level === "easy" ? " Výhry sa nerátajú do DON!! skinov." : ""}
+          </span>
+        </div>
+      )}
       <div className="row gap wrapr">
         <div className="seg">
           <button className={mode === "bot" ? "on" : ""} onClick={() => setMode("bot")}>
@@ -391,7 +416,7 @@ function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<st
   );
 }
 
-function LocalGame({ initial, mode, byCode, onExit }: { initial: GameState; mode: "bot" | "local"; byCode: Map<string, Card>; onExit: () => void }) {
+function LocalGame({ initial, mode, level, byCode, onExit }: { initial: GameState; mode: "bot" | "local"; level: BotLevel; byCode: Map<string, Card>; onExit: () => void }) {
   const [s, setS] = useState(initial);
   const [err, setErr] = useState<string | null>(null);
   const actor: P = s.prompt ? s.prompt.p : s.active;
@@ -415,16 +440,22 @@ function LocalGame({ initial, mode, byCode, onExit }: { initial: GameState; mode
   };
 
   const botTurn = useRef(-1);
+  const botCall = useRef(0);
+  const botWorker = useRef<Worker | null>(null);
+  useEffect(() => () => botWorker.current?.terminate(), []);
   useEffect(() => {
     if (mode !== "bot" || s.winner != null) return;
-    const a = botAction(s, 1);
-    if (!a) return;
+    // Ťažký bot rozmýšľa vo vlákne na pozadí, ostatní hneď
+    let cancelled = false;
+    let t: ReturnType<typeof setTimeout> | undefined;
+    const go = (a: Action | null) => {
+      if (!a || cancelled) return;
     // prirodzené tempo: na začiatku ťahu počká na banner, útok a zahranie karty si treba pozrieť
     const freshTurn = botTurn.current !== s.turn;
     botTurn.current = s.turn;
     const wait =
       a.type === "attack" ? 1700 : a.type === "play" ? 1500 : a.type === "endTurn" ? 1300 : a.type === "answer" ? 1100 : 1200;
-    const t = setTimeout(() => {
+    t = setTimeout(() => {
       setS((cur) => {
         try {
           return applyAction(cur, a);
@@ -433,12 +464,29 @@ function LocalGame({ initial, mode, byCode, onExit }: { initial: GameState; mode
         }
       });
     }, wait + (freshTurn ? 900 : 0));
-    return () => clearTimeout(t);
-  }, [s, mode]);
+    };
+    if (level === "hard") {
+      const id = ++botCall.current;
+      const w = (botWorker.current ??= new Worker(new URL("../../lib/engine/bot-worker.ts", import.meta.url)));
+      const onMsg = (e: MessageEvent) => {
+        if (e.data.id !== id) return;
+        w.removeEventListener("message", onMsg);
+        go(e.data.error ? botAction(s, 1, "medium") : e.data.action);
+      };
+      w.addEventListener("message", onMsg);
+      w.postMessage({ id, s, me: 1, level });
+    } else {
+      go(botAction(s, 1, level));
+    }
+    return () => {
+      cancelled = true;
+      if (t) clearTimeout(t);
+    };
+  }, [s, mode, level]);
 
   return (
     <div style={{ position: "relative" }}>
-      <Board s={s} me={me} byCode={byCode} mode={mode} onAction={act} error={err} onExit={onExit} />
+      <Board s={s} me={me} byCode={byCode} mode={mode} botLevel={level} onAction={act} error={err} onExit={onExit} />
       {cover != null && mode === "local" && s.winner == null && (
         <div className="gcover">
           <h2>Na rade je {s.players[cover].name}</h2>

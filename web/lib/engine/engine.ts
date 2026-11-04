@@ -750,6 +750,8 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
         return true;
       }
       let opts = candidates(s, st.f, c);
+      // pri zákaze hrať postavy sa netreba pýtať, efekt by aj tak nič neurobil
+      if (st.forPlay && playerFlag(s, p, "noPlayChars")) opts = opts.filter((i) => def(s, i).type !== "Character");
       const max = N(st.max);
       if (!opts.length || max <= 0) {
         f.vars[st.v] = [];
@@ -1030,7 +1032,10 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
         addMod(s, { target: i, kind: "flag", amount: 0, flag: st.flag, until: st.flag === "noRefresh" ? "permanent" : st.until, owner: p });
       return true;
     case "playerFlag":
-      pl(s, sp(st.side)).flags.push({ flag: st.flag, until: st.until, setOnTurn: s.turn });
+      {
+        const flags = pl(s, sp(st.side)).flags;
+        if (!flags.some((x) => x.flag === st.flag && x.until === st.until && x.setOnTurn === s.turn)) flags.push({ flag: st.flag, until: st.until, setOnTurn: s.turn });
+      }
       return true;
     case "if": {
       const branch = evalCond(s, st.cond, c) ? st.then : (st.else ?? []);

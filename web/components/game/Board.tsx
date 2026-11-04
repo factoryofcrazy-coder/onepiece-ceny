@@ -19,6 +19,7 @@ export type BoardProps = {
   me: P;
   byCode: Map<string, Card>;
   mode: "bot" | "local" | "online";
+  botLevel?: "easy" | "medium" | "hard";
   onAction: (a: Action) => void;
   busy?: boolean;
   error?: string | null;
@@ -32,7 +33,7 @@ export type BoardProps = {
 
 const HEART = <Icon name="heart" size={13} />;
 
-export default function Board({ s, me, byCode, mode, onAction, busy, error, elo, onExit, onResign, onTimeout, result, gameId }: BoardProps) {
+export default function Board({ s, me, byCode, mode, onAction, busy, error, elo, onExit, onResign, onTimeout, result, botLevel, gameId }: BoardProps) {
   const clock = useGameClock(s, onTimeout);
   const { skin: donSkin, choose: chooseSkin } = useDonSkin();
   // koniec hry proti botovi sa zapíše do štatistík DON!! skinov (raz za hru)
@@ -47,7 +48,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
   useEffect(() => {
     if (mode !== "bot" || s.winner == null || recorded.current) return;
     recorded.current = true;
-    setNewSkins(recordBotGame(s.winner === me));
+    if (botLevel !== "easy") setNewSkins(recordBotGame(s.winner === me));
   }, [s.winner, mode, me]);
   const actionLog = useRef<ActionLog>([]);
   const opp: P = me === 0 ? 1 : 0;
