@@ -151,7 +151,7 @@ export type Ability = {
 
 /** Kocky DSL. var = meno premennej so zoznamom kariet. "$self" = zdrojová karta. */
 export type Step =
-  | { op: "choose"; v: string; f: Filter; min?: Num; max: Num; label: string; distinctNames?: boolean; maxTotalCost?: number; chooser?: "opp" }
+  | { op: "choose"; v: string; f: Filter; min?: Num; max: Num; label: string; distinctNames?: boolean; maxTotalCost?: number; chooser?: "opp"; forPlay?: boolean }
   | { op: "all"; v: string; f: Filter }
   | { op: "set"; v: string; from: "self" | "myLeader" | "oppLeader" | "battleAttacker" | "battleTarget" | "eventCard" }
   | { op: "look"; n: Num; side?: Side }

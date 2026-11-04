@@ -884,3 +884,4 @@ body.in-game .chatd { display: none; }
 .cd-looks-list button.on { border-color: var(--gold); color: var(--text); }
 .cd-looks-list img { width: 100%; aspect-ratio: 5 / 7; object-fit: cover; border-radius: 5px; background: var(--sea-2); }
 .cd-looks-list span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.bot-levels { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }

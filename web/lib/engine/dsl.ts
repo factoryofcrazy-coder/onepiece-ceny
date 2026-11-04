@@ -149,7 +149,7 @@ export const search = (n: number, f: FX = {}, max = 1, rest: "bottom" | "trash" 
 export const playFrom = (zone: "hand" | "trash", f: FX = {}, max = 1, rested = false, label?: string): Step[] => {
   const v = nv();
   const flt: Filter = { zone, type: f.type ?? CH, ...f };
-  return [choose(flt, max, label ?? `Zahraj ${fdesc(flt)}${rested ? " (v rest)" : ""}`, 0, v), { op: "play", v, rested }];
+  return [{ ...choose(flt, max, label ?? `Zahraj ${fdesc(flt)}${rested ? " (v rest)" : ""}`, 0, v), forPlay: true } as Step, { op: "play", v, rested }];
 };
 
 export const ifThen = (cond: Cond, then: Step[], els?: Step[]): Step => ({ op: "if", cond, then, else: els });
