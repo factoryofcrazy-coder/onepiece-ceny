@@ -6,12 +6,68 @@ const CM_LIST = "https://downloads.s3.cardmarket.com/productCatalog/productList/
 const MIN_OVERLAP = 0.9; // podiel spoločných kariet v oboch smeroch
 const MIN_EXPANSION = 8; // malé expanzie sa dajú ľahko spárovať náhodou
 
-export type TcgProduct = { group: string; name: string; number: string; img: string };
+export type TcgProduct = { group: string; name: string; number: string; img: string; usd?: number };
 export type CmProduct = { idProduct: number; idExpansion: number };
-type CardRow = { id: string; code: string; v: string; set: string; img: string; cmId?: number; imgBase?: boolean };
+type CardRow = {
+  id: string;
+  code: string;
+  v: string;
+  set: string;
+  setName?: string;
+  img: string;
+  cmId?: number;
+  imgBase?: boolean;
+  usd?: number | null;
+  cm?: number | null;
+  cmLow?: number | null;
+};
 
 const large = (url: string) => url.replace(/_200w(\.\w+)$/, "_in_400x400$1");
 const isPromoGroup = (g: string) => /Promotion|Revision/.test(g);
+const TRUSTED_RATIO = 4; // cena CM a TCGplayeru sa pri tej istej verzii nelíši viac než 4-násobne
+const TREND_FLOOR = 0.05; // trend pod 5 % ceny TCGplayeru je chyba z málo predajov, nie reálna cena
+
+/** „Nami (055) (Super Rare Alternate Art)“ → „Alternate Art“; základná verzia → "" */
+export function variantLabel(name: string) {
+  const parts = [...name.matchAll(/\(([^()]+)\)/g)].map((m) => m[1]).map((t) => t.replace(/^[A-Z]{1,4}\d{0,2}-\d{1,3}\s*·?\s*/, "").trim()).filter((t) => t && !/^\d{1,3}$/.test(t));
+  return parts.join(" · ").replace(/^Super Rare Alternate Art$/, "Alternate Art");
+}
+
+// Nová edícia: OPTCG API zatiaľ nepozná vzácne verzie a Cardmarket ich nerozlišuje v názve.
+// Verzie jednej karty idú na Cardmarkete podľa čísla produktu v rovnakom poradí, v akom ich má TCGplayer podľa ceny.
+// Páruje sa len pri rovnakom počte verzií a keď to potvrdia aj ceny.
+function pairRareVersions(rows: CardRow[], numbers: Map<string, TcgProduct[]>, baseOf: Map<string, CardRow>) {
+  let paired = 0;
+  const byCode = new Map<string, CardRow[]>();
+  for (const c of rows) if (!c.img) byCode.set(c.code, [...(byCode.get(c.code) ?? []), c]);
+  for (const [code, list] of byCode) {
+    const variants = (numbers.get(code) ?? []).filter((p) => variantLabel(p.name));
+    if (variants.length !== list.length || variants.some((p) => !p.usd)) continue;
+    const ours = [...list].sort((a, b) => a.cmId! - b.cmId!);
+    const theirs = [...variants].sort((a, b) => a.usd! - b.usd!);
+    const reliable = ours
+      .map((c, i) => [c.cm ?? 0, theirs[i].usd!] as const)
+      .filter(([cm, usd]) => cm >= TREND_FLOOR * usd);
+    if (!reliable.length || reliable.some(([cm, usd]) => cm > usd * TRUSTED_RATIO || cm * TRUSTED_RATIO < usd)) continue;
+    ours.forEach((c, i) => {
+      const t = theirs[i];
+      const base = baseOf.get(code);
+      c.v = variantLabel(t.name);
+      c.img = large(t.img);
+      c.usd = t.usd;
+      if (base) {
+        c.set = base.set;
+        c.setName = base.setName;
+      }
+      if ((c.cm ?? 0) < TREND_FLOOR * t.usd!) {
+        c.cm = null;
+        c.cmLow = null;
+      }
+      paired++;
+    });
+  }
+  return paired;
+}
 
 export function applyPromoImages(cards: CardRow[], cm: CmProduct[], tcg: TcgProduct[]) {
   const expansionOf = new Map(cm.map((p) => [p.idProduct, p.idExpansion]));
@@ -36,7 +92,11 @@ export function applyPromoImages(cards: CardRow[], cm: CmProduct[], tcg: TcgProd
     expansions.set(e, [...(expansions.get(e) ?? []), c]);
   }
 
+  const baseOf = new Map<string, CardRow>();
+  for (const c of cards) if (!c.v && !c.cmId && !baseOf.has(c.code)) baseOf.set(c.code, c);
+
   let exact = 0;
+  let paired = 0;
   for (const rows of expansions.values()) {
     if (rows.length < MIN_EXPANSION || rows.some((c) => /Errata/i.test(c.v))) continue;
     const codes = new Set(rows.map((c) => c.code));
@@ -50,7 +110,12 @@ export function applyPromoImages(cards: CardRow[], cm: CmProduct[], tcg: TcgProd
       if (coverage >= MIN_OVERLAP && precision >= MIN_OVERLAP && (!best || coverage * precision > best.score))
         best = { score: coverage * precision, numbers };
     }
-    if (!best) continue;
+    if (!best) {
+      // expanzia je samotná edícia: karty z nej má jediná bežná skupina, ktorá má aj vzácne verzie
+      const home = [...groups].filter(([name, numbers]) => !isPromoGroup(name) && !/Pre-Release|Release Event|Anniversary/.test(name) && [...codes].every((c) => numbers.has(c)));
+      if (home.length === 1 && !rows.some((c) => /Errata/i.test(c.v))) paired += pairRareVersions(rows, home[0][1], baseOf);
+      continue;
+    }
     const counts = new Map<string, number>();
     for (const c of rows) counts.set(c.code, (counts.get(c.code) ?? 0) + 1);
     for (const c of rows) {
@@ -84,7 +149,7 @@ export function applyPromoImages(cards: CardRow[], cm: CmProduct[], tcg: TcgProd
       approx++;
     }
   }
-  return { exact, filled, approx, without: promos.filter((c) => !c.img).length };
+  return { exact, paired, filled, approx, without: promos.filter((c) => !c.img).length };
 }
 
 async function json(url: string) {
@@ -101,9 +166,15 @@ export async function loadTcgProducts(): Promise<TcgProduct[]> {
     await Promise.all(
       groups.slice(i, i + 5).map(async (g: any) => {
         try {
-          const { results } = await json(`${TCG}/${g.groupId}/products`);
+          const [{ results }, prices] = await Promise.all([json(`${TCG}/${g.groupId}/products`), json(`${TCG}/${g.groupId}/prices`)]);
+          const usd = new Map<number, number>();
+          for (const x of prices.results) {
+            const v = x.marketPrice ?? x.midPrice;
+            if (v) usd.set(x.productId, Math.max(v, usd.get(x.productId) ?? 0));
+          }
           for (const p of results)
             out.push({
+              usd: usd.get(p.productId),
               group: g.name,
               name: p.name,
               number: p.extendedData?.find((d: any) => d.name === "Number")?.value ?? "",
