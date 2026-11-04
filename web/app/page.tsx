@@ -1,282 +1,184 @@
 "use client";
-import { plural } from "@/lib/sk";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { CountUp, DataError, Loading, FilterBar } from "@/components/ui";
-import { eur, Offer, usePrices } from "@/lib/data";
-import { Tcg, useTcg } from "@/lib/tcg";
+import { useTodayXp } from "@/components/Sidebar";
+import { useAuth } from "@/lib/auth";
+import { eur, usePrices } from "@/lib/data";
+import { levelProgress, loadBadges, rankOf, RankIcon, type Badge, XP_SOURCES } from "@/lib/gamify";
+import { loadProfiles } from "@/lib/auth";
+import { useTcg } from "@/lib/tcg";
 
-type Product = {
-  key: string;
-  code: string;
-  kind: string;
-  lang: string;
-  title: string;
-  img: string | null;
-  msrp: number | null;
-  offers: Offer[];
-  best: Offer | null;
-  pct: number | null;
-};
-
-const KINDS: Record<Tcg, string[]> = {
-  onepiece: ["Box", "Pack", "Double Pack", "Starter", "Premium", "Illustration", "Kolekcia", "Case", "Doplnky", "Iné"],
-  pokemon: ["Box", "ETB", "Bundle", "Pack", "Blister", "Tin", "Kolekcia", "Starter", "Case", "Doplnky", "Iné"],
-};
-const KIND_SK: Record<string, string> = { ETB: "Elite Trainer Box", Bundle: "Booster Bundle", Tin: "Tin", Blister: "Blister" };
-const LANGS: Record<Tcg, string[]> = { onepiece: ["EN", "JP", "CN", "KR"], pokemon: ["EN", "DE", "JP", "CN", "KR"] };
-const HINT: Record<Tcg, string> = { onepiece: "OP16, Azure Sea…", pokemon: "ME05, Pitch Black, Dunkelnacht…" };
-
-function ago(ts?: string) {
-  if (!ts) return "";
-  const m = Math.round((Date.now() - new Date(ts).getTime()) / 60000);
-  if (m < 60) return `pred ${m} min`;
-  if (m < 48 * 60) return `pred ${Math.round(m / 60)} h`;
-  return `pred ${Math.round(m / 1440)} dňami`;
-}
-
-export default function PricesPage() {
-  const { tcg } = useTcg();
-  const { data, error } = usePrices(tcg);
-  const [kind, setKind] = useState("Box");
-  const [lang, setLang] = useState("EN");
+/** Čas do polnoci v Bratislave, vtedy sa denné XP vynulujú. */
+function useResetCountdown() {
+  const [left, setLeft] = useState<number | null>(null);
   useEffect(() => {
-    if (!KINDS[tcg].includes(kind)) setKind("Box");
-    if (lang !== "*" && !LANGS[tcg].includes(lang)) setLang("EN");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tcg]);
-  const [q, setQ] = useState("");
-  const [stock, setStock] = useState(true);
-  const [ba, setBa] = useState(false);
-  const [sort, setSort] = useState("pct");
+    const tick = () => {
+      const now = new Date();
+      const parts = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Bratislava", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).formatToParts(now);
+      const g = (t: string) => Number(parts.find((x) => x.type === t)?.value ?? 0);
+      setLeft(24 * 3600 - (g("hour") % 24) * 3600 - g("minute") * 60 - g("second"));
+    };
+    tick();
+    const iv = setInterval(tick, 1000);
+    return () => clearInterval(iv);
+  }, []);
+  return left;
+}
+const pad = (n: number) => String(n).padStart(2, "0");
 
-  const products = useMemo(() => {
+type Deal = { title: string; img: string | null; code: string; price: number; msrp: number; pct: number; shop: string; url: string };
+
+export default function Home() {
+  const { user, profile, loading } = useAuth();
+  const { tcg } = useTcg();
+  const { data } = usePrices(tcg);
+  const { today, xp } = useTodayXp(user?.id);
+  const left = useResetCountdown();
+  const [top, setTop] = useState<(Badge & { id: string; name: string })[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    let live = true;
+    Promise.all([loadBadges(), loadProfiles()]).then(([m, ps]) => {
+      if (!live) return;
+      const names = new Map(ps.map((p) => [p.id, p.username ?? "Hráč"]));
+      setTop(
+        [...m.entries()]
+          .filter(([, b]) => b.games > 0)
+          .sort((a, b) => b[1].elo - a[1].elo)
+          .slice(0, 3)
+          .map(([id, b]) => ({ ...b, id, name: names.get(id) ?? "Hráč" })),
+      );
+    });
+    return () => {
+      live = false;
+    };
+  }, [user]);
+
+  // najvýhodnejšie boxy skladom oproti MSRP, z každej edície jeden
+  const deals = useMemo<Deal[]>(() => {
     if (!data) return [];
-    const map = new Map<string, Product>();
+    const best = new Map<string, Deal>();
     for (const o of data.offers) {
-      const [, name, code, k, l] = o;
-      const key = code ? `${code}|${k}|${l}` : `${name}|${k}|${l}`;
-      let p = map.get(key);
-      if (!p) {
-        p = { key, code, kind: k, lang: l, title: name, img: null, msrp: null, offers: [], best: null, pct: null };
-        map.set(key, p);
-      }
-      p.offers.push(o);
-      if (!p.img && o[15]) p.img = o[15];
-      if (p.msrp == null && o[10] != null) p.msrp = o[10];
-      if (name.length < p.title.length) p.title = name;
+      const [shop, name, code, kind, lang, price, inStock, url, , , msrp, , preorder, , , img] = o as any[];
+      if (kind !== "Box" || lang !== "EN" || !inStock || preorder || !msrp || !code) continue;
+      const cur = best.get(code);
+      if (!cur || price < cur.price) best.set(code, { title: name, img: img ?? cur?.img ?? null, code, price, msrp, pct: (price / msrp - 1) * 100, shop: data.shops[shop] ?? shop, url });
     }
-    for (const p of map.values()) {
-      p.offers.sort((a, b) => Number(b[6]) - Number(a[6]) || a[5] - b[5]);
-      p.best = p.offers.find((o) => o[6]) ?? null;
-      p.pct = p.best && p.msrp ? (p.best[5] / p.msrp - 1) * 100 : null;
-    }
-    return [...map.values()];
+    return [...best.values()].sort((a, b) => a.pct - b.pct).slice(0, 3);
   }, [data]);
 
-  const shown = useMemo(() => {
-    const s = q.trim().toLowerCase();
-    let list = products.filter(
-      (p) =>
-        (kind === "*" || p.kind === kind) &&
-        (lang === "*" || p.lang === lang) &&
-        (!stock || p.best) &&
-        (!ba || p.offers.some((o) => o[6] && data?.pickup[o[0]])) &&
-        (!s || p.title.toLowerCase().includes(s) || p.code.toLowerCase().includes(s)),
-    );
-    const price = (p: Product) => p.best?.[5] ?? p.offers[0]?.[5] ?? 1e9;
-    list.sort((a, b) =>
-      sort === "pct"
-        ? (a.pct ?? 1e9) - (b.pct ?? 1e9) || price(a) - price(b)
-        : sort === "price"
-          ? price(a) - price(b)
-          : b.code.localeCompare(a.code, undefined, { numeric: true }),
-    );
-    return list;
-  }, [products, kind, lang, q, stock, ba, sort, data]);
-
-  if (error) return <DataError error={error} file="prices" />;
-  if (!data) return <Loading what="Načítavam ceny" shape="tiles" />;
-
-  const failing = Object.entries(data.status).filter(([, s]) => !s.ok);
-
+  const p = levelProgress(xp);
+  const name = profile?.username ?? "";
   return (
-    <>
-      <section className="hero">
-        <div className="hero-copy">
-          <h1>
-            {tcg === "pokemon" ? "Pokémon boxy" : "Kde kúpiť box"} <em>čo najbližšie k MSRP</em>
-          </h1>
-          <p className="muted">
-            {Object.keys(data.shops).length} obchodov v SK, CZ, DE, AT a JP, aktualizované {ago(data.updated)}.
-          </p>
+    <div className="dash">
+      <section className="dash-hero">
+        <div>
+          <span className="dash-chip">{user ? `Level ${p.level}` : "Pre zberateľov a hráčov"}</span>
+          <h1>{user ? `Vitaj späť${name ? `, ${name}` : ""}!` : "Všetko o One Piece kartách na jednom mieste"}</h1>
+          <p>{user ? `Do levelu ${p.level + 1} ti chýba ${p.toNext} XP. Najviac získaš online hrou.` : "Porovnaj ceny boxov, spravuj zbierku, skenuj karty a zahraj si proti ostatným."}</p>
+          <div className="dash-cta">
+            <Link className="btn dash-btn" href={user ? "/hra" : "/login"}>
+              {user ? "Zahrať si" : "Vytvoriť účet zadarmo"}
+            </Link>
+            <Link className="btn ghost" href="/skener">
+              Skenovať karty
+            </Link>
+          </div>
+          {user && (
+            <div className="rk-bar dash-bar" role="progressbar" aria-valuenow={p.pct} aria-valuemin={0} aria-valuemax={100} aria-label="Postup na ďalší level">
+              <i style={{ width: `${p.pct}%` }} />
+            </div>
+          )}
         </div>
-        <WantedBoard products={products} shops={data.shops} langs={tcg === "pokemon" ? ["EN", "DE", "JP"] : ["EN", "JP"]} />
+        {deals[0]?.img && <img className="dash-hero-img" src={deals[0].img} alt="" />}
       </section>
 
-      <FilterBar>
-        <label className="field keep">
-          <span>Typ</span>
-          <select value={kind} onChange={(e) => setKind(e.target.value)}>
-            <option value="*">Všetko</option>
-            {KINDS[tcg].map((k) => (
-              <option key={k} value={k}>
-                {KIND_SK[k] ?? k}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="field">
-          <span>Jazyk</span>
-          <select value={lang} onChange={(e) => setLang(e.target.value)}>
-            <option value="*">Všetky</option>
-            {LANGS[tcg].map((l) => (
-              <option key={l}>{l}</option>
-            ))}
-          </select>
-        </label>
-        <label className="field grow">
-          <span>Hľadať</span>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={HINT[tcg]} />
-        </label>
-        <label className="field">
-          <span>Zoradiť</span>
-          <select value={sort} onChange={(e) => setSort(e.target.value)}>
-            <option value="pct">Najbližšie k MSRP</option>
-            <option value="price">Najlacnejšie</option>
-            <option value="code">Najnovšie edície</option>
-          </select>
-        </label>
-        <label className="check">
-          <input type="checkbox" checked={stock} onChange={(e) => setStock(e.target.checked)} /> Skladom
-        </label>
-        <label className="check">
-          <input type="checkbox" checked={ba} onChange={(e) => setBa(e.target.checked)} /> 📍 Osobne v BA
-        </label>
-      </FilterBar>
+      <div className="dash-grid">
+        <section className="dash-card dash-board">
+          <div className="dash-head">
+            <h2>Rebríček</h2>
+            <Link href="/rebricek">Celý rebríček</Link>
+          </div>
+          {!loading && !user ? (
+            <p className="muted small">
+              Rebríček vidia prihlásení hráči. <Link href="/login">Prihlásiť sa</Link>
+            </p>
+          ) : top.length === 0 ? (
+            <p className="muted small">Zatiaľ nikto neodohral hodnotenú hru. Buď prvý.</p>
+          ) : (
+            <ol>
+              {top.map((t, i) => (
+                <li key={t.id}>
+                  <span className="dash-pos">{i + 1}</span>
+                  <span className="dash-name">
+                    <b>{t.name}</b>
+                    <i>{t.elo} ELO</i>
+                  </span>
+                  <span className="dash-rank" style={{ color: rankOf(t.elo).color }}>
+                    <RankIcon rank={rankOf(t.elo)} size={15} /> {rankOf(t.elo).name}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          )}
+        </section>
 
-      {failing.length > 0 && (
-        <p className="small warnline">
-          ⚠ Nefungujú: {failing.map(([k]) => data.shops[k] ?? k).join(", ")} (ukazujú sa posledné známe ceny)
-        </p>
-      )}
+        <section className="dash-timer">
+          <span>Nové denné XP o</span>
+          <b>{left == null ? "--:--:--" : `${pad(Math.floor(left / 3600))}:${pad(Math.floor((left % 3600) / 60))}:${pad(left % 60)}`}</b>
+          <i>hodiny, minúty, sekundy</i>
+        </section>
 
-      <p className="muted small">{shown.length} {plural(shown.length, "produkt", "produkty", "produktov")}</p>
-      <div className="pgrid">
-        {shown.map((p) => (
-          <ProductCard key={p.key} p={p} shops={data.shops} pickup={data.pickup} th={data.th} />
-        ))}
+        {user && (
+          <section className="dash-card dash-quests">
+            <div className="dash-head">
+              <h2>Denné úlohy</h2>
+              <Link href="/ucet">Môj postup</Link>
+            </div>
+            <ul>
+              {XP_SOURCES.slice(0, 5).map((s) => {
+                const have = today[s.id] ?? 0;
+                return (
+                  <li key={s.id} className={have >= s.cap ? "done" : ""}>
+                    <span>{s.label}</span>
+                    <b>
+                      {have}/{s.cap} XP
+                    </b>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
       </div>
-    </>
-  );
-}
 
-function ProductCard({
-  p,
-  shops,
-  pickup,
-  th,
-}: {
-  p: Product;
-  shops: Record<string, string>;
-  pickup: Record<string, string>;
-  th: Record<string, number>;
-}) {
-  const [open, setOpen] = useState(false);
-  const good = p.pct != null && p.pct <= (th[p.lang] ?? 30);
-  const list = open ? p.offers : p.offers.slice(0, 4);
-  return (
-    <article className={`pcard ${good ? "good" : ""}`}>
-      <div className="ptop">
-        {p.img ? <img src={p.img} alt="" loading="lazy" /> : <div className="pimg-ph">{p.kind}</div>}
-        <div>
-          <div className="row gap wrapr">
-            {p.code && <span className="tag">{p.code}</span>}
-            <span className="tag dim">{KIND_SK[p.kind] ?? p.kind}</span>
-            <span className="tag dim">{p.lang}</span>
-          </div>
-          <h3 title={p.title}>{p.title}</h3>
-          <div className="pprice">
-            <b>{p.best ? eur(p.best[5]) : "nie je skladom"}</b>
-            {p.pct != null && (
-              <span className={`pct ${good ? "ok" : p.pct > 100 ? "bad" : ""}`}>
-                {p.pct > 0 ? "+" : ""}
-                {p.pct.toFixed(0)} % vs MSRP
-              </span>
-            )}
-          </div>
-          {p.msrp != null && <div className="muted small">MSRP {eur(p.msrp)}</div>}
+      <section>
+        <div className="dash-head">
+          <h2>Najlepšie ceny boxov</h2>
+          <Link href="/ceny">Všetky ceny</Link>
         </div>
-      </div>
-      <ul className="offers">
-        {list.map((o, i) => (
-          <li key={i} className={o[6] ? "" : "out"}>
-            <a href={o[7]} target="_blank" rel="noreferrer">
-              <i className={`sd ${o[6] ? "in" : ""}`} />
-              {shops[o[0]] ?? o[0]}
-              {pickup[o[0]] && <span title={pickup[o[0]]}> 📍</span>}
-              {o[12] && <span className="tag tiny">predobj.</span>}
+        <div className="dash-deals">
+          {deals.length === 0 && <p className="muted small">Načítavam ponuky…</p>}
+          {deals.map((d) => (
+            <a key={d.code} className="dash-deal" href={d.url} target="_blank" rel="noreferrer">
+              <div className="dash-deal-img">{d.img ? <img src={d.img} alt="" loading="lazy" /> : <span>{d.code}</span>}</div>
+              <div className="dash-deal-body">
+                <span className="tag dim">{d.code}</span>
+                <b>{d.title}</b>
+                <div className="dash-deal-row">
+                  <strong>{eur(d.price)}</strong>
+                  <i className={d.pct <= 0 ? "good" : ""}>
+                    {d.pct > 0 ? "+" : ""}
+                    {Math.round(d.pct)} % MSRP
+                  </i>
+                </div>
+                <span className="tiny muted">{d.shop}</span>
+              </div>
             </a>
-            <span>
-              {eur(o[5])}
-              {o[13] != null && o[13] > 0 && <span className="muted tiny"> +{eur(o[13])}</span>}
-            </span>
-          </li>
-        ))}
-      </ul>
-      <div className="row between">
-        {p.offers.length > 4 ? (
-          <button className="link small" onClick={() => setOpen(!open)}>
-            {open ? "menej" : `všetky obchody (${p.offers.length})`}
-          </button>
-        ) : (
-          <span />
-        )}
-        {p.offers[0]?.[14] && (
-          <a className="small" href={p.offers[0][14]} target="_blank" rel="noreferrer">
-            Cardmarket ↗
-          </a>
-        )}
-      </div>
-    </article>
-  );
-}
-
-function WantedBoard({ products, shops, langs }: { products: Product[]; shops: Record<string, string>; langs: string[] }) {
-  const pick = (lang: string) =>
-    products
-      .filter((p) => p.kind === "Box" && p.lang === lang && p.best && p.pct != null)
-      .sort((a, b) => a.pct! - b.pct!);
-  const top = langs
-    .flatMap(pick)
-    .sort((a, b) => a.pct! - b.pct!)
-    .slice(0, 3);
-  if (!top.length) return null;
-  return (
-    <div className="wanted-board" aria-label="Najlepšie ponuky boxov">
-      {top.map((p, i) => (
-        <a
-          key={p.key}
-          className="wanted"
-          href={p.best![7]}
-          target="_blank"
-          rel="noreferrer"
-          style={{ ["--i" as any]: i, ["--tilt" as any]: `${[-2.5, 1.5, -1][i]}deg` }}
-        >
-          <span className="w-title">WANTED</span>
-          <span className="w-frame">{p.img ? <img src={p.img} alt="" /> : <b>{p.code}</b>}</span>
-          <span className="w-name">
-            {p.code} {p.kind} {p.lang}
-          </span>
-          <span className="w-bounty">
-            <CountUp value={p.best![5]} format={(v) => v.toLocaleString("sk-SK", { maximumFractionDigits: 0 })} />
-            <small>€</small>
-          </span>
-          <span className="w-foot">
-            {shops[p.best![0]] ?? p.best![0]} · {p.pct! > 0 ? "+" : ""}
-            {p.pct!.toFixed(0)} % voči MSRP
-          </span>
-        </a>
-      ))}
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

@@ -7,17 +7,18 @@ import { UserBadge, useBadges } from "@/lib/gamify";
 import { useNewReports } from "@/lib/reports";
 import { GAME_PUBLIC } from "@/lib/config";
 import { TCGS, useTcg } from "@/lib/tcg";
+import SearchBox from "./SearchBox";
 
 // Pokémon: ceny, karty, zbierka a master sety (decky a hra sú len pre One Piece)
 const PK_LINKS = [
-  { href: "/", label: "Ceny" },
+  { href: "/ceny", label: "Ceny" },
   { href: "/karty", label: "Karty" },
   { href: "/zbierka", label: "Zbierka" },
   { href: "/master-sety", label: "Master sety" },
 ];
 
 const LINKS = [
-  { href: "/", label: "Ceny" },
+  { href: "/ceny", label: "Ceny" },
   { href: "/karty", label: "Karty" },
   { href: "/zbierka", label: "Zbierka" },
   { href: "/master-sety", label: "Master sety" },
@@ -33,7 +34,7 @@ const LINKS = [
   { href: "/report", label: "Report" },
 ];
 
-export default function Nav() {
+export default function Nav({ onMenu }: { onMenu?: () => void }) {
   const path = usePathname();
   const { user, profile, signOut, loading } = useAuth();
   const { tcg, setTcg } = useTcg();
@@ -52,6 +53,11 @@ export default function Nav() {
   return (
     <header className="nav">
       <div className="wrap navin">
+        <button className="tb-menu" onClick={onMenu} aria-label="Otvoriť menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
         <Link href="/" className="brand">
           <span className="logo" aria-hidden>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -94,6 +100,7 @@ export default function Nav() {
             </Link>
           ))}
         </nav>
+        <SearchBox />
         <div className="who">
           {loading ? null : user ? (
             <div className="acct">

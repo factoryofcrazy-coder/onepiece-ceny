@@ -20,7 +20,7 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     shortcuts: [
       { name: "Skener kariet", short_name: "Skener", url: "/skener", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
-      { name: "Ceny", url: "/" },
+      { name: "Ceny", url: "/ceny" },
       { name: "Zbierka", url: "/zbierka" },
     ],
   };
