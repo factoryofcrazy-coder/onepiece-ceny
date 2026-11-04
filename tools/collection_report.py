@@ -14,7 +14,7 @@ Cena karty = Cardmarket trend (EN); keď chýba, TCGplayer prepočítaný na EUR
 import argparse, json, os, sys, urllib.parse, urllib.request
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://wpmarrzqzcfugtfjitot.supabase.co")
-SITE = "https://grand-line-tracker-gilt.vercel.app"
+SITE = "https://www.grand-line.eu"
 USD_EUR = 1.12
 
 
