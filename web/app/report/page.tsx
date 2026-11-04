@@ -180,13 +180,21 @@ export default function Report() {
           <h1>Report</h1>
           <p className="muted">Čo nefunguje alebo čo by si chcel inak? Z každého hlásenia vznikne úloha a tu uvidíš, ako je na tom.</p>
         </div>
-        <button className="btn" aria-expanded={showForm} onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Zavrieť formulár" : "Nové hlásenie"}
-        </button>
+        {user ? (
+          <button className="btn" aria-expanded={showForm} onClick={() => setShowForm(!showForm)}>
+            {showForm ? "Zavrieť formulár" : "Nové hlásenie"}
+          </button>
+        ) : (
+          !loading && (
+            <Link className="btn" href="/login">
+              Prihlásiť sa a nahlásiť
+            </Link>
+          )
+        )}
       </div>
       {sent && <p className="okc small">Ďakujeme, hlásenie máme a pridali sme ho medzi úlohy.</p>}
 
-      {showForm && (
+      {showForm && user && (
       <form className="ucet-card" onSubmit={send}>
         <div className="rep-kinds" role="radiogroup" aria-label="O čo ide">
           {KINDS.map((k) => (
@@ -216,7 +224,7 @@ export default function Report() {
         </button>
         {err && <p className="badc small">{err}</p>}
         <p className="tiny muted">
-          Do správy nepíš osobné údaje. {user ? "Hlásenie sa spojí s tvojím účtom, ostatní to neuvidia. " : "Môžeš písať aj bez prihlásenia. "}
+          Do správy nepíš osobné údaje. Hlásenie sa spojí s tvojím účtom, ostatní to neuvidia. 
           Uložíme aj typ prehliadača, aby sme chybu vedeli zopakovať. Viac v <Link href="/sukromie">zásadách súkromia</Link>.
         </p>
       </form>
@@ -246,7 +254,7 @@ export default function Report() {
       ) : !tasks ? (
         <Loading what="Načítavam úlohy" shape="rows" />
       ) : shown.length === 0 ? (
-        <p className="muted">Tu zatiaľ nič nie je. Všimol si si niečo? Daj nám vedieť cez „Nové hlásenie“.</p>
+        <p className="muted">Tu zatiaľ nič nie je.</p>
       ) : (
         <>
           <p className="tiny muted">
