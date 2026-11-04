@@ -15,7 +15,22 @@ const sortd = (x: any): any =>
             .map((k) => [k, sortd(x[k])]),
         )
       : x;
-const norm = (x: any) => JSON.stringify(sortd(x)).replace(/"v":"(?!\$)[^"]*"/g, '"v":"v"');
+// „typ A alebo B“ sa dá zapísať dvoma spôsobmi s rovnakým významom
+const canon = (x: any): any => {
+  if (Array.isArray(x)) return x.map(canon);
+  if (!x || typeof x !== "object") return x;
+  const o: any = Object.fromEntries(Object.entries(x).map(([k, v]) => [k, canon(v)]));
+  if (Array.isArray(o.any) && o.any.every((a: any) => Object.keys(a).length === 1 && typeof a.trait === "string")) {
+    o.trait = o.any.map((a: any) => a.trait);
+    delete o.any;
+  }
+  if (o.c === "or" && o.any?.every((a: any) => a.c === "leader" && typeof a.f?.trait === "string" && Object.keys(a.f).length === 2))
+    return { c: "leader", f: { zone: "leader", trait: o.any.map((a: any) => a.f.trait) } };
+  if (o.a?.n === "donField" && !o.a.side) o.a = { ...o.a, side: "me" };
+  if (o.b?.n === "donField" && !o.b.side) o.b = { ...o.b, side: "me" };
+  return o;
+};
+const norm = (x: any) => JSON.stringify(sortd(canon(x))).replace(/"v":"(?!\$)[^"]*"/g, '"v":"v"');
 
 describe("prekladač textov kariet", () => {
   it("keď text preloží, zhoduje sa s ručným skriptom", () => {
