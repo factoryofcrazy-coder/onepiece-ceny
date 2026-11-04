@@ -6,6 +6,7 @@ export type Card = {
   code: string; // herné ID (OP01-001)
   name: string;
   v: string; // "" = základná verzia, inak názov varianty (Parallel, Manga…)
+  imgBase?: boolean; // promo verzia bez vlastného obrázka, ukazuje sa základná karta
   set: string;
   setName: string;
   rarity: string;
@@ -154,6 +155,7 @@ export function sortSets<T extends { id: string }>(sets: T[]) {
  *  Obrázky z OPTCG API majú 150–280 kB; náhľad 200 px ~25 kB. Iné zdroje (TCGdex) ostávajú bez zmeny. */
 export function thumb(url: string | null | undefined, w: number) {
   if (!url) return "";
+  if (/^https:\/\/tcgplayer-cdn\.tcgplayer\.com\//.test(url)) return url.replace("_in_400x400", "_200w");
   if (!/^https:\/\/optcgapi\.com\//.test(url)) return url;
   return `https://wsrv.nl/?url=${encodeURIComponent(url.replace(/^https:\/\//, ""))}&w=${w}&output=webp&q=72`;
 }

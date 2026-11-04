@@ -1,4 +1,5 @@
 import { cardmarketPrices } from "./cardmarket";
+import { applyPromoImages, loadCmProducts, loadTcgProducts } from "./promo-images";
 // Zostavenie databázy One Piece kariet z OPTCG API (zadarmo, bez kľúča) + ceny z Cardmarketu (lib/cardmarket.ts).
 // Používa ho /api/cards (záloha) aj skript scripts/build-cards.ts (denne cez GitHub Actions → docs/data/cards.json).
 
@@ -189,6 +190,12 @@ export async function buildCards() {
     if (extras.length) sets.set("CM-PROMO", "Promo verzie (Cardmarket)");
   } catch (e: any) {
     console.error("Cardmarket ceny zlyhali:", e?.message ?? e);
+  }
+  try {
+    const stats = applyPromoImages(out as any[], await loadCmProducts(), await loadTcgProducts());
+    console.log(`Obrázky: presné ${stats.exact}, doplnené ${stats.filled}, ilustračné ${stats.approx}, bez obrázka ${stats.without}`);
+  } catch (e: any) {
+    console.error("Obrázky promo verzií zlyhali:", e?.message ?? e);
   }
   return {
     updated: new Date().toISOString(),

@@ -873,3 +873,5 @@ body.in-game .chatd { display: none; }
 }
 .chatx-online { margin-left: 8px; font-weight: 500; font-family: var(--body); }
 .chatx-page h1 .chatx-online { font-size: 13px; }
+.cimg.approx { opacity: .72; filter: saturate(.6); }
+.cd-approx { display: block; flex-basis: 100%; margin-top: 4px; }

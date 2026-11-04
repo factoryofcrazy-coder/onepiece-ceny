@@ -98,7 +98,7 @@ def main():
 
     todo = []
     for c in cards:
-        if c.get("img") and (c["id"], "optcg") not in have:
+        if c.get("img") and c.get("set") != "CM-PROMO" and (c["id"], "optcg") not in have:  # promo verzie sú stále len z Cardmarketu, v indexe ich nechceme
             todo.append((c["id"], "optcg", c["img"]))
         if not a.no_official and not c["id"].startswith("DON") and (c["id"], "jp") not in have:
             todo.append((c["id"], "jp", f"https://www.onepiece-cardgame.com/images/cardlist/card/{c['id']}.png"))
