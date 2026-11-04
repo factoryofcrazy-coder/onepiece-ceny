@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { CardImg, CardModal, DataError, Loading, NeedLogin } from "@/components/ui";
+import { CardImg, CardModal, DataError, Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
 import { Card, cardEur, eur, useCards, usePrices } from "@/lib/data";
@@ -25,7 +25,8 @@ export default function TradePage() {
   const { data: cards, error } = useCards();
   const { data: prices } = usePrices();
   const usd = prices?.fx?.USD ?? 1.12;
-  const { list, traders, missing, loading: tLoading, reload, error: tError } = useTrades(!!user);
+  const { list, traders, missing, loading: tLoading, reload, error: tError } = useTrades(!loading, !!user);
+  const uid = user?.id;
   const { qty } = useCollection(user?.id ?? null, false);
   const me = useMyContact(user?.id);
   const [tab, setTab] = useState<Tab>("offer");
@@ -49,8 +50,8 @@ export default function TradePage() {
     localStorage.setItem("trade-view", v);
   };
 
-  const mineWant = useMemo(() => new Set(list.filter((l) => l.user_id === user?.id && l.kind === "want").map((l) => l.card_id)), [list, user]);
-  const mineOffer = useMemo(() => new Set(list.filter((l) => l.user_id === user?.id && l.kind === "offer").map((l) => l.card_id)), [list, user]);
+  const mineWant = useMemo(() => new Set(list.filter((l) => l.user_id === uid && l.kind === "want").map((l) => l.card_id)), [list, user]);
+  const mineOffer = useMemo(() => new Set(list.filter((l) => l.user_id === uid && l.kind === "offer").map((l) => l.card_id)), [list, user]);
 
   if (tcg === "pokemon")
     return (
@@ -60,7 +61,6 @@ export default function TradePage() {
       </div>
     );
   if (loading) return <Loading shape="rows" />;
-  if (!user) return <NeedLogin what="Trhovisko" />;
   if (error) return <DataError error={error} file="cards" />;
   if (!cards) return <Loading what="Načítavam karty" shape="rows" />;
 
@@ -74,7 +74,7 @@ export default function TradePage() {
   };
   // zhoda: niekto ponúka, čo hľadám / hľadá, čo mám (v zbierke alebo v ponuke)
   const isMatch = (l: Listing) =>
-    l.user_id !== user.id && (l.kind === "offer" ? mineWant.has(l.card_id) : (qty[l.card_id] ?? 0) > 0 || mineOffer.has(l.card_id));
+    !!uid && l.user_id !== uid && (l.kind === "offer" ? mineWant.has(l.card_id) : (qty[l.card_id] ?? 0) > 0 || mineOffer.has(l.card_id));
   const cmOf = (l: Listing) => {
     const c = card(l.card_id);
     return c ? cardEur(c, usd, l.lang) : null;
@@ -88,7 +88,7 @@ export default function TradePage() {
     (!fLang || l.lang === fLang) &&
     (!fCond || l.cond === fCond) &&
     (!fDeal || (fDeal === "sale" ? l.price != null : l.price == null));
-  const others = list.filter((l) => l.user_id !== user.id);
+  const others = list.filter((l) => l.user_id !== uid);
   const orderBy = (a: Listing, b: Listing) => {
     if (sort === "cheap") return (a.price ?? 1e9) - (b.price ?? 1e9);
     if (sort === "dear") return (b.price ?? -1) - (a.price ?? -1);
@@ -96,7 +96,7 @@ export default function TradePage() {
     return b.created_at.localeCompare(a.created_at);
   };
   const shown = list
-    .filter((l) => (tab === "mine" ? l.user_id === user.id : l.kind === tab && l.user_id !== user.id))
+    .filter((l) => (tab === "mine" ? l.user_id === uid : l.kind === tab && l.user_id !== uid))
     .filter(match)
     .filter((l) => tab === "mine" || passes(l))
     .sort(orderBy);
@@ -146,7 +146,11 @@ export default function TradePage() {
           <b>{t?.username ?? "hráč"}</b>
           <i>{ago(l.created_at)}</i>
         </span>
-        {t?.contact ? (
+        {!user ? (
+          <Link className="btn ghost sm trx-contact" href="/login">
+            Kontakt po prihlásení
+          </Link>
+        ) : t?.contact ? (
           <button className="btn ghost sm trx-contact" title={t.contact} onClick={() => copyContact(l.id, t.contact!)}>
             {copied === l.id ? "Skopírované" : "Kontakt"}
           </button>
@@ -175,9 +179,15 @@ export default function TradePage() {
           <h1>Trhovisko</h1>
           <p className="muted">Ponúkni karty na predaj alebo výmenu a nájdi tie, ktoré ti chýbajú. Dohodnete sa medzi sebou cez kontakt.</p>
         </div>
-        <button className="btn" onClick={() => setTab("mine")}>
-          Pridať ponuku
-        </button>
+        {user ? (
+          <button className="btn" onClick={() => setTab("mine")}>
+            Pridať ponuku
+          </button>
+        ) : (
+          <Link className="btn" href="/login">
+            Prihlásiť sa a pridať ponuku
+          </Link>
+        )}
       </div>
 
       {missing && <div className="empty warn">Trhovisko sa práve pripravuje – databáza ešte nemá tabuľku ponúk. Skús to o chvíľu.</div>}
@@ -210,9 +220,9 @@ export default function TradePage() {
 
       <div className="trx-bar">
         <div className="rep-kinds" role="tablist" aria-label="Zobrazenie">
-          {(Object.keys(TAB_SK) as Tab[]).map((t) => (
+          {(Object.keys(TAB_SK) as Tab[]).filter((t) => user || t !== "mine").map((t) => (
             <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? "on" : ""} onClick={() => setTab(t)}>
-              {TAB_SK[t]} ({t === "mine" ? list.filter((l) => l.user_id === user.id).length : others.filter((l) => l.kind === t).length})
+              {TAB_SK[t]} ({t === "mine" ? list.filter((l) => l.user_id === uid).length : others.filter((l) => l.kind === t).length})
             </button>
           ))}
         </div>
@@ -320,7 +330,7 @@ export default function TradePage() {
               </button>
             </>
           ) : (
-            "Zatiaľ tu nič nie je. Buď prvý a pridaj svoju ponuku."
+            user ? "Zatiaľ tu nič nie je. Buď prvý a pridaj svoju ponuku." : "Zatiaľ tu nič nie je."
           )}
         </div>
       ) : tab !== "mine" && view === "grid" ? (
@@ -356,7 +366,7 @@ export default function TradePage() {
         <ul className="tr-list trx-list">
           {shown.map((l) => {
             const c = card(l.card_id);
-            const mine = l.user_id === user.id;
+            const mine = l.user_id === uid;
             return (
               <li key={l.id} className={isMatch(l) ? "match" : ""}>
                 <button className="tr-img" onClick={() => c && setOpen(c)} aria-label="Detail karty">
@@ -417,7 +427,7 @@ export default function TradePage() {
 
       {open && <CardModal card={open} usd={usd} onClose={() => setOpen(null)} />}
       <p className="tiny muted" style={{ marginTop: 24 }}>
-        Grand Line Tracker len spája ľudí, výmenu či predaj si dohodnete sami. <Link href="/zbierka">Tvoja zbierka</Link> je súkromná.
+        Grand Line Tracker len spája ľudí, výmenu či predaj si dohodnete sami. {user && <><Link href="/zbierka">Tvoja zbierka</Link> je súkromná.</>}
       </p>
     </div>
   );
