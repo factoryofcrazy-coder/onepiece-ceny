@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-04T11:23:25Z",
+ "updated": "2026-11-04T11:27:56Z",
  "fx": {
   "CZK": 24.3,
   "USD": 1.16,
@@ -640,7 +640,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -1869,7 +1869,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -2235,7 +2235,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -2614,7 +2614,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -2837,7 +2837,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -3569,7 +3569,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -3739,7 +3739,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -3790,7 +3790,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -4278,7 +4278,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -4797,7 +4797,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -5406,7 +5406,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -5484,7 +5484,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -5634,7 +5634,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -6095,8 +6095,8 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-11-04T09:15:28Z",
-   "ok": false,
+   "ts": "2026-11-04T11:27:56Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game - 3D2Y ST-14 Starter Deck Englisch",
@@ -6404,13 +6404,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0324/5867/0218/files/one-piece-card-game-the-worlds-strongest-warriors-op-17-booster-display-japanisch.webp?v=1790449080"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "samurai": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -6840,7 +6837,7 @@
    ]
   },
   "crispycards": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -8512,7 +8509,7 @@
    ]
   },
   "underpaid": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
@@ -9310,296 +9307,503 @@
    ]
   },
   "cardbinder": {
-   "ts": "2026-11-04T11:23:25Z",
+   "ts": "2026-11-04T11:27:56Z",
    "ok": true,
    "items": [
     {
      "name": "The Best Volume 2 Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-prb02-the-best-volume-2-japanese-booster-box",
-     "price": 81.32,
+     "price": 79.99,
      "currency": "EUR",
-     "eur": 81.32,
+     "eur": 79.99,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-PRB-01-The-Best-Volume-2-Japanese-Booster-Box.webp?v=1759221135"
     },
     {
+     "name": "The Time of Battle Booster Pack",
+     "url": "https://card-binder.com/products/one-piece-op-16-the-time-of-battle-booster-pack",
+     "price": 8.95,
+     "currency": "EUR",
+     "eur": 8.95,
+     "inStock": true,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP-16-The-Time-of-Battle-Booster-Pack.webp?v=1776197526"
+    },
+    {
      "name": "Carrying on His Will Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op13-carrying-on-his-will-japanese-booster-box",
-     "price": 223.63,
+     "price": 219.99,
      "currency": "EUR",
-     "eur": 223.63,
+     "eur": 219.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP13-Carrying-On-His-Will-Japanese-Booster-Box.webp?v=1759220480"
     },
     {
+     "name": "Adventure on KAMI's Island Japanese Booster Pack",
+     "url": "https://card-binder.com/products/one-piece-op15-adventure-on-kamis-island-japanese-booster-pack",
+     "price": 4.99,
+     "currency": "EUR",
+     "eur": 4.99,
+     "inStock": true,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP-15-Adventures-on-KAMIs-Island-Booster-Pack.webp?v=1768817206"
+    },
+    {
      "name": "The Time of Battle Japanese Booster Pack",
      "url": "https://card-binder.com/products/one-piece-op-16-the-time-of-battle-booster-pack-japanese",
-     "price": 5.58,
+     "price": 5.49,
      "currency": "EUR",
-     "eur": 5.58,
+     "eur": 5.49,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP-16-The-Time-of-Battle-Booster-Pack-Japanese.webp?v=1776196764"
     },
     {
      "name": "The Best Volume 1 Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-prb01-the-best-volume-1-japanese-booster-box",
-     "price": 162.63,
+     "price": 159.99,
      "currency": "EUR",
-     "eur": 162.63,
+     "eur": 159.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-PRB-01-The-Best-Volume-1-Japanese-Booster-Box.webp?v=1759220541"
     },
     {
      "name": "Heroines Edition Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-eb-03-heroines-edition-japanese-booster-box",
-     "price": 193.13,
+     "price": 189.99,
      "currency": "EUR",
-     "eur": 193.13,
+     "eur": 189.99,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-EB03-Heroines-Edition-Japanese-Booster-Box.webp?v=1759694169"
     },
     {
      "name": "The Azure Sea's Seven Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op-14-the-azure-seas-seven-japanese-booster-box",
-     "price": 121.98,
+     "price": 119.99,
      "currency": "EUR",
-     "eur": 121.98,
+     "eur": 119.99,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP-14-The-Azure-Seven-Japanese-Booster-Box.webp?v=1764152800"
     },
     {
+     "name": "The Time of Battle Booster box",
+     "url": "https://card-binder.com/products/one-piece-op-16-the-time-of-battle-booster-box",
+     "price": 209.95,
+     "currency": "EUR",
+     "eur": 209.95,
+     "inStock": true,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP-16-The-Time-of-Battle-Booster-Box.webp?v=1776197526"
+    },
+    {
+     "name": "Royal Blood Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op10-royal-blood-booster-box",
+     "price": 179.99,
+     "currency": "EUR",
+     "eur": 179.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-Royal-Blood-Booster-Box.webp?v=1748246979"
+    },
+    {
      "name": "Legacy of the Master Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op12-legacy-of-the-master-japanese-booster-box",
-     "price": 162.63,
+     "price": 159.99,
      "currency": "EUR",
-     "eur": 162.63,
+     "eur": 159.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP12-Legacy-of-the-Master-Japanese-Booster-Box.webp?v=1759693298"
     },
     {
      "name": "Emperors in the New World Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op09-the-four-emperors-japanese-booster-box",
-     "price": 203.29,
+     "price": 199.99,
      "currency": "EUR",
-     "eur": 203.29,
+     "eur": 199.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP09-The-Four-Emperors-Japanese-Booster-Box.webp?v=1759219209"
     },
     {
+     "name": "Adventure on KAMI's Island Japanese Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op15-adventure-on-kamis-island-japanese-booster-box",
+     "price": 109.99,
+     "currency": "EUR",
+     "eur": 109.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP-15-Adventures-on-KAMIs-Island-Booster-Box.webp?v=1768817206"
+    },
+    {
      "name": "Egghead Crisis Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-eb04-egghead-crisis-japanese-booster-box",
-     "price": 111.81,
+     "price": 109.99,
      "currency": "EUR",
-     "eur": 111.81,
+     "eur": 109.99,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-EB-04-Egghead-Crisis-Japanese-Booster-Box-Display.webp?v=1766183583"
     },
     {
      "name": "The Time of Battle Japanese Booster box",
      "url": "https://card-binder.com/products/one-piece-op-16-the-time-of-battle-booster-box-japanese",
-     "price": 132.14,
+     "price": 129.99,
      "currency": "EUR",
-     "eur": 132.14,
+     "eur": 129.99,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP-16-The-Time-of-Battle-Booster-Box-Japanese.webp?v=1776196764"
     },
     {
      "name": "OP17 The World's Strongest Warriors Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op17-the-worlds-strongest-warriors-japanese-booster-box",
-     "price": 121.98,
+     "price": 119.99,
      "currency": "EUR",
-     "eur": 121.98,
+     "eur": 119.99,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP17-The-Worlds-Strongest-Warriors-Japanese-Booster-Box.webp?v=1784631445"
     },
     {
      "name": "A fist of Divine Speed Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op11-a-fist-of-divine-speed-japanese-booster-box",
-     "price": 325.27,
+     "price": 319.99,
      "currency": "EUR",
-     "eur": 325.27,
+     "eur": 319.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP11-A-Fist-of-Divine-Speed-Japanese-Booster-Box.webp?v=1759219800"
     },
     {
      "name": "Awakening of the New Era Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op05-awakening-of-the-new-era-japanese-booster-box",
-     "price": 254.12,
+     "price": 249.99,
      "currency": "EUR",
-     "eur": 254.12,
+     "eur": 249.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-Awakening-of-the-New-Era-Japanese-Booster-Box.webp?v=1759218530"
     },
     {
      "name": "25th Collection Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-eb-02-25th-collection-japanese-booster-box",
-     "price": 121.98,
+     "price": 119.99,
      "currency": "EUR",
-     "eur": 121.98,
+     "eur": 119.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-EB02-Anime-25th-Collection-Japanese-Booster-Box.webp?v=1759693926"
     },
     {
+     "name": "The Best Volume 2 Booster Box",
+     "url": "https://card-binder.com/products/one-piece-prb02-the-best-volume-2-booster-box",
+     "price": 369.99,
+     "currency": "EUR",
+     "eur": 369.99,
+     "inStock": true,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-PRB02-The-Best-Volume-2-Booster-Box-English.webp?v=1759843573"
+    },
+    {
+     "name": "Legacy of the Master Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op12-legacy-of-the-master-booster-box",
+     "price": 179.99,
+     "currency": "EUR",
+     "eur": 179.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP12-Legacy-of-the-Master-Booster-Box-English.webp?v=1759862805"
+    },
+    {
      "name": "The World's Strongest Warriors Booster Box",
      "url": "https://card-binder.com/products/one-piece-op17-the-worlds-strongest-warriors-booster-box",
-     "price": 457.39,
+     "price": 449.95,
      "currency": "EUR",
-     "eur": 457.39,
+     "eur": 449.95,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/one-piece-card-games-op17-the-world_s-strongest-warriors-booster-box.webp?v=1784631392"
     },
     {
      "name": "Royal Blood Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op10-royal-blood-japanese-booster-box",
-     "price": 111.81,
+     "price": 109.99,
      "currency": "EUR",
-     "eur": 111.81,
+     "eur": 109.99,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP10-Royal-Blood-Japanese-Booster-Pack.webp?v=1759692945"
     },
     {
+     "name": "Two Legends Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op08-two-legends-booster-box",
+     "price": 179.99,
+     "currency": "EUR",
+     "eur": 179.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-Two-Legends-OP08-booster-display.webp?v=1746210352"
+    },
+    {
+     "name": "The Azure Sea's Seven Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op14-the-azure-seas-seven-booster-box",
+     "price": 229.99,
+     "currency": "EUR",
+     "eur": 229.99,
+     "inStock": true,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP14-The-Azure-Seven-Booster-Box-Display.webp?v=1765567919"
+    },
+    {
+     "name": "Carrying on His Will Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op13-carrying-on-his-will-booster-box",
+     "price": 499.99,
+     "currency": "EUR",
+     "eur": 499.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP13-Carrying-His-Own-Will-Booster-Box-English.webp?v=1759862959"
+    },
+    {
      "name": "Panini 25th Anniversary Booster Box",
      "url": "https://card-binder.com/products/one-piece-panini-25th-anniversary-booster-box",
-     "price": 81.27,
+     "price": 79.95,
      "currency": "EUR",
-     "eur": 81.27,
+     "eur": 79.95,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-Panini-25th-anniversary-booster-box.webp?v=1783164272"
     },
     {
      "name": "OP15-EB04 Booster Box",
      "url": "https://card-binder.com/products/one-piece-op15-eb04-booster-box",
-     "price": 223.63,
+     "price": 219.99,
      "currency": "EUR",
-     "eur": 223.63,
+     "eur": 219.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP15-EB04-Adventure-On-Kamis-Island-Booster-Box.webp?v=1774872491"
     },
     {
      "name": "Two Legends Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op08-two-legends-japanese-booster-box",
-     "price": 101.65,
+     "price": 99.99,
      "currency": "EUR",
-     "eur": 101.65,
+     "eur": 99.99,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP08-Two-Legends-Japanese-Booster-Box.webp?v=1759692636"
     },
     {
      "name": "Wings of the Captain Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op06-wings-of-the-captain-japanese-booster-box",
-     "price": 101.65,
+     "price": 99.99,
      "currency": "EUR",
-     "eur": 101.65,
+     "eur": 99.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP06-Wings-of-the-Captain-Japanese-Booster-Box.webp?v=1759692284"
     },
     {
+     "name": "A Fist of Divine Speed Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op11-a-fist-of-divine-speed-booster-box",
+     "price": 249.99,
+     "currency": "EUR",
+     "eur": 249.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP11-A-fist-of-Divine-Speed-Booster-Box-English.webp?v=1759861961"
+    },
+    {
      "name": "500 Years in the Future Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op07-500-years-in-the-future-japanese-booster-box",
-     "price": 101.65,
+     "price": 99.99,
      "currency": "EUR",
-     "eur": 101.65,
+     "eur": 99.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/one-piece-500-years-in-the-future-booster-box-japanese-op-07.webp?v=1759217815"
     },
     {
      "name": "Romance Dawn Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op01-romance-dawn-japanese-booster-box",
-     "price": 304.95,
+     "price": 299.99,
      "currency": "EUR",
-     "eur": 304.95,
+     "eur": 299.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP-01-Romance-Dawn-Japanese-Booster-Box.webp?v=1761201948"
     },
     {
      "name": "Memorial Collection Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-eb01-memorial-collection-japanese-booster-box",
-     "price": 121.98,
+     "price": 119.99,
      "currency": "EUR",
-     "eur": 121.98,
+     "eur": 119.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-EB01-Memorial-Collection-Japanese-Booster-Box.webp?v=1759693663"
     },
     {
+     "name": "Kingdoms of Intrigue Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op-04-kingdoms-of-intrigue-booster-box",
+     "price": 399.99,
+     "currency": "EUR",
+     "eur": 399.99,
+     "inStock": true,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP04-Kingdoms-of-Intrigue-Booster-Box-English.webp?v=1759863830"
+    },
+    {
+     "name": "Heroines Edition Booster Box",
+     "url": "https://card-binder.com/products/one-piece-eb03-heroines-edition-booster-box",
+     "price": 269.99,
+     "currency": "EUR",
+     "eur": 269.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-EB03-Heroines-Edition-Booster-Box-English.webp?v=1759847519"
+    },
+    {
+     "name": "500 Years in the Future Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op07-500-years-in-the-future-booster-box",
+     "price": 239.99,
+     "currency": "EUR",
+     "eur": 239.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OP-7-500-Years-In-The-Future.webp?v=1748247326"
+    },
+    {
      "name": "Paramount War Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op-02-paramount-war-japanese-booster-box",
-     "price": 132.14,
+     "price": 129.99,
      "currency": "EUR",
-     "eur": 132.14,
+     "eur": 129.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP-02-Paramount-War-Japanese-Booster-Box.webp?v=1761202267"
     },
     {
+     "name": "Wings of the Captain Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op06-wings-of-the-captain-booster-box",
+     "price": 209.99,
+     "currency": "EUR",
+     "eur": 209.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP06-Wings-of-the-Captain-Booster-Box-English.webp?v=1759863346"
+    },
+    {
      "name": "Kingdoms of Intrigue Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op-04-kingdoms-of-intrigue-japanese-booster-box",
-     "price": 132.14,
+     "price": 129.99,
      "currency": "EUR",
-     "eur": 132.14,
+     "eur": 129.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP-04-Kingdoms-of-Intrigue-Japanese-Booster-Box.webp?v=1761203016"
     },
     {
+     "name": "Awakening of the New Era Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op05-awakening-of-the-new-era-booster-box",
+     "price": 599.99,
+     "currency": "EUR",
+     "eur": 599.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP05-Awakening-of-the-New-Era-Booster-Box-English.webp?v=1759863597"
+    },
+    {
+     "name": "Emperors in the New World Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op09-emperors-in-the-new-world-booster-box",
+     "price": 299.99,
+     "currency": "EUR",
+     "eur": 299.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP09-Emperors-of-the-New-World-Booster-Box-English.webp?v=1759848050"
+    },
+    {
      "name": "OPC-01 Romance Dawn Booster Box",
      "url": "https://card-binder.com/products/one-piece-opc-01-romance-dawn-booster-box",
-     "price": 81.32,
+     "price": 79.99,
      "currency": "EUR",
-     "eur": 81.32,
+     "eur": 79.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OPC-01-Romance-Dawn-Chinese-Booster-Box.webp?v=1767868375"
     },
     {
      "name": "Pillars of Strength Japanese Booster Box",
      "url": "https://card-binder.com/products/one-piece-op-03-pillars-of-strength-japanese-booster-box",
-     "price": 121.98,
+     "price": 119.99,
      "currency": "EUR",
-     "eur": 121.98,
+     "eur": 119.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP-03-Pillars-of-Strength-Japanese-Booster-Box.webp?v=1761202655"
     },
     {
+     "name": "Pillars of Strength Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op-03-pillars-of-strength-booster-box",
+     "price": 499.99,
+     "currency": "EUR",
+     "eur": 499.99,
+     "inStock": true,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP03-Pillars-of-Strength-Booster-Box-English.webp?v=1759864109"
+    },
+    {
+     "name": "Romance Dawn Booster Box (2nd)",
+     "url": "https://card-binder.com/products/one-piece-op-01-romance-dawn-booster-box",
+     "price": 1399.99,
+     "currency": "EUR",
+     "eur": 1399.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP01-Romance-Dawn-Booster-Box-English.webp?v=1759864682"
+    },
+    {
      "name": "OPC-02 Paramount War Booster Box",
      "url": "https://card-binder.com/products/one-piece-opc-02-paramount-war-booster-box",
-     "price": 81.32,
+     "price": 79.99,
      "currency": "EUR",
-     "eur": 81.32,
+     "eur": 79.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-OPC-02-Paramount-War-Chinese-Booster-Box.webp?v=1767885399"
     },
     {
+     "name": "Anime 25th Collection Booster Box",
+     "url": "https://card-binder.com/products/one-piece-eb02-anime-25th-collection-booster-box",
+     "price": 219.99,
+     "currency": "EUR",
+     "eur": 219.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-EB02-Anime-25th-Collection-Booster-Box-English.webp?v=1759846077"
+    },
+    {
      "name": "The Dominance of God Booster Box [OP-18]",
      "url": "https://card-binder.com/products/one-piece-tcg-op-18-the-dominance-of-god-booster-box",
-     "price": 203.26,
+     "price": 199.95,
      "currency": "EUR",
-     "eur": 203.26,
+     "eur": 199.95,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/one-piece-op-18-the-dominance-of-god-booster-box.webp?v=1791382887"
     },
     {
      "name": "The Dominance of God Japanese Booster Pack [OP-18]",
      "url": "https://card-binder.com/products/one-piece-tcg-japanese-op-18-the-dominance-of-god-booster-pack",
-     "price": 5.03,
+     "price": 4.95,
      "currency": "EUR",
-     "eur": 5.03,
+     "eur": 4.95,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/one-piece-op-18-japanese-the-dominance-of-god-booster-pack.webp?v=1791382887"
     },
     {
      "name": "The Dominance of God Japanese Booster Box [OP-18]",
      "url": "https://card-binder.com/products/one-piece-tcg-japanese-op-18-the-dominance-of-god-booster-box",
-     "price": 101.6,
+     "price": 99.95,
      "currency": "EUR",
-     "eur": 101.6,
+     "eur": 99.95,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/one-piece-op-18-japanese-the-dominance-of-god-booster-box.webp?v=1791382887"
     },
     {
      "name": "Heroines Edition Vol.2 Booster Box [EB-05]",
      "url": "https://card-binder.com/products/one-piece-tcg-english-eb-05-heroines-edition-vol-2-booster-box",
-     "price": 203.26,
+     "price": 199.95,
      "currency": "EUR",
-     "eur": 203.26,
+     "eur": 199.95,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/one-piece-eb-05-heroines-edition-vol-2-Booster-box.webp?v=1791378634"
+    },
+    {
+     "name": "Paramount War Booster Box",
+     "url": "https://card-binder.com/products/one-piece-op-02-paramount-war-booster-box",
+     "price": 399.99,
+     "currency": "EUR",
+     "eur": 399.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-OP02-Paramount-War-Booster-Box-English.webp?v=1759864379"
+    },
+    {
+     "name": "Memorial Collection Booster Box",
+     "url": "https://card-binder.com/products/one-piece-eb01-memorial-collection-booster-box",
+     "price": 249.99,
+     "currency": "EUR",
+     "eur": 249.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-EB01-MemorialCollection-Booster-Box-English.webp?v=1759845406"
+    },
+    {
+     "name": "The Best Volume 1 Booster Box",
+     "url": "https://card-binder.com/products/one-piece-prb01-the-best-volume-1-booster-box",
+     "price": 399.99,
+     "currency": "EUR",
+     "eur": 399.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-PRB01-The-Best-Volume-one-Booster-Box-English.webp?v=1759844795"
     }
    ]
   }
