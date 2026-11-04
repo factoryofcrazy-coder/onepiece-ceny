@@ -10,5 +10,12 @@ export async function GET() {
     body: "{}",
     cache: "no-store",
   });
+  // denné zmazanie súkromných správ starších ako 12 mesiacov; zlyhanie nesmie pokaziť keepalive
+  await fetch(`${SUPABASE_URL}/rest/v1/rpc/dm_cleanup`, {
+    method: "POST",
+    headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" },
+    body: "{}",
+    cache: "no-store",
+  }).catch(() => null);
   return Response.json({ supabase: r.status, body: await r.text() }, { headers: { "Cache-Control": "no-store" } });
 }
