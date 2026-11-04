@@ -1,4 +1,5 @@
 "use client";
+import { DM_ENABLED } from "./config";
 import { createContext, useCallback, useContext, useEffect, useState, ReactNode } from "react";
 import type { User } from "@supabase/supabase-js";
 import { sb } from "./supabase";
@@ -50,6 +51,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refreshProfile]);
 
   const signOut = async () => {
+    // notifikácie so správami sa nesmú ukazovať na zariadení po odhlásení
+    if (DM_ENABLED) await import("./dm/push-client").then((m) => m.disablePush()).catch(() => null);
     await sb().auth.signOut();
   };
 

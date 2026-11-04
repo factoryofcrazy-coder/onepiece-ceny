@@ -1,24 +1,27 @@
 # Súkromné správy: spustenie
 
-Tajné kľúče nepatria do repozitára ani do chatu. Tento repozitár je verejný.
+Tajné hodnoty nepatria do repozitára ani do chatu. Tento repozitár je verejný.
 
-## 1. Vytvorenie kľúča
+Poradie je zámerné: nič z krokov 1 až 4 nezmení živý web, kým sa nezapne prepínač v kroku 5.
 
-Na vlastnom počítači:
+## 1. Vytvorenie tajných hodnôt
+
+Vo vlastnom termináli, nie cez chat:
 
 ```bash
-openssl rand -base64 32
+cd web
+node scripts/dm-keys.mjs
 ```
 
-Hodnotu ulož do správcu hesiel. **Strata kľúča znamená trvalú stratu všetkých správ.**
+Výpis ulož do správcu hesiel. **Strata `DM_KEYS` znamená trvalú stratu všetkých správ.**
 
-## 2. Tajná premenná v Supabase
+## 2. Tajné premenné v Supabase
 
-Edge Functions → Secrets, názov `DM_KEYS`, hodnota `1:<kľúč z kroku 1>`.
+Project Settings alebo Edge Functions → Secrets. Pridaj všetky štyri hodnoty z výpisu: `DM_KEYS`, `VAPID_PUBLIC`, `VAPID_PRIVATE`, `VAPID_SUBJECT`.
 
 ## 3. Migrácia
 
-SQL Editor: `web/supabase/migrations/20261111_direct_messages.sql`. Súčasnému webu neublíži, pridáva len nové tabuľky.
+SQL Editor: spusti `web/supabase/migrations/20261111_direct_messages.sql`. Pridáva len nové tabuľky a funkcie.
 
 ## 4. Funkcia
 
@@ -26,6 +29,18 @@ Nasadí sa zostavený súbor `supabase/functions/dm/dist/index.js` (`npm run bui
 
 Kontrola: požiadavka `{"op":"health"}` vráti `{"ok":true}`.
 
-## 5. Rotácia kľúča
+## 5. Zapnutie len na preview
+
+Vercel → Settings → Environment Variables: `NEXT_PUBLIC_DM_ENABLED` = `1`, prostredie **Preview**, nie Production. Potom znova nasadiť vetvu `sukromne-spravy`. Preview používa ostrú databázu.
+
+## 6. Ručný test
+
+Podľa [TESTOVANIE.md](TESTOVANIE.md).
+
+## 7. Zapnutie pre všetkých
+
+Až po úspešnom teste a zlúčení do `main`: rovnaká premenná aj pre Production a nové nasadenie. Vypnutie je jej odstránenie a nové nasadenie. Dáta sa tým nestratia.
+
+## Rotácia kľúča
 
 Pridaj novú verziu za pôvodnú, napríklad `1:<starý>,2:<nový>`. Nové správy používajú verziu 2, staré sa čítajú verziou 1. Starý kľúč nemaž, kým existujú ním šifrované správy.

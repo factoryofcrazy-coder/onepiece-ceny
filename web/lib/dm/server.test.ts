@@ -1,5 +1,6 @@
 // Integračný test: skutočná migrácia v Postgrese (PGlite) a funkcia volaná tak ako z prehliadača.
 import { PGlite } from "@electric-sql/pglite";
+import { createDecipheriv, createECDH, hkdfSync } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { cleanText, createDmHandler, normalize, snippet } from "./server";
@@ -410,6 +411,101 @@ describe("nahlásenia a správca", () => {
     await ok(BORIS, "report", { messageId: m.id });
     await db.exec("delete from public.dm_messages");
     expect((await ok(ADMIN, "admin_reports"))[0].body.text).toBe("dôkaz");
+  });
+});
+
+describe("notifikácie", () => {
+  const ua = createECDH("prime256v1");
+  ua.generateKeys();
+  const srv = createECDH("prime256v1");
+  srv.generateKeys();
+  const device = { endpoint: "https://fcm.googleapis.com/fcm/send/boris", p256dh: ua.getPublicKey().toString("base64url"), auth: Buffer.alloc(16, 3).toString("base64url") };
+  const decrypt = (data: Uint8Array) => {
+    const b = Buffer.from(data);
+    const asPublic = b.subarray(21, 21 + b[20]);
+    const body = b.subarray(21 + b[20]);
+    const ikm = Buffer.from(hkdfSync("sha256", ua.computeSecret(asPublic), Buffer.alloc(16, 3), Buffer.concat([Buffer.from("WebPush: info\0"), ua.getPublicKey(), asPublic]), 32));
+    const salt = b.subarray(0, 16);
+    const d = createDecipheriv("aes-128-gcm", Buffer.from(hkdfSync("sha256", ikm, salt, Buffer.from("Content-Encoding: aes128gcm\0"), 16)), Buffer.from(hkdfSync("sha256", ikm, salt, Buffer.from("Content-Encoding: nonce\0"), 12)));
+    d.setAuthTag(body.subarray(body.length - 16));
+    const out = Buffer.concat([d.update(body.subarray(0, body.length - 16)), d.final()]);
+    return JSON.parse(out.subarray(0, out.length - 1).toString());
+  };
+  const live = (status = 201) => {
+    const sent: any[] = [];
+    const h = createDmHandler(
+      { URL: "", SERVICE: "", ANON: "", DM_KEYS: `1:${KEY}`, VAPID_PUBLIC: srv.getPublicKey().toString("base64url"), VAPID_PRIVATE: srv.getPrivateKey().toString("base64url") },
+      { rpc, authUser: async (a) => a.slice(7), pushFetch: (async (u: string, init: any) => { sent.push({ u, body: decrypt(init.body), auth: init.headers.Authorization }); return new Response(null, { status }); }) as any },
+    );
+    const run = async (who: string, op: string, extra = {}) => {
+      const r = await h(new Request("http://x/", { method: "POST", headers: { Authorization: `Bearer ${who}` }, body: JSON.stringify({ op, ...extra }) }));
+      return { status: r.status, ...(await r.json()) } as any;
+    };
+    return { sent, run };
+  };
+  const conv = async (run: any) => {
+    const c = (await run(ANNA, "open", { userId: BORIS })).data.id;
+    await run(ANNA, "send", { id: uuid(), conversationId: c, text: "prvá" });
+    await run(BORIS, "send", { id: uuid(), conversationId: c, text: "odpoveď" });
+    return c;
+  };
+  it("pošle meno a text šifrovane, po skrytí textu len upozornenie", async () => {
+    const { sent, run } = live();
+    await run(BORIS, "push_subscribe", device);
+    const c = await conv(run);
+    sent.length = 0;
+    await run(ANNA, "send", { id: uuid(), conversationId: c, text: "Áno, poštou" });
+    expect(sent[0].u).toBe(device.endpoint);
+    expect(sent[0].body).toMatchObject({ title: "Anna", body: "Áno, poštou", url: `/spravy?c=${c}`, unread: 1 });
+    await run(BORIS, "settings_set", { showText: false });
+    expect((await run(BORIS, "settings")).data.show_text).toBe(false);
+    await run(ANNA, "send", { id: uuid(), conversationId: c, text: "tajné" });
+    expect(sent[1].body.body).toBe("Nová správa");
+  });
+  it("žiadosť od cudzieho je bez textu", async () => {
+    const { sent, run } = live();
+    await run(BORIS, "push_subscribe", device);
+    const c = (await run(ANNA, "open", { userId: BORIS })).data.id;
+    await run(ANNA, "send", { id: uuid(), conversationId: c, text: "kúp si podvod https://zly.sk" });
+    expect(sent[0].body).toMatchObject({ title: "Anna", body: "Žiadosť o správu" });
+    expect(JSON.stringify(sent[0].body)).not.toContain("podvod");
+  });
+  it("neplatné zariadenie zabudne a odosielateľ o chybe nevie", async () => {
+    const { sent, run } = live(410);
+    await run(BORIS, "push_subscribe", device);
+    const c = await conv(run);
+    expect(sent.length).toBeGreaterThan(0);
+    expect((await db.query<any>("select count(*) c from public.dm_push_subscriptions")).rows[0].c).toBe(0);
+    expect((await run(ANNA, "send", { id: uuid(), conversationId: c, text: "ďalej" })).status).toBe(200);
+  });
+  it("odmietne cudziu adresu a neplatné kľúče, odhlásiť môže len vlastník", async () => {
+    const { run } = live();
+    expect((await run(BORIS, "push_subscribe", { ...device, endpoint: "https://169.254.169.254/x" })).status).toBe(400);
+    expect((await run(BORIS, "push_subscribe", { ...device, p256dh: "krátky" })).status).toBe(400);
+    await run(BORIS, "push_subscribe", device);
+    await run(ANNA, "push_unsubscribe", { endpoint: device.endpoint });
+    expect((await db.query<any>("select count(*) c from public.dm_push_subscriptions")).rows[0].c).toBe(1);
+    await run(BORIS, "push_unsubscribe", { endpoint: device.endpoint });
+    expect((await db.query<any>("select count(*) c from public.dm_push_subscriptions")).rows[0].c).toBe(0);
+  });
+  it("zariadenie prejde na nový účet a staršie nad 10 sa zmažú", async () => {
+    const { run } = live();
+    await run(BORIS, "push_subscribe", device);
+    await run(ANNA, "push_subscribe", device);
+    expect((await db.query<any>("select user_id from public.dm_push_subscriptions")).rows).toEqual([{ user_id: ANNA }]);
+    for (let i = 0; i < 12; i++) await run(BORIS, "push_subscribe", { ...device, endpoint: `${device.endpoint}${i}` });
+    expect((await db.query<any>(`select count(*) c from public.dm_push_subscriptions where user_id = '${BORIS}'`)).rows[0].c).toBe(10);
+  });
+  it("klient sa k tabuľkám notifikácií nedostane a bez kľúčov server nič neposiela", async () => {
+    for (const t of ["dm_push_subscriptions", "dm_settings"]) {
+      await db.exec("set role authenticated");
+      await expect(db.query(`select * from public.${t}`)).rejects.toThrow();
+      await db.exec("reset role");
+    }
+    expect((await ok(ANNA, "push_config")).publicKey).toBeNull();
+    const { run } = live();
+    expect((await run(ANNA, "push_config")).data.publicKey).toBeTruthy();
+    expect(JSON.stringify((await run(ANNA, "push_config")).data)).not.toContain(srv.getPrivateKey().toString("base64url"));
   });
 });
 

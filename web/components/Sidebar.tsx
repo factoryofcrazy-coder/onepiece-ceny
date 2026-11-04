@@ -3,9 +3,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { GAME_PUBLIC } from "@/lib/config";
+import { DM_ENABLED, GAME_PUBLIC } from "@/lib/config";
 import { levelProgress, loadBadges, XP_SOURCES } from "@/lib/gamify";
 import { useNewReports } from "@/lib/reports";
+import { useDm } from "@/lib/dm/client";
 import { sb } from "@/lib/supabase";
 
 const ICONS: Record<string, string> = {
@@ -20,6 +21,7 @@ const ICONS: Record<string, string> = {
   rank: "M8 21h8M12 17v4M6 3h12v6a6 6 0 0 1-12 0V3ZM6 5H3v2a3 3 0 0 0 3 3M18 5h3v2a3 3 0 0 1-3 3",
   trade: "M7 7h13l-3-3M17 17H4l3 3",
   chat: "M21 12a8 8 0 0 1-8 8H4l2.200-3.300A8 8 0 1 1 21 12Z",
+  mail: "M3 6h18v13H3V6Zm1 1 8 6 8-6",
   report: "M5 21V4h13l-2 4 2 4H5",
   import: "M12 3v12M7 10l5 5 5-5M4 21h16",
   app: "M7 2h10v20H7V2Zm4 17h2",
@@ -60,6 +62,7 @@ const GROUPS: { title: string; links: { href: string; label: string; icon: strin
         : []),
       { href: "/trhovisko", label: "Trhovisko", icon: "trade" },
       { href: "/chat", label: "Chat", icon: "chat" },
+      ...(DM_ENABLED ? [{ href: "/spravy", label: "Správy", icon: "mail" }] : []),
       { href: "/report", label: "Report", icon: "report" },
     ],
   },
@@ -91,6 +94,7 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
   const path = usePathname();
   const { user, profile } = useAuth();
   const newReports = useNewReports();
+  const { unread: dmUnread } = useDm();
   const { today, xp } = useTodayXp(user?.id);
   const p = levelProgress(xp);
   const done = XP_SOURCES.filter((s) => (today[s.id] ?? 0) >= s.cap).length;
@@ -120,6 +124,7 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
                   <Icon name={l.icon} />
                   <span>{l.label}</span>
                   {l.href === "/report" && newReports > 0 && <span className="sb-pill">{newReports}</span>}
+                  {l.href === "/spravy" && dmUnread > 0 && <span className="sb-pill">{dmUnread > 99 ? "99+" : dmUnread}</span>}
                 </Link>
               ))}
             </div>

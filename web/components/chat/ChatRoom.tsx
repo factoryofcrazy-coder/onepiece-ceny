@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useChat } from "@/lib/chat";
 import { UserBadge, useBadges } from "@/lib/gamify";
+import { WriteLink } from "@/components/dm/DmLink";
 
 const MAX = 500;
 
@@ -92,6 +93,7 @@ export default function ChatRoom() {
                 <span className="tiny muted">{fmtTime(m.created_at)}</span>
                 {(isAdmin || m.user_id !== user.id) && (
                   <span className="chatx-tools">
+                    {m.user_id !== user.id && <WriteLink userId={m.user_id} className="link tiny" />}
                     {!isAdmin && (
                       <button className="link tiny" onClick={() => report(m.id)}>
                         Nahlásiť

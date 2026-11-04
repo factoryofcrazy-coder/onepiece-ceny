@@ -1,16 +1,20 @@
 // Logika Edge Function "dm". Overí používateľa, skontroluje vstup, zašifruje a rozšifruje text a zavolá databázové
 // funkcie dm_*, ktoré strážia pravidlá (členstvo, žiadosti, blokovanie, limity). Text správ sa nikdy nezapisuje do logov.
 import { KeyRing, open, parseKeyRing, seal } from "./crypto";
+import { allowedEndpoint, PushSub, sendPush, Vapid } from "./push";
 
-export type DmEnv = { URL: string; SERVICE: string; ANON: string; DM_KEYS: string | undefined };
+export type DmEnv = { URL: string; SERVICE: string; ANON: string; DM_KEYS: string | undefined; VAPID_PUBLIC?: string; VAPID_PRIVATE?: string; VAPID_SUBJECT?: string };
 export type DmCard = { id: string; listing?: { id: string; kind: string; price: number | null; cond: string; lang: string } };
 export type DmBody = { text: string; card?: DmCard };
 export type DmDeps = {
   rpc?: (fn: string, args: Record<string, unknown>) => Promise<any>;
   authUser?: (authorization: string) => Promise<string | null>;
   /** upozornenie príjemcu po uložení správy; chyba nesmie zastaviť odoslanie */
-  notify?: (x: { recipient: string; conversationId: string; senderId: string; isRequest: boolean; body: DmBody }) => Promise<void>;
+  notify?: (x: DmNotice) => Promise<void>;
+  /** odoslanie notifikácie, v testoch sa nahrádza */
+  pushFetch?: typeof fetch;
 };
+export type DmNotice = { recipient: string; conversationId: string; senderId: string; isRequest: boolean; body: DmBody };
 
 export const MAX_TEXT = 1000;
 const MAX_REQUEST_BYTES = 16_000;
@@ -99,6 +103,21 @@ export function createDmHandler(env: DmEnv, deps: DmDeps = {}) {
       return ((await r.json()) as { id?: string }).id ?? null;
     });
 
+  const vapid: Vapid | null = env.VAPID_PUBLIC && env.VAPID_PRIVATE ? { publicKey: env.VAPID_PUBLIC, privateKey: env.VAPID_PRIVATE, subject: env.VAPID_SUBJECT || "https://www.grand-line.eu" } : null;
+
+  const pushNotice = async (x: DmNotice) => {
+    if (!vapid) return;
+    const t = await rpc("dm_push_targets", { p_recipient: x.recipient, p_sender: x.senderId });
+    if (!t.subs.length) return;
+    // od cudzieho sa text na zamknutú obrazovku nedostane
+    const text = x.isRequest ? "Žiadosť o správu" : !t.show_text ? "Nová správa" : x.body.text || (x.body.card ? `Karta ${x.body.card.id.split("_")[0]}` : "Nová správa");
+    const payload = JSON.stringify({ title: t.sender_name, body: text.slice(0, 240), url: `/spravy?c=${x.conversationId}`, tag: `dm-${x.conversationId}`, conversationId: x.conversationId, unread: Number(t.unread) });
+    const results = await Promise.all((t.subs as PushSub[]).map((s) => sendPush(s, payload, vapid, deps.pushFetch ?? fetch).catch(() => 0)));
+    const gone = (t.subs as PushSub[]).filter((_, i) => results[i] === 404 || results[i] === 410).map((s) => s.endpoint);
+    if (gone.length) await rpc("dm_push_forget", { p_endpoints: gone });
+  };
+  const notify = deps.notify ?? pushNotice;
+
   const unseal = async (m: any): Promise<DmBody | null> => {
     try {
       return JSON.parse(await open(keys(), m.conversation_id, m.sender_id, m.id, m));
@@ -142,8 +161,8 @@ export function createDmHandler(env: DmEnv, deps: DmDeps = {}) {
       const body = await bodyOf(b, me);
       const s = await seal(keys(), conv, me, id, JSON.stringify(body));
       const row = await rpc("dm_insert", { p_id: id, p_conv: conv, p_me: me, p_ciphertext: s.ciphertext, p_iv: s.iv, p_key_version: s.key_version });
-      if (!row.duplicate && deps.notify) {
-        await deps.notify({ recipient: row.recipient, conversationId: conv, senderId: me, isRequest: !!row.is_request, body }).catch(() => console.error("dm: upozornenie zlyhalo"));
+      if (!row.duplicate) {
+        await notify({ recipient: row.recipient, conversationId: conv, senderId: me, isRequest: !!row.is_request, body }).catch(() => console.error("dm: upozornenie zlyhalo"));
       }
       return { id: row.id, created_at: row.created_at, conversation_id: conv, sender_id: me, body, unreadable: false };
     },
@@ -195,6 +214,26 @@ export function createDmHandler(env: DmEnv, deps: DmDeps = {}) {
         }
       }
       return { results, next: done ? null : before };
+    },
+    async push_config() {
+      return { publicKey: vapid?.publicKey ?? null };
+    },
+    async push_subscribe(me, b) {
+      if (!allowedEndpoint(b.endpoint)) throw new HttpError(400, "Toto zariadenie sa nedá prihlásiť na notifikácie.");
+      if (typeof b.p256dh !== "string" || !/^[\w-]{80,100}$/.test(b.p256dh) || typeof b.auth !== "string" || !/^[\w-]{16,32}$/.test(b.auth)) {
+        throw new HttpError(400, "Neplatné údaje zariadenia.");
+      }
+      return rpc("dm_push_save", { p_me: me, p_endpoint: b.endpoint, p_p256dh: b.p256dh, p_auth: b.auth });
+    },
+    async push_unsubscribe(me, b) {
+      if (typeof b.endpoint !== "string" || b.endpoint.length > 800) throw new HttpError(400, "Neplatné zariadenie.");
+      return rpc("dm_push_remove", { p_me: me, p_endpoint: b.endpoint });
+    },
+    async settings(me) {
+      return rpc("dm_settings_get", { p_me: me });
+    },
+    async settings_set(me, b) {
+      return rpc("dm_settings_set", { p_me: me, p_show_text: b.showText !== false });
     },
     async admin_reports(me) {
       const rows = (await rpc("dm_admin_reports", { p_me: me })) as any[];

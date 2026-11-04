@@ -9,6 +9,9 @@ const handler = createDmHandler({
   SERVICE: Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   ANON: Deno.env.get("SUPABASE_ANON_KEY") ?? "",
   DM_KEYS: Deno.env.get("DM_KEYS"),
+  VAPID_PUBLIC: Deno.env.get("VAPID_PUBLIC"),
+  VAPID_PRIVATE: Deno.env.get("VAPID_PRIVATE"),
+  VAPID_SUBJECT: Deno.env.get("VAPID_SUBJECT"),
 });
 
 Deno.serve(handler);

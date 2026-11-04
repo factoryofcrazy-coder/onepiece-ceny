@@ -119,6 +119,24 @@ begin
   end if;
 end $$;
 
+-- zariadenia na notifikácie a nastavenia; len cez funkciu "dm"
+create table if not exists public.dm_push_subscriptions (
+  endpoint text primary key check (char_length(endpoint) <= 800),
+  user_id uuid not null references auth.users on delete cascade,
+  p256dh text not null check (char_length(p256dh) <= 120),
+  auth text not null check (char_length(auth) <= 60),
+  created_at timestamptz not null default now()
+);
+create index if not exists dm_push_user_idx on public.dm_push_subscriptions (user_id, created_at desc);
+create table if not exists public.dm_settings (
+  user_id uuid primary key references auth.users on delete cascade,
+  show_text boolean not null default true
+);
+alter table public.dm_push_subscriptions enable row level security;
+alter table public.dm_settings enable row level security;
+revoke all on public.dm_push_subscriptions, public.dm_settings from anon, authenticated;
+grant all on public.dm_push_subscriptions, public.dm_settings to service_role;
+
 -- ===== funkcie pre Edge Function, p_me je používateľ overený funkciou =====
 
 create or replace function public.dm_blocked_between(p_a uuid, p_b uuid)
@@ -391,6 +409,52 @@ begin
   return jsonb_build_object('ok', true);
 end $$;
 
+-- zariadenie patrí tomu, kto sa naposledy prihlásil; najviac 10 zariadení na hráča
+create or replace function public.dm_push_save(p_me uuid, p_endpoint text, p_p256dh text, p_auth text)
+returns jsonb language plpgsql set search_path = '' as $$
+begin
+  insert into public.dm_push_subscriptions (endpoint, user_id, p256dh, auth) values (p_endpoint, p_me, p_p256dh, p_auth)
+    on conflict (endpoint) do update set user_id = p_me, p256dh = excluded.p256dh, auth = excluded.auth, created_at = now();
+  delete from public.dm_push_subscriptions where endpoint in (
+    select endpoint from public.dm_push_subscriptions where user_id = p_me order by created_at desc offset 10
+  );
+  return jsonb_build_object('ok', true);
+end $$;
+
+create or replace function public.dm_push_remove(p_me uuid, p_endpoint text)
+returns jsonb language sql set search_path = '' as $$
+  with d as (delete from public.dm_push_subscriptions where endpoint = p_endpoint and user_id = p_me returning 1)
+  select jsonb_build_object('ok', true);
+$$;
+
+create or replace function public.dm_push_forget(p_endpoints text[])
+returns jsonb language sql set search_path = '' as $$
+  with d as (delete from public.dm_push_subscriptions where endpoint = any (p_endpoints) returning 1)
+  select jsonb_build_object('ok', true);
+$$;
+
+create or replace function public.dm_push_targets(p_recipient uuid, p_sender uuid)
+returns jsonb language sql stable set search_path = '' as $$
+  select jsonb_build_object(
+    'subs', coalesce((select jsonb_agg(jsonb_build_object('endpoint', s.endpoint, 'p256dh', s.p256dh, 'auth', s.auth)) from public.dm_push_subscriptions s where s.user_id = p_recipient), '[]'::jsonb),
+    'sender_name', coalesce((select username from public.profiles where id = p_sender), 'Hráč'),
+    'show_text', coalesce((select show_text from public.dm_settings where user_id = p_recipient), true),
+    'unread', coalesce((select sum(unread) from public.dm_members where user_id = p_recipient), 0)
+  );
+$$;
+
+create or replace function public.dm_settings_get(p_me uuid)
+returns jsonb language sql stable set search_path = '' as $$
+  select jsonb_build_object('show_text', coalesce((select show_text from public.dm_settings where user_id = p_me), true));
+$$;
+
+create or replace function public.dm_settings_set(p_me uuid, p_show_text boolean)
+returns jsonb language sql set search_path = '' as $$
+  insert into public.dm_settings (user_id, show_text) values (p_me, p_show_text)
+    on conflict (user_id) do update set show_text = excluded.show_text
+    returning jsonb_build_object('show_text', show_text);
+$$;
+
 do $$
 declare f text;
 begin
@@ -398,7 +462,9 @@ begin
     'dm_blocked_between(uuid,uuid)', 'dm_open(uuid,uuid)', 'dm_insert(uuid,uuid,uuid,text,text,smallint)', 'dm_list(uuid)',
     'dm_history(uuid,uuid,timestamptz,int)', 'dm_scan(uuid,timestamptz,int)', 'dm_mark_read(uuid,uuid)', 'dm_respond(uuid,uuid,boolean)',
     'dm_block(uuid,uuid,boolean)', 'dm_block_list(uuid)', 'dm_find_user(uuid,text)', 'dm_listing(uuid)', 'dm_report(uuid,uuid,text)',
-    'dm_admin_reports(uuid)', 'dm_admin_resolve(uuid,bigint)'
+    'dm_admin_reports(uuid)', 'dm_admin_resolve(uuid,bigint)',
+    'dm_push_save(uuid,text,text,text)', 'dm_push_remove(uuid,text)', 'dm_push_forget(text[])', 'dm_push_targets(uuid,uuid)',
+    'dm_settings_get(uuid)', 'dm_settings_set(uuid,boolean)'
   ] loop
     execute format('revoke execute on function public.%s from public, anon, authenticated', f);
     execute format('grant execute on function public.%s to service_role', f);

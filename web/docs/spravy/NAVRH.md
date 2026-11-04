@@ -68,6 +68,26 @@ Databázové funkcie `dm_*` smie volať len `service_role`. Výnimky:
 - **Ban v chate:** platí aj pre súkromné správy.
 - **Nahlásenie:** vytvorí šifrovanú kópiu, ktorá prežije zmazanie správy, najviac 12 mesiacov.
 
+## Rozhranie
+
+- Stránka `/spravy`: na počítači zoznam a konverzácia vedľa seba, na mobile po jednom. Počet neprečítaných je na ikone v hornej lište a v bočnom menu.
+- Tlačidlo **Napísať** je na trhovisku (priloží ponuku), v rebríčku a vo verejnom chate. Hráča sa dá nájsť aj cez **Nová správa**.
+- Na trhovisku nahrádza **Napísať** pri zapnutých správach tlačidlo Kontakt. Pole kontaktu v profile ostáva, kým sa nerozhodne inak.
+- Text sa vždy vykresľuje ako text. Klikateľné sú len `http` a `https` odkazy v prijatej konverzácii, s upozornením a `rel="noopener noreferrer nofollow ugc"`.
+- Neodoslaná správa sa dá poslať znova s rovnakým id, takže sa nezdvojí.
+- Prepínač: `NEXT_PUBLIC_DM_ENABLED=1`. Bez neho web nevolá funkciu `dm`, nečíta `dm_members` a neregistruje service worker.
+
+## Notifikácie (`lib/dm/push.ts`, `public/sw.js`)
+
+- Web Push bez knižnice: šifrovanie obsahu podľa RFC 8291, prihlásenie servera VAPID podľa RFC 8292.
+- Google, Apple a Mozilla vidia len šifrovaný obsah. Text sa rozšifruje až v zariadení a na zamknutej obrazovke ho vidno, ak je to zapnuté v nastaveniach.
+- Žiadosť od cudzieho je vždy bez textu.
+- Server posiela len na známe notifikačné služby (`allowedEndpoint`), aby sa nedal zneužiť na volanie iných adries.
+- Service worker sa registruje až po zapnutí notifikácií a nič neukladá do cache.
+- Odhlásenie zruší zariadenie na serveri aj v prehliadači. Vypršané prihlásenie ho zruší v prehliadači.
+- Pri otvorenej konverzácii sa notifikácia nezobrazí, odznak na ikone sa aktualizuje.
+- Ako kontakt VAPID sa používa adresa webu, nie osobný e-mail.
+
 ## Hľadanie
 
 Text je šifrovaný, preto funkcia `search` rozšifruje správy používateľa po dávkach (3 × 500 na požiadavku), porovnáva ich bez diakritiky a vracia ukazovateľ na pokračovanie. Pri veľkom objeme sa dá doplniť slepý index, to teraz netreba.
@@ -78,3 +98,5 @@ Text je šifrovaný, preto funkcia `search` rozšifruje správy používateľa p
 - Strata `DM_KEYS` znamená trvalú stratu všetkých správ.
 - Kompromitácia kľúča odhalí aj staršie správy. Nová verzia kľúča chráni len nové správy.
 - Na iPhone fungujú notifikácie až po pridaní webu na plochu.
+- Odstránenie notifikácií po vypršaní prihlásenia prebehne až pri ďalšej návšteve webu.
+- Preview a produkcia zatiaľ zdieľajú databázu, testovacie správy z preview sú v ostrej databáze.

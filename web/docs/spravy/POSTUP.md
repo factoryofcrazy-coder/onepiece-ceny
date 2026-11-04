@@ -18,8 +18,25 @@ Rozdiel oproti pôvodnej schéme: funkcia `dm` si nesťahuje kód z webu, lebo d
 
 Nespustené na produkcii: migrácia, tajný kľúč, nasadenie funkcie. Rozhranie zatiaľ neexistuje.
 
-### Ďalej
+## 4. 11. 2026: 2. časť, rozhranie
 
-2. Rozhranie správ, žiadosti, karta, hľadanie, Prečítané a Píše…
-3. Ikona, service worker, notifikácie
-4. Nahlasovanie a blokovanie v rozhraní, `/sukromie`, ručné testy
+- stránka `/spravy` (`components/dm/Messages.tsx`), klient `lib/dm/client.tsx`, spracovanie textu `lib/dm/text.ts`,
+- ikona v lište, položka v menu, tlačidlo Napísať na trhovisku, v rebríčku a chate,
+- žiadosti, karta alebo ponuka, hľadanie, Prečítané, Píše…, opakované odoslanie,
+- prepínač `NEXT_PUBLIC_DM_ENABLED`, predvolene vypnutý.
+
+Oprava pri testovaní: dve polia mali rovnaký popis pre čítačku obrazovky.
+
+## 4. 11. 2026: 3. a 4. časť, notifikácie, nastavenia, správca
+
+- Web Push bez knižnice `lib/dm/push.ts`, service worker `public/sw.js`, klient `lib/dm/push-client.ts`,
+- nastavenia: notifikácie, text v notifikácii, zablokovaní hráči, nahlásené správy pre správcu,
+- text na `/sukromie` (zobrazí sa až po zapnutí), skript na tajné hodnoty `scripts/dm-keys.mjs`.
+
+Rozhodnutia v priebehu práce, ktoré treba potvrdiť:
+- Na trhovisku pri zapnutých správach nahrádza Napísať tlačidlo Kontakt.
+- Správca vidí len nahlásené správy (používateľ nemal preferenciu, zvolila sa prísnejšia možnosť).
+
+## Stav
+
+Hotové a otestované automaticky a v prehliadači so simuláciou. Ostáva spustenie podľa [NASADENIE.md](NASADENIE.md) a [ručný test](TESTOVANIE.md). Do `main` nezlúčené, na produkcii nič.
