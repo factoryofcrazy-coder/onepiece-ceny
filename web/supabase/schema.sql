@@ -1,5 +1,5 @@
 -- Grand Line Tracker – databáza v Supabase (projekt onepiece-tracker, wpmarrzqzcfugtfjitot)
--- Už je nasadená (migrácie init_tables, init_auth_policies, revoke_trigger_fn). Tento súbor je len záznam.
+-- Už je nasadená (migrácie init_tables, init_auth_policies, revoke_trigger_fn). Tento súbor je len záznam. Novšie zmeny sú v supabase/migrations/.
 
 -- tabuľky -------------------------------------------------------------------
 create table if not exists public.profiles (
