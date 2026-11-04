@@ -21,6 +21,7 @@ const LINKS = [
   { href: "/master-sety", label: "Master sety" },
   { href: "/decky", label: "Decky" },
   { href: "/skener", label: "Skener" },
+  { href: "/trhovisko", label: "Trhovisko" },
   ...(GAME_PUBLIC
     ? [
         { href: "/hra", label: "Hra" },
@@ -58,6 +59,7 @@ export default function Nav() {
             Grand Line <b>Tracker</b>
           </span>
         </Link>
+        {TCGS.length > 1 && (
         <div className="tcg-switch" role="radiogroup" aria-label="Kartová hra">
           {TCGS.map((t) => (
             <button
@@ -74,6 +76,7 @@ export default function Nav() {
             </button>
           ))}
         </div>
+        )}
         <nav className="links">
           {links.map((l) => (
             <Link

@@ -55,6 +55,7 @@ const OP_TABS: Tab[] = [
   { href: "/zbierka", label: "Zbierka", icon: I.vault },
 ];
 const OP_MORE = [
+  { href: "/trhovisko", label: "Trhovisko" },
   { href: "/master-sety", label: "Master sety" },
   { href: "/decky", label: "Decky" },
   { href: "/decky/odporucanie", label: "Čo si viem postaviť" },

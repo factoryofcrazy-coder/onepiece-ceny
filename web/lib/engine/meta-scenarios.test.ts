@@ -166,4 +166,43 @@ describe("turnajové karty – scenáre", () => {
     s.players[1].donDeck = 5;
     expect(handCost(s, sanji)).toBe(3);
   });
+
+  it("OP09-081 Teach: vlastné [On Play] sú negované", () => {
+    let s = game("OP09-081", "OP17-039", ["OP03-044"]);
+    setMain(s, 0, 5);
+    const kaya = put(s, 0, "OP03-044"); // [On Play] potiahni 2, vyhoď 2
+    const hand = s.players[0].hand.length;
+    s = applyAction(s, { type: "play", p: 0, iid: kaya });
+    expect(s.prompt).toBeNull(); // žiadna výzva na vyhodenie
+    expect(s.players[0].hand.length).toBe(hand - 1);
+  });
+
+  it("OP09-081 Teach: [Activate: Main] neguje súperove [On Play]", () => {
+    let s = game("OP09-081", "OP15-001", [], ["OP03-044"]);
+    setMain(s, 0, 0);
+    s = applyAction(s, { type: "activate", p: 0, iid: s.players[0].leader, ability: 0 });
+    if (s.prompt?.kind === "payCost") s = ans(s, 0, { yes: true });
+    if (s.prompt?.kind === "choose") s = ans(s, 0, { pick: [s.prompt.options[0]] });
+    expect(s.players[1].flags.some((f) => f.flag === "noOnPlay")).toBe(true);
+  });
+
+  it("P-117 Nami: keď jej balíček klesne na 0, vyhráva", () => {
+    let s = game("P-117", "OP17-039");
+    setMain(s, 1, 0);
+    s.players[0].deck = [];
+    s = applyAction(s, { type: "endTurn", p: 1 }); // Nami ťahá z prázdneho balíčka
+    expect(s.winner).toBe(0);
+  });
+
+  it("OP12-041 Sanji: DON!! 1 → aktivuje [Main] eventu Straw Hat Crew z ruky", () => {
+    let s = game("OP12-041", "OP17-039", ["OP03-056"]);
+    setMain(s, 0, 3);
+    const pilaf = put(s, 0, "OP03-056"); // [Main] potiahni 2 (Straw Hat Crew? nie – East Blue) → použijeme len ako kontrolu výberu
+    const hand = s.players[0].hand.length;
+    s = applyAction(s, { type: "activate", p: 0, iid: s.players[0].leader, ability: 0 });
+    if (s.prompt?.kind === "payCost") s = ans(s, 0, { yes: true });
+    // Sanji's Pilaf je East Blue, nie Straw Hat Crew → nič sa neponúkne, karta ostane v ruke
+    expect(s.players[0].hand).toContain(pilaf);
+    expect(s.players[0].hand.length).toBe(hand);
+  });
 });

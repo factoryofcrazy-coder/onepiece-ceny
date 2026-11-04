@@ -749,3 +749,36 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .cimg.ph b { font: 800 15px var(--display); color: var(--gold); letter-spacing: .02em; }
 .cimg.ph span { font-weight: 700; line-height: 1.2; }
 .cimg.ph i { font-style: normal; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border: 1px solid var(--stroke-2); border-radius: 999px; padding: 2px 8px; }
+
+/* ---------- Trhovisko ---------- */
+.tr-page { max-width: 900px; margin: 22px auto 40px; }
+.tr-page h1 { margin: 0 0 6px; font-size: clamp(28px, 6vw, 42px); }
+.tr-matchc { color: var(--gold); }
+.tr-tabs { display: flex; gap: 6px; margin: 18px 0 12px; border-bottom: 1px solid var(--stroke); }
+.tr-tabs button { background: none; border: 0; color: var(--muted); font: 700 15px var(--body); padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; display: inline-flex; gap: 8px; align-items: center; }
+.tr-tabs button.on { color: var(--text); border-bottom-color: var(--gold); }
+.tr-tabs button span { font-size: 12px; background: var(--surface-2); border-radius: 999px; padding: 1px 8px; color: var(--muted); }
+.tr-search, .tr-add input, .tr-contact input { width: 100%; height: 44px; border-radius: 999px; padding: 0 18px; background: var(--surface); border: 1px solid var(--stroke); color: var(--text); font: 15px var(--body); }
+.tr-search { margin-bottom: 12px; }
+.tr-mine { display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px; }
+.tr-contact { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
+.tr-add ul { list-style: none; margin: 8px 0 0; padding: 6px; display: flex; flex-direction: column; gap: 4px; background: var(--surface); border: 1px solid var(--stroke); border-radius: var(--r-md); }
+.tr-add li { display: flex; align-items: center; gap: 10px; padding: 4px; }
+.tr-add li .cimg { width: 40px; border-radius: 4px; }
+.tr-msg { position: sticky; top: 70px; z-index: 5; margin: 8px 0; padding: 10px 14px; border-radius: 12px; background: rgba(94, 200, 200, .14); border: 1px solid var(--foam); color: var(--foam); font-weight: 700; }
+.tr-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.tr-list li { display: flex; gap: 12px; padding: 10px; border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--stroke); }
+.tr-list li.match { border-color: rgba(242, 184, 75, .55); box-shadow: inset 3px 0 0 var(--gold); }
+.tr-img { flex: none; width: 64px; padding: 0; border: 0; background: none; cursor: pointer; }
+.tr-img .cimg { width: 64px; border-radius: 5px; }
+.tr-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+.tr-name { font-family: var(--display); font-size: 16px; }
+.tr-price { color: var(--gold); }
+.tr-note { color: var(--text); font-style: italic; }
+.tr-contactv { color: var(--foam); font-weight: 700; user-select: all; }
+.tr-edit { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.tr-edit select, .tr-edit input { height: 34px; padding: 0 10px; border-radius: 10px; background: var(--sea); border: 1px solid var(--stroke); color: var(--text); font: 13px var(--body); }
+.tr-edit input[type=number] { width: 90px; }
+.tr-edit input:not([type=number]) { flex: 1; min-width: 120px; }
+.cd-trade { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.navin .who { margin-left: auto; }

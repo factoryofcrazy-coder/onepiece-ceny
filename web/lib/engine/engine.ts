@@ -475,6 +475,11 @@ const WHEN_SK: Record<string, string> = {
 };
 export function queueWhen(s: GameState, src: string, when: Ability["when"]) {
   const p = ownerOf(s, src);
+  // OP09-081 Teach: vlastné [On Play] sú negované; jeho [Activate: Main] neguje súperove do konca jeho ďalšieho ťahu
+  if (when === "onPlay" && (def(s, pl(s, p).leader).code === "OP09-081" || playerFlag(s, p, "noOnPlay"))) {
+    if (abilitiesOf(s, src).some((a) => a.when === "onPlay")) info(s, `${def(s, src).name}: efekt [On Play] je negovaný.`);
+    return;
+  }
   abilitiesOf(s, src).forEach((a, k) => a.when === when && queue(s, src, p, k));
 }
 
@@ -534,10 +539,19 @@ export function addMod(s: GameState, m: Omit<Modifier, "setOnTurn">) {
 }
 export function lose(s: GameState, p: P, why: string) {
   if (s.winner != null) return;
+  // P-117 Nami (East Blue): keď balíček klesne na 0, vyhráva namiesto prehry
+  if (why.startsWith("došli") && def(s, pl(s, p).leader).code === "P-117") return deckOutWin(s, p);
   s.winner = other(p);
   s.phase = "over";
   s.prompt = null;
   info(s, `${pl(s, p).name} prehral, ${why}.`);
+}
+function deckOutWin(s: GameState, p: P) {
+  if (s.winner != null) return;
+  s.winner = p;
+  s.phase = "over";
+  s.prompt = null;
+  info(s, `${pl(s, p).name} vyhral – balíček klesol na 0 (pravidlo leadera Nami).`);
 }
 function putOnField(s: GameState, iid: string, rested = false) {
   const c = s.cards[iid];
@@ -559,7 +573,7 @@ function putOnField(s: GameState, iid: string, rested = false) {
   queueWhen(s, iid, "onPlay");
   if (x.characters.length > MAX_CHARS) s.prompt = { kind: "trashCharacter", p: c.owner, options: x.characters.filter((i) => i !== iid) };
 }
-function moveTo(s: GameState, iid: string, to: string, faceUp = false) {
+export function moveTo(s: GameState, iid: string, to: string, faceUp = false) {
   const c = s.cards[iid];
   const x = pl(s, c.owner);
   detach(s, iid);
@@ -916,6 +930,7 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
     case "mill": {
       const x = pl(s, p);
       for (let k = 0; k < N(st.n) && x.deck.length; k++) x.trash.push(x.deck.shift()!);
+      if (!x.deck.length && def(s, x.leader).code === "P-117") deckOutWin(s, p);
       return true;
     }
     case "addDon":
