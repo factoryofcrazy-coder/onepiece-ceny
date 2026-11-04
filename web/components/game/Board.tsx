@@ -38,6 +38,12 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
   // koniec hry proti botovi sa zapíše do štatistík DON!! skinov (raz za hru)
   const [newSkins, setNewSkins] = useState<DonSkin[]>([]);
   const recorded = useRef(false);
+  // počas hry sa chat schová, hra potrebuje celé okno
+  useEffect(() => {
+    document.body.classList.add("in-game");
+    return () => document.body.classList.remove("in-game");
+  }, []);
+
   useEffect(() => {
     if (mode !== "bot" || s.winner == null || recorded.current) return;
     recorded.current = true;

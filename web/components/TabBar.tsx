@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 import { GAME_PUBLIC } from "@/lib/config";
+import { useNewReports } from "@/lib/reports";
 import { useTcg } from "@/lib/tcg";
 
 // Dolná navigácia na mobile (ako natívna appka). Na desktope sa nezobrazuje – tam je horné menu.
@@ -82,6 +83,7 @@ export default function TabBar() {
   const path = usePathname();
   const { tcg } = useTcg();
   const [more, setMore] = useState(false);
+  const newReports = useNewReports();
   useEffect(() => setMore(false), [path]);
   const tabs = tcg === "pokemon" ? PK_TABS : OP_TABS;
   const moreOn = tcg !== "pokemon" && OP_MORE.some((l) => active(path, l.href));
@@ -94,6 +96,7 @@ export default function TabBar() {
           {OP_MORE.map((l) => (
             <Link key={l.href} href={l.href} className={active(path, l.href) ? "on" : ""}>
               {l.label}
+              {l.href === "/report" && newReports > 0 && <span className="nav-badge">{newReports}</span>}
             </Link>
           ))}
         </div>
@@ -107,7 +110,7 @@ export default function TabBar() {
         ))}
         {tcg !== "pokemon" && (
           <button className={moreOn || more ? "on" : ""} onClick={() => setMore(!more)} aria-expanded={more}>
-            <span className="tb-ic">{I.more}</span>
+            <span className="tb-ic">{I.more}{newReports > 0 && <span className="nav-dot" aria-hidden />}</span>
             <span className="tb-l">Viac</span>
           </button>
         )}

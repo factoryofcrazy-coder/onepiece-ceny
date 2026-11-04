@@ -38,12 +38,13 @@ export default function Privacy() {
         <li>
           Ak je pri prihlásení zapnuté overenie, že nie si robot, zabezpečuje ho <b>Cloudflare Turnstile</b>. E-maily na zmenu hesla posiela e-mailová služba, ktorej odovzdáme tvoju adresu.
         </li>
+        <li><b>Discord:</b> text nového hlásenia, bez kontaktu a mena, dostane správca ako upozornenie.</li>
         <li>Obrázky kariet a knižnica skenera sa načítavajú z externých serverov, ktoré tak vidia tvoju IP adresu.</li>
       </ul>
 
       <h2>Prehliadač</h2>
       <p>
-        Používame len nevyhnutné úložisko: prihlásenie, zvolenú hru, vzhľad a tvoj postup v tréningu. Reklamné ani analytické cookies nepoužívame.
+        Používame len nevyhnutné úložisko: prihlásenie, zvolenú hru, vzhľad, stav chatu a tvoj postup v tréningu. Reklamné ani analytické cookies nepoužívame.
       </p>
 
       <h2>Ako dlho</h2>

@@ -829,3 +829,45 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .chatx-tools .link { margin: 0; }
 .chatx-form { display: flex; gap: 8px; }
 .chatx-form input { flex: 1; min-width: 0; }
+
+/* Report: úlohy navrchu */
+.rep-top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+.rep-top h1 { margin: 0 0 6px; }
+.rep-top > div { flex: 1 1 280px; }
+.rep-top p { margin: 0; }
+.nav-badge { display: inline-block; min-width: 18px; margin-left: 6px; padding: 2px 5px; border-radius: 99px; background: var(--gold); color: var(--ink); font: 700 11px/14px var(--body); text-align: center; }
+.tb-ic { position: relative; }
+.nav-dot { position: absolute; top: 0; right: -2px; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+
+/* Chat: panel na PC, bublina na mobile */
+.chatx-room { position: relative; display: flex; flex-direction: column; gap: 8px; min-height: 0; flex: 1; }
+.chatx-room .chatx-list { flex: 1; height: auto; min-height: 0; }
+.chatx-rules { margin: 0; }
+.chatx-fresh { position: absolute; left: 50%; bottom: 88px; transform: translateX(-50%); z-index: 2; border: 0; border-radius: 99px; padding: 7px 12px; background: var(--gold); color: var(--ink); font: 700 12px/1 var(--body); cursor: pointer; white-space: nowrap; }
+.chatx-bans { font-size: 13px; }
+.chatx-bans .ucet-row { justify-content: space-between; margin-top: 6px; }
+.chatx-page { display: flex; flex-direction: column; gap: 10px; max-width: 760px; margin: 12px auto 0; height: calc(100dvh - 96px); }
+.chatx-page h1 { margin: 0; }
+.chatd-bubble, .chatd-tab, .chatd-panel { display: none; }
+.chatd-badge { position: absolute; top: -5px; right: -5px; min-width: 19px; padding: 3px 5px; border-radius: 99px; background: var(--red); color: #fff; font: 700 11px/13px var(--body); text-align: center; }
+body.in-game .chatd { display: none; }
+@media (max-width: 720px) {
+  .chatx-page { height: calc(100dvh - 56px - var(--tb-h) - env(safe-area-inset-bottom) - 24px); }
+  .chatd-bubble { display: grid; place-items: center; position: fixed; right: 14px; bottom: calc(var(--tb-h) + env(safe-area-inset-bottom) + 14px); z-index: 36; width: 52px; height: 52px; border-radius: 50%; color: var(--gold); background: var(--sea-2); border: 1px solid rgba(242, 184, 75, .55); box-shadow: 0 10px 24px -8px rgba(0, 0, 0, .7); }
+}
+@media (min-width: 721px) {
+  .chatd-tab { display: flex; align-items: center; gap: 8px; position: fixed; right: 18px; bottom: 18px; z-index: 36; padding: 10px 16px; border-radius: 99px; color: var(--text); background: var(--sea-2); border: 1px solid rgba(242, 184, 75, .55); box-shadow: 0 10px 24px -8px rgba(0, 0, 0, .7); font: 700 14px/1 var(--body); cursor: pointer; }
+  .chatd-tab svg { color: var(--gold); }
+  .chatd-panel { display: flex; flex-direction: column; gap: 8px; position: fixed; top: 65px; right: 0; bottom: 0; z-index: 25; width: 340px; padding: 10px 12px 12px; background: var(--sea); border-left: 1px solid var(--line); box-shadow: -14px 0 30px -18px rgba(0, 0, 0, .7); }
+  .chatd-head { display: flex; align-items: center; justify-content: space-between; }
+  .chatd-login { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .x-plain { background: none; border: 0; color: var(--muted); font-size: 22px; line-height: 1; cursor: pointer; padding: 0 4px; }
+  .chatd-panel .chatx-msg { max-width: 94%; }
+}
+@media (min-width: 1500px) {
+  body.chat-open:not(.in-game) main.wrap, body.chat-open:not(.in-game) .foot { max-width: none; padding-right: 356px; margin-right: 0; }
+}
+@media (hover: hover) {
+  .chatx-tools { opacity: 0; transition: opacity .15s; }
+  .chatx-msg:hover .chatx-tools, .chatx-msg:focus-within .chatx-tools { opacity: 1; }
+}
