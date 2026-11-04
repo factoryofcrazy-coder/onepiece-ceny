@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-04T17:14:06Z",
+ "updated": "2026-11-04T17:23:06Z",
  "fx": {
   "CZK": 24.309,
   "USD": 1.1267,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-11-04T15:23:07Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -553,7 +553,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-11-04T15:23:07Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -640,7 +640,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -1887,7 +1887,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -2253,7 +2253,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -2632,7 +2632,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -2855,7 +2855,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3014,7 +3014,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-11-04T15:23:07Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3587,7 +3587,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3743,7 +3743,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-11-04T15:23:07Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3767,7 +3767,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3818,7 +3818,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3869,7 +3869,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-11-04T15:23:07Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -4003,7 +4003,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-11-04T15:23:07Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -4307,7 +4307,7 @@
   },
   "cardcosmos": {
    "ts": "2026-11-04T17:14:06Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece Card Game - OP13 Booster Display - JPN",
@@ -4822,11 +4822,14 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP-08_-_Two_Legends_Booster_Box_-_EN_cd4ac2e07120627d.webp?v=1791208428"
     }
-   ]
+   ],
+   "error": "HTTP Error 429: Too Many Requests",
+   "fails": 1,
+   "warned": false
   },
   "yonko": {
    "ts": "2026-11-04T17:14:06Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "[JP] One Piece · Card Game Display - Royal Bloodline (OP-10)",
@@ -5431,11 +5434,14 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0814/4656/8264/files/One-Piece-Card-Game-BOOSTERPACK-Emperors-In-The-New-World-OP-09-english.jpg?v=1755092829"
     }
-   ]
+   ],
+   "error": "HTTP Error 429: Too Many Requests",
+   "fails": 1,
+   "warned": false
   },
   "funkelpappe": {
    "ts": "2026-11-04T17:14:06Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece TCG OP-17 The World's Strongest Warriors Booster Display – Japanisch",
@@ -5509,11 +5515,14 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/1050/1786/8620/files/OP-OP13COHW-BD-JPN.png?v=1782678633"
     }
-   ]
+   ],
+   "error": "HTTP Error 429: Too Many Requests",
+   "fails": 1,
+   "warned": false
   },
   "mikis": {
    "ts": "2026-11-04T17:14:06Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece Card Game Illustration Box IB-07 - Englisch",
@@ -5659,10 +5668,13 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/OnePieceCardGameAdventureonKamisIslandOP-15BoosterDisplay_Englisch.webp?v=1775934440"
     }
-   ]
+   ],
+   "error": "HTTP Error 429: Too Many Requests",
+   "fails": 1,
+   "warned": false
   },
   "butticards": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -5831,7 +5843,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-11-04T15:23:07Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -5909,7 +5921,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-11-04T15:23:07Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -5920,15 +5932,6 @@
      "eur": 9.83,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/462508_zeny2.jpg?ff=1&x=100&y=100&q=85&ts=6ae450f1&sg=8dda0505"
-    },
-    {
-     "name": "One Piece Card Game - Heroines Edition vol.2 Booster Box (EB05) - EN",
-     "url": "https://www.blacklotus.cz/one-piece-card-game-heroines-edition-vol-2-booster-box--eb05-en/",
-     "price": 5499.0,
-     "currency": "CZK",
-     "eur": 226.21,
-     "inStock": true,
-     "img": "https://cdn.myshoptet.com/usr/www.blacklotus.cz/user/shop/related/462505_zeny.jpg?ff=1&x=100&y=100&q=85&ts=6ae44c75&sg=8dda0505"
     },
     {
      "name": "One Piece Card Game - The World's Strongest Warriors Booster Pack - EN",
@@ -6122,7 +6125,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -6434,7 +6437,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -6863,7 +6866,7 @@
    ]
   },
   "crispycards": {
-   "ts": "2026-11-04T17:14:06Z",
+   "ts": "2026-11-04T17:23:06Z",
    "ok": true,
    "items": [
     {
@@ -8536,7 +8539,7 @@
   },
   "underpaid": {
    "ts": "2026-11-04T17:14:06Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "One Piece Card Game: The Azure Sea’s Seven OP-14 Boosterpack (JP)",
@@ -9330,11 +9333,14 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0729/9871/5717/files/one-piece-japanese-2nd-anniversary-set-en-851361.webp?v=1746214435"
     }
-   ]
+   ],
+   "error": "HTTP Error 429: Too Many Requests",
+   "fails": 1,
+   "warned": false
   },
   "cardbinder": {
    "ts": "2026-11-04T17:14:06Z",
-   "ok": true,
+   "ok": false,
    "items": [
     {
      "name": "The Best Volume 2 Japanese Booster Box",
@@ -9831,7 +9837,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-PRB01-The-Best-Volume-one-Booster-Box-English.webp?v=1759844795"
     }
-   ]
+   ],
+   "error": "HTTP Error 429: Too Many Requests",
+   "fails": 1,
+   "warned": false
   }
  }
 }
