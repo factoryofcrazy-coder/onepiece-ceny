@@ -147,8 +147,8 @@ export default function TradePage() {
           <i>{ago(l.created_at)}</i>
         </span>
         {!user ? (
-          <Link className="btn ghost sm trx-contact" href="/login">
-            Kontakt po prihlásení
+          <Link className="btn ghost sm trx-contact" href="/login" title="Kontakt vidia prihlásení">
+            Kontakt
           </Link>
         ) : t?.contact ? (
           <button className="btn ghost sm trx-contact" title={t.contact} onClick={() => copyContact(l.id, t.contact!)}>
