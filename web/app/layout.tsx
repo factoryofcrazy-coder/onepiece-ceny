@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { AuthProvider } from "@/lib/auth";
+import { ChatProvider } from "@/lib/chat";
+import ChatDock from "@/components/chat/ChatDock";
 import Nav from "@/components/Nav";
 import { cookies } from "next/headers";
 import { TcgProvider } from "@/lib/tcg";
@@ -32,10 +34,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <TcgProvider initial={tcg}>
           <AuthProvider>
-            <Nav />
-            <main className="wrap">{children}</main>
-            <Footer />
-            <TabBar />
+            <ChatProvider>
+              <Nav />
+              <main className="wrap">{children}</main>
+              <Footer />
+              <ChatDock />
+              <TabBar />
+            </ChatProvider>
           </AuthProvider>
         </TcgProvider>
       </body>

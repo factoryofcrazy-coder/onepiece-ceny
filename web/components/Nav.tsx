@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
+import { useNewReports } from "@/lib/reports";
 import { GAME_PUBLIC } from "@/lib/config";
 import { TCGS, useTcg } from "@/lib/tcg";
 
@@ -28,7 +29,6 @@ const LINKS = [
         { href: "/rebricek", label: "Rebríček" },
       ]
     : []),
-  { href: "/chat", label: "Chat" },
   { href: "/report", label: "Report" },
 ];
 
@@ -40,6 +40,7 @@ export default function Nav() {
   const [menu, setMenu] = useState(false);
   useEffect(() => setMenu(false), [path]);
   const links = tcg === "pokemon" ? PK_LINKS : LINKS;
+  const newReports = useNewReports();
   const pick = (t: typeof tcg) => {
     if (t === tcg) return;
     setTcg(t);
@@ -87,6 +88,7 @@ export default function Nav() {
               className={(l.href === "/" ? path === "/" : path.startsWith(l.href)) ? "on" : ""}
             >
               {l.label}
+              {l.href === "/report" && newReports > 0 && <span className="nav-badge">{newReports}</span>}
             </Link>
           ))}
         </nav>

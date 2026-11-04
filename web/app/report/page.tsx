@@ -102,6 +102,7 @@ export default function Report() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [sent, setSent] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [tasks, setTasks] = useState<Task[] | null>(null);
   const [loadErr, setLoadErr] = useState(false);
   const [filter, setFilter] = useState("open");
@@ -144,6 +145,7 @@ export default function Report() {
     setBusy(false);
     if (error) return setErr(error.code === "P0001" ? error.message : "Nepodarilo sa odoslať. Skús to znova o chvíľu.");
     setSent(true);
+    setShowForm(false);
     setMessage("");
     setFilter("open");
     load();
@@ -158,9 +160,18 @@ export default function Report() {
 
   return (
     <div className="ucet rep">
-      <h1>Report</h1>
-      <p className="muted">Napíš, čo nefunguje alebo čo by si chcel inak. Z každého hlásenia vznikne úloha a nižšie uvidíš, ako je na tom.</p>
+      <div className="rep-top">
+        <div>
+          <h1>Report</h1>
+          <p className="muted">Čo nefunguje alebo čo by si chcel inak? Z každého hlásenia vznikne úloha a tu uvidíš, ako je na tom.</p>
+        </div>
+        <button className="btn" aria-expanded={showForm} onClick={() => setShowForm(!showForm)}>
+          {showForm ? "Zavrieť formulár" : "Nové hlásenie"}
+        </button>
+      </div>
+      {sent && <p className="okc small">Ďakujeme, hlásenie máme a pridali sme ho medzi úlohy.</p>}
 
+      {showForm && (
       <form className="ucet-card" onSubmit={send}>
         <div className="rep-kinds" role="radiogroup" aria-label="O čo ide">
           {KINDS.map((k) => (
@@ -189,12 +200,12 @@ export default function Report() {
           {busy ? "Odosielam…" : "Odoslať"}
         </button>
         {err && <p className="badc small">{err}</p>}
-        {sent && <p className="okc small">Ďakujeme, hlásenie máme a pridali sme ho medzi úlohy.</p>}
         <p className="tiny muted">
           Do správy nepíš osobné údaje. {user ? "Hlásenie sa spojí s tvojím účtom, ostatní to neuvidia. " : "Môžeš písať aj bez prihlásenia. "}
           Uložíme aj typ prehliadača, aby sme chybu vedeli zopakovať. Viac v <Link href="/sukromie">zásadách súkromia</Link>.
         </p>
       </form>
+      )}
 
       <h2 className="rep-h">Úlohy</h2>
       <div className="rep-kinds" role="tablist" aria-label="Filter úloh">
@@ -215,7 +226,7 @@ export default function Report() {
       ) : !tasks ? (
         <Loading what="Načítavam úlohy" shape="rows" />
       ) : shown.length === 0 ? (
-        <p className="muted">Tu zatiaľ nič nie je.</p>
+        <p className="muted">Tu zatiaľ nič nie je. Všimol si si niečo? Daj nám vedieť cez „Nové hlásenie“.</p>
       ) : (
         <>
           <p className="tiny muted">
