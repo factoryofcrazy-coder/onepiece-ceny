@@ -1,4 +1,5 @@
 // Definície kariet pre engine: údaje z databázy kariet + skript efektu (DSL) podľa herného kódu.
+import { autoScript } from "./autoscript";
 import type { Script } from "./dsl";
 import { SCRIPTS } from "./scripts";
 import type { CardDef, Keyword } from "./types";
@@ -80,8 +81,9 @@ export function splitTraits(s: string): string[] {
 }
 
 export function buildDef(c: CardData): CardDef {
-  const sc: Script | undefined = SCRIPTS[c.code];
   const text = c.text && c.text !== "NULL" ? c.text : "";
+  // ručný skript má prednosť, inak prekladač, ktorý berie len kartu, ktorej celému textu rozumie
+  const sc: Script | undefined = SCRIPTS[c.code] ?? autoScript(text) ?? undefined;
   const alias = [...text.matchAll(/also treat this card's name as \[([^\]]+)\](?: and \[([^\]]+)\])?/gi)].flatMap((m) => [m[1], m[2]].filter(Boolean) as string[]);
   return {
     code: c.code,

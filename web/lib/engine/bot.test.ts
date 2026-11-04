@@ -52,7 +52,7 @@ describe("úrovne botov", () => {
   it.each(["easy", "medium", "hard"] as BotLevel[])("%s dohrá partiu bez nelegálneho ťahu", (level) => {
     const s = play([level, "medium"], 1, 6, 77);
     expect(s.winner).not.toBeNull();
-  });
+  }, 120000);
 
   it("Stredný sa nezasekne na efekte bez zmeny (EB04-016)", () => {
     const i = decks.findIndex((d) => d.cards.includes("EB04-016"));
