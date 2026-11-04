@@ -1,17 +1,99 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
+import { plural } from "@/lib/sk";
 import { sb } from "@/lib/supabase";
 
+type Status = "new" | "doing" | "done" | "rejected";
+type Task = {
+  id: number;
+  created_at: string;
+  kind: string;
+  message: string;
+  page: string | null;
+  status: Status;
+  admin_reply: string | null;
+  source: string;
+  // len pre admina
+  contact?: string | null;
+  user_agent?: string | null;
+  hidden?: boolean;
+  username?: string | null;
+};
+
 const KINDS = [
-  { id: "bug", label: "Niečo nefunguje", hint: "Čo si robil, čo sa stalo a čo si čakal?" },
-  { id: "idea", label: "Mám nápad", hint: "Čo by sa ti tu hodilo alebo čo by si zmenil?" },
-  { id: "other", label: "Niečo iné", hint: "Napíš, čo máš na srdci." },
+  { id: "bug", label: "Niečo nefunguje", short: "Chyba", hint: "Čo si robil, čo sa stalo a čo si čakal?" },
+  { id: "idea", label: "Mám nápad", short: "Nápad", hint: "Čo by sa ti tu hodilo alebo čo by si zmenil?" },
+  { id: "other", label: "Niečo iné", short: "Iné", hint: "Napíš, čo máš na srdci." },
 ];
+const STATUS: Record<Status, string> = { new: "Nové", doing: "Robí sa", done: "Hotové", rejected: "Zamietnuté" };
+const FILTERS: { id: string; label: string; test: (s: Status) => boolean }[] = [
+  { id: "open", label: "Otvorené", test: (s) => s === "new" || s === "doing" },
+  { id: "done", label: "Hotové", test: (s) => s === "done" },
+  { id: "rejected", label: "Zamietnuté", test: (s) => s === "rejected" },
+  { id: "all", label: "Všetky", test: () => true },
+];
+const COLUMNS = "id, created_at, kind, message, page, status, admin_reply, source";
+const fmtDate = (ts: string) => new Date(ts).toLocaleDateString("sk-SK", { day: "numeric", month: "numeric", year: "numeric" });
+
+function AdminBox({ task, onSaved }: { task: Task; onSaved: () => void }) {
+  const [status, setStatus] = useState<Status>(task.status);
+  const [reply, setReply] = useState(task.admin_reply ?? "");
+  const [hidden, setHidden] = useState(!!task.hidden);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const dirty = status !== task.status || reply.trim() !== (task.admin_reply ?? "") || hidden !== !!task.hidden;
+
+  const save = async () => {
+    setBusy(true);
+    setErr("");
+    const { error } = await sb().rpc("feedback_admin_update", { p_id: task.id, p_status: status, p_reply: reply, p_hidden: hidden });
+    setBusy(false);
+    if (error) return setErr(error.message);
+    onSaved();
+  };
+
+  return (
+    <div className="rep-admin">
+      <p className="tiny muted">
+        Od: {task.username ?? "neprihlásený"}
+        {task.contact ? ` · kontakt: ${task.contact}` : ""}
+        {task.user_agent ? ` · ${task.user_agent}` : ""}
+      </p>
+      <div className="rep-admin-row">
+        <label className="field">
+          <span>Stav</span>
+          <select value={status} onChange={(e) => setStatus(e.target.value as Status)}>
+            {(Object.keys(STATUS) as Status[]).map((s) => (
+              <option key={s} value={s}>
+                {STATUS[s]}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="rep-hide">
+          <input type="checkbox" checked={hidden} onChange={(e) => setHidden(e.target.checked)} />
+          Skryť z nástenky
+        </label>
+      </div>
+      <label className="field">
+        <span>Verejná odpoveď (nepovinné)</span>
+        <textarea rows={2} maxLength={1000} value={reply} onChange={(e) => setReply(e.target.value)} />
+      </label>
+      <div>
+        <button className="btn sm" disabled={!dirty || busy} onClick={save}>
+          {busy ? "Ukladám…" : "Uložiť"}
+        </button>
+      </div>
+      {err && <p className="badc small">{err}</p>}
+    </div>
+  );
+}
 
 export default function Report() {
-  const { user } = useAuth();
+  const { user, isAdmin, loading } = useAuth();
   const [kind, setKind] = useState("bug");
   const [message, setMessage] = useState("");
   const [page, setPage] = useState("");
@@ -20,6 +102,21 @@ export default function Report() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [sent, setSent] = useState(false);
+  const [tasks, setTasks] = useState<Task[] | null>(null);
+  const [loadErr, setLoadErr] = useState(false);
+  const [filter, setFilter] = useState("open");
+
+  const load = useCallback(async () => {
+    const { data, error } = isAdmin
+      ? await sb().rpc("feedback_admin_list")
+      : await sb().from("feedback").select(COLUMNS).order("created_at", { ascending: false }).limit(300);
+    setLoadErr(!!error);
+    if (!error) setTasks((data as Task[]) ?? []);
+  }, [isAdmin]);
+
+  useEffect(() => {
+    if (!loading) load();
+  }, [load, loading]);
 
   useEffect(() => {
     try {
@@ -30,6 +127,7 @@ export default function Report() {
 
   const send = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSent(false);
     if (message.trim().length < 5) return setErr("Napíš aspoň pár slov.");
     if (trap) return setSent(true);
     setBusy(true);
@@ -46,35 +144,23 @@ export default function Report() {
     setBusy(false);
     if (error) return setErr(error.code === "P0001" ? error.message : "Nepodarilo sa odoslať. Skús to znova o chvíľu.");
     setSent(true);
+    setMessage("");
+    setFilter("open");
+    load();
   };
 
-  if (sent)
-    return (
-      <div className="ucet">
-        <h1>Ďakujeme!</h1>
-        <p>Hlásenie máme. Každé si prečítame, aj keď nestihneme odpovedať na všetky.</p>
-        <div className="ucet-row">
-          <button
-            className="btn ghost"
-            onClick={() => {
-              setSent(false);
-              setMessage("");
-            }}
-          >
-            Napísať ďalšie
-          </button>
-          <Link className="btn" href="/">
-            Späť na web
-          </Link>
-        </div>
-      </div>
-    );
-
+  const counts = useMemo(() => Object.fromEntries(FILTERS.map((f) => [f.id, (tasks ?? []).filter((t) => f.test(t.status)).length])), [tasks]);
+  const shown = useMemo(() => {
+    const f = FILTERS.find((x) => x.id === filter)!;
+    return (tasks ?? []).filter((t) => f.test(t.status));
+  }, [tasks, filter]);
   const active = KINDS.find((k) => k.id === kind)!;
+
   return (
-    <div className="ucet">
+    <div className="ucet rep">
       <h1>Report</h1>
-      <p className="muted">Web je nový a stále ho dolaďujeme. Napíš nám, čo nefunguje alebo čo by si chcel inak.</p>
+      <p className="muted">Napíš, čo nefunguje alebo čo by si chcel inak. Z každého hlásenia vznikne úloha a nižšie uvidíš, ako je na tom.</p>
+
       <form className="ucet-card" onSubmit={send}>
         <div className="rep-kinds" role="radiogroup" aria-label="O čo ide">
           {KINDS.map((k) => (
@@ -84,15 +170,15 @@ export default function Report() {
           ))}
         </div>
         <label className="field">
-          <span>Správa</span>
-          <textarea required rows={6} maxLength={2000} value={message} onChange={(e) => setMessage(e.target.value)} placeholder={active.hint} />
+          <span>Správa (uvidia ju všetci)</span>
+          <textarea required rows={4} maxLength={2000} value={message} onChange={(e) => setMessage(e.target.value)} placeholder={active.hint} />
         </label>
         <label className="field">
-          <span>Kde sa to stalo? (nepovinné)</span>
+          <span>Kde sa to stalo? (nepovinné, uvidia to všetci)</span>
           <input maxLength={200} value={page} onChange={(e) => setPage(e.target.value)} placeholder="napr. skener, zbierka, online hra" />
         </label>
         <label className="field">
-          <span>Kontakt, ak chceš odpoveď (nepovinné)</span>
+          <span>Kontakt, ak chceš odpoveď (nepovinné, vidí len správca)</span>
           <input maxLength={120} value={contact} onChange={(e) => setContact(e.target.value)} placeholder="napr. Discord: Anon" />
         </label>
         <label className="rep-trap" aria-hidden>
@@ -103,11 +189,59 @@ export default function Report() {
           {busy ? "Odosielam…" : "Odoslať"}
         </button>
         {err && <p className="badc small">{err}</p>}
+        {sent && <p className="okc small">Ďakujeme, hlásenie máme a pridali sme ho medzi úlohy.</p>}
         <p className="tiny muted">
-          {user ? "Hlásenie sa spojí s tvojím účtom. " : "Môžeš písať aj bez prihlásenia. "}
+          Do správy nepíš osobné údaje. {user ? "Hlásenie sa spojí s tvojím účtom, ostatní to neuvidia. " : "Môžeš písať aj bez prihlásenia. "}
           Uložíme aj typ prehliadača, aby sme chybu vedeli zopakovať. Viac v <Link href="/sukromie">zásadách súkromia</Link>.
         </p>
       </form>
+
+      <h2 className="rep-h">Úlohy</h2>
+      <div className="rep-kinds" role="tablist" aria-label="Filter úloh">
+        {FILTERS.map((f) => (
+          <button key={f.id} role="tab" aria-selected={filter === f.id} className={filter === f.id ? "on" : ""} onClick={() => setFilter(f.id)}>
+            {f.label} ({counts[f.id] ?? 0})
+          </button>
+        ))}
+      </div>
+
+      {loadErr ? (
+        <p className="badc">
+          Úlohy sa nepodarilo načítať.{" "}
+          <button className="link" onClick={load}>
+            Skúsiť znova
+          </button>
+        </p>
+      ) : !tasks ? (
+        <Loading what="Načítavam úlohy" shape="rows" />
+      ) : shown.length === 0 ? (
+        <p className="muted">Tu zatiaľ nič nie je.</p>
+      ) : (
+        <>
+          <p className="tiny muted">
+            {shown.length} {plural(shown.length, "úloha", "úlohy", "úloh")}
+          </p>
+          {shown.map((t) => (
+            <article key={t.id} className={`ucet-card rep-task ${t.hidden ? "is-hidden" : ""}`}>
+              <div className="rep-meta">
+                <span className={`rep-status s-${t.status}`}>{STATUS[t.status]}</span>
+                <span className="tag dim">{KINDS.find((k) => k.id === t.kind)?.short ?? "Iné"}</span>
+                {t.source === "game" && <span className="tag dim">Z hry</span>}
+                {t.hidden && <span className="tag dim">Skryté</span>}
+                <span className="tiny muted">{fmtDate(t.created_at)}</span>
+              </div>
+              <p className="rep-msg">{t.message}</p>
+              {t.page && <p className="tiny muted">Kde: {t.page}</p>}
+              {t.admin_reply && (
+                <p className="rep-reply">
+                  <b>Odpoveď:</b> {t.admin_reply}
+                </p>
+              )}
+              {isAdmin && <AdminBox key={`${t.id}-${t.status}-${t.hidden}-${t.admin_reply}`} task={t} onSaved={load} />}
+            </article>
+          ))}
+        </>
+      )}
     </div>
   );
 }

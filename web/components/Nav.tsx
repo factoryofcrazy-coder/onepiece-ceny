@@ -28,6 +28,7 @@ const LINKS = [
         { href: "/rebricek", label: "Rebríček" },
       ]
     : []),
+  { href: "/chat", label: "Chat" },
   { href: "/report", label: "Report" },
 ];
 

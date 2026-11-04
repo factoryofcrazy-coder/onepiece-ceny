@@ -66,6 +66,7 @@ const OP_MORE = [
       ]
     : []),
   { href: "/import", label: "Import z HoloDex" },
+  { href: "/chat", label: "Chat" },
   { href: "/report", label: "Report" },
 ];
 const PK_TABS: Tab[] = [
