@@ -19,54 +19,65 @@ import type { Action, CardDef, GameState, P } from "@/lib/engine/types";
 import { ago, byCodeOf, deckRef, DeckOpt, gameCall, GameRow, loadRatings, Rating, useMyDecks } from "@/lib/game";
 import { sb } from "@/lib/supabase";
 
-type Tab = "online" | "training";
+type Mode = "online" | "bot" | "local";
+
+const MODES: { id: Mode; title: string; text: string; tag: string; icon: string }[] = [
+  { id: "online", title: "Online zápas", text: "Zahraj si so živým súperom. Súper nevidí tvoje karty a hodnotené zápasy menia tvoje ELO.", tag: "Rebríček a rank", icon: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18ZM3 12h18M12 3c2.500 2.500 3.500 5.500 3.500 9s-1 6.500-3.500 9c-2.500-2.500-3.500-5.500-3.500-9s1-6.500 3.500-9Z" },
+  { id: "bot", title: "Tréning s botom", text: "Vyskúšaj si deck proti Ľahkému, Strednému alebo Ťažkému botovi. Hrať môžeš aj bez účtu.", tag: "3 obtiažnosti", icon: "M12 2v3M5 8h14a2 2 0 0 1 2 2v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-8a2 2 0 0 1 2-2Zm4 5h.01M15 13h.01M9 17h6" },
+  { id: "local", title: "Dvaja na jednom", text: "Podávajte si zariadenie a hrajte spolu pri jednom stole, napríklad na stretnutí.", tag: "Spoločná hra", icon: "M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm9-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 21a6 6 0 0 1 12 0M15 15a5 5 0 0 1 7 4.500V21" },
+];
 
 function GamePage() {
   const { data: cards, error } = useCards();
   const { user, loading } = useAuth();
   const byCode = useMemo(() => byCodeOf(cards?.cards), [cards]);
   const decks = useMyDecks(user?.id, cards ? byCode : undefined);
-  const [tab, setTab] = useState<Tab>("online");
+  const [picked, setPicked] = useState<Mode | null>(null);
   const [local, setLocal] = useState<{ s: GameState; mode: "bot" | "local"; level: BotLevel } | null>(null);
 
   if (error) return <DataError error={error} file="cards" />;
   if (!cards || loading) return <Loading what="Pripravujem hru" shape="tiles" />;
   if (local) return <LocalGame initial={local.s} mode={local.mode} level={local.level} byCode={byCode} onExit={() => setLocal(null)} />;
 
+  // neprihlásený môže hneď trénovať, online potrebuje účet
+  const mode: Mode = picked ?? (user ? "online" : "bot");
   return (
     <div className="glob">
-      <div className="glob-hero">
-        <div>
-          <h1>Hra</h1>
-          <p className="muted">
-            Zahraj si One Piece TCG priamo tu. Pravidlá aj efekty kariet rieši hra za teba. V online zápase súper nevidí tvoju ruku ani balíček a hodnotené výsledky idú do{" "}
-            <Link href="/rebricek">rebríčka</Link>.
-          </p>
-        </div>
-        <div className="seg">
-          <button className={tab === "online" ? "on" : ""} onClick={() => setTab("online")}>
-            Online s kamošmi
-          </button>
-          <button className={tab === "training" ? "on" : ""} onClick={() => setTab("training")}>
-            Tréning
-          </button>
-        </div>
+      <div className="gm-hero">
+        <h1>Hra</h1>
+        <p className="muted">Pravidlá aj efekty kariet rieši hra za teba. Vyber si, ako chceš hrať.</p>
       </div>
-      {tab === "online" ? (
-        user ? (
-          <OnlineLobby userId={user.id} decks={decks} byCode={byCode} />
+      <div className="gm-modes" role="radiogroup" aria-label="Spôsob hry">
+        {MODES.map((m) => (
+          <button key={m.id} type="button" role="radio" aria-checked={mode === m.id} className={`gm-mode ${mode === m.id ? "on" : ""}`} onClick={() => setPicked(m.id)}>
+            <span className="gm-ic">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.800" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d={m.icon} />
+              </svg>
+            </span>
+            <b>{m.title}</b>
+            <span className="gm-text">{m.text}</span>
+            <span className="gm-tag">{m.id === "online" && !user ? "Treba sa prihlásiť" : m.tag}</span>
+          </button>
+        ))}
+      </div>
+      <div className="gm-panel">
+        {mode === "online" ? (
+          user ? (
+            <OnlineLobby userId={user.id} decks={decks} byCode={byCode} />
+          ) : (
+            <div className="empty">
+              Na online zápas sa musíš <Link href="/login">prihlásiť</Link>. Tréning s botom si zahráš aj bez účtu.
+            </div>
+          )
         ) : (
-          <div className="empty">
-            Na online zápas sa musíš <Link href="/login">prihlásiť</Link>. Tréning s botom si zahráš aj bez účtu.
-          </div>
-        )
-      ) : (
-        <Training decks={decks} byCode={byCode} onStart={(s, mode, level) => setLocal({ s, mode, level })} />
-      )}
+          <Training key={mode} mode={mode} decks={decks} byCode={byCode} onStart={(s, m, level) => setLocal({ s, mode: m, level })} />
+        )}
+      </div>
       <DonSkins />
       <p className="small muted" style={{ marginTop: 18 }}>
-        Efekty poznáme pri všetkých kartách z turnajových top deckov (Limitless, posledných 30 dní) a pri starter deckoch ST-01 a ST-26. Ostatné karty
-        sa hrajú bez efektu a majú pri sebe výkričník. Vlastný deck si poskladáš v <Link href="/decky">Deckoch</Link> (leader a 40 až 50 kariet).
+        Efekty poznáme pri všetkých kartách z turnajových top deckov a pri veľkej časti ostatných. Karty bez hotového efektu sa hrajú bez neho a majú pri sebe výkričník. Vlastný deck si poskladáš v{" "}
+        <Link href="/decky">Deckoch</Link> (leader a 40 až 50 kariet).
       </p>
     </div>
   );
@@ -311,10 +322,9 @@ function deckStat(d: DeckOpt | undefined, byCode: Map<string, Card>) {
 }
 
 // ================================================================== tréning (bot / jedno zariadenie)
-function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<string, Card>; onStart: (s: GameState, mode: "bot" | "local", level: BotLevel) => void }) {
+function Training({ mode, decks, byCode, onStart }: { mode: "bot" | "local"; decks: DeckOpt[]; byCode: Map<string, Card>; onStart: (s: GameState, mode: "bot" | "local", level: BotLevel) => void }) {
   const [a, setA] = useState(decks[0]?.id ?? "st26");
   const [b, setB] = useState("st01");
-  const [mode, setMode] = useState<"bot" | "local">("bot");
   const [level, setLevel] = useState<BotLevel>("medium");
   useEffect(() => {
     const saved = localStorage.getItem("bot-level");
@@ -357,8 +367,8 @@ function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<st
   const leader = (d: DeckOpt) => byCode.get(d.leader);
 
   return (
-    <div className="gcard" style={{ maxWidth: 760 }}>
-      <span className="kicker">Tréning</span>
+    <div className="gcard">
+      <span className="kicker">{mode === "bot" ? "Tréning s botom" : "Dvaja na jednom zariadení"}</span>
       <div className="vsline">
         <div className="pl">
           {leader(da) && <CardImg card={leader(da)!} />}
@@ -397,20 +407,9 @@ function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<st
           </span>
         </div>
       )}
-      <div className="row gap wrapr">
-        <div className="seg">
-          <button className={mode === "bot" ? "on" : ""} onClick={() => setMode("bot")}>
-            Proti botovi
-          </button>
-          <button className={mode === "local" ? "on" : ""} onClick={() => setMode("local")}>
-            Dvaja na jednom zariadení
-          </button>
-        </div>
-        <span className="grow" />
-        <button className="btn" onClick={start}>
-          Hrať
-        </button>
-      </div>
+      <button className="btn gm-play" onClick={start}>
+        {mode === "bot" ? "Hrať proti botovi" : "Začať hru"}
+      </button>
       {err && <p className="gerr">{err}</p>}
     </div>
   );
