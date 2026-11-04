@@ -2,7 +2,8 @@
 // Výber DON!! skinu v lobby: náhľady, stav odomknutia a pokrok k ďalším.
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { cacheOnlineStats, DON_SKINS, isUnlocked, progressOf, ruleText, useDonSkin, useLocalDonStats } from "@/lib/donSkins";
+import { levelOf, loadBadges, rankIndex } from "@/lib/gamify";
+import { cacheOnlineStats, cacheProgress, DON_SKINS, isUnlocked, progressOf, ruleText, useDonSkin, useLocalDonStats } from "@/lib/donSkins";
 import { loadRatings } from "@/lib/game";
 import { Icon } from "./icons";
 
@@ -11,6 +12,22 @@ export default function DonSkins() {
   const local = useLocalDonStats();
   const { skin, choose } = useDonSkin();
   const [online, setOnline] = useState<{ games: number; wins: number } | null>(null);
+
+  const [progress, setProgress] = useState<{ level: number; rankIndex: number } | null>(null);
+  useEffect(() => {
+    if (!user) return setProgress(null);
+    let live = true;
+    loadBadges().then((m) => {
+      const b = m.get(user.id);
+      const v = { level: b ? levelOf(b.xp) : 1, rankIndex: b && b.games > 0 ? rankIndex(b.elo) : -1 };
+      if (!live) return;
+      setProgress(v);
+      cacheProgress(v.level, v.rankIndex);
+    });
+    return () => {
+      live = false;
+    };
+  }, [user]);
 
   // online výhry a hry z rebríčka prihláseného hráča
   useEffect(() => {
@@ -30,7 +47,7 @@ export default function DonSkins() {
     };
   }, [user]);
 
-  const st = { ...local, ...(online ? { onlineGames: online.games, onlineWins: online.wins } : {}) };
+  const st = { ...local, ...(online ? { onlineGames: online.games, onlineWins: online.wins } : {}), ...(progress ?? {}) };
   const open = DON_SKINS.filter((k) => isUnlocked(k, st)).length;
 
   return (

@@ -2,9 +2,10 @@
 // DON!! skiny: vzhľad mojich DON!! žetónov na hracej ploche. Odomykajú sa hraním –
 // výhry proti botovi a odohrané hry sa počítajú v prehliadači, online výhry a hry sa berú z rebríčka.
 import { useCallback, useEffect, useState } from "react";
+import { RANKS } from "./gamify";
 
-export type DonStats = { botGames: number; botWins: number; onlineGames: number; onlineWins: number };
-type Rule = { kind: "free" } | { kind: "botWins" | "games" | "onlineWins"; n: number };
+export type DonStats = { botGames: number; botWins: number; onlineGames: number; onlineWins: number; level?: number; rankIndex?: number };
+type Rule = { kind: "free" } | { kind: "botWins" | "games" | "onlineWins" | "level"; n: number } | { kind: "rank"; rank: string };
 export type DonSkin = { id: string; name: string; img: string | null; rule: Rule };
 
 export const DON_SKINS: DonSkin[] = [
@@ -21,6 +22,16 @@ export const DON_SKINS: DonSkin[] = [
   { id: "crimson_storm", name: "Karmínová búrka", img: "/game/don/crimson_storm.webp", rule: { kind: "onlineWins", n: 3 } },
   { id: "golden_flame", name: "Zlatý plameň", img: "/game/don/golden_flame.webp", rule: { kind: "onlineWins", n: 5 } },
   { id: "black_gold", name: "Čierne zlato", img: "/game/don/black_gold.webp", rule: { kind: "onlineWins", n: 10 } },
+  { id: "level_05", name: "Rajský ostrov", img: "/game/don/level_05.webp", rule: { kind: "level", n: 5 } },
+  { id: "level_10", name: "Hviezdna mapa", img: "/game/don/level_10.webp", rule: { kind: "level", n: 10 } },
+  { id: "level_20", name: "Koralové kráľovstvo", img: "/game/don/level_20.webp", rule: { kind: "level", n: 20 } },
+  { id: "level_30", name: "Lietajúci ostrov", img: "/game/don/level_30.webp", rule: { kind: "level", n: 30 } },
+  { id: "level_40", name: "Krvavá obloha", img: "/game/don/level_40.webp", rule: { kind: "level", n: 40 } },
+  { id: "rank_captain", name: "Kapitánska búrka", img: "/game/don/rank_captain.webp", rule: { kind: "rank", rank: "captain" } },
+  { id: "rank_supernova", name: "Výbuch Supernovy", img: "/game/don/rank_supernova.webp", rule: { kind: "rank", rank: "supernova" } },
+  { id: "rank_warlord", name: "Búrka Warlorda", img: "/game/don/rank_warlord.webp", rule: { kind: "rank", rank: "warlord" } },
+  { id: "rank_yonko", name: "Hnev Yonka", img: "/game/don/rank_yonko.webp", rule: { kind: "rank", rank: "yonko" } },
+  { id: "rank_king", name: "Poklad Kráľa pirátov", img: "/game/don/rank_king.webp", rule: { kind: "rank", rank: "king" } },
 ];
 
 const STATS_KEY = "op-don-stats";
@@ -33,6 +44,8 @@ export const emptyStats = (): DonStats => ({ botGames: 0, botWins: 0, onlineGame
 /** hodnota, podľa ktorej sa pravidlo posudzuje */
 export function progressOf(rule: Rule, st: DonStats): { have: number; need: number } {
   if (rule.kind === "free") return { have: 1, need: 1 };
+  if (rule.kind === "level") return { have: st.level ?? 0, need: rule.n };
+  if (rule.kind === "rank") return { have: Math.max(0, (st.rankIndex ?? -1) + 1), need: RANKS.findIndex((r) => r.id === rule.rank) + 1 };
   const have = rule.kind === "botWins" ? st.botWins : rule.kind === "onlineWins" ? st.onlineWins : st.botGames + st.onlineGames;
   return { have, need: rule.n };
 }
@@ -42,6 +55,8 @@ export const isUnlocked = (skin: DonSkin, st: DonStats) => {
 };
 export function ruleText(rule: Rule): string {
   if (rule.kind === "free") return "Odomknutý";
+  if (rule.kind === "level") return `Level ${rule.n}`;
+  if (rule.kind === "rank") return `Rank ${RANKS.find((r) => r.id === rule.rank)?.name ?? rule.rank}`;
   const n = rule.n;
   const pl = (one: string, few: string, many: string) => (n === 1 ? one : n < 5 ? few : many);
   if (rule.kind === "botWins") return `${n} ${pl("výhra", "výhry", "výhier")} proti botovi`;
@@ -75,7 +90,14 @@ export function readLocalStats(): DonStats {
 export function cacheOnlineStats(onlineGames: number, onlineWins: number) {
   const cur = read<Partial<DonStats>>(ONLINE_KEY, {});
   if (cur.onlineGames === onlineGames && cur.onlineWins === onlineWins) return;
-  write(ONLINE_KEY, { onlineGames, onlineWins });
+  write(ONLINE_KEY, { ...cur, onlineGames, onlineWins });
+}
+
+/** uloží level a rank, aby boli skiny odomknuté aj hneď po načítaní */
+export function cacheProgress(level: number, rankIndex: number) {
+  const cur = read<Partial<DonStats>>(ONLINE_KEY, {});
+  if (cur.level === level && cur.rankIndex === rankIndex) return;
+  write(ONLINE_KEY, { ...cur, level, rankIndex });
 }
 
 /** zapíše dohranú hru proti botovi; vráti skiny, ktoré sa práve odomkli */

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { DON_SKINS, isUnlocked, ruleText, emptyStats } from "./donSkins";
 import { levelOf, levelProgress, rankOf, RANKS, xpForLevel } from "./gamify";
 
 describe("levely a ranky", () => {
@@ -16,5 +17,16 @@ describe("levely a ranky", () => {
     expect(rankOf(1600).id).toBe("king");
     expect(RANKS.map((r) => r.min)).toEqual([...RANKS.map((r) => r.min)].sort((a, b) => a - b));
     expect(new Set(RANKS.map((r) => r.id)).size).toBe(7);
+  });
+  it("skiny za level a rank", () => {
+    const byId = (id: string) => DON_SKINS.find((k) => k.id === id)!;
+    const st = { ...emptyStats(), level: 5, rankIndex: 2 }; // Kapitán
+    expect(isUnlocked(byId("level_05"), st)).toBe(true);
+    expect(isUnlocked(byId("level_10"), st)).toBe(false);
+    expect(isUnlocked(byId("rank_captain"), st)).toBe(true);
+    expect(isUnlocked(byId("rank_supernova"), st)).toBe(false);
+    expect(isUnlocked(byId("rank_captain"), emptyStats())).toBe(false);
+    expect(ruleText(byId("rank_king").rule)).toBe("Rank Kráľ pirátov");
+    expect(ruleText(byId("level_20").rule)).toBe("Level 20");
   });
 });
