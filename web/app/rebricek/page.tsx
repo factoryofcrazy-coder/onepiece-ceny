@@ -22,18 +22,19 @@ function RankingPage() {
   const [games, setGames] = useState<GameRow[]>([]);
 
   useEffect(() => {
-    if (!user) return;
+    if (loading) return;
     const load = async () => {
       const [{ data: r }, profs, { data: gs }] = await Promise.all([
         sb().from("ratings").select("*").order("elo", { ascending: false }).limit(200),
         loadProfiles(),
-        sb().from("games").select("*").eq("status", "done").order("updated_at", { ascending: false }).limit(15),
+        user ? sb().from("games").select("*").eq("status", "done").order("updated_at", { ascending: false }).limit(15) : Promise.resolve({ data: [] }),
       ]);
       setRows((r as Rating[]) ?? []);
       setNames(new Map(profs.map((p) => [p.id, p.username ?? "hráč"])));
       setGames((gs as GameRow[]) ?? []);
     };
     load();
+    if (!user) return;
     const ch = sb()
       .channel("ranking")
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "games" }, () => setTimeout(load, 400))
@@ -41,17 +42,9 @@ function RankingPage() {
     return () => {
       sb().removeChannel(ch);
     };
-  }, [user]);
+  }, [user, loading]);
 
   if (loading) return <Loading what="Načítavam rebríček" shape="rows" />;
-  if (!user)
-    return (
-      <div className="glob">
-        <div className="empty">
-          Rebríček vidia prihlásení hráči. <Link href="/login">Prihlásiť sa</Link>
-        </div>
-      </div>
-    );
   if (!rows) return <Loading what="Načítavam rebríček" shape="rows" />;
 
   const nm = (id: string) => names.get(id) ?? "hráč";
@@ -65,7 +58,7 @@ function RankingPage() {
         <div>
           <h1>Rebríček</h1>
           <p className="muted">
-            ELO z hodnotených online hier. Každý začína na 1000; za výhru nad silnejším súperom získaš viac bodov. <Link href="/hra">Vyzvi kamoša →</Link>
+            ELO z hodnotených online hier. Každý začína na 1000; za výhru nad silnejším súperom získaš viac bodov. <Link href={user ? "/hra" : "/login"}>{user ? "Vyzvi kamoša →" : "Prihlás sa a hraj →"}</Link>
           </p>
         </div>
       </div>
@@ -105,14 +98,14 @@ function RankingPage() {
             </thead>
             <tbody>
               {rows.map((r, i) => (
-                <tr key={r.user_id} className={r.user_id === user.id ? "me" : ""} style={{ animationDelay: `${Math.min(i, 12) * 40}ms` }}>
+                <tr key={r.user_id} className={r.user_id === user?.id ? "me" : ""} style={{ animationDelay: `${Math.min(i, 12) * 40}ms` }}>
                   <td className="pos">{i + 1}</td>
                   <td>
                     <span className="who">
                       <span className="av">{nm(r.user_id).slice(0, 1).toUpperCase()}</span>
                       {nm(r.user_id)}
                       <UserBadge badge={{ elo: r.elo, games: r.games, xp: badges.get(r.user_id)?.xp ?? 0 }} />
-                      {r.user_id === user.id && <span className="tag dim">ty</span>}
+                      {r.user_id === user?.id && <span className="tag dim">ty</span>}
                     </span>
                   </td>
                   <td className="elo">{r.elo}</td>

@@ -1,5 +1,4 @@
 "use client";
-import { OLD_SITE } from "./config";
 import { useEffect, useState } from "react";
 
 export type Card = {
@@ -157,7 +156,7 @@ export function sortSets<T extends { id: string }>(sets: T[]) {
 let altsCache: Promise<Record<string, { l: string; i: string }[]>> | null = null;
 /** Známe verzie kariet na TCGplayeri (detail promo karty s ilustračným obrázkom). */
 export function loadCardAlts() {
-  altsCache ??= fetch(`${OLD_SITE}data/card-alts.json`)
+  altsCache ??= fetch("/api/card-alts")
     .then((r) => (r.ok ? r.json() : {}))
     .catch(() => {
       altsCache = null;

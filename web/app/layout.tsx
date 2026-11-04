@@ -1,9 +1,10 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { AuthProvider } from "@/lib/auth";
+import { THEME_INIT } from "@/lib/theme-init";
 import { ChatProvider } from "@/lib/chat";
 import ChatDock from "@/components/chat/ChatDock";
-import Nav from "@/components/Nav";
+import AppChrome from "@/components/AppChrome";
 import { cookies } from "next/headers";
 import { TcgProvider } from "@/lib/tcg";
 import { parseTcg, TCG_COOKIE } from "@/lib/tcg-shared";
@@ -17,13 +18,14 @@ export const metadata: Metadata = {
   // iPhone: „Pridať na plochu“ → appka cez celú obrazovku
   appleWebApp: { capable: true, title: "Grand Line", statusBarStyle: "black-translucent" },
 };
-export const viewport: Viewport = { themeColor: "#06121f", width: "device-width", initialScale: 1, viewportFit: "cover" };
+export const viewport: Viewport = { themeColor: "#0b0a14", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const tcg = parseTcg((await cookies()).get(TCG_COOKIE)?.value);
   return (
-    <html lang="sk" data-tcg={tcg}>
+    <html lang="sk" data-tcg={tcg} suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link
@@ -35,9 +37,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <TcgProvider initial={tcg}>
           <AuthProvider>
             <ChatProvider>
-              <Nav />
-              <main className="wrap">{children}</main>
-              <Footer />
+              <AppChrome>
+                <main className="wrap">{children}</main>
+                <Footer />
+              </AppChrome>
               <ChatDock />
               <TabBar />
             </ChatProvider>

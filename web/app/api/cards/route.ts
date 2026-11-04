@@ -1,6 +1,6 @@
 // Databáza kariet. Najprv hotový súbor z GitHub Pages (docs/data/cards.json, generuje ho denne GitHub Action –
 // rýchle), inak zostavenie naživo z OPTCG API (pomalé, ~10 s). Vercel CDN odpoveď drží 24 h.
-import { OLD_SITE } from "@/lib/config";
+import { OLD_SITE } from "@/lib/data-source";
 import { buildCards } from "@/lib/cards-build";
 
 export const dynamic = "force-dynamic";

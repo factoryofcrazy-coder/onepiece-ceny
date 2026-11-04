@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { DataError, Loading } from "@/components/ui";
+import { DataError, Loading, NeedLogin } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
 import { Card, cardEur, eur, priceSource, thumb, useCards, usePrices } from "@/lib/data";
@@ -77,7 +77,7 @@ function beep() {
   navigator.vibrate?.(40);
 }
 
-export default function ScannerPage() {
+function ScannerPage() {
   const { tcg } = useTcg();
   const { data: cards, error } = useCards();
   const { data: prices } = usePrices();
@@ -788,4 +788,12 @@ export default function ScannerPage() {
       )}
     </div>
   );
+}
+
+/** Skener a sťahovanie jeho modelu sa spustia až po prihlásení. */
+export default function Page() {
+  const { user, loading } = useAuth();
+  if (loading) return <Loading what="Načítavam skener" />;
+  if (!user) return <NeedLogin what="Skener" />;
+  return <ScannerPage />;
 }

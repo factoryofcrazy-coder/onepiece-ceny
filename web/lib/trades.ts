@@ -21,7 +21,7 @@ export type Trader = { id: string; username: string | null; contact: string | nu
 /** chyba „tabuľka/stĺpec neexistuje“ = migrácia ešte nie je spustená */
 const notReady = (m?: string) => !!m && /trade_listings|contact|does not exist|schema cache/i.test(m);
 
-export function useTrades(enabled: boolean) {
+export function useTrades(enabled: boolean, signedIn: boolean) {
   const [list, setList] = useState<Listing[]>([]);
   const [traders, setTraders] = useState<Map<string, Trader>>(new Map());
   const [error, setError] = useState<string | null>(null);
@@ -41,15 +41,15 @@ export function useTrades(enabled: boolean) {
     setList(data as Listing[]);
     const ids = [...new Set((data as Listing[]).map((l) => l.user_id))];
     if (ids.length) {
-      const pr = await sb().from("profiles").select("id, username, contact").in("id", ids);
-      const fallback = pr.error ? await sb().from("profiles").select("id, username").in("id", ids) : null; // pred migráciou bez contact
-      const rows = ((pr.error ? fallback?.data : pr.data) ?? []) as Trader[];
+      // kontakt vidia len prihlásení
+      const pr = await sb().from("profiles").select(signedIn ? "id, username, contact" : "id, username").in("id", ids);
+      const rows = (pr.data ?? []) as unknown as Trader[];
       setTraders(new Map(rows.map((t) => [t.id, { contact: null, ...t }])));
     }
     setError(null);
     setMissing(false);
     setLoading(false);
-  }, [enabled]);
+  }, [enabled, signedIn]);
 
   useEffect(() => {
     reload();

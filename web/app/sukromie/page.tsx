@@ -16,13 +16,13 @@ export default function Privacy() {
       <h2>Čo ukladáme a kto to vidí</h2>
       <ul>
         <li><b>E-mail a heslo:</b> slúžia na prihlásenie. E-mail ostatní hráči nevidia, heslo ukladáme len v nečitateľnej (hashovanej) podobe.</li>
-        <li><b>Prezývka:</b> vidia ju ostatní prihlásení hráči.</li>
+        <li><b>Prezývka:</b> v rebríčku a pri ponukách na trhovisku ju vidí každý, aj neprihlásený. Inde ju vidia prihlásení hráči.</li>
         <li><b>Zbierka a sledované produkty:</b> vidíš ich len ty.</li>
         <li><b>Decky:</b> vidia ich ostatní prihlásení hráči.</li>
-        <li><b>Ponuky na trhovisku a kontakt, ktorý k nim vyplníš:</b> vidia ich všetci prihlásení, preto uvádzaj len kontakt, ktorý chceš zverejniť.</li>
-        <li><b>Hry a hodnotenie:</b> výsledky, ELO a mená hráčov vidia prihlásení hráči, karty v ruke súper nevidí.</li>
+        <li><b>Ponuky na trhovisku:</b> vidí ich každý, aj neprihlásený. <b>Kontakt, ktorý k nim vyplníš,</b> vidia len prihlásení, preto uvádzaj len kontakt, ktorý chceš zverejniť. Do poznámky k ponuke kontakt nepíš, tú vidí každý.</li>
+        <li><b>Hry a hodnotenie:</b> ELO a štatistiky v rebríčku vidí každý, priebeh a výsledky jednotlivých hier len prihlásení hráči, karty v ruke súper nevidí.</li>
         <li><b>Hlásenia v Reporte:</b> text, stav a odpoveď správcu sú verejné pre každého, aj neprihláseného, ale bez tvojho mena. Kontakt, typ prehliadača a väzbu na účet vidí len správca. Hlásenie z hry obsahuje aj stav hry, ktorý vidí len správca. Do textu nepíš osobné údaje.</li>
-        <li><b>Level a rank:</b> XP, level a rank vidia ostatní prihlásení hráči, prehľad dnešných XP podľa aktivít vidíš len ty.</li>
+        <li><b>Level a rank:</b> XP, level a rank vidí v rebríčku každý, prehľad dnešných XP podľa aktivít vidíš len ty.</li>
         <li><b>Chat:</b> správy a tvoju prezývku vidia všetci prihlásení. Správca môže správy mazať a zablokovať písanie. Ak správu nahlásiš, správca vidí jej text a kto ju nahlásil. Počet ľudí online je len číslo, bez mien. Správy sa mažú po 30 dňoch alebo so zmazaním účtu.</li>
       </ul>
 

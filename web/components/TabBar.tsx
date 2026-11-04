@@ -10,6 +10,11 @@ import { useTcg } from "@/lib/tcg";
 type Tab = { href: string; label: string; icon: ReactNode; main?: boolean };
 
 const I = {
+  home: (
+    <svg viewBox="0 0 24 24" aria-hidden>
+      <path d="M3 11 12 3l9 8v10h-6v-6H9v6H3V11Z" />
+    </svg>
+  ),
   prices: (
     <svg viewBox="0 0 24 24" aria-hidden>
       <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z" />
@@ -50,12 +55,13 @@ const I = {
 };
 
 const OP_TABS: Tab[] = [
-  { href: "/", label: "Ceny", icon: I.prices },
+  { href: "/", label: "Domov", icon: I.home },
   { href: "/karty", label: "Karty", icon: I.cards },
   { href: "/skener", label: "Skener", icon: I.scan, main: true },
   { href: "/zbierka", label: "Zbierka", icon: I.vault },
 ];
 const OP_MORE = [
+  { href: "/ceny", label: "Ceny boxov" },
   { href: "/trhovisko", label: "Trhovisko" },
   { href: "/master-sety", label: "Master sety" },
   { href: "/decky", label: "Decky" },

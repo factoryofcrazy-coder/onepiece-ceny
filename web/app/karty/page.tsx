@@ -37,6 +37,11 @@ function OpCardsPage() {
     if (p.get("set")) setSet(p.get("set")!);
     if (p.get("own")) setOwn(p.get("own")!);
     if (p.get("variant")) setVariant(p.get("variant")!);
+    if (p.get("q")) setQ(p.get("q")!);
+    // hľadanie z hornej lišty, aj keď už je človek na tejto stránke
+    const onSearch = (e: Event) => setQ((e as CustomEvent<string>).detail);
+    window.addEventListener("op-card-search", onSearch);
+    return () => window.removeEventListener("op-card-search", onSearch);
   }, []);
   useEffect(() => setLimit(PAGE), [set, q, color, type, rarity, variant, own, sort, viewing]);
 
