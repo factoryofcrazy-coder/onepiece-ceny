@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyPromoImages, CmProduct, TcgProduct } from "./promo-images";
+import { applyPromoImages, CmProduct, TcgProduct, variantLabel } from "./promo-images";
 
 const card = (id: string, code: string, cmId?: number, v = "Pre-Release", img = "") => ({ id, code, v, set: cmId ? "CM-PROMO" : "OP01", img, cmId });
 const prod = (group: string, number: string, name = "Karta") => ({ group, number, name, img: `https://x/${group}-${number}_200w.jpg` }) as TcgProduct;
@@ -46,5 +46,45 @@ describe("applyPromoImages", () => {
     const a = card("EB05-061", "EB05-061", undefined, "");
     applyPromoImages([a], [], [prod("EB-05", "EB05-061", "Nami (061)"), prod("EB-05", "EB05-061", "Nami (061) (Alternate Art)")]);
     expect(a.img).toContain("_in_400x400");
+  });
+
+  const tcgv = (number: string, name: string, usd: number) => ({ ...prod("EB-05", number, name), usd });
+  const rare = (code: string, n: number, cm: number, id: number): any => ({ ...card(`${code}_cm${id}`, code, id, "Promo"), cm, cmLow: cm });
+  // edícia musí mať aspoň 8 verzií, malé sa párujú príliš ľahko náhodou
+  const filler = Array.from({ length: 8 }, (_, i) => rare(`EB05-1${i}0`, 1, 10, 100 + i));
+  // bežná edícia má oveľa viac kariet než vzácnych verzií
+  const others = Array.from({ length: 40 }, (_, i) => tcgv(`EB05-2${String(i).padStart(2, "0")}`, "Bežná karta", 1));
+  const fillerTcg = [...others, ...filler.flatMap((f: any) => [tcgv(f.code, "Karta", 2), tcgv(f.code, "Karta (Alternate Art)", 12)])];
+  
+  it("vzácne verzie sa spárujú podľa poradia a cien, chybný trend sa zahodí", () => {
+    const base = { ...card("EB05-055", "EB05-055", undefined, "", "b.jpg"), set: "EB-05", setName: "Heroines" };
+    const a = rare("EB05-055", 1, 16.48, 920071), b = rare("EB05-055", 2, 0.02, 920072), c = rare("EB05-055", 3, 1500, 920073);
+    const r = applyPromoImages(
+      [base, a, b, c, ...filler],
+      [a, b, c, ...filler].map((x: any) => ({ idProduct: x.cmId!, idExpansion: 7 })),
+      [...fillerTcg, tcgv("EB05-055", "Nami (055)", 4.63), tcgv("EB05-055", "Nami (055) (Super Rare Alternate Art)", 29.89), tcgv("EB05-055", "Nami (055) (Kentaro Yabuki)", 67.75), tcgv("EB05-055", "Nami (055) (Kentaro Yabuki) (Gold Stamped)", 1319)],
+    );
+    expect(r.paired).toBe(11);
+    expect([a.v, b.v, c.v]).toEqual(["Alternate Art", "Kentaro Yabuki", "Kentaro Yabuki · Gold Stamped"]);
+    expect(a.set).toBe("EB-05");
+    expect(b.cm).toBeNull();
+    expect(b.usd).toBe(67.75);
+    expect(c.cm).toBe(1500);
+  });
+
+  it("nesedí počet alebo cena, verzia ostane ilustračná", () => {
+    const base = { ...card("EB05-001", "EB05-001", undefined, "", "b.jpg"), set: "EB-05" };
+    const a = rare("EB05-001", 1, 500, 1);
+    const r = applyPromoImages([base, a, ...filler], [a, ...filler].map((x: any) => ({ idProduct: x.cmId, idExpansion: 7 })), [...fillerTcg, tcgv("EB05-001", "Bonney", 13), tcgv("EB05-001", "Bonney (Alternate Art)", 41)]);
+    expect(r.paired).toBe(8);
+    expect(a.imgBase).toBe(true);
+  });
+
+  it("názov verzie", () => {
+    expect(variantLabel("Nico Robin (016)")).toBe("");
+    expect(variantLabel("Nico Robin (016) (SP)")).toBe("SP");
+    expect(variantLabel("Baby 5 (Alternate Art)")).toBe("Alternate Art");
+    expect(variantLabel("Zoro-Juurou (OP05-067)")).toBe("");
+    expect(variantLabel("Chopper (EB01-006) (Manga)")).toBe("Manga");
   });
 });
