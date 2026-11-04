@@ -781,3 +781,4 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .tr-edit input[type=number] { width: 90px; }
 .tr-edit input:not([type=number]) { flex: 1; min-width: 120px; }
 .cd-trade { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.navin .who { margin-left: auto; }
