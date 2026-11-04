@@ -112,7 +112,10 @@ def main():
     bgs = []
     new_ids, new_src, new_vec = [], [], []
     for n, (cid, kind, url) in enumerate(todo):
-        card = decode(fetch(url))
+        data = fetch(url)
+        if data is None and "_in_400x400" in url:  # nie každá karta má na TCGplayeri väčší obrázok
+            data = fetch(url.replace("_in_400x400", "_200w"))
+        card = decode(data) if data else None
         if card is None:
             continue
         if len(bgs) < 40:
