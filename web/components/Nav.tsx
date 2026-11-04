@@ -8,6 +8,7 @@ import { useNewReports } from "@/lib/reports";
 import { GAME_PUBLIC } from "@/lib/config";
 import { TCGS, useTcg } from "@/lib/tcg";
 import SearchBox from "./SearchBox";
+import ThemeToggle from "./ThemeToggle";
 
 // Pokémon: ceny, karty, zbierka a master sety (decky a hra sú len pre One Piece)
 const PK_LINKS = [
@@ -101,6 +102,7 @@ export default function Nav({ onMenu }: { onMenu?: () => void }) {
           ))}
         </nav>
         <SearchBox />
+        <ThemeToggle />
         <div className="who">
           {loading ? null : user ? (
             <div className="acct">

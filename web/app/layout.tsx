@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { AuthProvider } from "@/lib/auth";
+import { THEME_INIT } from "@/lib/theme-init";
 import { ChatProvider } from "@/lib/chat";
 import ChatDock from "@/components/chat/ChatDock";
 import AppChrome from "@/components/AppChrome";
@@ -22,8 +23,9 @@ export const viewport: Viewport = { themeColor: "#0b0a14", width: "device-width"
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const tcg = parseTcg((await cookies()).get(TCG_COOKIE)?.value);
   return (
-    <html lang="sk" data-tcg={tcg}>
+    <html lang="sk" data-tcg={tcg} suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link
