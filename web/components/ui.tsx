@@ -167,9 +167,11 @@ export function CardImg({
 }) {
   // náhľad (wsrv.nl) → pri chybe pôvodný obrázok → zástupný blok
   const small = full ? "" : thumb(card.img, 240);
-  const sources = [...new Set([small, card.img].filter(Boolean))];
+  // detail: veľký obrázok, ale nie každý má na TCGplayeri väčšiu veľkosť → záloha menšia
+  const sources = [...new Set((full ? [card.img, thumb(card.img, 240)] : [small, card.img]).filter(Boolean))];
+  const approx = !!(card as any).imgBase;
   const [i, setI] = useState(0);
-  const srcSet = !full && i === 0 && small !== card.img ? `${small} 240w, ${thumb(card.img, 360)} 360w` : undefined;
+  const srcSet = !full && i === 0 && small.includes("wsrv.nl") ? `${small} 240w, ${thumb(card.img, 360)} 360w` : undefined;
   if (i >= sources.length)
     return (
       <div className={`cimg ph ${className}`}>
@@ -181,7 +183,8 @@ export function CardImg({
   return (
     <img
       key={sources[i]}
-      className={`cimg ${className}`}
+      className={`cimg ${approx ? "approx" : ""} ${className}`}
+      title={approx ? "Ilustračný obrázok: základná verzia karty" : undefined}
       src={sources[i]}
       srcSet={srcSet}
       sizes={srcSet ? "(max-width: 720px) 45vw, 180px" : undefined}
@@ -251,6 +254,7 @@ export function CardModal({
             <span className="chip">{card.set === "CM-PROMO" ? "Cardmarket" : card.set}</span>
             {card.rarity && <span className="chip">{card.rarity}</span>}
             {card.v && <span className="chip hot">{card.v}</span>}
+            {card.imgBase && <span className="cd-approx tiny muted">Obrázok je len ilustračný: pri tejto verzii poznáme len základnú kartu, skutočná verzia môže vyzerať inak.</span>}
           </div>
           <h2>{card.name}</h2>
           <p className="muted small">
