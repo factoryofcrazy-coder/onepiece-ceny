@@ -51,7 +51,8 @@ describe("applyPromoImages", () => {
   const tcgv = (number: string, name: string, usd: number) => ({ ...prod("EB-05", number, name), usd });
   const rare = (code: string, n: number, cm: number, id: number): any => ({ ...card(`${code}_cm${id}`, code, id, "Promo"), cm, cmLow: cm });
   // edícia musí mať aspoň 8 verzií, malé sa párujú príliš ľahko náhodou
-  const filler = Array.from({ length: 8 }, (_, i) => rare(`EB05-1${i}0`, 1, 10, 100 + i));
+  const makeFiller = () => Array.from({ length: 8 }, (_, i) => rare(`EB05-1${i}0`, 1, 10, 100 + i));
+  const filler = makeFiller();
   // bežná edícia má oveľa viac kariet než vzácnych verzií
   const others = Array.from({ length: 40 }, (_, i) => tcgv(`EB05-2${String(i).padStart(2, "0")}`, "Bežná karta", 1));
   const fillerTcg = [...others, ...filler.flatMap((f: any) => [tcgv(f.code, "Karta", 2), tcgv(f.code, "Karta (Alternate Art)", 12)])];
@@ -75,7 +76,8 @@ describe("applyPromoImages", () => {
   it("nesedí počet alebo cena, verzia ostane ilustračná", () => {
     const base = { ...card("EB05-001", "EB05-001", undefined, "", "b.jpg"), set: "EB-05" };
     const a = rare("EB05-001", 1, 500, 1);
-    const r = applyPromoImages([base, a, ...filler], [a, ...filler].map((x: any) => ({ idProduct: x.cmId, idExpansion: 7 })), [...fillerTcg, tcgv("EB05-001", "Bonney", 13), tcgv("EB05-001", "Bonney (Alternate Art)", 41)]);
+    const fresh = makeFiller(); // applyPromoImages mení riadky, predošlý test ich už spároval
+    const r = applyPromoImages([base, a, ...fresh], [a, ...fresh].map((x: any) => ({ idProduct: x.cmId, idExpansion: 7 })), [...fillerTcg, tcgv("EB05-001", "Bonney", 13), tcgv("EB05-001", "Bonney (Alternate Art)", 41)]);
     expect(r.paired).toBe(8);
     expect(a.imgBase).toBe(true);
   });
