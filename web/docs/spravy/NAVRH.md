@@ -75,7 +75,7 @@ Databázové funkcie `dm_*` smie volať len `service_role`. Výnimky:
 - Na trhovisku nahrádza **Napísať** pri zapnutých správach tlačidlo Kontakt. Pole kontaktu v profile ostáva, kým sa nerozhodne inak.
 - Text sa vždy vykresľuje ako text. Klikateľné sú len `http` a `https` odkazy v prijatej konverzácii, s upozornením a `rel="noopener noreferrer nofollow ugc"`.
 - Neodoslaná správa sa dá poslať znova s rovnakým id, takže sa nezdvojí.
-- Prepínač: `NEXT_PUBLIC_DM_ENABLED=1`. Bez neho web nevolá funkciu `dm`, nečíta `dm_members` a neregistruje service worker.
+- Prepínač: na preview zapnuté automaticky, na produkcii `NEXT_PUBLIC_DM_ENABLED=1`. Bez neho web nevolá funkciu `dm`, nečíta `dm_members` a neregistruje service worker.
 
 ## Notifikácie (`lib/dm/push.ts`, `public/sw.js`)
 

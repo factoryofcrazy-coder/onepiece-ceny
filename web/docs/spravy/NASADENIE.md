@@ -29,9 +29,9 @@ Nasadí sa zostavený súbor `supabase/functions/dm/dist/index.js` (`npm run bui
 
 Kontrola: požiadavka `{"op":"health"}` vráti `{"ok":true}`.
 
-## 5. Zapnutie len na preview
+## 5. Preview
 
-Vercel → Settings → Environment Variables: `NEXT_PUBLIC_DM_ENABLED` = `1`, prostredie **Preview**, nie Production. Potom znova nasadiť vetvu `sukromne-spravy`. Preview používa ostrú databázu.
+Na preview sú správy zapnuté automaticky podľa `NEXT_PUBLIC_VERCEL_ENV`, netreba nič nastavovať. Preview používa ostrú databázu.
 
 ## 6. Ručný test
 
@@ -39,7 +39,7 @@ Podľa [TESTOVANIE.md](TESTOVANIE.md).
 
 ## 7. Zapnutie pre všetkých
 
-Až po úspešnom teste a zlúčení do `main`: rovnaká premenná aj pre Production a nové nasadenie. Vypnutie je jej odstránenie a nové nasadenie. Dáta sa tým nestratia.
+Až po úspešnom teste a zlúčení do `main`: vo Verceli premenná `NEXT_PUBLIC_DM_ENABLED` = `1` pre Production a nové nasadenie. Vypnutie je jej odstránenie a nové nasadenie. Dáta sa tým nestratia.
 
 ## Rotácia kľúča
 

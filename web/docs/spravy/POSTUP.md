@@ -37,6 +37,10 @@ Rozhodnutia v priebehu práce, ktoré treba potvrdiť:
 - Na trhovisku pri zapnutých správach nahrádza Napísať tlačidlo Kontakt.
 - Správca vidí len nahlásené správy (používateľ nemal preferenciu, zvolila sa prísnejšia možnosť).
 
+## 4. 11. 2026: spustenie na serveri
+
+Používateľ pridal tajné hodnoty a spustil migráciu. Funkcia `dm` je nasadená: kontrola, odmietnutie bez prihlásenia a chybnej požiadavky prešli na ostro. Ručný test s dvoma účtami ešte čaká. Správy na preview sa zapínajú automaticky, lebo nastavenie premennej len pre Preview vo Verceli nešlo vybrať.
+
 ## Stav
 
-Hotové a otestované automaticky a v prehliadači so simuláciou. Ostáva spustenie podľa [NASADENIE.md](NASADENIE.md) a [ručný test](TESTOVANIE.md). Do `main` nezlúčené, na produkcii nič.
+Hotové a otestované automaticky a v prehliadači so simuláciou. Ostáva [ručný test](TESTOVANIE.md). Do `main` nezlúčené, na produkcii nič.
