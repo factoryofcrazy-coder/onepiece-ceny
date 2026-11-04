@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useChat } from "@/lib/chat";
+import { UserBadge, useBadges } from "@/lib/gamify";
 
 const MAX = 500;
 
@@ -16,6 +17,7 @@ function fmtTime(ts: string) {
 export default function ChatRoom() {
   const { user, isAdmin } = useAuth();
   const { msgs, error, notice, bans, send, remove, setBan, report, markSeen } = useChat();
+  const badges = useBadges(!!user);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [atBottom, setAtBottom] = useState(true);
@@ -86,6 +88,7 @@ export default function ChatRoom() {
             <div key={m.id} className={`chatx-msg ${m.user_id === user.id ? "me" : ""}`}>
               <div className="chatx-head">
                 <b>{m.username}</b>
+                <UserBadge badge={badges.get(m.user_id)} compact />
                 <span className="tiny muted">{fmtTime(m.created_at)}</span>
                 {(isAdmin || m.user_id !== user.id) && (
                   <span className="chatx-tools">

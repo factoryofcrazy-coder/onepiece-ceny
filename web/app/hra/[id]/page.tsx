@@ -1,4 +1,5 @@
 "use client";
+import { UserBadge, useBadges } from "@/lib/gamify";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -17,6 +18,7 @@ import { sb } from "@/lib/supabase";
 type ViewRow = { seat: P; version: number; view: GameState };
 
 function OnlineGamePage() {
+  const badges = useBadges();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { user, loading } = useAuth();
@@ -219,6 +221,7 @@ function OnlineGamePage() {
 
   return (
     <Board
+        playerBadge={(p: P) => <UserBadge badge={badges.get(seatIds[p] ?? "")} compact />}
       s={v.view}
       me={v.seat}
       byCode={byCode}

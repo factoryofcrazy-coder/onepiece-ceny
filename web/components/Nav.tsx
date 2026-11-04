@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
+import { UserBadge, useBadges } from "@/lib/gamify";
 import { useNewReports } from "@/lib/reports";
 import { GAME_PUBLIC } from "@/lib/config";
 import { TCGS, useTcg } from "@/lib/tcg";
@@ -41,6 +42,7 @@ export default function Nav() {
   useEffect(() => setMenu(false), [path]);
   const links = tcg === "pokemon" ? PK_LINKS : LINKS;
   const newReports = useNewReports();
+  const badges = useBadges(!!user);
   const pick = (t: typeof tcg) => {
     if (t === tcg) return;
     setTcg(t);
@@ -103,7 +105,9 @@ export default function Nav() {
                   <div className="acct-scrim" onClick={() => setMenu(false)} />
                   <div className="acct-menu" role="menu">
                     <div className="acct-who">
-                      <b>{profile?.username ?? "Môj účet"}</b>
+                      <b>
+                        {profile?.username ?? "Môj účet"} <UserBadge badge={user ? badges.get(user.id) : undefined} compact />
+                      </b>
                       <span className="tiny muted">{user.email}</span>
                     </div>
                     <Link href="/ucet" onClick={() => setMenu(false)}>
