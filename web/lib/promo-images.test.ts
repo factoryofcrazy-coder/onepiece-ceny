@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyPromoImages, CmProduct, TcgProduct, variantLabel } from "./promo-images";
+import { applyPromoImages, buildCardAlts, CmProduct, TcgProduct, variantLabel } from "./promo-images";
 
 const card = (id: string, code: string, cmId?: number, v = "Pre-Release", img = "") => ({ id, code, v, set: cmId ? "CM-PROMO" : "OP01", img, cmId });
 const prod = (group: string, number: string, name = "Karta") => ({ group, number, name, img: `https://x/${group}-${number}_200w.jpg` }) as TcgProduct;
@@ -80,6 +80,20 @@ describe("applyPromoImages", () => {
     const r = applyPromoImages([base, a, ...fresh], [a, ...fresh].map((x: any) => ({ idProduct: x.cmId, idExpansion: 7 })), [...fillerTcg, tcgv("EB05-001", "Bonney", 13), tcgv("EB05-001", "Bonney (Alternate Art)", 41)]);
     expect(r.paired).toBe(8);
     expect(a.imgBase).toBe(true);
+  });
+
+  it("možné vzhľady len pre ilustračné karty, bez základnej verzie a duplicít", () => {
+    const a: any = { ...card("OP01-016_cm1", "OP01-016", 1, "Promo", "b.jpg"), imgBase: true };
+    const b: any = card("OP02-001", "OP02-001", undefined, "", "c.jpg");
+    const alts = buildCardAlts([a, b], [
+      prod("Romance Dawn", "OP01-016", "Nami"),
+      prod("Romance Dawn", "OP01-016", "Nami (Parallel)"),
+      prod("Romance Dawn", "OP01-016", "Nami (Parallel)"),
+      prod("One Piece Promotion Cards", "OP01-016", "Nami (Judge)"),
+      prod("Romance Dawn", "OP02-001", "Iná (Parallel)"),
+    ]);
+    expect(Object.keys(alts)).toEqual(["OP01-016"]);
+    expect(alts["OP01-016"].map((x) => x.l)).toEqual(["Judge", "Parallel"]);
   });
 
   it("názov verzie", () => {

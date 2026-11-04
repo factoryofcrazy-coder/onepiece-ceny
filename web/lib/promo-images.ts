@@ -152,6 +152,23 @@ export function applyPromoImages(cards: CardRow[], cm: CmProduct[], tcg: TcgProd
   return { exact, paired, filled, approx, without: promos.filter((c) => !c.img).length };
 }
 
+export type CardAlt = { l: string; i: string };
+
+/** „Možné vzhľady“: známe verzie karty pre promo záznamy, pri ktorých nevieme určiť tú presnú. */
+export function buildCardAlts(cards: CardRow[], tcg: TcgProduct[]) {
+  const wanted = new Set(cards.filter((c) => c.imgBase).map((c) => c.code));
+  const out: Record<string, CardAlt[]> = {};
+  for (const p of tcg) {
+    if (!wanted.has(p.number) || !p.img) continue;
+    const label = variantLabel(p.name);
+    if (!label && !isPromoGroup(p.group)) continue; // základná verzia sa ukazuje aj tak
+    const list = (out[p.number] ??= []);
+    if (!list.some((x) => x.i === p.img)) list.push({ l: label || p.group, i: p.img });
+  }
+  for (const list of Object.values(out)) list.sort((a, b) => a.l.localeCompare(b.l));
+  return out;
+}
+
 async function json(url: string) {
   const r = await fetch(url, { signal: AbortSignal.timeout(30000), headers: { "User-Agent": "grand-line-tracker" } });
   if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);

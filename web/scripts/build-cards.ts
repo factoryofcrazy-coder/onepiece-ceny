@@ -7,7 +7,9 @@ const out = process.argv[2] ?? "../docs/data/cards.json";
 buildCards().then(
   (d) => {
     mkdirSync(out.replace(/\/[^/]+$/, ""), { recursive: true });
-    writeFileSync(out, JSON.stringify(d));
+    const { alts, ...db } = d;
+    writeFileSync(out, JSON.stringify(db));
+    writeFileSync(out.replace(/[^/]+$/, "card-alts.json"), JSON.stringify(alts));
     console.log(`${d.cards.length} kariet, ${d.sets.length} setov → ${out}`);
   },
   (e) => {

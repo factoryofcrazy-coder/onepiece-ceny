@@ -1,4 +1,5 @@
 "use client";
+import { OLD_SITE } from "./config";
 import { useEffect, useState } from "react";
 
 export type Card = {
@@ -153,6 +154,18 @@ export function sortSets<T extends { id: string }>(sets: T[]) {
 
 /** Zmenšený náhľad obrázka karty (wsrv.nl – bezplatný resize proxy na Cloudflare, cache 1 rok).
  *  Obrázky z OPTCG API majú 150–280 kB; náhľad 200 px ~25 kB. Iné zdroje (TCGdex) ostávajú bez zmeny. */
+let altsCache: Promise<Record<string, { l: string; i: string }[]>> | null = null;
+/** Známe verzie kariet na TCGplayeri (detail promo karty s ilustračným obrázkom). */
+export function loadCardAlts() {
+  altsCache ??= fetch(`${OLD_SITE}data/card-alts.json`)
+    .then((r) => (r.ok ? r.json() : {}))
+    .catch(() => {
+      altsCache = null;
+      return {};
+    });
+  return altsCache;
+}
+
 export function thumb(url: string | null | undefined, w: number) {
   if (!url) return "";
   if (/^https:\/\/tcgplayer-cdn\.tcgplayer\.com\//.test(url)) return url.replace("_in_400x400", "_200w");

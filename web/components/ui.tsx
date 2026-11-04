@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { loadProfiles, Profile, useAuth } from "@/lib/auth";
 import type { Card } from "@/lib/data";
-import { cardEur, COLOR_SK, eur, thumb } from "@/lib/data";
+import { loadCardAlts, cardEur, COLOR_SK, eur, thumb } from "@/lib/data";
 
 /** Kostra namiesto „Načítavam…“ – tvar zodpovedá obsahu, ktorý príde. */
 export function Loading({ what = "Načítavam", shape = "cards" }: { what?: string; shape?: "cards" | "rows" | "tiles" }) {
@@ -221,6 +221,18 @@ export function CardModal({
     };
   }, [onClose]);
   const main = cardEur(card, usd);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [alts, setAlts] = useState<{ l: string; i: string }[]>([]);
+  useEffect(() => {
+    setPreview(null);
+    setAlts([]);
+    if (!card.imgBase) return;
+    let live = true;
+    loadCardAlts().then((m) => live && setAlts(m[card.code] ?? []));
+    return () => {
+      live = false;
+    };
+  }, [card.id, card.code, card.imgBase]);
   const { user: me } = useAuth();
   const [trade, setTrade] = useState("");
   const toTrade = async (kind: "offer" | "want") => {
@@ -246,7 +258,7 @@ export function CardModal({
         </button>
         <div className="cd-art">
           <Foil holo={!!card.v} className="big">
-            <CardImg card={card} full eager />
+            <CardImg key={preview ?? card.img} card={preview ? { ...card, img: preview.replace("_200w", "_in_400x400"), imgBase: false } : card} full eager />
           </Foil>
         </div>
         <div className="cd-head">
@@ -313,6 +325,20 @@ export function CardModal({
           )}
         </div>
         <div className="cd-rest">
+          {alts.length > 0 && (
+            <section className="cd-looks" aria-label="Možné vzhľady">
+              <h3>Možné vzhľady ({alts.length})</h3>
+              <p className="tiny muted">Známe verzie tejto karty. Cardmarket neuvádza, ktorá z nich patrí k tejto cene, tak si porovnaj pečiatku alebo obrázok.</p>
+              <div className="cd-looks-list">
+                {alts.map((a) => (
+                  <button key={a.i} className={preview === a.i ? "on" : ""} aria-pressed={preview === a.i} title={a.l} onClick={() => setPreview(preview === a.i ? null : a.i)}>
+                    <img src={a.i} alt={`${card.name}: ${a.l}`} loading="lazy" />
+                    <span>{a.l}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
           {stats.length > 0 && (
             <div className="cd-stats">
               {stats.map(([k, v]) => (

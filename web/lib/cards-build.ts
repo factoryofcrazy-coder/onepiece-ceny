@@ -1,5 +1,5 @@
 import { cardmarketPrices } from "./cardmarket";
-import { applyPromoImages, loadCmProducts, loadTcgProducts } from "./promo-images";
+import { applyPromoImages, buildCardAlts, CardAlt, loadCmProducts, loadTcgProducts } from "./promo-images";
 // Zostavenie databázy One Piece kariet z OPTCG API (zadarmo, bez kľúča) + ceny z Cardmarketu (lib/cardmarket.ts).
 // Používa ho /api/cards (záloha) aj skript scripts/build-cards.ts (denne cez GitHub Actions → docs/data/cards.json).
 
@@ -191,8 +191,11 @@ export async function buildCards() {
   } catch (e: any) {
     console.error("Cardmarket ceny zlyhali:", e?.message ?? e);
   }
+  let alts: Record<string, CardAlt[]> = {};
   try {
-    const stats = applyPromoImages(out as any[], await loadCmProducts(), await loadTcgProducts());
+    const tcg = await loadTcgProducts();
+    const stats = applyPromoImages(out as any[], await loadCmProducts(), tcg);
+    alts = buildCardAlts(out as any[], tcg);
     console.log(`Obrázky: presné ${stats.exact}, doplnené ${stats.filled}, ilustračné ${stats.approx}, bez obrázka ${stats.without}`);
   } catch (e: any) {
     console.error("Obrázky promo verzií zlyhali:", e?.message ?? e);
@@ -203,5 +206,6 @@ export async function buildCards() {
     cmCards: cmCount,
     sets: [...sets].map(([id, name]) => ({ id, name })),
     cards: out,
+    alts, // ukladá sa do samostatného súboru, sťahuje sa až v detaile karty
   };
 }
