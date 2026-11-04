@@ -41,4 +41,10 @@ describe("applyPromoImages", () => {
     expect(b.img).toBe("");
     expect(r.filled).toBe(1);
   });
+
+  it("číslo v zátvorke neznamená inú verziu", () => {
+    const a = card("EB05-061", "EB05-061", undefined, "");
+    applyPromoImages([a], [], [prod("EB-05", "EB05-061", "Nami (061)"), prod("EB-05", "EB05-061", "Nami (061) (Alternate Art)")]);
+    expect(a.img).toContain("_in_400x400");
+  });
 });

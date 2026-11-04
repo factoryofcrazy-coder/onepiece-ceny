@@ -66,7 +66,8 @@ export function applyPromoImages(cards: CardRow[], cm: CmProduct[], tcg: TcgProd
   let filled = 0;
   for (const c of cards) {
     if (c.img || c.cmId || c.v || c.set === "DON") continue;
-    const plain = (byNumber.get(c.code) ?? []).filter((p) => !/[(\[]/.test(p.name));
+    // „Nami (061)“ je základná verzia, zátvorka s číslom nerozlišuje; „(Alternate Art)“ áno
+    const plain = (byNumber.get(c.code) ?? []).filter((p) => !/[(\[]/.test(p.name.replace(/\(\d{1,3}\)/g, "")));
     if (plain.length === 1) {
       c.img = large(plain[0].img);
       filled++;
