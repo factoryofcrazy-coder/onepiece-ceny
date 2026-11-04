@@ -885,3 +885,23 @@ body.in-game .chatd { display: none; }
 .cd-looks-list img { width: 100%; aspect-ratio: 5 / 7; object-fit: cover; border-radius: 5px; background: var(--sea-2); }
 .cd-looks-list span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
 .bot-levels { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+
+/* ranky a levely */
+.rk-badge { display: inline-flex; align-items: center; gap: 4px; margin-left: 6px; font: 600 11px/1 var(--body); vertical-align: middle; white-space: nowrap; }
+.rk-ic { flex: none; vertical-align: -3px; }
+.rk-lv { color: var(--muted); }
+.rk-card { gap: 14px; }
+.rk-top { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rk-top > div { display: flex; flex-direction: column; gap: 6px; }
+.rk-big { font: 700 18px/1.2 var(--body); }
+.rk-bar { height: 8px; border-radius: 99px; background: rgba(6, 18, 31, .7); overflow: hidden; }
+.rk-bar i { display: block; height: 100%; background: linear-gradient(90deg, #d99a2e, var(--gold)); }
+.rk-h { margin: 4px 0 0; font-size: 14px; }
+.rk-list, .rk-ranks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.rk-list li { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+.rk-list i { display: block; font-style: normal; }
+.rk-ranks li { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 8px; border-radius: 8px; }
+.rk-ranks li i { margin-left: auto; font-style: normal; }
+.rk-ranks li.on { background: rgba(242, 184, 75, .12); }
+@media (max-width: 480px) { .rk-top { grid-template-columns: 1fr; } }
+@media (max-width: 720px) { .rk-name { display: none; } }

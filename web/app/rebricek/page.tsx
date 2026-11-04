@@ -1,4 +1,5 @@
 "use client";
+import { UserBadge, useBadges } from "@/lib/gamify";
 import { plural } from "@/lib/sk";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -12,6 +13,7 @@ import { ago, byCodeOf, GameRow, Rating } from "@/lib/game";
 import { sb } from "@/lib/supabase";
 
 function RankingPage() {
+  const badges = useBadges();
   const { user, loading } = useAuth();
   const { data: cards } = useCards();
   const byCode = useMemo(() => byCodeOf(cards?.cards), [cards]);
@@ -109,6 +111,7 @@ function RankingPage() {
                     <span className="who">
                       <span className="av">{nm(r.user_id).slice(0, 1).toUpperCase()}</span>
                       {nm(r.user_id)}
+                      <UserBadge badge={{ elo: r.elo, games: r.games, xp: badges.get(r.user_id)?.xp ?? 0 }} />
                       {r.user_id === user.id && <span className="tag dim">ty</span>}
                     </span>
                   </td>

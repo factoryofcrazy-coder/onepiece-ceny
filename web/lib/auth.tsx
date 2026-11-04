@@ -42,6 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     profilesCache = null;
     setProfile(data ?? { id: userId, username: null });
     setIsAdmin(admin.data === true);
+    sb().rpc("xp_daily").then(() => {}); // XP za dennú návštevu, databáza pustí len raz za deň
   }, [userId]);
 
   useEffect(() => {
