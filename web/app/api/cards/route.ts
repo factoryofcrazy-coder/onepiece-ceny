@@ -30,6 +30,7 @@ export async function GET() {
         if (old) return old;
         throw e;
       }));
+    delete (data as any).alts; // zostavenie naživo: možné vzhľady sa posielajú zvlášť
     return Response.json(data, {
       headers: { "Cache-Control": "public, max-age=600, s-maxage=86400, stale-while-revalidate=172800" },
     });

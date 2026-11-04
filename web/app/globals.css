@@ -877,3 +877,10 @@ body.in-game .chatd { display: none; }
 .cd-approx { display: block; flex-basis: 100%; margin-top: 4px; }
 .app-steps { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; line-height: 1.5; }
 .foot-links { flex-wrap: wrap; }
+.cd-looks h3 { margin: 0 0 4px; font-size: 15px; }
+.cd-looks p { margin: 0 0 8px; }
+.cd-looks-list { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; }
+.cd-looks-list button { flex: 0 0 84px; display: flex; flex-direction: column; gap: 4px; padding: 3px; background: none; border: 1px solid transparent; border-radius: 8px; color: var(--muted); cursor: pointer; font: 500 10px/1.25 var(--body); text-align: left; }
+.cd-looks-list button.on { border-color: var(--gold); color: var(--text); }
+.cd-looks-list img { width: 100%; aspect-ratio: 5 / 7; object-fit: cover; border-radius: 5px; background: var(--sea-2); }
+.cd-looks-list span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
