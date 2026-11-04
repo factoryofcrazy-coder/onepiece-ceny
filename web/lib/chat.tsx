@@ -15,10 +15,13 @@ type ChatState = {
   msgs: ChatMsg[] | null; // viditeľné správy, null = ešte sa načítavajú
   unread: number;
   error: string;
+  notice: string;
+  online: number; // koľko prihlásených má web práve otvorený
   bans: ChatBan[];
   send: (body: string) => Promise<boolean>;
   remove: (id: number) => Promise<void>;
   setBan: (uid: string, banned: boolean) => Promise<void>;
+  report: (id: number) => Promise<void>;
   markSeen: () => void;
 };
 
@@ -26,10 +29,13 @@ const Ctx = createContext<ChatState>({
   msgs: null,
   unread: 0,
   error: "",
+  notice: "",
+  online: 0,
   bans: [],
   send: async () => false,
   remove: async () => {},
   setBan: async () => {},
+  report: async () => {},
   markSeen: () => {},
 });
 
@@ -39,6 +45,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const [all, setAll] = useState<ChatMsg[] | null>(null);
   const [seen, setSeen] = useState(0);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [online, setOnline] = useState(0);
   const [bans, setBans] = useState<ChatBan[]>([]);
 
   const merge = useCallback((incoming: ChatMsg[]) => {
@@ -63,14 +71,18 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setAll(null);
+    setOnline(0);
     if (!userId) return;
     // správy sa dotiahnu po pripojení (aj po výpadku) a po návrate do okna, inak chodia naživo
     const ch = sb()
-      .channel("chat-room")
+      .channel("chat-room", { config: { presence: { key: userId } } })
+      .on("presence", { event: "sync" }, () => setOnline(Object.keys(ch.presenceState()).length))
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages" }, (p) => merge([p.new as ChatMsg]))
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "chat_messages" }, (p) => merge([p.new as ChatMsg]))
       .subscribe((status) => {
-        if (status === "SUBSCRIBED") load();
+        if (status !== "SUBSCRIBED") return;
+        load();
+        ch.track({});
       });
     const onVisible = () => {
       if (!document.hidden) load();
@@ -144,7 +156,18 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     [loadBans],
   );
 
-  const value = useMemo(() => ({ msgs, unread, error, bans, send, remove, setBan, markSeen }), [msgs, unread, error, bans, send, remove, setBan, markSeen]);
+  const report = useCallback(async (id: number) => {
+    setError("");
+    setNotice("");
+    const { error: e } = await sb().rpc("chat_report_message", { p_id: id });
+    if (e) return setError(e.code === "P0001" ? e.message : "Správu sa nepodarilo nahlásiť. Skús to znova.");
+    setNotice("Ďakujeme, správu si pozrie správca.");
+  }, []);
+
+  const value = useMemo(
+    () => ({ msgs, unread, error, notice, online, bans, send, remove, setBan, report, markSeen }),
+    [msgs, unread, error, notice, online, bans, send, remove, setBan, report, markSeen],
+  );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

@@ -871,3 +871,5 @@ body.in-game .chatd { display: none; }
   .chatx-tools { opacity: 0; transition: opacity .15s; }
   .chatx-msg:hover .chatx-tools, .chatx-msg:focus-within .chatx-tools { opacity: 1; }
 }
+.chatx-online { margin-left: 8px; font-weight: 500; font-family: var(--body); }
+.chatx-page h1 .chatx-online { font-size: 13px; }

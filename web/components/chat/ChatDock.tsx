@@ -21,7 +21,7 @@ const Icon = () => (
 export default function ChatDock() {
   const path = usePathname();
   const { user, loading } = useAuth();
-  const { unread } = useChat();
+  const { unread, online } = useChat();
   const [open, setOpen] = useState(false);
   const hidden = HIDE_ON.some((p) => path === p || path.startsWith(p + "/"));
 
@@ -54,7 +54,10 @@ export default function ChatDock() {
       {open ? (
         <aside className="chatd-panel" aria-label="Chat">
           <header className="chatd-head">
-            <b>Chat</b>
+            <span>
+              <b>Chat</b>
+              {online > 0 && <span className="tiny muted chatx-online">online: {online}</span>}
+            </span>
             <button className="x-plain" onClick={() => toggle(false)} aria-label="Zbaliť chat">
               ×
             </button>

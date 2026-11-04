@@ -22,7 +22,7 @@ export default function Privacy() {
         <li><b>Ponuky na trhovisku a kontakt, ktorý k nim vyplníš:</b> vidia ich všetci prihlásení, preto uvádzaj len kontakt, ktorý chceš zverejniť.</li>
         <li><b>Hry a hodnotenie:</b> výsledky, ELO a mená hráčov vidia prihlásení hráči, karty v ruke súper nevidí.</li>
         <li><b>Hlásenia v Reporte:</b> text, stav a odpoveď správcu sú verejné pre každého, aj neprihláseného, ale bez tvojho mena. Kontakt, typ prehliadača a väzbu na účet vidí len správca. Hlásenie z hry obsahuje aj stav hry, ktorý vidí len správca. Do textu nepíš osobné údaje.</li>
-        <li><b>Chat:</b> správy a tvoju prezývku vidia všetci prihlásení. Správca môže správy mazať a zablokovať písanie. Správy sa mažú po 30 dňoch alebo so zmazaním účtu.</li>
+        <li><b>Chat:</b> správy a tvoju prezývku vidia všetci prihlásení. Správca môže správy mazať a zablokovať písanie. Ak správu nahlásiš, správca vidí jej text a kto ju nahlásil. Počet ľudí online je len číslo, bez mien. Správy sa mažú po 30 dňoch alebo so zmazaním účtu.</li>
       </ul>
 
       <h2>Skener a kamera</h2>

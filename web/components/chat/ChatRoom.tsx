@@ -15,7 +15,7 @@ function fmtTime(ts: string) {
 /** Miestnosť bez hlavičky – používa ju panel na PC aj stránka /chat. */
 export default function ChatRoom() {
   const { user, isAdmin } = useAuth();
-  const { msgs, error, bans, send, remove, setBan, markSeen } = useChat();
+  const { msgs, error, notice, bans, send, remove, setBan, report, markSeen } = useChat();
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [atBottom, setAtBottom] = useState(true);
@@ -87,12 +87,19 @@ export default function ChatRoom() {
               <div className="chatx-head">
                 <b>{m.username}</b>
                 <span className="tiny muted">{fmtTime(m.created_at)}</span>
-                {isAdmin && (
+                {(isAdmin || m.user_id !== user.id) && (
                   <span className="chatx-tools">
-                    <button className="link tiny" onClick={() => remove(m.id)}>
-                      Zmazať
-                    </button>
-                    {m.user_id !== user.id && (
+                    {!isAdmin && (
+                      <button className="link tiny" onClick={() => report(m.id)}>
+                        Nahlásiť
+                      </button>
+                    )}
+                    {isAdmin && (
+                      <button className="link tiny" onClick={() => remove(m.id)}>
+                        Zmazať
+                      </button>
+                    )}
+                    {isAdmin && m.user_id !== user.id && (
                       <button className="link tiny" onClick={() => setBan(m.user_id, !banned.has(m.user_id))}>
                         {banned.has(m.user_id) ? "Odblokovať" : "Zablokovať"}
                       </button>
@@ -117,6 +124,7 @@ export default function ChatRoom() {
         </button>
       </form>
       {error && <p className="badc small">{error}</p>}
+      {notice && !error && <p className="okc small">{notice}</p>}
       <p className="tiny muted chatx-rules">
         Buď slušný a nepíš osobné údaje. Správy sa po 30 dňoch mažú. Problém s webom patrí do <Link href="/report">Reportu</Link>.
       </p>

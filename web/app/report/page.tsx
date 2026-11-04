@@ -94,6 +94,7 @@ function AdminBox({ task, onSaved }: { task: Task; onSaved: () => void }) {
 
 export default function Report() {
   const { user, isAdmin, loading } = useAuth();
+  const userId = user?.id;
   const [kind, setKind] = useState("bug");
   const [message, setMessage] = useState("");
   const [page, setPage] = useState("");
@@ -106,6 +107,7 @@ export default function Report() {
   const [tasks, setTasks] = useState<Task[] | null>(null);
   const [loadErr, setLoadErr] = useState(false);
   const [filter, setFilter] = useState("open");
+  const [myIds, setMyIds] = useState<Set<number>>(new Set());
 
   const load = useCallback(async () => {
     const { data, error } = isAdmin
@@ -113,7 +115,13 @@ export default function Report() {
       : await sb().from("feedback").select(COLUMNS).order("created_at", { ascending: false }).limit(300);
     setLoadErr(!!error);
     if (!error) setTasks((data as Task[]) ?? []);
-  }, [isAdmin]);
+    if (userId) {
+      const mine = await sb().rpc("feedback_my_ids");
+      setMyIds(new Set(((mine.data as number[]) ?? []).map(Number)));
+    } else {
+      setMyIds(new Set());
+    }
+  }, [isAdmin, userId]);
 
   useEffect(() => {
     if (!loading) load();
@@ -151,11 +159,18 @@ export default function Report() {
     load();
   };
 
-  const counts = useMemo(() => Object.fromEntries(FILTERS.map((f) => [f.id, (tasks ?? []).filter((t) => f.test(t.status)).length])), [tasks]);
+  const counts = useMemo(
+    () => ({
+      ...Object.fromEntries(FILTERS.map((f) => [f.id, (tasks ?? []).filter((t) => f.test(t.status)).length])),
+      mine: (tasks ?? []).filter((t) => myIds.has(Number(t.id))).length,
+    }),
+    [tasks, myIds],
+  ) as Record<string, number>;
   const shown = useMemo(() => {
+    if (filter === "mine") return (tasks ?? []).filter((t) => myIds.has(Number(t.id)));
     const f = FILTERS.find((x) => x.id === filter)!;
     return (tasks ?? []).filter((t) => f.test(t.status));
-  }, [tasks, filter]);
+  }, [tasks, filter, myIds]);
   const active = KINDS.find((k) => k.id === kind)!;
 
   return (
@@ -214,6 +229,11 @@ export default function Report() {
             {f.label} ({counts[f.id] ?? 0})
           </button>
         ))}
+        {user && (
+          <button role="tab" aria-selected={filter === "mine"} className={filter === "mine" ? "on" : ""} onClick={() => setFilter("mine")}>
+            Moje ({counts.mine ?? 0})
+          </button>
+        )}
       </div>
 
       {loadErr ? (
@@ -238,6 +258,8 @@ export default function Report() {
                 <span className={`rep-status s-${t.status}`}>{STATUS[t.status]}</span>
                 <span className="tag dim">{KINDS.find((k) => k.id === t.kind)?.short ?? "Iné"}</span>
                 {t.source === "game" && <span className="tag dim">Z hry</span>}
+                {t.source === "chat" && <span className="tag dim">Z chatu</span>}
+                {myIds.has(Number(t.id)) && <span className="tag dim">Moje</span>}
                 {t.hidden && <span className="tag dim">Skryté</span>}
                 <span className="tiny muted">{fmtDate(t.created_at)}</span>
               </div>
