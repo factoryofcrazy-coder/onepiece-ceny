@@ -1,6 +1,6 @@
 // Ceny zo scrapera (GitHub Pages). Najprv docs/data/prices.json, inak vytiahne dáta zo stránky (const P={...}).
 // ?game=pokemon → docs/data/pokemon.json
-import { OLD_SITE } from "@/lib/config";
+import { OLD_SITE } from "@/lib/data-source";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +29,7 @@ export async function GET(req: Request) {
         })
       : ((await tryJson("prices.json").catch(() => null)) ?? (await fromHtml()));
     data.hist = undefined; // história je veľká, nová stránka ju zatiaľ nepotrebuje
+    data.repo = undefined; // adresa zdroja sa von neposiela
     return Response.json(data, {
       headers: { "Cache-Control": "public, s-maxage=120, stale-while-revalidate=60" },
     });
