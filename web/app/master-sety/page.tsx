@@ -72,7 +72,7 @@ function OpMasterSets() {
         <div>
           <h1>Master sety</h1>
           <p className="muted small">
-            Spolu {tot.have} / {tot.all} kariet · hodnota kolekcie {eur(tot.value)} (Cardmarket)
+            Spolu {tot.have} / {tot.all} kariet · hodnota zbierky {eur(tot.value)} (Cardmarket)
           </p>
         </div>
         <div className="row gap">

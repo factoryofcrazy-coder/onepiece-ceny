@@ -22,7 +22,7 @@ type Arche = { leader: string; leaderCard?: Card; name: string; best: Scored; to
 
 const SORTS = {
   ready: "Najbližšie k dokončeniu",
-  cheap: "Najlacnejšie dokúpiť",
+  cheap: "Najlacnejšie na dokúpenie",
   meta: "Najsilnejšie v mete",
 } as const;
 
@@ -107,7 +107,7 @@ export default function Recommend() {
         Turnajové decky sa teraz nepodarilo načítať ({mErr}). Skús to o chvíľu znova.
       </div>
     );
-  if (!cards || !meta || qLoading) return <Loading what="Porovnávam turnajové decky s tvojou kolekciou" shape="tiles" />;
+  if (!cards || !meta || qLoading) return <Loading what="Porovnávam turnajové decky s tvojou zbierkou" shape="tiles" />;
 
   const save = async (a: Arche) => {
     setSaving(a.leader);
@@ -133,7 +133,7 @@ export default function Recommend() {
           <Link href="/decky" className="small">
             ← Decky
           </Link>
-          <h1>Čo si viem postaviť</h1>
+          <h1>Čo si viem poskladať</h1>
           <p className="muted">
             {meta.decks.length} top 8 deckov z {meta.tournaments} najväčších turnajov za posledný mesiac (Limitless TCG),
             porovnaných s tvojimi {ownedTotal} kartami.
@@ -150,7 +150,7 @@ export default function Recommend() {
 
       {ownedTotal === 0 && (
         <div className="empty">
-          V kolekcii zatiaľ nemáš žiadne karty. <Link href="/import">Naimportuj ich z HoloDex</Link> alebo si ich označ v{" "}
+          V zbierke zatiaľ nemáš žiadne karty. <Link href="/import">Naimportuj ich z HoloDex</Link> alebo si ich označ v{" "}
           <Link href="/karty">Kartách</Link>.
         </div>
       )}
@@ -172,7 +172,7 @@ export default function Recommend() {
                     <span className="muted small">{a.leader}</span>
                   </div>
                   <p className="small muted rec-meta">
-                    {a.top8}× v top 8{a.wins ? `, ${a.wins}× víťaz` : ""}. Najbližší list: {b.deck.player},{" "}
+                    {a.top8}× v top 8{a.wins ? `, ${a.wins}× víťaz` : ""}. Najbližší decklist: {b.deck.player},{" "}
                     {b.deck.placing}. miesto na {b.deck.tournament} ({b.deck.players} hráčov)
                   </p>
                   <div className="rec-progress">

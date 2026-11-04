@@ -116,7 +116,7 @@ export function OwnerPicker({ value, onChange }: { value: string | null; onChang
   if (!user || all.length < 2 || !SHOW_OTHER_COLLECTIONS) return null;
   return (
     <label className="field">
-      <span>Kolekcia</span>
+      <span>Zbierka</span>
       <select value={value ?? user.id} onChange={(e) => onChange(e.target.value)}>
         {all.map((p) => (
           <option key={p.id} value={p.id}>

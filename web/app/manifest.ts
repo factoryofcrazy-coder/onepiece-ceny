@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Grand Line Tracker",
     short_name: "Grand Line",
-    description: "One Piece a Pokémon TCG – ceny v SK/CZ obchodoch, skener kariet, kolekcia a decky",
+    description: "One Piece a Pokémon TCG – ceny v SK/CZ obchodoch, skener kariet, zbierka a decky",
     lang: "sk",
     start_url: "/",
     scope: "/",

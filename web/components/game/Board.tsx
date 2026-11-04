@@ -1,6 +1,7 @@
 "use client";
 // Hracia plocha – spoločná pre hru proti botovi, dvoch na jednom zariadení aj online.
 // Board dostane stav (pri online len pohľad hráča) a posiela akcie cez onAction; pravidlá stráži engine.
+import { kartyAkuz } from "@/lib/sk";
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { CardImg } from "@/components/ui";
 import type { Card } from "@/lib/data";
@@ -338,7 +339,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
           {d.type === "Character" && hasKw(s, iid, "rush") && <i className="rush" title="Rush">R</i>}
           {hasKw(s, iid, "doubleAttack") && <i className="da" title="Double Attack">2×</i>}
         </span>
-        {!d.scripted && <span className="warn" title="Efekt tejto karty zatiaľ nepoznáme, hrá sa bez neho">!</span>}
+        {!d.scripted && <span className="warn" title="Efekt tejto karty v hre ešte nie je, hrá sa bez neho">!</span>}
         {c.don > 0 && (
           <span className="dons" title={`${c.don} DON!! pripojené`}>
             {Array.from({ length: Math.min(c.don, 4) }, (_, i) => (
@@ -934,7 +935,7 @@ export default function Board({ s, me, byCode, mode, onAction, busy, error, elo,
       <div className="gtable" ref={tableRef}>
         <div className="gtopbar">
           {Plate(opp)}
-          <span className="bks" aria-label={`Súper má v ruke ${oppHand} kariet`} role="img">
+          <span className="bks" aria-label={`Súper má v ruke ${kartyAkuz(oppHand)}`} role="img">
             {Array.from({ length: Math.min(oppHand, 12) }, (_, i) => (
               <i key={i} className="bk back" style={{ ["--i" as any]: i, ["--mid" as any]: (Math.min(oppHand, 12) - 1) / 2 }} />
             ))}
@@ -1215,7 +1216,7 @@ function PeekText({ s, iid }: { s: GameState; iid: string }) {
           </span>
         )}
       </div>
-      {!d.scripted && <p className="warnline small" style={{ margin: 0 }}>Efekt tejto karty zatiaľ nepoznáme, hrá sa bez neho.</p>}
+      {!d.scripted && <p className="warnline small" style={{ margin: 0 }}>Efekt tejto karty v hre ešte nie je, hrá sa bez neho.</p>}
       {d.text && <div className="txt">{richText(d.text)}</div>}
     </>
   );

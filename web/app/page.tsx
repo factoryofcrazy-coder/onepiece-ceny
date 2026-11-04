@@ -229,7 +229,7 @@ function ProductCard({
       <div className="row between">
         {p.offers.length > 4 ? (
           <button className="link small" onClick={() => setOpen(!open)}>
-            {open ? "menej" : `všetkých ${p.offers.length} obchodov`}
+            {open ? "menej" : `všetky obchody (${p.offers.length})`}
           </button>
         ) : (
           <span />

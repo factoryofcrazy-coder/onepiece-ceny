@@ -86,7 +86,7 @@ export default function TradePage() {
         <div>
           <h1>Trhovisko</h1>
           <p className="muted">
-            Označ karty, ktoré ponúkaš na výmenu alebo hľadáš. Pri zhode sa ozvi cez kontakt v profile.
+            Pridaj karty, ktoré ponúkaš alebo hľadáš. Keď niekto ponúka to, čo hľadáš, ozvi sa mu cez jeho kontakt.
             {matches > 0 && (
               <>
                 {" "}
@@ -116,7 +116,7 @@ export default function TradePage() {
           <label className="tr-contact">
             <span>Tvoj kontakt (Discord, Instagram, Messenger…) – uvidia ho ostatní pri tvojich ponukách</span>
             <div className="row gap">
-              <input value={me.contact} onChange={(e) => me.setContact(e.target.value)} placeholder="napr. Discord: hobo#1234" maxLength={120} />
+              <input value={me.contact} onChange={(e) => me.setContact(e.target.value)} placeholder="napr. Discord: Anon" maxLength={120} />
               <button className="btn sm" onClick={async () => flash((await me.save(me.contact)) ?? "Kontakt uložený")}>
                 Uložiť
               </button>

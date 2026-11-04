@@ -87,7 +87,7 @@ function OpCardsPage() {
                 · vlastnené {owned.length} · hodnota {eur(value)}
               </>
             )}
-            {!user && " · prihlás sa, aby si si mohol značiť kolekciu"}
+            {!user && " · prihlás sa a môžeš si značiť karty v zbierke"}
           </p>
         </div>
         <div className="row gap wrapr">

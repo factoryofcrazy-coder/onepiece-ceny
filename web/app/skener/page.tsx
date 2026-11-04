@@ -313,7 +313,7 @@ export default function ScannerPage() {
       setMsg(
         e?.name === "NotAllowedError"
           ? "Prístup ku kamere je zamietnutý – povoľ ho v nastaveniach prehliadača."
-          : `Kamera nejde spustiť: ${e?.message || e}`,
+          : `Kameru sa nepodarilo spustiť: ${e?.message || e}`,
       );
     }
   }, [onResult]);
