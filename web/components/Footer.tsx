@@ -18,6 +18,7 @@ export default function Footer() {
         </>
       )}
       <div className="foot-links">
+        <Link href="/aplikacia">Aplikácia do mobilu</Link>
         <Link href="/report">Report</Link>
         <Link href="/sukromie">Zásady súkromia</Link>
       </div>
