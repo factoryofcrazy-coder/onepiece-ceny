@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-04T13:24:00Z",
+ "updated": "2026-11-04T13:30:09Z",
  "fx": {
   "CZK": 24.343,
   "USD": 1.1179,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "veselydrak": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -4248,7 +4248,7 @@
    ]
   },
   "kartovo": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -4416,7 +4416,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -4701,7 +4701,7 @@
    ]
   },
   "pompo_sk": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -4721,15 +4721,6 @@
      "eur": 109.8,
      "inStock": true,
      "img": "https://pompo.sk/data/tmp/2/8/517108_2.jpg?1777026105_1"
-    },
-    {
-     "name": "Pokémon TCG: ME04 Chaos Rising - Booster",
-     "url": "https://pompo.sk/pokemon-tcg-me04-chaos-rising-booster_z267629/",
-     "price": 7.39,
-     "currency": "EUR",
-     "eur": 7.39,
-     "inStock": false,
-     "img": "https://pompo.sk/data/tmp/2/7/517097_2.jpg?1777026098_1"
     },
     {
      "name": "Pokémon TCG: ME04 Chaos Rising - Elite Trainer Box",
@@ -4759,15 +4750,6 @@
      "img": "https://pompo.sk/data/tmp/2/6/496816_2.jpg?1770999986_1"
     },
     {
-     "name": "Pokémon TCG: First Partners Illustration Collection - Series 3",
-     "url": "https://pompo.sk/pokemon-tcg-first-partners-illustration-collection-series-3_z273805/",
-     "price": 38.99,
-     "currency": "EUR",
-     "eur": 38.99,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/5/544875_2.jpg?1786443607_1"
-    },
-    {
      "name": "Pokémon TCG: Mega Charizard Tin",
      "url": "https://pompo.sk/pokemon-tcg-mega-charizard-tin_z262208/",
      "price": 56.8,
@@ -4775,6 +4757,15 @@
      "eur": 56.8,
      "inStock": true,
      "img": "https://pompo.sk/data/tmp/2/7/496807_2.jpg?1770999984_1"
+    },
+    {
+     "name": "Pokémon TCG: ME02.5 Ascended Heroes - First Partner Deluxe Pin Collection",
+     "url": "https://pompo.sk/pokemon-tcg-me02-5-ascended-heroes-first-partner-deluxe-pin-collection_z264800/",
+     "price": 82.0,
+     "currency": "EUR",
+     "eur": 82.0,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/1/509511_2.jpg?1774520520_1"
     },
     {
      "name": "Pokémon TCG: First Partner Illustration Collection - Series 2",
@@ -4786,6 +4777,24 @@
      "img": "https://pompo.sk/data/tmp/2/9/517089_2.jpg?1777026093_1"
     },
     {
+     "name": "Pokémon TCG: ME02.5 Ascended Heroes - Elite Trainer Box",
+     "url": "https://pompo.sk/pokemon-tcg-me02-5-ascended-heroes-elite-trainer-box_z262209/",
+     "price": 203.5,
+     "currency": "EUR",
+     "eur": 203.5,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/1/496811_2.jpg?1770999985_1"
+    },
+    {
+     "name": "Pokémon TCG: Battle Academy 2024 CZ/SK - kartová hra",
+     "url": "https://pompo.sk/pokemon-tcg-battle-academy-2024-cz-sk-kartova-hra_z211025/",
+     "price": 41.99,
+     "currency": "EUR",
+     "eur": 41.99,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/1/355831_2.jpg?1723023348_1"
+    },
+    {
      "name": "Pokémon TCG: SV10 Destined Rivals - Booster",
      "url": "https://pompo.sk/pokemon-tcg-sv10-destined-rivals-booster_z236308/",
      "price": 10.99,
@@ -4795,6 +4804,15 @@
      "img": "https://pompo.sk/data/tmp/2/2/415522_2.jpg?1749104694_1"
     },
     {
+     "name": "Pokémon TCG: First Partners Illustration Collection - Series 3",
+     "url": "https://pompo.sk/pokemon-tcg-first-partners-illustration-collection-series-3_z273805/",
+     "price": 38.99,
+     "currency": "EUR",
+     "eur": 38.99,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/5/544875_2.jpg?1786443607_1"
+    },
+    {
      "name": "Pokémon TCG: Lumiose City Mini Tin",
      "url": "https://pompo.sk/pokemon-tcg-lumiose-city-mini-tin_z267625/",
      "price": 16.2,
@@ -4802,15 +4820,6 @@
      "eur": 16.2,
      "inStock": true,
      "img": "https://pompo.sk/data/tmp/2/5/517075_2.jpg?1777026085_1"
-    },
-    {
-     "name": "Pokémon TCG: ME02.5 Ascended Heroes - First Partner Deluxe Pin Collection",
-     "url": "https://pompo.sk/pokemon-tcg-me02-5-ascended-heroes-first-partner-deluxe-pin-collection_z264800/",
-     "price": 82.0,
-     "currency": "EUR",
-     "eur": 82.0,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/1/509511_2.jpg?1774520520_1"
     },
     {
      "name": "Pokémon TCG: Pokémon Day 2026 Collection",
@@ -4831,15 +4840,6 @@
      "img": "https://pompo.sk/data/tmp/2/1/517081_2.jpg?1777026089_1"
     },
     {
-     "name": "Pokémon TCG: ME02.5 Ascended Heroes - Elite Trainer Box",
-     "url": "https://pompo.sk/pokemon-tcg-me02-5-ascended-heroes-elite-trainer-box_z262209/",
-     "price": 203.5,
-     "currency": "EUR",
-     "eur": 203.5,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/1/496811_2.jpg?1770999985_1"
-    },
-    {
      "name": "Pokémon TCG: ME02.5 Ascended Heroes - Tech Sticker Collection, viac druhov",
      "url": "https://pompo.sk/pokemon-tcg-me02-5-ascended-heroes-tech-sticker-collection-viac-druhov_z260182/",
      "price": 64.99,
@@ -4847,15 +4847,6 @@
      "eur": 64.99,
      "inStock": true,
      "img": "https://pompo.sk/data/tmp/2/2/494322_2.jpg?1769782861_1"
-    },
-    {
-     "name": "Pokémon TCG: Battle Academy 2024 CZ/SK - kartová hra",
-     "url": "https://pompo.sk/pokemon-tcg-battle-academy-2024-cz-sk-kartova-hra_z211025/",
-     "price": 41.99,
-     "currency": "EUR",
-     "eur": 41.99,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/1/355831_2.jpg?1723023348_1"
     },
     {
      "name": "Pokémon TCG: Mega Greninja ex Premium Collection",
@@ -4867,24 +4858,6 @@
      "img": "https://pompo.sk/data/tmp/2/9/533999_2.jpg?1783491700_1"
     },
     {
-     "name": "Pokémon TCG: ME05 Pitch Black - Booster",
-     "url": "https://pompo.sk/pokemon-tcg-me05-pitch-black-booster_z272061/",
-     "price": 7.0,
-     "currency": "EUR",
-     "eur": 7.0,
-     "inStock": false,
-     "img": "https://pompo.sk/data/tmp/2/3/533993_2.jpg?1783491695_1"
-    },
-    {
-     "name": "Pokémon TCG: ME02 Phantasmal Flames - Booster, viac druhov",
-     "url": "https://pompo.sk/pokemon-tcg-me02-phantasmal-flames-booster-viac-druhov_z257048/",
-     "price": 13.9,
-     "currency": "EUR",
-     "eur": 13.9,
-     "inStock": false,
-     "img": "https://pompo.sk/data/tmp/2/8/483438_2.jpg?1763547717_1"
-    },
-    {
      "name": "Pokémon TCG: ME05 Pitch Black - Elite Trainer Box",
      "url": "https://pompo.sk/pokemon-tcg-me05-pitch-black-elite-trainer-box_z272059/",
      "price": 89.9,
@@ -4892,6 +4865,15 @@
      "eur": 89.9,
      "inStock": false,
      "img": "https://pompo.sk/data/tmp/2/6/533986_2.jpg?1783491689_1"
+    },
+    {
+     "name": "Pokémon TCG: ME04 Chaos Rising - Booster",
+     "url": "https://pompo.sk/pokemon-tcg-me04-chaos-rising-booster_z267629/",
+     "price": 7.39,
+     "currency": "EUR",
+     "eur": 7.39,
+     "inStock": false,
+     "img": "https://pompo.sk/data/tmp/2/7/517097_2.jpg?1777026098_1"
     },
     {
      "name": "Pokémon TCG: First Partner Illustration Collection - Series 1",
@@ -4928,6 +4910,24 @@
      "eur": 6.99,
      "inStock": false,
      "img": "https://pompo.sk/data/tmp/2/2/301062_2.jpg?1706279339_1"
+    },
+    {
+     "name": "Pokémon TCG: ME05 Pitch Black - Booster",
+     "url": "https://pompo.sk/pokemon-tcg-me05-pitch-black-booster_z272061/",
+     "price": 7.0,
+     "currency": "EUR",
+     "eur": 7.0,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/3/533993_2.jpg?1783491695_1"
+    },
+    {
+     "name": "Pokémon TCG: ME02 Phantasmal Flames - Booster, viac druhov",
+     "url": "https://pompo.sk/pokemon-tcg-me02-phantasmal-flames-booster-viac-druhov_z257048/",
+     "price": 13.9,
+     "currency": "EUR",
+     "eur": 13.9,
+     "inStock": false,
+     "img": "https://pompo.sk/data/tmp/2/8/483438_2.jpg?1763547717_1"
     },
     {
      "name": "Pokémon TCG: Poké Ball Tin 2024 Reprint",
@@ -5211,7 +5211,7 @@
    ]
   },
   "gorila": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -5267,6 +5267,15 @@
      "eur": 12.17,
      "inStock": false,
      "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157829.jpg?v=17928327692"
+    },
+    {
+     "name": "Pokémon TCG: Mega Brave - Booster (japonský)",
+     "url": "https://www.gorila.sk/detail/4157839/Pokemon-TCG-Mega-Brave-Booster-japonsky",
+     "price": 7.0,
+     "currency": "EUR",
+     "eur": 7.0,
+     "inStock": false,
+     "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157839.jpg?v=17937737842"
     },
     {
      "name": "Pokémon UltraPRO: Sinnoh Alcove Click Deck Box - koženková krabička na karty",
@@ -5325,7 +5334,7 @@
    ]
   },
   "konzoliste": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -5405,7 +5414,7 @@
    ]
   },
   "gengar": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -5877,7 +5886,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -5991,7 +6000,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -6321,7 +6330,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -6670,7 +6679,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -6884,7 +6893,7 @@
    ]
   },
   "planetaher": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -7565,7 +7574,7 @@
    ]
   },
   "tlama": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -7823,7 +7832,7 @@
    ]
   },
   "pokeunited": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -8135,7 +8144,7 @@
    ]
   },
   "fyft": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -8375,7 +8384,7 @@
    ]
   },
   "imago": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -8615,7 +8624,7 @@
    ]
   },
   "dobrovsky": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -8720,7 +8729,7 @@
    ]
   },
   "svether": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -8762,7 +8771,7 @@
    ]
   },
   "pompo_cz": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -8782,6 +8791,15 @@
      "eur": 93.95,
      "inStock": true,
      "img": "https://data.pompo.cz/data/tmp/2/8/517108_2.jpg?1777026105_1"
+    },
+    {
+     "name": "Pokémon TCG: SV10 Destined Rivals - Booster",
+     "url": "https://pompo.cz/pokemon-tcg-sv10-destined-rivals-booster_z236308/",
+     "price": 249.0,
+     "currency": "CZK",
+     "eur": 10.23,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/2/415522_2.jpg?1749104694_1"
     },
     {
      "name": "Pokémon TCG: ME02.5 Ascended Heroes - ex Box",
@@ -8809,33 +8827,6 @@
      "eur": 36.93,
      "inStock": true,
      "img": "https://data.pompo.cz/data/tmp/2/5/544875_2.jpg?1786443607_1"
-    },
-    {
-     "name": "Pokémon TCG: First Partner Illustration Collection - Series 2",
-     "url": "https://pompo.cz/pokemon-tcg-first-partner-illustration-collection-series-2_z267626/",
-     "price": 999.0,
-     "currency": "CZK",
-     "eur": 41.04,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/9/517089_2.jpg?1777026093_1"
-    },
-    {
-     "name": "Pokémon TCG: Battle Academy 2024 CZ/SK - karetní hra",
-     "url": "https://pompo.cz/pokemon-tcg-battle-academy-2024-cz-sk-karetni-hra_z211025/",
-     "price": 949.0,
-     "currency": "CZK",
-     "eur": 38.98,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/1/355831_2.jpg?1723023348_1"
-    },
-    {
-     "name": "Pokémon TCG: SV10 Destined Rivals - Booster",
-     "url": "https://pompo.cz/pokemon-tcg-sv10-destined-rivals-booster_z236308/",
-     "price": 249.0,
-     "currency": "CZK",
-     "eur": 10.23,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/2/415522_2.jpg?1749104694_1"
     },
     {
      "name": "Pokémon TCG: Lumiose City Mini Tin",
@@ -8874,6 +8865,15 @@
      "img": "https://data.pompo.cz/data/tmp/2/2/494332_2.jpg?1769595848_1"
     },
     {
+     "name": "Pokémon TCG: First Partner Illustration Collection - Series 2",
+     "url": "https://pompo.cz/pokemon-tcg-first-partner-illustration-collection-series-2_z267626/",
+     "price": 999.0,
+     "currency": "CZK",
+     "eur": 41.04,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/9/517089_2.jpg?1777026093_1"
+    },
+    {
      "name": "Pokémon TCG: Mega Zygarde ex Premium Collection",
      "url": "https://pompo.cz/pokemon-tcg-mega-zygarde-ex-premium-collection_z267623/",
      "price": 1498.0,
@@ -8901,6 +8901,15 @@
      "img": "https://data.pompo.cz/data/tmp/2/2/494322_2.jpg?1769782861_1"
     },
     {
+     "name": "Pokémon TCG: Battle Academy 2024 CZ/SK - karetní hra",
+     "url": "https://pompo.cz/pokemon-tcg-battle-academy-2024-cz-sk-karetni-hra_z211025/",
+     "price": 949.0,
+     "currency": "CZK",
+     "eur": 38.98,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/1/355831_2.jpg?1723023348_1"
+    },
+    {
      "name": "Pokémon TCG: Mega Greninja ex Premium Collection",
      "url": "https://pompo.cz/pokemon-tcg-mega-greninja-ex-premium-collection_z272058/",
      "price": 1598.0,
@@ -8908,15 +8917,6 @@
      "eur": 65.65,
      "inStock": true,
      "img": "https://data.pompo.cz/data/tmp/2/9/533999_2.jpg?1783491700_1"
-    },
-    {
-     "name": "Pokémon TCG: ME05 Pitch Black - Booster",
-     "url": "https://pompo.cz/pokemon-tcg-me05-pitch-black-booster_z272061/",
-     "price": 149.0,
-     "currency": "CZK",
-     "eur": 6.12,
-     "inStock": false,
-     "img": "https://data.pompo.cz/data/tmp/2/3/533993_2.jpg?1783491695_1"
     },
     {
      "name": "Pokémon TCG: ME04 Chaos Rising - Booster",
@@ -8962,6 +8962,15 @@
      "eur": 180.17,
      "inStock": false,
      "img": "https://data.pompo.cz/data/tmp/2/2/506682_2.jpg?1773915659_1"
+    },
+    {
+     "name": "Pokémon TCG: ME05 Pitch Black - Booster",
+     "url": "https://pompo.cz/pokemon-tcg-me05-pitch-black-booster_z272061/",
+     "price": 149.0,
+     "currency": "CZK",
+     "eur": 6.12,
+     "inStock": false,
+     "img": "https://data.pompo.cz/data/tmp/2/3/533993_2.jpg?1783491695_1"
     },
     {
      "name": "Pokémon TCG: ME02 Phantasmal Flames - Booster, více druhů",
@@ -9254,8 +9263,8 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-11-04T11:28:56Z",
-   "ok": false,
+   "ts": "2026-11-04T13:30:09Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon - 30th Anniversary Celebration Coin Set - CHN",
@@ -10734,6 +10743,15 @@
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/Pok_mon_-_Paradigm_Trigger_Booster_Pack_-_KOR_eaa94b4245e650d5.webp?v=1791207486"
     },
     {
+     "name": "Pokémon - 30th Anniversary Collection 20er Display - JPN",
+     "url": "https://cardcosmos.de/products/pokemon-30th-anniversary-collection-30er-display-japanisch",
+     "price": 199.9,
+     "currency": "EUR",
+     "eur": 199.9,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/Pok_mon_-_30th_Anniversary_Collection_20er_Display_-_JPN_2cff177b3a7be7dc.webp?v=1791206111"
+    },
+    {
      "name": "Pokémon - Star Birth Booster Pack - KOR",
      "url": "https://cardcosmos.de/products/pokemon-star-birth-booster-pack-koreanisch",
      "price": 4.9,
@@ -10831,6 +10849,15 @@
      "eur": 4.9,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/Pok_mon_-_Funism_Palmsize_Wonders_Vol_3_Blind_Box_Figuren_-_CHN_de4569e27e3a5ec1.webp?v=1791205225"
+    },
+    {
+     "name": "Pokémon - 30th Anniversary Collection 20er Display - JPN + 16 Pocket Zip Premium Leather Binder - Pink",
+     "url": "https://cardcosmos.de/products/pokemon-30th-anniversary-collection-20er-display-japanisch-16-pocket-zip-premium-leather-binder-pink",
+     "price": 239.9,
+     "currency": "EUR",
+     "eur": 239.9,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/PKM30thAnniversaryBBJPN_Binder.webp?v=1791466217"
     },
     {
      "name": "Pokémon GO Dragoran-VSTAR Premier Deckhalter Kollektion - DE",
@@ -11767,24 +11794,6 @@
      "eur": 194.9,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/Pok_mon_-_30th_Anniversary_Collection_20er_Display_Ohne_Folie_-_JPN_962ed4934feac0e5.webp?v=1791205206"
-    },
-    {
-     "name": "Pokémon - 30th Anniversary Collection 20er Display - JPN",
-     "url": "https://cardcosmos.de/products/pokemon-30th-anniversary-collection-30er-display-japanisch",
-     "price": 199.9,
-     "currency": "EUR",
-     "eur": 199.9,
-     "inStock": false,
-     "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/Pok_mon_-_30th_Anniversary_Collection_20er_Display_-_JPN_2cff177b3a7be7dc.webp?v=1791206111"
-    },
-    {
-     "name": "Pokémon - 30th Anniversary Collection 20er Display - JPN + 16 Pocket Zip Premium Leather Binder - Pink",
-     "url": "https://cardcosmos.de/products/pokemon-30th-anniversary-collection-20er-display-japanisch-16-pocket-zip-premium-leather-binder-pink",
-     "price": 239.9,
-     "currency": "EUR",
-     "eur": 239.9,
-     "inStock": false,
-     "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/PKM30thAnniversaryBBJPN_Binder.webp?v=1791466217"
     },
     {
      "name": "Pokémon - Black Bolt Pack Booster Pack - KOR",
@@ -16534,13 +16543,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/PKMM6a30thAnnivBBKOR_2.webp?v=1793618622"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "playmaniac": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -16996,8 +17002,8 @@
    ]
   },
   "yonko": {
-   "ts": "2026-11-04T11:28:56Z",
-   "ok": false,
+   "ts": "2026-11-04T13:30:09Z",
+   "ok": true,
    "items": [
     {
      "name": "[S-CHN] Pokémon Box - Gengar Kartenhalter (CSU)",
@@ -20576,14 +20582,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0814/4656/8264/files/Pokemon-Jumbo-Boosterpack-chinesisch-CS1V-eternal-birth.jpg?v=1755092766"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "crispycards": {
-   "ts": "2026-11-04T11:28:56Z",
-   "ok": false,
+   "ts": "2026-11-04T13:30:09Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon  Phantasmal Flames 1-Pack Blister (ENG)",
@@ -25566,14 +25569,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0950/2733/1402/files/PokemonSilberneSturmwindeTopTrainerBox_DE.webp?v=1770996137"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "pushdich": {
-   "ts": "2026-11-04T11:28:56Z",
-   "ok": false,
+   "ts": "2026-11-04T13:30:09Z",
+   "ok": true,
    "items": [
     {
      "name": "1x Booster Pokémon 151 sv2a JP",
@@ -25713,9 +25713,9 @@
     {
      "name": "2025 Pokemon Mega Charizard X 130/094",
      "url": "https://www.pushdich-tcg.de/products/2025-topps-pokemon-mega-charizard-x-130-094",
-     "price": 310.0,
+     "price": 311.0,
      "currency": "EUR",
-     "eur": 310.0,
+     "eur": 311.0,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0600/6010/6901/files/8b8e68f4-f510-4cb3-9e93-d531d4bc61ce.jpg?v=1792509348"
     },
@@ -25737,13 +25737,10 @@
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0600/6010/6901/files/21eba0d3-ce80-431a-933c-090317251e8e.jpg?v=1783595006"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "cardcorner": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -25966,7 +25963,7 @@
    ]
   },
   "gate": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -26450,8 +26447,8 @@
    ]
   },
   "comicplanet": {
-   "ts": "2026-11-04T11:28:56Z",
-   "ok": false,
+   "ts": "2026-11-04T13:30:09Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon: Mega Evolution Delta Reign Booster Display englisch",
@@ -26889,13 +26886,10 @@
      "inStock": false,
      "img": "https://www.comicplanet.de/media/c2/35/5d/1718211841/gc-pkm-d-kp4-5-ps.png?ts=1729119451"
     }
-   ],
-   "error": "[Errno 104] Connection reset by peer",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "trader": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -27225,7 +27219,7 @@
    ]
   },
   "geodude": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -28205,8 +28199,8 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-11-04T11:28:56Z",
-   "ok": false,
+   "ts": "2026-11-04T13:30:09Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon TCG 30th Anniversary First Partner Vol. 3 Booster Display – Chinesisch",
@@ -28451,14 +28445,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/1050/1786/8620/files/PKM-PO-ETB-EN.png?v=1782656470"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "mikis": {
-   "ts": "2026-11-04T11:28:56Z",
-   "ok": false,
+   "ts": "2026-11-04T13:30:09Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon Mega-Entwicklung – Delta-Herrschaft Top-Trainer-Box (TTB) - Deutsch",
@@ -28497,11 +28488,20 @@
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/Pokemon30Jahre_Ultra-Premium-Kollektion_Tag_mitPsiana-ex-Deutsch.webp?v=1793772533"
     },
     {
+     "name": "Pokémon - 30th Anniversary Coin Set - Chinesisch (vereinfacht)",
+     "url": "https://www.mikiscardshop.at/products/pokemon-30th-anniversary-coin-set-chinesisch-vereinfacht",
+     "price": 21.99,
+     "currency": "EUR",
+     "eur": 21.99,
+     "inStock": true,
+     "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/library-2D76D2AB-0068-405A-A503-A541F1A58DA6-L0-001.jpg?v=1793797813"
+    },
+    {
      "name": "Pokémon - 30 Jahre Jubiläum 2-Pack Blister Evoli - Deutsch",
      "url": "https://www.mikiscardshop.at/products/pokemon-30-jahre-2-pack-blister-evoli",
-     "price": 15.99,
+     "price": 16.99,
      "currency": "EUR",
-     "eur": 15.99,
+     "eur": 16.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/06a4ba8c66e7ca.jpg?v=1790681829"
     },
@@ -28628,7 +28628,7 @@
      "price": 25.99,
      "currency": "EUR",
      "eur": 25.99,
-     "inStock": false,
+     "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/61218645-196214147249-h.jpg?v=1783757432"
     },
     {
@@ -28643,18 +28643,18 @@
     {
      "name": "Pokémon - 30 Jahre Jubiläum Tin Box Feelinara - Deutsch",
      "url": "https://www.mikiscardshop.at/products/pokemon-30-jahre-edition-tin-box-1-deutsch",
-     "price": 27.99,
+     "price": 29.99,
      "currency": "EUR",
-     "eur": 27.99,
+     "eur": 29.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/61218661-196214146983-h.jpg?v=1783756397"
     },
     {
      "name": "Pokémon - 30 Jahre Jubiläum Tin Box Quajutsu - Deutsch",
      "url": "https://www.mikiscardshop.at/products/pokemon-30-jahre-edition-tin-box-2-deutsch",
-     "price": 27.99,
+     "price": 29.99,
      "currency": "EUR",
-     "eur": 27.99,
+     "eur": 29.99,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/61218670-196214147041-h.jpg?v=1783755820"
     },
@@ -29165,10 +29165,10 @@
     {
      "name": "Pokémon Karmesin & Purpur 8.5 Prismatische Entwicklungen Super Premium Kollektion -Deutsch",
      "url": "https://www.mikiscardshop.at/products/pokemon-karmesin-purpur-8-5-prismatische-entwicklungen-super-premium-kollektion-deutsch",
-     "price": 269.99,
+     "price": 189.99,
      "currency": "EUR",
-     "eur": 269.99,
-     "inStock": false,
+     "eur": 189.99,
+     "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/61185950-17-2-196214106086.jpg?v=1742240151"
     },
     {
@@ -30053,13 +30053,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/Pokemon_Schwert_Schild_Strahlende_Sterne_Booster_Display_-_Deutsch.jpg?v=1720349472"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "rays": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -30227,7 +30224,7 @@
    ]
   },
   "sammelmania": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -30448,7 +30445,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -32173,7 +32170,7 @@
    ]
   },
   "fyft_sk": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -32413,7 +32410,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -32516,15 +32513,6 @@
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/fa30c90fca89de81af0d2dab725fe4f8.jpg"
     },
     {
-     "name": "Pokémon: Destined Rivals 3-pack blister Zebstrika",
-     "url": "https://www.ihrysko.sk/pokemon-destined-rivals-3-pack-blister-zebstrika-p119504",
-     "price": 24.99,
-     "currency": "EUR",
-     "eur": 24.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/6b133556fd96934797e49f4ba8a97efb.jpg"
-    },
-    {
      "name": "Pokémon: Destined Rivals 3-pack blister Kangaskhan",
      "url": "https://www.ihrysko.sk/pokemon-destined-rivals-3-pack-blister-kangaskhan-p119505",
      "price": 24.99,
@@ -32532,6 +32520,15 @@
      "eur": 24.99,
      "inStock": false,
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/b11019d53aa08686e91a6112e57945e1.jpg"
+    },
+    {
+     "name": "Pokémon: Destined Rivals 3-pack blister Zebstrika",
+     "url": "https://www.ihrysko.sk/pokemon-destined-rivals-3-pack-blister-zebstrika-p119504",
+     "price": 24.99,
+     "currency": "EUR",
+     "eur": 24.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/6b133556fd96934797e49f4ba8a97efb.jpg"
     },
     {
      "name": "Pokémon: Destined Rivals Elite Trainer Box",
@@ -32759,6 +32756,33 @@
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/19980b3ea27b0eb86153b783127372c7.jpg"
     },
     {
+     "name": "Pokémon Prerelease Box Of Energy",
+     "url": "https://www.ihrysko.sk/pokemon-prerelease-box-of-energy-p102304",
+     "price": 4.99,
+     "currency": "EUR",
+     "eur": 4.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/4990b0d4620c91aa7a5f7813324e31e0.jpg"
+    },
+    {
+     "name": "UltraPRO: 9-pocket album Pokémon Pikachu 2019",
+     "url": "https://www.ihrysko.sk/ultrapro-9-pocket-album-pokemon-pikachu-2019-p105881",
+     "price": 14.99,
+     "currency": "EUR",
+     "eur": 14.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/24182ff95d7f09c8dafe4461b97d70a7.jpg"
+    },
+    {
+     "name": "UltraPRO: album Pokémon Great Ball 9-pocket ",
+     "url": "https://www.ihrysko.sk/ultrapro-album-pokemon-great-ball-9-pocket-p106313",
+     "price": 14.99,
+     "currency": "EUR",
+     "eur": 14.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/62b8cdd8c11486616b1ab4524a7a86c7.png"
+    },
+    {
      "name": "Šiltovka Pokémon block Pikachu Snapback",
      "url": "https://www.ihrysko.sk/siltovka-pokemon-block-pikachu-snapback-p108457",
      "price": 22.99,
@@ -32775,15 +32799,6 @@
      "eur": 22.99,
      "inStock": true,
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/a06064aa76eaa92a177b310f950ae366.jpg"
-    },
-    {
-     "name": "Ultra Pro: Album Pokémon Destined Rivals 4-pocket",
-     "url": "https://www.ihrysko.sk/ultra-pro-album-pokemon-destined-rivals-4-pocket-p119510",
-     "price": 8.99,
-     "currency": "EUR",
-     "eur": 8.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/263b91f55f1d64b2478fd94e5a24635d.png"
     },
     {
      "name": "UltraPRO: album Pokémon 9-pocket Master Ball",
@@ -32937,6 +32952,312 @@
      "eur": 4.99,
      "inStock": true,
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/8a092596b6e9055ccac97791efa870be.jpg"
+    },
+    {
+     "name": "Krabička Pokémon GO",
+     "url": "https://www.ihrysko.sk/krabicka-pokemon-go-p114759",
+     "price": 1.0,
+     "currency": "EUR",
+     "eur": 1.0,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/d4426871dc95ad8987abf1adba895451.jpg"
+    },
+    {
+     "name": "Pokémon žetóny kondícií",
+     "url": "https://www.ihrysko.sk/pokemon-zetony-kondicii-p114762",
+     "price": 1.0,
+     "currency": "EUR",
+     "eur": 1.0,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/926a4270690eb01357bb5169b814e4b9.jpg"
+    },
+    {
+     "name": "Funko Pocket POP! Pokémon - Squirtle 9 cm",
+     "url": "https://www.ihrysko.sk/funko-pocket-pop-pokemon-squirtle-9-cm-p114783",
+     "price": 14.99,
+     "currency": "EUR",
+     "eur": 14.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/57fcfdc7ce53aa4a338eb9b4b011025b.jpg"
+    },
+    {
+     "name": "3D Puzzle Pokémon - Pokéball (54 ks)",
+     "url": "https://www.ihrysko.sk/3d-puzzle-pokemon-pokeball-54-ks-p114856",
+     "price": 7.99,
+     "currency": "EUR",
+     "eur": 7.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/1dc4f2c11898d5a21ac15642006134cb.jpg"
+    },
+    {
+     "name": "Šiltovka Pokémon Denim - Pokéball a Pikachu",
+     "url": "https://www.ihrysko.sk/siltovka-pokemon-denim-pokeball-a-pikachu-p114864",
+     "price": 19.99,
+     "currency": "EUR",
+     "eur": 19.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/7c946f19c404256aaf5efe579d5cf1d1.jpg"
+    },
+    {
+     "name": "Obaly ULTRA PRO - Pokémon Galarian Rapidash (65ks)",
+     "url": "https://www.ihrysko.sk/obaly-ultra-pro-pokemon-galarian-rapidash-65ks-p114907",
+     "price": 7.99,
+     "currency": "EUR",
+     "eur": 7.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/3c45dc511ffc2b95afe51c5aaced1892.jpg"
+    },
+    {
+     "name": "Mega Construx Pokémon: Build & Show EEVEE",
+     "url": "https://www.ihrysko.sk/mega-construx-pokemon-build-show-eevee-p115100",
+     "price": 25.99,
+     "currency": "EUR",
+     "eur": 25.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/0804206e0eb36e1ebe92ccc2f2f43a41.jpg"
+    },
+    {
+     "name": "Mega Construx Pokémon: CHARIZARD",
+     "url": "https://www.ihrysko.sk/mega-construx-pokemon-charizard-p115101",
+     "price": 26.99,
+     "currency": "EUR",
+     "eur": 26.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/3d67127d9ef96981ee63125b6cfb98c0.jpg"
+    },
+    {
+     "name": "Herná podložka Pokémon pre dvoch hráčov",
+     "url": "https://www.ihrysko.sk/herna-podlozka-pokemon-pre-dvoch-hracov-p115154",
+     "price": 39.99,
+     "currency": "EUR",
+     "eur": 39.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/1c4e210c86e60274bb570a5bc4bd25fb.png"
+    },
+    {
+     "name": "Pokémon: Silver Tempest Booster Pack Sword and Shield 12",
+     "url": "https://www.ihrysko.sk/pokemon-silver-tempest-booster-pack-sword-and-shield-12-p115158",
+     "price": 4.49,
+     "currency": "EUR",
+     "eur": 4.49,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/d091fc8be3654098041c684d6e6a41cc.jpg"
+    },
+    {
+     "name": "Pokémon League Battle Deck - Mew VMAX",
+     "url": "https://www.ihrysko.sk/pokemon-league-battle-deck-mew-vmax-p115304",
+     "price": 39.99,
+     "currency": "EUR",
+     "eur": 39.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/4deaf4066bf8c68ade0e360590e20d53.png"
+    },
+    {
+     "name": "UltraPRO: Pokémon Arceus Album 9-pocket Zippered Pro-Binder",
+     "url": "https://www.ihrysko.sk/ultrapro-pokemon-arceus-album-9-pocket-zippered-pro-binder-p115328",
+     "price": 39.99,
+     "currency": "EUR",
+     "eur": 39.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/421c368f953a64b8ec3a54a2e3fe8544.jpg"
+    },
+    {
+     "name": "Puzzle Pokémon 4x100 ks",
+     "url": "https://www.ihrysko.sk/puzzle-pokemon-4x100-ks-p115352",
+     "price": 18.99,
+     "currency": "EUR",
+     "eur": 18.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/762315df969b713c3751717ff022bf56.jpg"
+    },
+    {
+     "name": "3D Puzzle Pokémon (72 ks)",
+     "url": "https://www.ihrysko.sk/3d-puzzle-pokemon-72-ks-p115353",
+     "price": 12.99,
+     "currency": "EUR",
+     "eur": 12.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/e77163f1fee925aab13f61ce4c0e0332.jpg"
+    },
+    {
+     "name": "Podložka Pokémon Radiant Eevee",
+     "url": "https://www.ihrysko.sk/podlozka-pokemon-radiant-eevee-p115367",
+     "price": 9.99,
+     "currency": "EUR",
+     "eur": 9.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/bbb6488ffc9f392f91e9dc04b2c40959.jpg"
+    },
+    {
+     "name": "Funko Pocket POP! Pokémon - Eevee 9 cm",
+     "url": "https://www.ihrysko.sk/funko-pocket-pop-pokemon-eevee-9-cm-p115411",
+     "price": 16.99,
+     "currency": "EUR",
+     "eur": 16.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/a5d24f3cf1663964bba84ccacd498f09.jpg"
+    },
+    {
+     "name": "Funko Pocket POP! Pokémon - Vulpix 9 cm",
+     "url": "https://www.ihrysko.sk/funko-pocket-pop-pokemon-vulpix-9-cm-p115426",
+     "price": 14.99,
+     "currency": "EUR",
+     "eur": 14.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/6ad56f91ded3c84a42cb884ff11c8c6a.jpg"
+    },
+    {
+     "name": "Plyšová figúrka Pokémon - spiaca Eevee 45 cm",
+     "url": "https://www.ihrysko.sk/plysova-figurka-pokemon-spiaca-eevee-45-cm-p115436",
+     "price": 64.99,
+     "currency": "EUR",
+     "eur": 64.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/63c062ab31631de7753fd1dd12d8c67d.jpg"
+    },
+    {
+     "name": "Plyšová figúrka Pokémon - spiaci Squirtle",
+     "url": "https://www.ihrysko.sk/plysova-figurka-pokemon-spiaci-squirtle-p115509",
+     "price": 59.99,
+     "currency": "EUR",
+     "eur": 59.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/4aed1817452f4e126835a35f9eaafed5.jpg"
+    },
+    {
+     "name": "Plyšová figúrka Pokémon - Charmander",
+     "url": "https://www.ihrysko.sk/plysova-figurka-pokemon-charmander-p115512",
+     "price": 64.99,
+     "currency": "EUR",
+     "eur": 64.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/26f37023bb6b74d499fe3d118f91639e.jpg"
+    },
+    {
+     "name": "Obaly ULTRA PRO - Pokémon Charizard (65 ks)",
+     "url": "https://www.ihrysko.sk/obaly-ultra-pro-pokemon-charizard-65-ks-p115577",
+     "price": 6.99,
+     "currency": "EUR",
+     "eur": 6.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/3ee884fa5f5df3c6e11a38d0f31f2ad6.jpg"
+    },
+    {
+     "name": "Obaly Vulpix (65 ks) - Pokémon Silver Tempest",
+     "url": "https://www.ihrysko.sk/obaly-vulpix-65-ks-pokemon-silver-tempest-p115583",
+     "price": 6.99,
+     "currency": "EUR",
+     "eur": 6.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/fb514ba16eee28df5904c6614ad62311.jpg"
+    },
+    {
+     "name": "šiltovka Pokémon Multi Pop Art",
+     "url": "https://www.ihrysko.sk/siltovka-pokemon-multi-pop-art-p115765",
+     "price": 19.99,
+     "currency": "EUR",
+     "eur": 19.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/541f999b9bb8ac9c1f6ad564b5e79ec9.jpg"
+    },
+    {
+     "name": "UltraPRO: Album 3-ring - Pokémon Snorlax & Munchlax",
+     "url": "https://www.ihrysko.sk/ultrapro-album-3-ring-pokemon-snorlax-munchlax-p115857",
+     "price": 15.99,
+     "currency": "EUR",
+     "eur": 15.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/5735ab45c0de64ddcd6c0ece85bf0514.jpg"
+    },
+    {
+     "name": "Podložka Pokémon Snorlax & Munchlax",
+     "url": "https://www.ihrysko.sk/podlozka-pokemon-snorlax-munchlax-p115864",
+     "price": 19.99,
+     "currency": "EUR",
+     "eur": 19.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/3ef482cae4b23f622230f423fe2a83d6.jpg"
+    },
+    {
+     "name": "UltraPRO: album Pokémon Snorlax & Munchlax 4-pocket",
+     "url": "https://www.ihrysko.sk/ultrapro-album-pokemon-snorlax-munchlax-4-pocket-p115865",
+     "price": 9.99,
+     "currency": "EUR",
+     "eur": 9.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/c78fc807995a961b76ac2aeb37cbf0cb.jpg"
+    },
+    {
+     "name": "Obaly ULTRA PRO - Pokémon Snorlax & Munchlax (65 ks)",
+     "url": "https://www.ihrysko.sk/obaly-ultra-pro-pokemon-snorlax-munchlax-65-ks-p115867",
+     "price": 8.99,
+     "currency": "EUR",
+     "eur": 8.99,
+     "inStock": true,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/e2513cfe59d74650082825e4c4b8d63c.jpg"
+    },
+    {
+     "name": "UltraPRO: album Pokémon 9-pocket Crown Zenith (252 kariet)",
+     "url": "https://www.ihrysko.sk/ultrapro-album-pokemon-9-pocket-crown-zenith-252-kariet-p115882",
+     "price": 9.99,
+     "currency": "EUR",
+     "eur": 9.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/7044b40b1be9b201499280a32f24a2aa.jpg"
+    },
+    {
+     "name": "UltraPRO: Pokémon Pikachu & Mimikyu Album Pro-Binder 9-pocket",
+     "url": "https://www.ihrysko.sk/ultrapro-pokemon-pikachu-mimikyu-album-pro-binder-9-pocket-p115885",
+     "price": 19.99,
+     "currency": "EUR",
+     "eur": 19.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/f8231b45d2579c74cb9f934307c66c9f.jpg"
+    },
+    {
+     "name": "Pokémon Paldea Friends Mini Tin - Quaxly",
+     "url": "https://www.ihrysko.sk/pokemon-paldea-friends-mini-tin-quaxly-p115949",
+     "price": 11.99,
+     "currency": "EUR",
+     "eur": 11.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/527858e0b4aeecf0238e86570d869734.png"
+    },
+    {
+     "name": "Pokémon League Battle Deck - Origin Forme Palkia VSTAR",
+     "url": "https://www.ihrysko.sk/pokemon-league-battle-deck-origin-forme-palkia-vstar-p115951",
+     "price": 36.99,
+     "currency": "EUR",
+     "eur": 36.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/73ae3239e1f556e28b769a8b606c3d19.jpg"
+    },
+    {
+     "name": "Batoh Pokémon Pikachu (čierny so žltými Pikachu)",
+     "url": "https://www.ihrysko.sk/batoh-pokemon-pikachu-cierny-so-zltymi-pikachu-p115953",
+     "price": 34.99,
+     "currency": "EUR",
+     "eur": 34.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/f3efbcf598cce71f38d3019250b19b9f.jpg"
+    },
+    {
+     "name": "Plyšová figúrka Pokémon - Teddiursa 30cm",
+     "url": "https://www.ihrysko.sk/plysova-figurka-pokemon-teddiursa-30cm-p115955",
+     "price": 24.99,
+     "currency": "EUR",
+     "eur": 24.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/81950ce9dd67185a9cc605eacd476c09.jpg"
+    },
+    {
+     "name": "Batoh Pokémon Colorful Pikachu",
+     "url": "https://www.ihrysko.sk/batoh-pokemon-colorful-pikachu-p115958",
+     "price": 34.99,
+     "currency": "EUR",
+     "eur": 34.99,
+     "inStock": false,
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/e63bb928c33f1cbac5ef21ae79f45cd3.jpg"
     },
     {
      "name": "UltraPRO: album Pokémon Scarlet & Violet 9-Pocket (252 kariet)",
@@ -33128,256 +33449,49 @@
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/89d41bfc1ed31346fff963ced4b095cb.png"
     },
     {
-     "name": "Pokémon: Ultra-Premium Collection MEW 151 - herná podložka",
-     "url": "https://www.ihrysko.sk/pokemon-ultra-premium-collection-mew-151-herna-podlozka-p117503",
-     "price": 14.99,
+     "name": "UltraPRO: Album 3-ring Pokémon Scorching Summit",
+     "url": "https://www.ihrysko.sk/ultrapro-album-3-ring-pokemon-scorching-summit-p116453",
+     "price": 11.99,
      "currency": "EUR",
-     "eur": 14.99,
+     "eur": 11.99,
      "inStock": true,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/e928681b617fd9ad8a9ad3c5a3eb15b5.png"
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/4885693fc01f3fffaa97a5a37ca61b33.png"
     },
     {
-     "name": "Pokémon: set 6 kociek, krabičky, 2 žetónov kondícií a mince (151)",
-     "url": "https://www.ihrysko.sk/pokemon-set-6-kociek-krabicky-2-zetonov-kondicii-a-mince-151-p117504",
-     "price": 5.99,
-     "currency": "EUR",
-     "eur": 5.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/9534ae3aef629c588c55ca0468587853.png"
-    },
-    {
-     "name": "Herná podložka Pokémon pre jedného hráča",
-     "url": "https://www.ihrysko.sk/herna-podlozka-pokemon-pre-jedneho-hraca-p117535",
-     "price": 19.99,
-     "currency": "EUR",
-     "eur": 19.99,
-     "inStock": true,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/c444d02457c2a5e1ecccd9763171e6d3.png"
-    },
-    {
-     "name": "Pokémon Zapdos ex - ex Deluxe Battle Deck ",
-     "url": "https://www.ihrysko.sk/pokemon-zapdos-ex-ex-deluxe-battle-deck-p117540",
-     "price": 20.99,
-     "currency": "EUR",
-     "eur": 20.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/c728ded725aa66f93db105dcf4b4a466.jpg"
-    },
-    {
-     "name": "Pokémon: Iron Leaves Paradox Clash Tin",
-     "url": "https://www.ihrysko.sk/pokemon-iron-leaves-paradox-clash-tin-p117543",
+     "name": "Pokémon Meowscarada ex - ex Deluxe Battle Deck",
+     "url": "https://www.ihrysko.sk/pokemon-meowscarada-ex-ex-deluxe-battle-deck-p116558",
      "price": 21.99,
      "currency": "EUR",
      "eur": 21.99,
      "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/50280d1c59743c2d5cdb46d71c6bb53c.jpg"
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/d84fb7e034dfa62b3c90640c9409e3d8.jpg"
     },
     {
-     "name": "Pokémon: Twilight Masquerade Booster Pack",
-     "url": "https://www.ihrysko.sk/pokemon-twilight-masquerade-booster-pack-p117546",
-     "price": 4.49,
+     "name": "Pokémon Quaquaval ex - ex Deluxe Battle Deck",
+     "url": "https://www.ihrysko.sk/pokemon-quaquaval-ex-ex-deluxe-battle-deck-p116559",
+     "price": 21.99,
      "currency": "EUR",
-     "eur": 4.49,
+     "eur": 21.99,
      "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/b600c837d4551ced39b2e126c4c34762.jpg"
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/c355e7da3fa93715c0958cadf8fee94d.jpg"
     },
     {
-     "name": "Pokémon: Toxel Checklane Blister Twilight Masquerade",
-     "url": "https://www.ihrysko.sk/pokemon-toxel-checklane-blister-twilight-masquerade-p117550",
-     "price": 5.49,
-     "currency": "EUR",
-     "eur": 5.49,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/0f2b7d67c282799b99433d3a6f9ff16f.jpg"
-    },
-    {
-     "name": "Pokémon: Kingdra Premium Checklane Blister Twilight Masquerade",
-     "url": "https://www.ihrysko.sk/pokemon-kingdra-premium-checklane-blister-twilight-masquerade-p117551",
-     "price": 6.49,
-     "currency": "EUR",
-     "eur": 6.49,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/6577deb2a82e4ae303625396e9881702.png"
-    },
-    {
-     "name": "Pokémon: Porygon-Z Premium Checklane Blister Twilight Masquerade",
-     "url": "https://www.ihrysko.sk/pokemon-porygon-z-premium-checklane-blister-twilight-masquerade-p117552",
-     "price": 6.49,
-     "currency": "EUR",
-     "eur": 6.49,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/b6cd588de4a660b65ff6a3be32ec4954.png"
-    },
-    {
-     "name": "Pokémon League Battle Deck - Origin Forme Palkia VSTAR",
-     "url": "https://www.ihrysko.sk/pokemon-league-battle-deck-origin-forme-palkia-vstar-p115951",
-     "price": 36.99,
-     "currency": "EUR",
-     "eur": 36.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/73ae3239e1f556e28b769a8b606c3d19.jpg"
-    },
-    {
-     "name": "Batoh Pokémon Pikachu (čierny so žltými Pikachu)",
-     "url": "https://www.ihrysko.sk/batoh-pokemon-pikachu-cierny-so-zltymi-pikachu-p115953",
-     "price": 34.99,
-     "currency": "EUR",
-     "eur": 34.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/f3efbcf598cce71f38d3019250b19b9f.jpg"
-    },
-    {
-     "name": "Plyšová figúrka Pokémon - Teddiursa 30cm",
-     "url": "https://www.ihrysko.sk/plysova-figurka-pokemon-teddiursa-30cm-p115955",
-     "price": 24.99,
-     "currency": "EUR",
-     "eur": 24.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/81950ce9dd67185a9cc605eacd476c09.jpg"
-    },
-    {
-     "name": "Batoh Pokémon Colorful Pikachu",
-     "url": "https://www.ihrysko.sk/batoh-pokemon-colorful-pikachu-p115958",
-     "price": 34.99,
-     "currency": "EUR",
-     "eur": 34.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/e63bb928c33f1cbac5ef21ae79f45cd3.jpg"
-    },
-    {
-     "name": "Obaly ULTRA PRO - Pokémon Armarouge (65ks) ",
-     "url": "https://www.ihrysko.sk/obaly-ultra-pro-pokemon-armarouge-65ks-p117963",
+     "name": "UltraPRO: Pokémon Obsidian Flames Album 4-pocket",
+     "url": "https://www.ihrysko.sk/ultrapro-pokemon-obsidian-flames-album-4-pocket-p116611",
      "price": 6.99,
      "currency": "EUR",
      "eur": 6.99,
      "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/830fbb9f8eb005edb666c737fb916f49.jpg"
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/bf3a7b4e3f53544e0a02818f16cb439a.jpg"
     },
     {
-     "name": "ŠIltovka Pokémon Curved Bill Pikachu (žltá)",
-     "url": "https://www.ihrysko.sk/siltovka-pokemon-curved-bill-pikachu-zlta-p117968",
-     "price": 22.99,
+     "name": "Funko Pocket POP! Pokémon Scorbunny - 9 cm",
+     "url": "https://www.ihrysko.sk/funko-pocket-pop-pokemon-scorbunny-9-cm-p116662",
+     "price": 14.99,
      "currency": "EUR",
-     "eur": 22.99,
+     "eur": 14.99,
      "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/871f1b2ee446d9fec4b619ee73769752.jpg"
-    },
-    {
-     "name": "UltraPRO: Album Pokémon Morning Meadow 4-Pocket",
-     "url": "https://www.ihrysko.sk/ultrapro-album-pokemon-morning-meadow-4-pocket-p117978",
-     "price": 6.99,
-     "currency": "EUR",
-     "eur": 6.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/702bf5fba212236761ea4f550c62153a.jpg"
-    },
-    {
-     "name": "UltraPRO: Album Pokémon Morning Meadow 9-Pocket ",
-     "url": "https://www.ihrysko.sk/ultrapro-album-pokemon-morning-meadow-9-pocket-p117979",
-     "price": 12.99,
-     "currency": "EUR",
-     "eur": 12.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/dd83d4f92668cd413c0ad0a815307238.jpg"
-    },
-    {
-     "name": "UltraPRO: Pokémon Morning Meadow Album Pro-Binder 9-pocket",
-     "url": "https://www.ihrysko.sk/ultrapro-pokemon-morning-meadow-album-pro-binder-9-pocket-p117980",
-     "price": 20.99,
-     "currency": "EUR",
-     "eur": 20.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/55fe20f09e3bef2a01827f02d0874c0b.jpg"
-    },
-    {
-     "name": "Pokémon: krabička na karty Morning Meadow",
-     "url": "https://www.ihrysko.sk/pokemon-krabicka-na-karty-morning-meadow-p117981",
-     "price": 2.99,
-     "currency": "EUR",
-     "eur": 2.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/780dc59c9a474b0a11c611763daac1f6.jpg"
-    },
-    {
-     "name": "Obaly ULTRA PRO - Pokémon Morning Meadow (65ks)",
-     "url": "https://www.ihrysko.sk/obaly-ultra-pro-pokemon-morning-meadow-65ks-p117982",
-     "price": 7.99,
-     "currency": "EUR",
-     "eur": 7.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/d23b2f5802d919046a2054c98780d775.jpg"
-    },
-    {
-     "name": "Pokémon: Shrouded Fable Booster Bundle",
-     "url": "https://www.ihrysko.sk/pokemon-shrouded-fable-booster-bundle-p117986",
-     "price": 25.99,
-     "currency": "EUR",
-     "eur": 25.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/88ae3654e982839f1570a3bae5e7d5d6.jpg"
-    },
-    {
-     "name": "UltraPRO: Album Pokémon Shrouded Fable 4-Pocket ",
-     "url": "https://www.ihrysko.sk/ultrapro-album-pokemon-shrouded-fable-4-pocket-p117987",
-     "price": 6.99,
-     "currency": "EUR",
-     "eur": 6.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/d8f5334f4437aa576570a6a7ad6fad9a.jpg"
-    },
-    {
-     "name": "Pokémon: Shrouded Fable Mini Tin - Dusknoir",
-     "url": "https://www.ihrysko.sk/pokemon-shrouded-fable-mini-tin-dusknoir-p117991",
-     "price": 9.99,
-     "currency": "EUR",
-     "eur": 9.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/ed99326412fbeaae6a03c7b564c9fce3.jpg"
-    },
-    {
-     "name": "Pokémon: Shrouded Fable Mini Tin - Zoroark",
-     "url": "https://www.ihrysko.sk/pokemon-shrouded-fable-mini-tin-zoroark-p117992",
-     "price": 9.99,
-     "currency": "EUR",
-     "eur": 9.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/0b616a84c312fab0e961770cdc935f0a.jpg"
-    },
-    {
-     "name": "Pokémon: Shrouded Fable Mini Tin - Okidogi",
-     "url": "https://www.ihrysko.sk/pokemon-shrouded-fable-mini-tin-okidogi-p117993",
-     "price": 9.99,
-     "currency": "EUR",
-     "eur": 9.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/e2befa3a154573a37f9f12acd7d144dc.jpg"
-    },
-    {
-     "name": "Pokémon: Shrouded Fable Mini Tin - Munkidori",
-     "url": "https://www.ihrysko.sk/pokemon-shrouded-fable-mini-tin-munkidori-p117994",
-     "price": 9.99,
-     "currency": "EUR",
-     "eur": 9.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/26bc501ac6703d3662f5393cf4356810.jpg"
-    },
-    {
-     "name": "Pokémon: Shrouded Fable Mini Tin - Fezandipiti",
-     "url": "https://www.ihrysko.sk/pokemon-shrouded-fable-mini-tin-fezandipiti-p117995",
-     "price": 9.99,
-     "currency": "EUR",
-     "eur": 9.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/c596167651ee56194283a498a4eb6cb1.jpg"
-    },
-    {
-     "name": "Pokémon: Pecharunt 3-Pack Blister Shrouded Fable ",
-     "url": "https://www.ihrysko.sk/pokemon-pecharunt-3-pack-blister-shrouded-fable-p117997",
-     "price": 12.99,
-     "currency": "EUR",
-     "eur": 12.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/ca42a18a0515c458166bedfe0e46e6d4.png"
+     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/32a2f72cfaaf55c8ea3d87da59e77d13.jpg"
     },
     {
      "name": "Pokémon: Album 1-pocket Stellar Crown",
@@ -33416,15 +33530,6 @@
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/1db0b7c7e2fc8e0beb9b01bee6fe1e14.png"
     },
     {
-     "name": "Pokémon Prerelease Box Of Energy",
-     "url": "https://www.ihrysko.sk/pokemon-prerelease-box-of-energy-p102304",
-     "price": 4.99,
-     "currency": "EUR",
-     "eur": 4.99,
-     "inStock": true,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/4990b0d4620c91aa7a5f7813324e31e0.jpg"
-    },
-    {
      "name": "Pokémon: Destined Rivals 1-pack Checklane Blister Eevee",
      "url": "https://www.ihrysko.sk/pokemon-destined-rivals-1-pack-checklane-blister-eevee-p119500",
      "price": 7.99,
@@ -33443,24 +33548,6 @@
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/7d1cdd0d4eb825860b493d46afc0a11a.png"
     },
     {
-     "name": "UltraPRO: 9-pocket album Pokémon Pikachu 2019",
-     "url": "https://www.ihrysko.sk/ultrapro-9-pocket-album-pokemon-pikachu-2019-p105881",
-     "price": 14.99,
-     "currency": "EUR",
-     "eur": 14.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/24182ff95d7f09c8dafe4461b97d70a7.jpg"
-    },
-    {
-     "name": "UltraPRO: album Pokémon Great Ball 9-pocket ",
-     "url": "https://www.ihrysko.sk/ultrapro-album-pokemon-great-ball-9-pocket-p106313",
-     "price": 14.99,
-     "currency": "EUR",
-     "eur": 14.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/62b8cdd8c11486616b1ab4524a7a86c7.png"
-    },
-    {
      "name": "Ultra Pro: Album Pokémon 9-pocket Destined Rivals",
      "url": "https://www.ihrysko.sk/ultra-pro-album-pokemon-9-pocket-destined-rivals-p119511",
      "price": 14.99,
@@ -33468,74 +33555,11 @@
      "eur": 14.99,
      "inStock": false,
      "img": "https://images-ihrysko-cdn.rshop.sk/default/products/7a3db2d5300104beb5edee33eecfc7b8.jpg"
-    },
-    {
-     "name": "Plyšová figúrka Pokémon - Charmander 30cm",
-     "url": "https://www.ihrysko.sk/plysova-figurka-pokemon-charmander-30cm-p117309",
-     "price": 32.99,
-     "currency": "EUR",
-     "eur": 32.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/2bd9782dbfc60aa362a2b3c36ec0a700.jpg"
-    },
-    {
-     "name": "Plyšová figúrka Pokémon - Jolteon 20cm",
-     "url": "https://www.ihrysko.sk/plysova-figurka-pokemon-jolteon-20cm-p117324",
-     "price": 22.99,
-     "currency": "EUR",
-     "eur": 22.99,
-     "inStock": true,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/d654b580c1488e5761cbb512e190bd27.jpg"
-    },
-    {
-     "name": "UltraPRO: Pokémon Paldean Fates Album 4-pocket",
-     "url": "https://www.ihrysko.sk/ultrapro-pokemon-paldean-fates-album-4-pocket-p117330",
-     "price": 6.99,
-     "currency": "EUR",
-     "eur": 6.99,
-     "inStock": true,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/a734575184d61d4847abca8f1fcc08b3.jpg"
-    },
-    {
-     "name": "Krabička na karty Alcove Flip box Pokémon: Shimmering Skyline",
-     "url": "https://www.ihrysko.sk/krabicka-na-karty-alcove-flip-box-pokemon-shimmering-skyline-p117335",
-     "price": 29.99,
-     "currency": "EUR",
-     "eur": 29.99,
-     "inStock": true,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/185d579c06bf37486bcbeec4166b5bf6.jpg"
-    },
-    {
-     "name": "Pokémon: Carvanha Checklane Blister Temporal Forces",
-     "url": "https://www.ihrysko.sk/pokemon-carvanha-checklane-blister-temporal-forces-p117346",
-     "price": 5.49,
-     "currency": "EUR",
-     "eur": 5.49,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/8e68d2ff2434d0d6f65541a704cdb716.png"
-    },
-    {
-     "name": "Pokémon: Togekiss Premium Checklane Blister Temporal Forces",
-     "url": "https://www.ihrysko.sk/pokemon-togekiss-premium-checklane-blister-temporal-forces-p117349",
-     "price": 6.49,
-     "currency": "EUR",
-     "eur": 6.49,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/9e36d4bc52291efc44ca486e0d7b32f2.jpg"
-    },
-    {
-     "name": "Pokémon: Combined Powers Premium Collection Lugia ex Box",
-     "url": "https://www.ihrysko.sk/pokemon-combined-powers-premium-collection-lugia-ex-box-p117412",
-     "price": 59.99,
-     "currency": "EUR",
-     "eur": 59.99,
-     "inStock": false,
-     "img": "https://images-ihrysko-cdn.rshop.sk/default/products/2204f2ffe0ff160e91d502c9f255e337.jpg"
     }
    ]
   },
   "kitstore_sk": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -33712,7 +33736,7 @@
    ]
   },
   "sparkys": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -34024,7 +34048,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -35362,7 +35386,7 @@
    ]
   },
   "kitstore": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -35539,7 +35563,7 @@
    ]
   },
   "plastic": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -36436,7 +36460,7 @@
    ]
   },
   "xzone_cz": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -36721,7 +36745,7 @@
    ]
   },
   "veselydrak_cz": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -41323,7 +41347,7 @@
    ]
   },
   "gengar_cz": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -41392,7 +41416,7 @@
    ]
   },
   "konzoliste_cz": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -41445,7 +41469,7 @@
    ]
   },
   "pokepop": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -41817,7 +41841,7 @@
    ]
   },
   "hras": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -41886,7 +41910,7 @@
    ]
   },
   "pokekarty": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -42108,7 +42132,7 @@
    ]
   },
   "spellbound": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -42141,7 +42165,7 @@
    ]
   },
   "kartickarna": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -42472,7 +42496,7 @@
    ]
   },
   "akcnihracky": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -42568,7 +42592,7 @@
    ]
   },
   "toysshop": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
@@ -42799,7 +42823,7 @@
    ]
   },
   "geekhall": {
-   "ts": "2026-11-04T13:24:00Z",
+   "ts": "2026-11-04T13:30:09Z",
    "ok": true,
    "items": [
     {
