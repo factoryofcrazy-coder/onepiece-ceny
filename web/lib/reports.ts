@@ -1,5 +1,5 @@
 "use client";
-// Počet nových hlásení pre admina (odznak v menu). Skryté hlásenia sa nerátajú.
+// Počet nových hlásení pre admina (odznak v menu), vrátane skrytých, napríklad nahlásených správ z chatu.
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "./auth";
@@ -12,10 +12,8 @@ export function useNewReports() {
   useEffect(() => {
     if (!isAdmin) return setCount(0);
     sb()
-      .from("feedback")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "new")
-      .then(({ count: n }) => setCount(n ?? 0));
+      .rpc("feedback_new_count")
+      .then(({ data }) => setCount(Number(data) || 0));
   }, [isAdmin, path]);
   return count;
 }
