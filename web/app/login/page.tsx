@@ -11,6 +11,8 @@ export default function Login() {
   const [mode, setMode] = useState<"in" | "up" | "reset">("in");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [pass2, setPass2] = useState("");
+  const [verify, setVerify] = useState<string | null>(null); // e-mail čakajúci na potvrdenie
   const [name, setName] = useState("");
   const [msg, setMsg] = useState<{ t: string; ok?: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
@@ -23,9 +25,35 @@ export default function Login() {
     if (user) router.replace("/karty");
   }, [user, router]);
 
+  // odkaz z potvrdzovacieho e-mailu vedie sem; pri vypršanom odkaze je chyba v adrese
+  useEffect(() => {
+    if (/error_code=|error=/.test(window.location.hash))
+      setMsg({ t: "Odkaz na potvrdenie vypršal alebo už bol použitý. Prihlás sa a pošleme ti nový." });
+  }, []);
+
   const pick = (m: typeof mode) => {
     setMode(m);
     setMsg(null);
+    setVerify(null);
+  };
+  const newCaptcha = () => {
+    setToken(null);
+    setCaptchaKey((k) => k + 1);
+  };
+  const confirmUrl = () => `${window.location.origin}/login`;
+
+  const resend = async () => {
+    if (!verify) return;
+    setBusy(true);
+    setMsg(null);
+    const { error } = await sb().auth.resend({
+      type: "signup",
+      email: verify,
+      options: { emailRedirectTo: confirmUrl(), captchaToken: token ?? undefined },
+    });
+    setMsg(error ? { t: authError(error) } : { t: "Poslali sme nový odkaz. Pozri aj spam.", ok: true });
+    newCaptcha();
+    setBusy(false);
   };
 
   const submit = async (e: React.FormEvent) => {
@@ -33,21 +61,23 @@ export default function Login() {
     if (mode === "up") {
       const bad = nickError(name);
       if (bad) return setMsg({ t: bad });
+      if (pass !== pass2) return setMsg({ t: "Heslá sa nezhodujú." });
     }
     setBusy(true);
     setMsg(null);
     const captchaToken = token ?? undefined;
     if (mode === "in") {
       const { error } = await sb().auth.signInWithPassword({ email, password: pass, options: { captchaToken } });
-      if (error) setMsg({ t: authError(error) });
+      if (error?.code === "email_not_confirmed") setVerify(email);
+      else if (error) setMsg({ t: authError(error) });
     } else if (mode === "up") {
       const { data, error } = await sb().auth.signUp({
         email,
         password: pass,
-        options: { data: { username: name.trim() }, emailRedirectTo: window.location.origin, captchaToken },
+        options: { data: { username: name.trim() }, emailRedirectTo: confirmUrl(), captchaToken },
       });
       if (error) setMsg({ t: authError(error) });
-      else if (!data.session) setMsg({ t: "Hotovo – potvrď registráciu cez odkaz v e-maile.", ok: true });
+      else if (!data.session) setVerify(email);
     } else {
       const { error } = await sb().auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/nove-heslo`,
@@ -55,10 +85,29 @@ export default function Login() {
       });
       setMsg(error ? { t: authError(error) } : { t: "Ak máme účet s týmto e-mailom, poslali sme naň odkaz na zmenu hesla. Pozri aj spam.", ok: true });
     }
-    setToken(null);
-    setCaptchaKey((k) => k + 1);
+    newCaptcha();
     setBusy(false);
   };
+
+  if (verify)
+    return (
+      <div className="login col gap">
+        <h1>Potvrď e-mail</h1>
+        <p>
+          Poslali sme odkaz na <b>{verify}</b>. Klikni naň a účet bude hotový. Ak e-mail neprišiel, pozri aj spam.
+        </p>
+        <Captcha key={captchaKey} onToken={setToken} />
+        <button className="btn ghost" disabled={busy || (CAPTCHA_ON && !token)} onClick={resend}>
+          {busy ? "Posielam…" : "Poslať odkaz znova"}
+        </button>
+        {msg && <p className={msg.ok ? "okc" : "badc"}>{msg.t}</p>}
+        <p className="small">
+          <button className="link" onClick={() => pick("in")}>
+            Späť na prihlásenie
+          </button>
+        </p>
+      </div>
+    );
 
   return (
     <div className="login">
@@ -85,6 +134,12 @@ export default function Login() {
               onChange={(e) => setPass(e.target.value)}
               autoComplete={mode === "up" ? "new-password" : "current-password"}
             />
+          </label>
+        )}
+        {mode === "up" && (
+          <label className="field">
+            <span>Zopakuj heslo</span>
+            <input type="password" required minLength={8} value={pass2} onChange={(e) => setPass2(e.target.value)} autoComplete="new-password" />
           </label>
         )}
         <Captcha key={captchaKey} onToken={setToken} />

@@ -1,4 +1,5 @@
 "use client";
+import { plural } from "@/lib/sk";
 import { useEffect, useMemo, useState } from "react";
 import { CountUp, DataError, Loading, FilterBar } from "@/components/ui";
 import { eur, Offer, usePrices } from "@/lib/data";
@@ -159,7 +160,7 @@ export default function PricesPage() {
         </p>
       )}
 
-      <p className="muted small">{shown.length} produktov</p>
+      <p className="muted small">{shown.length} {plural(shown.length, "produkt", "produkty", "produktov")}</p>
       <div className="pgrid">
         {shown.map((p) => (
           <ProductCard key={p.key} p={p} shops={data.shops} pickup={data.pickup} th={data.th} />
