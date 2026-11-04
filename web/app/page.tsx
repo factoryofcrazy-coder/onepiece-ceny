@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { CountUp, DataError, Loading, FilterBar } from "@/components/ui";
-import { OLD_SITE } from "@/lib/config";
 import { eur, Offer, usePrices } from "@/lib/data";
 import { Tcg, useTcg } from "@/lib/tcg";
 
@@ -107,10 +106,7 @@ export default function PricesPage() {
             {tcg === "pokemon" ? "Pokémon boxy" : "Kde kúpiť box"} <em>čo najbližšie k MSRP</em>
           </h1>
           <p className="muted">
-            {Object.keys(data.shops).length} obchodov v SK, CZ, DE, AT a JP, aktualizované {ago(data.updated)}.{" "}
-            <a href={tcg === "pokemon" ? OLD_SITE + "pokemon/" : OLD_SITE} target="_blank" rel="noreferrer">
-              Grafy vývoja cien
-            </a>
+            {Object.keys(data.shops).length} obchodov v SK, CZ, DE, AT a JP, aktualizované {ago(data.updated)}.
           </p>
         </div>
         <WantedBoard products={products} shops={data.shops} langs={tcg === "pokemon" ? ["EN", "DE", "JP"] : ["EN", "JP"]} />

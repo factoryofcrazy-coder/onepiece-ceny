@@ -30,7 +30,7 @@ export async function GET(req: Request) {
       : ((await tryJson("prices.json").catch(() => null)) ?? (await fromHtml()));
     data.hist = undefined; // história je veľká, nová stránka ju zatiaľ nepotrebuje
     return Response.json(data, {
-      headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600" },
+      headers: { "Cache-Control": "public, s-maxage=120, stale-while-revalidate=60" },
     });
   } catch (e: any) {
     return Response.json({ error: String(e?.message ?? e) }, { status: 502, headers: { "Cache-Control": "no-store" } });
