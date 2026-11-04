@@ -3,6 +3,7 @@ type AuthErr = { message?: string; code?: string } | null | undefined;
 
 const BY_CODE: Record<string, string> = {
   invalid_credentials: "Zlý e-mail alebo heslo.",
+  email_not_confirmed: "Najprv potvrď e-mail cez odkaz, ktorý sme ti poslali.",
   user_already_exists: "Účet s týmto e-mailom už existuje. Skús sa prihlásiť.",
   email_exists: "Účet s týmto e-mailom už existuje. Skús sa prihlásiť.",
   weak_password: "Heslo je príliš slabé. Použi aspoň 8 znakov.",
