@@ -58,7 +58,7 @@ const OP_MORE = [
   { href: "/trhovisko", label: "Trhovisko" },
   { href: "/master-sety", label: "Master sety" },
   { href: "/decky", label: "Decky" },
-  { href: "/decky/odporucanie", label: "Čo si viem postaviť" },
+  { href: "/decky/odporucanie", label: "Čo si viem poskladať" },
   ...(GAME_PUBLIC
     ? [
         { href: "/hra", label: "Hra" },
@@ -66,6 +66,7 @@ const OP_MORE = [
       ]
     : []),
   { href: "/import", label: "Import z HoloDex" },
+  { href: "/report", label: "Report" },
 ];
 const PK_TABS: Tab[] = [
   { href: "/", label: "Ceny", icon: I.prices },

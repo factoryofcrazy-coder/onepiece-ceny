@@ -84,7 +84,7 @@ export default function DecksPage() {
         </div>
         <div className="row gap wrapr">
           <Link className="btn ghost" href="/decky/odporucanie">
-            Čo si viem postaviť
+            Čo si viem poskladať
           </Link>
           <button className="btn" onClick={create} disabled={busy}>
             + Nový deck

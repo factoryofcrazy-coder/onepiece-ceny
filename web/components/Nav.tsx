@@ -28,6 +28,7 @@ const LINKS = [
         { href: "/rebricek", label: "Rebríček" },
       ]
     : []),
+  { href: "/report", label: "Report" },
 ];
 
 export default function Nav() {
@@ -102,6 +103,9 @@ export default function Nav() {
                       <b>{profile?.username ?? "Môj účet"}</b>
                       <span className="tiny muted">{user.email}</span>
                     </div>
+                    <Link href="/ucet" onClick={() => setMenu(false)}>
+                      Môj účet
+                    </Link>
                     <Link href="/zbierka" onClick={() => setMenu(false)}>
                       Moja zbierka
                     </Link>

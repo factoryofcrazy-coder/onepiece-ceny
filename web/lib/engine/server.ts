@@ -67,7 +67,7 @@ export function createHandler(env: Env) {
     if (!r.ok) throw new HttpError(401, "Nie si prihlásený.");
     const u = await r.json();
     const prof = await one(`profiles?id=eq.${u.id}&select=username`);
-    return { id: u.id, name: prof?.username || (u.email ?? "hráč").split("@")[0] };
+    return { id: u.id, name: prof?.username || "Hráč" };
   }
 
   type Deck = { name: string; leader: string; cards: string[] };

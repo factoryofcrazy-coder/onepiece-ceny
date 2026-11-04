@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useTcg } from "@/lib/tcg";
 
 export default function Footer() {
@@ -16,6 +17,10 @@ export default function Footer() {
           je spojená s Bandai.
         </>
       )}
+      <div className="foot-links">
+        <Link href="/report">Report</Link>
+        <Link href="/sukromie">Zásady súkromia</Link>
+      </div>
     </footer>
   );
 }

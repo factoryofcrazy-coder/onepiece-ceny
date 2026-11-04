@@ -111,7 +111,7 @@ export function OwnerPicker({ value, onChange }: { value: string | null; onChang
   }, [user]);
   // vlastná kolekcia je v zozname vždy – aj keď účtu chýba riadok v profiles (inak by select ukázal cudzie meno)
   const me = list.find((p) => p.id === user?.id);
-  const all = user ? [{ id: user.id, username: me?.username ?? user.email?.split("@")[0] ?? "ja" }, ...list.filter((p) => p.id !== user.id)] : [];
+  const all = user ? [{ id: user.id, username: me?.username ?? "ja" }, ...list.filter((p) => p.id !== user.id)] : [];
   // zbierky sú súkromné (každý vidí len svoju) – výber cudzej zbierky sa už neukazuje
   if (!user || all.length < 2 || !SHOW_OTHER_COLLECTIONS) return null;
   return (

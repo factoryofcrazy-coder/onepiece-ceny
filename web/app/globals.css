@@ -782,3 +782,23 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .tr-edit input:not([type=number]) { flex: 1; min-width: 120px; }
 .cd-trade { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
 .navin .who { margin-left: auto; }
+
+/* účet, Report, súkromie */
+.ucet { max-width: 620px; margin: 24px auto; display: flex; flex-direction: column; gap: 14px; }
+.ucet h1 { margin: 0; }
+.ucet-card { display: flex; flex-direction: column; align-items: stretch; gap: 12px; background: linear-gradient(180deg, var(--sea-2), var(--sea)); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+.ucet-card h2 { margin: 0; font-size: 17px; }
+.ucet-card p { margin: 0; }
+.ucet-card > .btn { align-self: flex-start; }
+.ucet-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.ucet-row input { flex: 1; min-width: 160px; }
+.ucet-danger { border-color: rgba(224, 122, 108, .45); }
+.rep-kinds { display: flex; gap: 8px; flex-wrap: wrap; }
+.rep-kinds button { background: transparent; color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; font: 600 13px/1 var(--body); cursor: pointer; }
+.rep-kinds button.on { border-color: var(--gold); color: var(--gold); background: rgba(242, 184, 75, .1); }
+.rep-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.captcha { min-height: 65px; }
+.foot-links { display: flex; gap: 16px; margin-top: 8px; }
+.legal h2 { margin: 14px 0 0; font-size: 18px; }
+.legal p, .legal ul { margin: 0; line-height: 1.6; }
+.legal ul { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
