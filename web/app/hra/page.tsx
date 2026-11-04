@@ -1,4 +1,5 @@
 "use client";
+import { karty, plural } from "@/lib/sk";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -276,7 +277,7 @@ function OnlineLobby({ userId, decks, byCode }: { userId: string; decks: DeckOpt
                       <span style={{ color: won ? "#7ff0b8" : "var(--bad)" }}>{won ? "Výhra" : "Prehra"}</span> vs {meHost ? g.guest_name : g.host_name}
                     </div>
                     <div className="s">
-                      {g.end_reason === "resign" ? "vzdaním" : g.end_reason === "time" ? "na čas" : `${g.turn} ťahov`} · {ago(g.updated_at)}
+                      {g.end_reason === "resign" ? "vzdaním" : g.end_reason === "time" ? "na čas" : `${g.turn} ${plural(g.turn, "ťah", "ťahy", "ťahov")}`} · {ago(g.updated_at)}
                     </div>
                   </span>
                   {g.rated && g.elo_delta != null && (
@@ -306,7 +307,7 @@ function deckStat(d: DeckOpt | undefined, byCode: Map<string, Card>) {
     const card = byCode.get(c);
     return card && buildDef(card).scripted;
   }).length;
-  return `${d.cards.length} kariet, efekty poznáme pri ${ok} z ${codes.length}`;
+  return `${karty(d.cards.length)}, hotové efekty: ${ok} z ${codes.length}`;
 }
 
 // ================================================================== tréning (bot / jedno zariadenie)
@@ -329,7 +330,7 @@ function Training({ decks, byCode, onStart }: { decks: DeckOpt[]; byCode: Map<st
       if (!c) missing.push(code);
       else defs[code] = buildDef(c);
     }
-    if (missing.length) return setErr(`Niektoré karty z decku zatiaľ nepoznáme: ${missing.join(", ")}`);
+    if (missing.length) return setErr(`Niektoré karty z decku v hre ešte nie sú: ${missing.join(", ")}`);
     onStart(
       newGame(
         [

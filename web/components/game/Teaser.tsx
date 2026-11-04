@@ -11,9 +11,9 @@ const OPP = "OP01-060";
 
 const COMING = [
   { t: "Automatické pravidlá", d: "Útoky, blokery, countery aj Life rieši hra za teba – stačí klikať." },
-  { t: "Efekty kariet", d: "Stovky kariet z turnajových deckov majú naskriptované efekty." },
-  { t: "Online s kamošmi", d: "Pošleš odkaz a hráš. Server drží stav, súper nevidí tvoju ruku." },
-  { t: "Tréning proti botovi", d: "Vyskúšaj si deck skôr, než ho postavíš naživo." },
+  { t: "Efekty kariet", d: "Stovky kariet z turnajových deckov majú hotové efekty." },
+  { t: "Online s kamošmi", d: "Pošleš odkaz a hráš. Súper nevidí tvoje karty." },
+  { t: "Tréning proti botovi", d: "Vyskúšaj si deck skôr, než si ho poskladáš naživo." },
   { t: "Tvoje decky aj meta", d: "Hraj s deckom zo svojej zbierky alebo s turnajovým top deckom." },
   { t: "Rebríček", d: "ELO z hodnotených hier – kto je najsilnejší pirát v partii." },
 ];
@@ -76,7 +76,7 @@ export default function GameTeaser() {
         </div>
       </section>
 
-      <h2 className="teaser-h2">Čo príde</h2>
+      <h2 className="teaser-h2">Čo ťa čaká</h2>
       <div className="teaser-grid">
         {COMING.map((f) => (
           <div key={f.t} className="teaser-item">

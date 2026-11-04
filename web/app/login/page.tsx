@@ -62,19 +62,19 @@ export default function Login() {
           </label>
         )}
         <button className="btn" disabled={busy}>
-          {mode === "in" ? "Prihlásiť" : mode === "up" ? "Vytvoriť účet" : "Poslať odkaz"}
+          {mode === "in" ? "Prihlásiť sa" : mode === "up" ? "Vytvoriť účet" : "Poslať odkaz"}
         </button>
         {msg && <p className={msg.ok ? "okc" : "badc"}>{msg.t}</p>}
       </form>
       <p className="small">
         {mode !== "in" && (
           <button className="link" onClick={() => setMode("in")}>
-            Mám účet – prihlásiť
+            Už mám účet – prihlásiť sa
           </button>
         )}
         {mode !== "up" && (
           <button className="link" onClick={() => setMode("up")}>
-            Nemám účet – registrovať
+            Nemám účet – zaregistrovať sa
           </button>
         )}
         {mode === "in" && (

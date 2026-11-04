@@ -1,4 +1,5 @@
 "use client";
+import { plural } from "@/lib/sk";
 import PkCollection from "@/components/pk/PkCollection";
 import { useTcg } from "@/lib/tcg";
 import Link from "next/link";
@@ -93,9 +94,9 @@ function OpCollection() {
             <small>€</small>
           </div>
           <p className="muted">
-            {stats.pieces} kusov, {items.length} rôznych kariet zo {stats.sets.length} setov. Ceny: Cardmarket trend, kde chýba,
+            Kusy: {stats.pieces}, rôzne karty: {items.length}, sety: {stats.sets.length}. Ceny: Cardmarket trend, kde chýba,
             TCGplayer prepočítaný na eurá
-            {stats.unpriced > 0 && <>; {stats.unpriced} kariet zatiaľ nemá cenu</>}.
+            {stats.unpriced > 0 && <>; {stats.unpriced} {plural(stats.unpriced, "karta zatiaľ nemá", "karty zatiaľ nemajú", "kariet zatiaľ nemá")} cenu</>}.
           </p>
           {mine && (
             <p className="tiny muted">

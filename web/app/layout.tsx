@@ -10,7 +10,7 @@ import TabBar from "@/components/TabBar";
 
 export const metadata: Metadata = {
   title: "Grand Line Tracker",
-  description: "One Piece a Pokémon TCG – ceny v SK/CZ obchodoch, kolekcia, master sety a deckbuilder",
+  description: "One Piece a Pokémon TCG – ceny v SK/CZ obchodoch, zbierka, master sety a deckbuilder",
   applicationName: "Grand Line Tracker",
   // iPhone: „Pridať na plochu“ → appka cez celú obrazovku
   appleWebApp: { capable: true, title: "Grand Line", statusBarStyle: "black-translucent" },

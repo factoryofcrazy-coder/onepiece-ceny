@@ -1,5 +1,6 @@
 // Herný engine One Piece TCG. Princípy: DESIGN.md
 // Stav je čisté dáta; applyAction() vracia nový stav (vstupný stav sa nemení).
+import { kartyAkuz } from "../sk";
 import { shuffle } from "./rng";
 import { CUSTOM } from "./custom";
 import {
@@ -477,7 +478,7 @@ export function queueWhen(s: GameState, src: string, when: Ability["when"]) {
   const p = ownerOf(s, src);
   // OP09-081 Teach: vlastné [On Play] sú negované; jeho [Activate: Main] neguje súperove do konca jeho ďalšieho ťahu
   if (when === "onPlay" && (def(s, pl(s, p).leader).code === "OP09-081" || playerFlag(s, p, "noOnPlay"))) {
-    if (abilitiesOf(s, src).some((a) => a.when === "onPlay")) info(s, `${def(s, src).name}: efekt [On Play] je negovaný.`);
+    if (abilitiesOf(s, src).some((a) => a.when === "onPlay")) info(s, `${def(s, src).name}: efekt [On Play] neplatí.`);
     return;
   }
   abilitiesOf(s, src).forEach((a, k) => a.when === when && queue(s, src, p, k));
@@ -638,9 +639,9 @@ function costText(st: Step): string {
     case "move":
       return st.v === "$self" ? "vyhodiť túto kartu" : "presunúť kartu";
     case "discard":
-      return `vyhodiť ${typeof st.n === "number" ? st.n : "X"} ${st.n === 1 ? "kartu" : "karty"} z ruky`;
+      return `vyhodiť ${typeof st.n === "number" ? kartyAkuz(st.n) : "X kariet"} z ruky`;
     case "reveal":
-      return `ukázať ${st.n} ${st.n === 1 ? "kartu" : "karty"} z ruky`;
+      return `ukázať ${kartyAkuz(st.n)} z ruky`;
     case "lifeToHand":
       return "Life karta do ruky";
     case "lifeFace":
@@ -856,7 +857,7 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
         trashFromHand(s, who, opts, true);
         return true;
       }
-      promptChoose(s, f, who, `Vyhoď ${n} ${n === 1 ? "kartu" : "karty"} z ruky`, opts, st.upTo ? 0 : n, n, "hand");
+      promptChoose(s, f, who, `Vyhoď ${kartyAkuz(n)} z ruky`, opts, st.upTo ? 0 : n, n, "hand");
       return false;
     }
     case "handToDeck": {
@@ -874,7 +875,7 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
       const opts = [...pl(s, p).hand];
       const n = Math.min(N(st.n), opts.length);
       if (!n) return true;
-      promptChoose(s, f, p, `Vyber ${n} ${n === 1 ? "kartu" : "karty"} z ruky – pôjdu ${st.where === "top" ? "na vrch" : "pod"} balíček`, opts, n, n, "hand");
+      promptChoose(s, f, p, `Vyber ${kartyAkuz(n)} z ruky – pôjdu ${st.where === "top" ? "na vrch" : "pod"} balíček`, opts, n, n, "hand");
       return false;
     }
     case "deckToLife": {
@@ -1098,7 +1099,7 @@ function execStep(s: GameState, f: Frame, st: Step): boolean {
         info(s, `${pl(s, p).name} ukazuje: ${opts.map((i) => nameOf(s, i)).join(", ")}`);
         return true;
       }
-      promptChoose(s, f, p, `Ukáž ${st.n} karty z ruky`, opts, st.n, st.n, "hand");
+      promptChoose(s, f, p, `Ukáž ${kartyAkuz(st.n)} z ruky`, opts, st.n, st.n, "hand");
       return false;
     }
     case "may":
@@ -1450,7 +1451,7 @@ export function applyAction(state: GameState, a: Action): GameState {
       if (d.type === "Character" && playerFlag(s, a.p, "noPlayChars")) fail("V tomto ťahu už postavy hrať nemôžeš.");
       if (d.type === "Character" && playerFlag(s, a.p, "noPlayChars5") && d.cost >= 5) fail("V tomto ťahu nemôžeš hrať postavy s base cost 5 a viac.");
       const c = handCost(s, a.iid);
-      if (x.donActive < c) fail(`Na túto kartu potrebuješ ${c} aktívne DON!!.`);
+      if (x.donActive < c) fail(`Na túto kartu potrebuješ aktívne DON!!: ${c}.`);
       x.donActive -= c;
       x.donRested += c;
       if (d.type === "Character" && hasName(d, "Trafalgar Law") && d.cost >= 4) x.flags = x.flags.filter((f) => f.flag !== "lawDiscount2");

@@ -1,4 +1,5 @@
 "use client";
+import { karty, kartyAkuz } from "@/lib/sk";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -104,7 +105,7 @@ export default function DeckEditor() {
   // ---------- kontrola pravidiel
   const problems: string[] = [];
   if (!leader) problems.push("Chýba leader.");
-  if (total !== 50) problems.push(`Deck má ${total} kariet (treba presne 50).`);
+  if (total !== 50) problems.push(`Deck má ${kartyAkuz(total)} (treba presne 50).`);
   entries.forEach((e) => {
     if (!e.c) problems.push(`${e.code}: neznáma karta.`);
     else {
@@ -280,7 +281,7 @@ export default function DeckEditor() {
                           <button className="link left" onClick={() => e.c && setOpen(e.c)}>
                             {e.c?.name ?? e.code} <span className="muted tiny">{e.code}</span>
                           </button>
-                          <span className={`tiny ${have >= e.n ? "okc" : "badc"}`} title="v mojej kolekcii">
+                          <span className={`tiny ${have >= e.n ? "okc" : "badc"}`} title="v mojej zbierke">
                             {Math.min(have, e.n)}/{e.n}
                           </span>
                           {editable ? (
@@ -389,7 +390,7 @@ export default function DeckEditor() {
               </>
             )}
           </FilterBar>
-          <p className="muted small">{poolSorted.length} kariet · klik = pridať, pravý klik / ⓘ = detail</p>
+          <p className="muted small">{karty(poolSorted.length)} · klik = pridať, pravý klik / ⓘ = detail</p>
           <div className="cgrid small-cards">
             {poolSorted.slice(0, 240).map((c) => {
               const inDeck = deck.cards?.[c.code] ?? 0;

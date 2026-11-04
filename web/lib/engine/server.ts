@@ -172,7 +172,7 @@ export function createHandler(env: Env) {
     if (!g) throw new HttpError(404, "Hra neexistuje.");
 
     if (op === "cancel") {
-      if (g.host !== me.id || g.status !== "open") throw new HttpError(400, "Výzvu už nejde zrušiť.");
+      if (g.host !== me.id || g.status !== "open") throw new HttpError(400, "Výzvu sa už nedá zrušiť.");
       await commit(id, g.version, { status: "cancelled", end_reason: "cancel" }, null, []);
       return { ok: true };
     }
@@ -202,7 +202,7 @@ export function createHandler(env: Env) {
     }
 
     const seat: P | -1 = g.host === me.id ? 0 : g.guest === me.id ? 1 : -1;
-    if (seat === -1) throw new HttpError(403, "Nie si hráčom tejto hry.");
+    if (seat === -1) throw new HttpError(403, "V tejto hre nehráš.");
     if (g.status !== "playing") throw new HttpError(400, "Hra už skončila.");
     const priv = await one(`game_private?game_id=eq.${id}&select=state`);
     let s = priv.state as GameState;

@@ -1,4 +1,5 @@
 "use client";
+import { plural } from "@/lib/sk";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import "@/components/game/game.css";
@@ -117,7 +118,7 @@ function RankingPage() {
                   </td>
                   <td className="hide-m">{pct(r)} %</td>
                   <td className="hide-m">
-                    {r.streak ? <span className={`streak ${r.streak < 0 ? "neg" : ""}`}>{r.streak > 0 ? `${r.streak}× výhra` : `${-r.streak}× prehra`}</span> : "–"}
+                    {r.streak ? <span className={`streak ${r.streak < 0 ? "neg" : ""}`}>{r.streak > 0 ? `${r.streak} ${plural(r.streak, "výhra", "výhry", "výhier")}` : `${-r.streak} ${plural(-r.streak, "prehra", "prehry", "prehier")}`}</span> : "–"}
                   </td>
                   <td className="hide-m muted">{r.best_elo}</td>
                 </tr>

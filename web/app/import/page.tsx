@@ -92,7 +92,7 @@ export default function ImportPage() {
   }, [existing, data, matches, override, manual, removeMissing]);
 
   if (loading) return <Loading shape="rows" />;
-  if (!user) return <NeedLogin what="Import kolekcie" />;
+  if (!user) return <NeedLogin what="Import zbierky" />;
   if (error) return <DataError error={error} file="cards" />;
   if (!data || !existing) return <Loading what="Načítavam" shape="rows" />;
 
@@ -129,7 +129,7 @@ export default function ImportPage() {
     }
     setBusy(false);
     if (err) return setDone(`Import zlyhal: ${err}`);
-    setDone(`Hotovo – uložených ${changes.length} zmien.`);
+    setDone(`Hotovo – uložené zmeny: ${changes.length}.`);
     setText("");
     setFileName("");
     loadExisting();
@@ -196,9 +196,9 @@ export default function ImportPage() {
             <label className="panel check removebox">
               <input type="checkbox" checked={removeMissing} onChange={(e) => setRemoveMissing(e.target.checked)} />
               <span>
-                Odstrániť z kolekcie {count("removed")} kariet, ktoré v tomto CSV chýbajú.{" "}
+                Odstrániť zo zbierky karty, ktoré v tomto CSV chýbajú ({count("removed")}).{" "}
                 <span className="muted small">
-                  Zapni, len ak je to export celej kolekcie – inak by si prišiel o karty z iných portfólií.
+                  Zapni, len ak je to export celej zbierky – inak by si prišiel o karty z iných portfólií.
                 </span>
               </span>
             </label>
@@ -273,14 +273,14 @@ export default function ImportPage() {
             <span>
               {changes.length ? (
                 <>
-                  <b>{changes.length}</b> zmien v kolekcii · hodnota importu {eur(value)}
+                  Zmeny v zbierke: <b>{changes.length}</b> · hodnota importu {eur(value)}
                 </>
               ) : (
                 "Všetko už máš – nič sa nezmení."
               )}
             </span>
             <button className="btn" disabled={busy || !changes.length} onClick={apply}>
-              {busy ? "Ukladám…" : `Importovať ${changes.length} zmien`}
+              {busy ? "Ukladám…" : `Importovať zmeny (${changes.length})`}
             </button>
           </div>
         </>
