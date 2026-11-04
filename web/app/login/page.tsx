@@ -144,7 +144,7 @@ export default function Login() {
         )}
         <Captcha key={captchaKey} onToken={setToken} />
         <button className="btn" disabled={busy || (CAPTCHA_ON && !token)}>
-          {mode === "in" ? "Prihlásiť sa" : mode === "up" ? "Vytvoriť účet" : "Poslať odkaz"}
+          {busy ? "Chvíľu strpenia…" : mode === "in" ? "Prihlásiť sa" : mode === "up" ? "Vytvoriť účet" : "Poslať odkaz"}
         </button>
         {msg && <p className={msg.ok ? "okc" : "badc"}>{msg.t}</p>}
         {mode === "up" && (
