@@ -91,7 +91,7 @@ export default function ReportButton({
               <div className="report-done">
                 <h2>Ďakujem, uložené ✓</h2>
                 <p className="muted">
-                  Hlásenie má aj presný stav hry a posledné ťahy, takže sa to dá zopakovať a opraviť. Pokojne hraj ďalej.
+                  Hlásenie má aj presný stav hry a posledné ťahy, takže sa to dá zopakovať a opraviť. Text uvidia všetci medzi úlohami v sekcii Report, stav hry vidí len správca. Pokojne hraj ďalej.
                 </p>
                 <button className="btn" onClick={reset}>
                   Späť do hry

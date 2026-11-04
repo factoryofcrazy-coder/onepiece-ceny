@@ -21,7 +21,8 @@ export default function Privacy() {
         <li><b>Decky:</b> vidia ich ostatní prihlásení hráči.</li>
         <li><b>Ponuky na trhovisku a kontakt, ktorý k nim vyplníš:</b> vidia ich všetci prihlásení, preto uvádzaj len kontakt, ktorý chceš zverejniť.</li>
         <li><b>Hry a hodnotenie:</b> výsledky, ELO a mená hráčov vidia prihlásení hráči, karty v ruke súper nevidí.</li>
-        <li><b>Hlásenia:</b> text, kontakt, ak ho vyplníš, typ prehliadača, stránka a pri prihlásení väzba na účet. Vidí ich len správca webu. Hlásenie z hry obsahuje aj stav hry.</li>
+        <li><b>Hlásenia v Reporte:</b> text, stav a odpoveď správcu sú verejné pre každého, aj neprihláseného, ale bez tvojho mena. Kontakt, typ prehliadača a väzbu na účet vidí len správca. Hlásenie z hry obsahuje aj stav hry, ktorý vidí len správca. Do textu nepíš osobné údaje.</li>
+        <li><b>Chat:</b> správy a tvoju prezývku vidia všetci prihlásení. Správca môže správy mazať a zablokovať písanie. Správy sa mažú po 30 dňoch alebo so zmazaním účtu.</li>
       </ul>
 
       <h2>Skener a kamera</h2>
@@ -47,7 +48,7 @@ export default function Privacy() {
 
       <h2>Ako dlho</h2>
       <p>
-        Údaje účtu držíme, kým účet nezmažeš. Hlásenia sa po zmazaní účtu odpoja od účtu a zmažeme ich, keď už nie sú potrebné.
+        Údaje účtu držíme, kým účet nezmažeš. Hlásenia sa po zmazaní účtu odpoja od účtu a ostanú bez mena medzi úlohami. Ak chceš niektoré odstrániť, napíš nám. Správy z chatu sa mažú po 30 dňoch.
       </p>
 
       <h2>Tvoje práva</h2>

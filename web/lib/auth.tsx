@@ -5,14 +5,15 @@ import { sb } from "./supabase";
 
 export type Profile = { id: string; username: string | null };
 
-type AuthState = { user: User | null; profile: Profile | null; loading: boolean; signOut: () => Promise<void>; refreshProfile: () => Promise<void> };
+type AuthState = { user: User | null; profile: Profile | null; loading: boolean; isAdmin: boolean; signOut: () => Promise<void>; refreshProfile: () => Promise<void> };
 
-const Ctx = createContext<AuthState>({ user: null, profile: null, loading: true, signOut: async () => {}, refreshProfile: async () => {} });
+const Ctx = createContext<AuthState>({ user: null, profile: null, loading: true, isAdmin: false, signOut: async () => {}, refreshProfile: async () => {} });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     sb().auth.getSession().then(({ data }) => {
@@ -29,10 +30,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const userId = user?.id;
   const refreshProfile = useCallback(async () => {
-    if (!userId) return setProfile(null);
-    const { data } = await sb().from("profiles").select("id, username").eq("id", userId).maybeSingle();
+    if (!userId) {
+      setProfile(null);
+      setIsAdmin(false);
+      return;
+    }
+    const [{ data }, admin] = await Promise.all([
+      sb().from("profiles").select("id, username").eq("id", userId).maybeSingle(),
+      sb().rpc("is_admin"),
+    ]);
     profilesCache = null;
     setProfile(data ?? { id: userId, username: null });
+    setIsAdmin(admin.data === true);
   }, [userId]);
 
   useEffect(() => {
@@ -43,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await sb().auth.signOut();
   };
 
-  return <Ctx.Provider value={{ user, profile, loading, signOut, refreshProfile }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ user, profile, loading, isAdmin, signOut, refreshProfile }}>{children}</Ctx.Provider>;
 }
 
 export const useAuth = () => useContext(Ctx);

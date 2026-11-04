@@ -802,3 +802,30 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .legal h2 { margin: 14px 0 0; font-size: 18px; }
 .legal p, .legal ul { margin: 0; line-height: 1.6; }
 .legal ul { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+
+/* Report ako nástenka úloh a chat */
+.rep-h { margin: 10px 0 0; font-size: 20px; }
+.rep-task { gap: 8px; }
+.rep-task.is-hidden { opacity: .6; border-style: dashed; }
+.rep-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.rep-meta .tag { margin: 0; }
+.rep-status { font: 700 12px/1 var(--body); padding: 5px 9px; border-radius: 99px; border: 1px solid var(--line); color: var(--text); }
+.rep-status.s-new { color: var(--gold); border-color: rgba(242, 184, 75, .5); }
+.rep-status.s-doing { color: #5ec8c8; border-color: rgba(94, 200, 200, .5); }
+.rep-status.s-done { color: #7fd69a; border-color: rgba(127, 214, 154, .5); }
+.rep-status.s-rejected { color: var(--muted); }
+.rep-msg { white-space: pre-wrap; overflow-wrap: anywhere; }
+.rep-reply { border-left: 3px solid var(--gold); padding-left: 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.rep-admin { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.rep-admin p { overflow-wrap: anywhere; }
+.rep-admin-row { display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; }
+.rep-hide { display: flex; gap: 8px; align-items: center; font-size: 13px; padding-bottom: 8px; }
+.chatx-list { height: min(58vh, 560px); overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 12px; background: rgba(6, 18, 31, .5); border: 1px solid var(--line); border-radius: 14px; }
+.chatx-msg { max-width: 85%; align-self: flex-start; background: var(--sea-2); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; }
+.chatx-msg.me { align-self: flex-end; border-color: rgba(242, 184, 75, .4); }
+.chatx-msg p { margin: 2px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.chatx-head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; font-size: 13px; }
+.chatx-tools { display: inline-flex; gap: 10px; }
+.chatx-tools .link { margin: 0; }
+.chatx-form { display: flex; gap: 8px; }
+.chatx-form input { flex: 1; min-width: 0; }
