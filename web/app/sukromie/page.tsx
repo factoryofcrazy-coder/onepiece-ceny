@@ -9,7 +9,7 @@ export default function Privacy() {
       <h1>Zásady súkromia</h1>
       <p className="muted small">Platné od 4. 11. 2026</p>
       <p>
-        Grand Line Tracker je neoficiálny fanúšikovský projekt zameraný na kartové hry, ktorý je zadarmo. Ukladáme len to, čo web potrebuje na fungovanie. Údaje
+        Grand Line Tracker je neoficiálny fanúšikovský projekt zameraný na kartové hry, ktorý je zadarmo. Prevádzkuje ho Gandel, kontaktovať ho môžeš cez Report. Ukladáme len to, čo web potrebuje na fungovanie. Údaje
         nepredávame a nepoužívame ich na reklamu.
       </p>
 
@@ -55,7 +55,7 @@ export default function Privacy() {
       <h2>Tvoje práva</h2>
       <p>
         Prezývku a zbierku si upravíš sám. <Link href="/ucet">Účet</Link> si môžeš kedykoľvek zmazať. Ak chceš kópiu údajov, opravu alebo máš inú otázku, napíš nám cez{" "}
-        <Link href="/report">Report</Link> a uveď kontakt. Sťažnosť môžeš podať aj na Úrade na ochranu osobných údajov SR.
+        <Link href="/report">Report</Link> a uveď kontakt.
       </p>
     </article>
   );
