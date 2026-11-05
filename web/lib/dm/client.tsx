@@ -6,8 +6,9 @@ import { DM_ENABLED } from "../config";
 import { sb } from "../supabase";
 import { resavePush, showBadge, stopPushLocally } from "./push-client";
 import type { DmBody } from "./server";
+import type { Reaction } from "../reactions";
 
-export type DmMessage = { id: string; conversation_id: string; sender_id: string; created_at: string; body: DmBody | null; unreadable: boolean };
+export type DmMessage = { id: string; conversation_id: string; sender_id: string; created_at: string; body: DmBody | null; unreadable: boolean; reactions?: Reaction[] };
 export type DmConversation = {
   id: string;
   status: "pending" | "accepted" | "declined";

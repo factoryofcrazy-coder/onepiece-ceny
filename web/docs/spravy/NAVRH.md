@@ -100,3 +100,7 @@ Text je šifrovaný, preto funkcia `search` rozšifruje správy používateľa p
 - Na iPhone fungujú notifikácie až po pridaní webu na plochu.
 - Odstránenie notifikácií po vypršaní prihlásenia prebehne až pri ďalšej návšteve webu.
 - Preview a produkcia zatiaľ zdieľajú databázu, testovacie správy z preview sú v ostrej databáze.
+
+## Reakcie (5. 11. 2026)
+
+Vlastné emoty (`lib/reactions.ts`, `components/reactions/`) vo verejnom chate aj v súkromných správach; jeden človek môže dať viac rôznych reakcií. V súkromných správach ide reakcia cez funkciu `dm`, uložená je bez šifrovania ako metadáto (emot, kto, ku ktorej správe), text správy v nej nie je. Upozornenie do telefónu príde len autorovi správy, tá istá reakcia najviac raz a od jedného hráča v konverzácii najviac raz za 30 s (`dm_reaction_pushes`). Naživo u druhého sa ukáže cez súkromný kanál `dm:<id>`, skutočný stav je v databáze. Migrácia `20261115_reactions.sql`.

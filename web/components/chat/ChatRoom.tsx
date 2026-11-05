@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useChat } from "@/lib/chat";
 import { UserBadge, useBadges } from "@/lib/gamify";
+import Reactions from "@/components/reactions/Reactions";
 
 const MAX = 500;
 
@@ -16,7 +17,7 @@ function fmtTime(ts: string) {
 /** Miestnosť bez hlavičky – používa ju panel na PC aj stránka /chat. */
 export default function ChatRoom() {
   const { user, isAdmin } = useAuth();
-  const { msgs, error, notice, bans, send, remove, setBan, report, markSeen } = useChat();
+  const { msgs, error, notice, bans, reactions, names, toggleReaction, send, remove, setBan, report, markSeen } = useChat();
   const badges = useBadges(!!user);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
@@ -111,6 +112,15 @@ export default function ChatRoom() {
                 )}
               </div>
               <p>{m.body}</p>
+              {reactions && (
+                <Reactions
+                  rows={reactions.get(m.id)}
+                  me={user.id}
+                  nameOf={(u) => names.get(u) ?? "Hráč"}
+                  canReact={!banned.has(user.id)}
+                  onToggle={(emote, on) => toggleReaction(m.id, emote, on)}
+                />
+              )}
             </div>
           ))
         )}

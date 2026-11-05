@@ -2,6 +2,7 @@
 // funkcie dm_*, ktoré strážia pravidlá (členstvo, žiadosti, blokovanie, limity). Text správ sa nikdy nezapisuje do logov.
 import { KeyRing, open, parseKeyRing, seal } from "./crypto";
 import { allowedEndpoint, PushSub, sendPush, Vapid } from "./push";
+import { emoteLabel, isEmote } from "../reactions";
 
 export type DmEnv = { URL: string; SERVICE: string; ANON: string; DM_KEYS: string | undefined; VAPID_PUBLIC?: string; VAPID_PRIVATE?: string; VAPID_SUBJECT?: string };
 export type DmCard = { id: string; listing?: { id: string; kind: string; price: number | null; cond: string; lang: string } };
@@ -11,10 +12,14 @@ export type DmDeps = {
   authUser?: (authorization: string) => Promise<string | null>;
   /** upozornenie príjemcu po uložení správy; chyba nesmie zastaviť odoslanie */
   notify?: (x: DmNotice) => Promise<void>;
+  /** upozornenie autora správy na reakciu; chyba nesmie zastaviť reakciu */
+  notifyReaction?: (x: DmReactionNotice) => Promise<void>;
   /** odoslanie notifikácie, v testoch sa nahrádza */
   pushFetch?: typeof fetch;
 };
 export type DmNotice = { recipient: string; conversationId: string; senderId: string; isRequest: boolean; body: DmBody };
+
+export type DmReactionNotice = { recipient: string; conversationId: string; senderId: string; emote: string };
 
 export const MAX_TEXT = 1000;
 const MAX_REQUEST_BYTES = 16_000;
@@ -110,6 +115,12 @@ export function createDmHandler(env: DmEnv, deps: DmDeps = {}) {
 
   const vapid: Vapid | null = env.VAPID_PUBLIC && env.VAPID_PRIVATE ? { publicKey: env.VAPID_PUBLIC, privateKey: env.VAPID_PRIVATE, subject: env.VAPID_SUBJECT || "https://www.grand-line.eu" } : null;
 
+  const pushTo = async (t: { subs: PushSub[] }, payload: string, v: Vapid) => {
+    const results = await Promise.all(t.subs.map((s) => sendPush(s, payload, v, deps.pushFetch ?? fetch).catch(() => 0)));
+    const gone = t.subs.filter((_, i) => results[i] === 404 || results[i] === 410).map((s) => s.endpoint);
+    if (gone.length) await rpc("dm_push_forget", { p_endpoints: gone });
+  };
+
   const pushNotice = async (x: DmNotice) => {
     if (!vapid) return;
     const t = await rpc("dm_push_targets", { p_recipient: x.recipient, p_sender: x.senderId });
@@ -117,11 +128,20 @@ export function createDmHandler(env: DmEnv, deps: DmDeps = {}) {
     // od cudzieho sa text na zamknutú obrazovku nedostane
     const text = x.isRequest ? "Žiadosť o správu" : !t.show_text ? "Nová správa" : x.body.text || (x.body.card ? `Karta ${x.body.card.id.split("_")[0]}` : "Nová správa");
     const payload = JSON.stringify({ title: t.sender_name, body: text.slice(0, 240), url: `/spravy?c=${x.conversationId}`, tag: `dm-${x.conversationId}`, conversationId: x.conversationId, unread: Number(t.unread) });
-    const results = await Promise.all((t.subs as PushSub[]).map((s) => sendPush(s, payload, vapid, deps.pushFetch ?? fetch).catch(() => 0)));
-    const gone = (t.subs as PushSub[]).filter((_, i) => results[i] === 404 || results[i] === 410).map((s) => s.endpoint);
-    if (gone.length) await rpc("dm_push_forget", { p_endpoints: gone });
+    await pushTo(t, payload, vapid);
   };
   const notify = deps.notify ?? pushNotice;
+
+  // reakcia neobsahuje text správy; vlastná značka (tag) nepremaže upozornenie na novú správu
+  const pushReaction = async (x: DmReactionNotice) => {
+    if (!vapid) return;
+    const t = await rpc("dm_push_targets", { p_recipient: x.recipient, p_sender: x.senderId });
+    if (!t.subs.length) return;
+    const body = t.show_text ? `${emoteLabel(x.emote)} na tvoju správu` : "Nová reakcia";
+    const payload = JSON.stringify({ title: t.sender_name, body, url: `/spravy?c=${x.conversationId}`, tag: `dm-react-${x.conversationId}`, conversationId: x.conversationId, unread: Number(t.unread) });
+    await pushTo(t, payload, vapid);
+  };
+  const notifyReaction = deps.notifyReaction ?? pushReaction;
 
   const unseal = async (m: any): Promise<DmBody | null> => {
     try {
@@ -132,7 +152,7 @@ export function createDmHandler(env: DmEnv, deps: DmDeps = {}) {
   };
   const present = async (m: any) => {
     const body = await unseal(m);
-    return { id: m.id, conversation_id: m.conversation_id, sender_id: m.sender_id, created_at: m.created_at, body, unreadable: !body };
+    return { id: m.id, conversation_id: m.conversation_id, sender_id: m.sender_id, created_at: m.created_at, body, unreadable: !body, reactions: m.reactions ?? [] };
   };
 
   async function bodyOf(b: any, me: string): Promise<DmBody> {
@@ -169,11 +189,19 @@ export function createDmHandler(env: DmEnv, deps: DmDeps = {}) {
       if (!row.duplicate) {
         await notify({ recipient: row.recipient, conversationId: conv, senderId: me, isRequest: !!row.is_request, body }).catch(() => console.error("dm: upozornenie zlyhalo"));
       }
-      return { id: row.id, created_at: row.created_at, conversation_id: conv, sender_id: me, body, unreadable: false };
+      return { id: row.id, created_at: row.created_at, conversation_id: conv, sender_id: me, body, unreadable: false, reactions: [] };
     },
     async history(me, b) {
       const rows = (await rpc("dm_history", { p_me: me, p_conv: uuidOf(b.conversationId, "id konverzácie"), p_before: timeOf(b.before), p_limit: 50 })) as any[];
       return Promise.all(rows.map(present));
+    },
+    async react(me, b) {
+      if (!isEmote(b.emote)) throw new HttpError(400, "Neznáma reakcia.");
+      const r = await rpc("dm_react", { p_me: me, p_message: uuidOf(b.messageId, "id správy"), p_emote: b.emote, p_on: b.on !== false });
+      if (r.notify) {
+        await notifyReaction({ recipient: r.recipient, conversationId: r.conversation_id, senderId: me, emote: b.emote }).catch(() => console.error("dm: upozornenie zlyhalo"));
+      }
+      return { changed: r.changed };
     },
     async read(me, b) {
       return rpc("dm_mark_read", { p_me: me, p_conv: uuidOf(b.conversationId, "id konverzácie") });

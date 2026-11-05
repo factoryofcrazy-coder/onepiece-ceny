@@ -10,6 +10,7 @@ const id = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, "0")
 const [ANNA, BORIS, CYRIL, ADMIN, NEW] = [1, 2, 3, 4, 5].map(id);
 let db: PGlite;
 let notified: any[] = [];
+let reacted: any[] = [];
 let n = 1000;
 const uuid = () => id(++n);
 
@@ -28,7 +29,7 @@ const rpc = async (fn: string, args: Record<string, unknown>) => {
 const handler = () =>
   createDmHandler(
     { URL: "", SERVICE: "", ANON: "", DM_KEYS: `1:${KEY}` },
-    { rpc, authUser: async (a) => (a.startsWith("Bearer ") ? a.slice(7) : null), notify: async (x) => void notified.push(x) },
+    { rpc, authUser: async (a) => (a.startsWith("Bearer ") ? a.slice(7) : null), notify: async (x) => void notified.push(x), notifyReaction: async (x) => void reacted.push(x) },
   );
 const call = async (who: string | null, op: string, extra: Record<string, unknown> = {}) => {
   const r = await handler()(new Request("http://x/", { method: "POST", headers: who ? { Authorization: `Bearer ${who}` } : {}, body: JSON.stringify({ op, ...extra }) }));
@@ -62,6 +63,7 @@ beforeAll(async () => {
     create table public.profiles (id uuid primary key references auth.users on delete cascade, username text, created_at timestamptz not null default now() - interval '30 days');
     create table public.admins (user_id uuid primary key);
     create table public.chat_bans (user_id uuid primary key);
+    create table public.chat_messages (id bigint primary key, user_id uuid, deleted_at timestamptz);
     create table public.trade_listings (id uuid primary key, user_id uuid, card_id text, kind text, price numeric, cond text, lang text);
     grant select on public.profiles, public.admins, public.chat_bans, public.trade_listings to service_role;
     alter default privileges in schema public grant all on tables to anon, authenticated;
@@ -71,6 +73,7 @@ beforeAll(async () => {
   // oprava sa musí dať spustiť nad už hotovou migráciou
   await db.exec(readFileSync("supabase/migrations/20261112_dm_open_fix.sql", "utf8"));
   await db.exec(readFileSync("supabase/migrations/20261113_dm_report_context.sql", "utf8"));
+  await db.exec(readFileSync("supabase/migrations/20261115_reactions.sql", "utf8"));
 }, 60000);
 
 beforeEach(async () => {
@@ -550,5 +553,101 @@ describe("uchovávanie", () => {
     const left = (await db.query<any>("select distinct conversation_id from public.dm_messages")).rows;
     expect(left).toEqual([{ conversation_id: fresh }]);
     expect((await db.query<any>("select count(*) c from public.dm_conversations")).rows[0].c).toBe(1);
+  });
+});
+
+describe("reakcie v súkromných správach", () => {
+  const setup = async () => {
+    reacted = [];
+    const c = await accepted();
+    const m = (await send(BORIS, c, "kúpim to")).id as string;
+    return { c, m };
+  };
+  const history = (who: string, c: string) => ok(who, "history", { conversationId: c });
+  const on = (who: string, m: string, emote = "kek", yes = true) => call(who, "react", { messageId: m, emote, on: yes });
+
+  it("pridá, zobrazí v histórii obom a zruší", async () => {
+    const { c, m } = await setup();
+    expect((await on(ANNA, m)).data.changed).toBe(true);
+    expect((await on(ANNA, m, "rip")).data.changed).toBe(true);
+    const seen = (await history(BORIS, c)).find((x: any) => x.id === m);
+    expect(seen.reactions.map((r: any) => [r.emote, r.user_id]).sort()).toEqual([["kek", ANNA], ["rip", ANNA]]);
+    expect((await on(ANNA, m, "kek", false)).data.changed).toBe(true);
+    expect((await history(ANNA, c)).find((x: any) => x.id === m).reactions.length).toBe(1);
+  });
+  it("dvojité pridanie nič nezdvojí", async () => {
+    const { c, m } = await setup();
+    await on(ANNA, m);
+    expect((await on(ANNA, m)).data.changed).toBe(false);
+    expect((await history(ANNA, c)).find((x: any) => x.id === m).reactions.length).toBe(1);
+  });
+  it("cudzí nesmie reagovať ani zistiť, že správa existuje", async () => {
+    const { m } = await setup();
+    const r = await on(CYRIL, m);
+    expect(r.status).toBe(400);
+    expect(r.error).toBe("Správa sa nenašla.");
+  });
+  it("neznámy emot a neprihlásený", async () => {
+    const { m } = await setup();
+    expect((await on(ANNA, m, "hack")).status).toBe(400);
+    expect((await call(null, "react", { messageId: m, emote: "kek" })).status).toBe(401);
+  });
+  it("na žiadosť sa reagovať nedá", async () => {
+    const c = await openConv(ANNA, CYRIL);
+    const m = (await send(ANNA, c, "ahoj")).id;
+    expect((await on(CYRIL, m)).error).toMatch(/žiadosť/);
+  });
+  it("po zablokovaní sa nová reakcia nedá pridať, zrušiť vlastnú áno", async () => {
+    const { m } = await setup();
+    await on(ANNA, m);
+    await ok(BORIS, "block", { userId: ANNA, on: true });
+    expect((await on(ANNA, m, "rip")).status).toBe(400);
+    expect((await on(ANNA, m, "kek", false)).data.changed).toBe(true);
+  });
+  it("upozorní autora správy, nie mňa pri vlastnej správe", async () => {
+    const { c, m } = await setup();
+    await on(ANNA, m);
+    expect(reacted).toEqual([{ recipient: BORIS, conversationId: c, senderId: ANNA, emote: "kek" }]);
+    reacted = [];
+    await on(BORIS, m, "gg");
+    expect(reacted).toEqual([]);
+  });
+  it("pridanie a rušenie dokola neposiela ďalšie upozornenia", async () => {
+    const { m } = await setup();
+    for (let i = 0; i < 4; i++) {
+      await on(ANNA, m, "kek", true);
+      await on(ANNA, m, "kek", false);
+    }
+    expect(reacted.length).toBe(1);
+  });
+  it("viac reakcií rýchlo za sebou = jedno upozornenie, po 30 s ďalšie", async () => {
+    const { c, m } = await setup();
+    await on(ANNA, m, "kek");
+    await on(ANNA, m, "pog");
+    expect(reacted.length).toBe(1);
+    await db.query("update public.dm_reaction_pushes set pushed_at = now() - interval '31 seconds' where conversation_id = $1", [c]);
+    await on(ANNA, m, "gg");
+    expect(reacted.length).toBe(2);
+  });
+  it("limit 40 za minútu", async () => {
+    const { c } = await setup();
+    const ids: string[] = [];
+    for (let i = 0; i < 9; i++) ids.push((await send(BORIS, c, "s" + i)).id);
+    const emotes = ["kek", "pog", "rip", "cope", "beli"];
+    let last: any;
+    for (const m of ids) for (const e of emotes) last = await on(ANNA, m, e);
+    expect(last.error).toMatch(/priveľmi rýchlo/);
+  });
+  it("reakcia zmizne so správou a v databáze je len emot, nie text", async () => {
+    const { m } = await setup();
+    await on(ANNA, m);
+    await db.query("delete from public.dm_messages where id = $1", [m]);
+    expect((await db.query<{ n: number }>("select count(*)::int n from public.dm_reactions where message_id = $1", [m])).rows[0].n).toBe(0);
+  });
+  it("prehliadač sa k tabuľkám reakcií nedostane", async () => {
+    await db.exec("set role authenticated");
+    await expect(db.query("select * from public.dm_reactions")).rejects.toThrow(/permission denied/);
+    await expect(db.query("select public.dm_react($1,$2,'kek',true)", [ANNA, ANNA])).rejects.toThrow(/permission denied/);
+    await db.exec("reset role");
   });
 });

@@ -30,6 +30,7 @@ export default function Privacy() {
             <b>Súkromné správy:</b> text je v databáze šifrovaný a kľúč je uložený mimo nej, takže samotný únik databázy text neprezradí. Nejde o šifrovanie medzi zariadeniami: prevádzkovateľ by správy technicky vedel otvoriť. Správca nemá rozhranie na čítanie konverzácií. Keď niekto správu nahlási, správca uvidí ju a najviac 5 správ pred ňou a 5 po nej. V databáze je nešifrované, kto komu a kedy písal a kedy si správu prečítal. Správy sa mažú po 12 mesiacoch a so zrušením účtu. Ak zapneš notifikácie, text prechádza šifrovane cez notifikačnú službu tvojho prehliadača (Google, Apple alebo Mozilla) a zobrazí sa na tvojom zariadení, v nastaveniach správ ho môžeš skryť.
           </li>
         )}
+        <li><b>Reakcie na správy:</b> vo verejnom chate vidia všetci prihlásení, kto a ako reagoval. V súkromných správach to vidí druhá osoba a reakcia je v databáze uložená bez šifrovania, ale text správy v nej nie je. Zmaže sa spolu so správou.</li>
         <li><b>Chat:</b> správy a tvoju prezývku vidia všetci prihlásení. Správca môže správy mazať a zablokovať písanie. Ak správu nahlásiš, správca vidí jej text a kto ju nahlásil. Počet ľudí online je len číslo, bez mien. Správy sa mažú po 30 dňoch alebo so zmazaním účtu.</li>
       </ul>
 
