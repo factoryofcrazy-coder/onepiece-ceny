@@ -61,6 +61,10 @@ Používateľ súhlasil so zlúčením, lebo preview sa na mobil zle inštaluje 
 
 Ručný test začatia konverzácie, prijatia, odoslania a Prečítané prešiel na preview. Notifikácie na telefóne ešte neboli vyskúšané.
 
+## 5. 11. 2026: notifikácie sa nedali zapnúť
+
+Na telefóne sa zobrazilo „Prehliadač notifikácie nepovolil“. Web pred žiadosťou o povolenie čakal na odpoveď servera, čím sa stratil priamy súvis s ťuknutím a prehliadač žiadosť zamietol. Povolenie sa teraz pýta ako prvé, test poradie stráži a pribudol návod pre zablokované notifikácie.
+
 ## Stav
 
 Hotové a otestované automaticky a v prehliadači so simuláciou. Ostáva [ručný test](TESTOVANIE.md). Zlúčené do `main`, na produkcii vypnuté prepínačom.

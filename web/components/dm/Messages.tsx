@@ -544,7 +544,9 @@ function Settings({ onClose, onChanged }: { onClose: () => void; onChanged: () =
         ) : status === "unsupported" ? (
           <p className="small muted">Tento prehliadač notifikácie nepodporuje.</p>
         ) : status === "denied" ? (
-          <p className="small muted">Notifikácie sú zablokované v nastaveniach prehliadača. Povoľ ich tam a skús to znova.</p>
+          <p className="small muted">
+            Notifikácie sú pre tento web zablokované. Android: v prehliadači ťukni na ikonu vedľa adresy, Povolenia, Notifikácie. iPhone: Nastavenia, Hlásenia, Grand Line. Potom sa sem vráť.
+          </p>
         ) : status === "off-server" ? (
           <p className="small muted">Notifikácie zatiaľ nie sú na serveri zapnuté.</p>
         ) : (

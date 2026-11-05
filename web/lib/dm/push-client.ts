@@ -32,9 +32,12 @@ export async function pushStatus(): Promise<PushStatus> {
 }
 
 export async function enablePush() {
+  // povolenie musí byť prvý krok po ťuknutí, po čakaní na server ho iPhone a niektoré prehliadače samy zamietnu
+  const permission = await Notification.requestPermission();
+  if (permission === "denied") throw new Error("Notifikácie sú zablokované. Povoľ ich v nastaveniach telefónu alebo prehliadača a skús to znova.");
+  if (permission !== "granted") throw new Error("Notifikácie sa nezapli. Skús to znova a v okne prehliadača zvoľ Povoliť.");
   const { publicKey } = await dmPushCall<{ publicKey: string | null }>("push_config");
   if (!publicKey) throw new Error("Notifikácie zatiaľ nie sú na serveri zapnuté.");
-  if ((await Notification.requestPermission()) !== "granted") throw new Error("Prehliadač notifikácie nepovolil.");
   const reg = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
   await navigator.serviceWorker.ready;
   const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: fromB64u(publicKey) as BufferSource });
