@@ -55,6 +55,12 @@ Začatie konverzácie po oprave funguje. Na želanie používateľa je Napísať
 
 Na rozhodnutie používateľa vidí správca pri nahlásení aj 5 správ pred ňou a 5 po nej. Upravená funkcia, rozhranie, `/sukromie` a dokumentácia.
 
+## 5. 11. 2026: zlúčenie do main
+
+Používateľ súhlasil so zlúčením, lebo preview sa na mobil zle inštaluje a notifikácie chce skúsiť na hlavnej adrese. Správy ostávajú na produkcii vypnuté, kým sa vo Verceli nenastaví `NEXT_PUBLIC_DM_ENABLED=1` pre Production. Spolu s tým pribudla grafika na domovskej stránke a v `/sukromie`.
+
+Ručný test začatia konverzácie, prijatia, odoslania a Prečítané prešiel na preview. Notifikácie na telefóne ešte neboli vyskúšané.
+
 ## Stav
 
-Hotové a otestované automaticky a v prehliadači so simuláciou. Ostáva [ručný test](TESTOVANIE.md). Do `main` nezlúčené, na produkcii nič.
+Hotové a otestované automaticky a v prehliadači so simuláciou. Ostáva [ručný test](TESTOVANIE.md). Zlúčené do `main`, na produkcii vypnuté prepínačom.

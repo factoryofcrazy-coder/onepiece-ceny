@@ -1291,3 +1291,11 @@ body.dm-open main.wrap { max-width: none; padding: 0; }
 .dm-admin-item .tiny { color: var(--muted); }
 .dm-admin-ctx { opacity: .72; }
 .dm-admin-hit { padding: 6px 8px; border-left: 3px solid #ff8a8a; background: rgb(255 138 138 / .1); border-radius: 4px; }
+
+/* Grafika na domovskej stránke a v zásadách súkromia */
+.dash-banner { display: block; width: 100%; height: auto; border-radius: 20px; border: 1px solid var(--line); }
+.legal-art { display: block; width: 100%; height: auto; margin-bottom: 18px; border-radius: 16px; border: 1px solid var(--line); }
+@media (max-width: 720px) {
+  .dash-banner { border-radius: 14px; }
+  .legal-art { border-radius: 12px; }
+}

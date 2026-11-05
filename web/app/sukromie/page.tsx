@@ -7,6 +7,7 @@ export const metadata: Metadata = { title: "Zásady súkromia – Grand Line Tra
 export default function Privacy() {
   return (
     <article className="ucet legal">
+      <img className="legal-art" src="/art/sukromie.webp" width={1672} height={941} alt="Grand-Line.eu: Luffy v troch podobách nad zasneženým hradom" />
       <h1>Zásady súkromia</h1>
       <p className="muted small">Platné od 4. 11. 2026</p>
       <p>
