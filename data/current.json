@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-05T11:23:06Z",
+ "updated": "2026-11-05T13:23:06Z",
  "fx": {
   "CZK": 24.309,
   "USD": 1.1267,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -553,7 +553,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -640,7 +640,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -1887,7 +1887,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -2253,7 +2253,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -2854,11 +2854,11 @@
     }
    ],
    "error": "HTTP Error 502: Bad Gateway (https://www.tolarie.cz/koupit_produkty/katalog/70-one-piece/57-one-piece-booster-boxy/)",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "cernyrytir": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3017,7 +3017,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3590,7 +3590,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3746,7 +3746,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3770,7 +3770,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3821,7 +3821,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -3872,7 +3872,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -4006,7 +4006,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -4827,8 +4827,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "yonko": {
    "ts": "2026-11-05T11:19:22Z",
@@ -5439,12 +5439,12 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "funkelpappe": {
-   "ts": "2026-11-05T11:19:22Z",
-   "ok": false,
+   "ts": "2026-11-05T13:23:06Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece TCG OP-17 The World's Strongest Warriors Booster Display – Japanisch",
@@ -5518,10 +5518,7 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/1050/1786/8620/files/OP-OP13COHW-BD-JPN.png?v=1782678633"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "mikis": {
    "ts": "2026-11-05T11:19:22Z",
@@ -5673,11 +5670,11 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "butticards": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -5846,7 +5843,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -5924,7 +5921,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -6128,8 +6125,8 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-11-05T11:19:22Z",
-   "ok": false,
+   "ts": "2026-11-05T13:23:06Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game - 3D2Y ST-14 Starter Deck Englisch",
@@ -6437,13 +6434,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0324/5867/0218/files/one-piece-card-game-the-worlds-strongest-warriors-op-17-booster-display-japanisch.webp?v=1790449080"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "samurai": {
-   "ts": "2026-11-05T11:23:06Z",
+   "ts": "2026-11-05T13:23:06Z",
    "ok": true,
    "items": [
     {
@@ -6458,9 +6452,9 @@
     {
      "name": "OP-06 Wings of the Captain Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op06box-damaged-box",
-     "price": 20219.0,
+     "price": 20209.0,
      "currency": "JPY",
-     "eur": 113.4,
+     "eur": 113.34,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4116-0e1f258c7a54/op06box_sst-thumb-320.webp"
     },
@@ -6470,15 +6464,15 @@
      "price": 35099.0,
      "currency": "JPY",
      "eur": 196.85,
-     "inStock": false,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4106-b4c20ebc0716/op01box_sst_88bb8ccc-0939-4e52-b392-8d54ae1ce257-thumb-320.webp"
     },
     {
      "name": "OP-17 The World’s Strongest Warriors Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box-damaged-box",
-     "price": 8993.0,
+     "price": 8983.0,
      "currency": "JPY",
-     "eur": 50.44,
+     "eur": 50.38,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
@@ -6506,15 +6500,15 @@
      "price": 28786.0,
      "currency": "JPY",
      "eur": 161.45,
-     "inStock": false,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1760-783ddcdc3aff/eb02box_sst-thumb-320.webp"
     },
     {
      "name": "EB-01 Memorial Collection Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/eb-01-memorial-collection-japanese-one-piece-booster-box-damaged-box",
-     "price": 15906.0,
+     "price": 16393.0,
      "currency": "JPY",
-     "eur": 89.21,
+     "eur": 91.94,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1758-037930df5454/eb01box_sst-thumb-320.webp"
     },
@@ -6530,10 +6524,10 @@
     {
      "name": "PRB-01 One Piece Card The Best Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/prb-01-one-piece-card-the-best-japanese-one-piece-booster-box-damaged-box",
-     "price": 19813.0,
+     "price": 19955.0,
      "currency": "JPY",
-     "eur": 111.12,
-     "inStock": false,
+     "eur": 111.92,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4480-6ed547b0e5e4/prb01box_sst_d4b56848-43ef-4ac7-b81e-32e30b0930bf-thumb-320.webp"
     },
     {
@@ -6548,9 +6542,9 @@
     {
      "name": "OP-14 The Azure Sea’s Seven Booster Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-14-the-azure-seas-seven-booster-japanese-one-piece-booster-box-damaged-box",
-     "price": 9308.0,
+     "price": 9298.0,
      "currency": "JPY",
-     "eur": 52.2,
+     "eur": 52.15,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4132-0b53b0de33e9/op14box_sst-thumb-320.webp"
     },
@@ -6578,16 +6572,16 @@
      "price": 27345.0,
      "currency": "JPY",
      "eur": 153.37,
-     "inStock": false,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4126-ef7aadb572ed/op11box_sst-thumb-320.webp"
     },
     {
      "name": "OP-10 Royal Blood Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-10-royal-blood-japanese-one-piece-booster-box-damaged-box",
-     "price": 9450.0,
+     "price": 9643.0,
      "currency": "JPY",
-     "eur": 53.0,
-     "inStock": false,
+     "eur": 54.08,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4124-4ff898448a99/op10box_sst-thumb-320.webp"
     },
     {
@@ -6602,27 +6596,27 @@
     {
      "name": "OP-08 Two Legends Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-08-two-legends-japanese-one-piece-booster-box-damaged-box",
-     "price": 10130.0,
+     "price": 10607.0,
      "currency": "JPY",
-     "eur": 56.81,
-     "inStock": false,
+     "eur": 59.49,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4120-27accad58b4e/op08box_sst-thumb-320.webp"
     },
     {
      "name": "OP-07 500 Years in the Future Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-07-500-years-in-the-future-japanese-one-piece-booster-box-damaged-box",
-     "price": 14515.0,
+     "price": 14556.0,
      "currency": "JPY",
-     "eur": 81.41,
-     "inStock": false,
+     "eur": 81.64,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4118-cf4993f57082/op07box_sst-thumb-320.webp"
     },
     {
      "name": "OP-05 Awakening of the New Era Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-05-awakening-of-the-new-era-japanese-one-piece-booster-box-damaged-box",
-     "price": 45919.0,
+     "price": 45878.0,
      "currency": "JPY",
-     "eur": 257.54,
+     "eur": 257.31,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4114-55dcc7370b4a/op05box_sst-thumb-320.webp"
     },
@@ -6632,16 +6626,16 @@
      "price": 14941.0,
      "currency": "JPY",
      "eur": 83.8,
-     "inStock": false,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4112-d22581bdbdb8/op04box_sst-thumb-320.webp"
     },
     {
      "name": "OP-03 Pillars of Strength Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-03-pillars-of-strength-japanese-one-piece-booster-box-damaged-box",
-     "price": 13013.0,
+     "price": 13977.0,
      "currency": "JPY",
-     "eur": 72.98,
-     "inStock": false,
+     "eur": 78.39,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4110-35d94f066fd9/op03box_sst-thumb-320.webp"
     },
     {
@@ -6650,7 +6644,7 @@
      "price": 16860.0,
      "currency": "JPY",
      "eur": 94.56,
-     "inStock": false,
+     "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4108-686aa9402225/op02box_sst-thumb-320.webp"
     },
     {
@@ -6665,9 +6659,9 @@
     {
      "name": "OP-17 The World’s Strongest Warriors Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box",
-     "price": 9846.0,
+     "price": 9841.0,
      "currency": "JPY",
-     "eur": 55.22,
+     "eur": 55.19,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
@@ -6692,9 +6686,9 @@
     {
      "name": "PRB-01 One Piece Card The Best Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/prb01box",
-     "price": 21694.0,
+     "price": 21852.0,
      "currency": "JPY",
-     "eur": 121.67,
+     "eur": 122.56,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4480-6ed547b0e5e4/prb01box_sst_d4b56848-43ef-4ac7-b81e-32e30b0930bf-thumb-320.webp"
     },
@@ -6710,9 +6704,9 @@
     {
      "name": "OP-14 The Azure Sea’s Seven Booster Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op14box",
-     "price": 10289.0,
+     "price": 10287.0,
      "currency": "JPY",
-     "eur": 57.71,
+     "eur": 57.69,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4132-0b53b0de33e9/op14box_sst-thumb-320.webp"
     },
@@ -6746,9 +6740,9 @@
     {
      "name": "OP-10 Royal Blood Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op10box",
-     "price": 10644.0,
+     "price": 10861.0,
      "currency": "JPY",
-     "eur": 59.7,
+     "eur": 60.91,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4124-4ff898448a99/op10box_sst-thumb-320.webp"
     },
@@ -6764,36 +6758,36 @@
     {
      "name": "OP-08 Two Legends Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op08box",
-     "price": 11732.0,
+     "price": 12282.0,
      "currency": "JPY",
-     "eur": 65.8,
+     "eur": 68.88,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4120-27accad58b4e/op08box_sst-thumb-320.webp"
     },
     {
      "name": "OP-07 500 Years in the Future Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op07box",
-     "price": 15587.0,
+     "price": 15634.0,
      "currency": "JPY",
-     "eur": 87.42,
+     "eur": 87.68,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4118-cf4993f57082/op07box_sst-thumb-320.webp"
     },
     {
      "name": "OP-06 Wings of the Captain Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op06box",
-     "price": 21719.0,
+     "price": 21705.0,
      "currency": "JPY",
-     "eur": 121.81,
+     "eur": 121.73,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4116-0e1f258c7a54/op06box_sst-thumb-320.webp"
     },
     {
      "name": "OP-05 Awakening of the New Era Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op05box",
-     "price": 49553.0,
+     "price": 49505.0,
      "currency": "JPY",
-     "eur": 277.92,
+     "eur": 277.65,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4114-55dcc7370b4a/op05box_sst-thumb-320.webp"
     },
@@ -6809,9 +6803,9 @@
     {
      "name": "OP-03 Pillars of Strength Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op03box",
-     "price": 15348.0,
+     "price": 16485.0,
      "currency": "JPY",
-     "eur": 86.08,
+     "eur": 92.46,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4110-35d94f066fd9/op03box_sst-thumb-320.webp"
     },
@@ -6863,9 +6857,9 @@
     {
      "name": "EB-01 Memorial Collection Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/eb01box",
-     "price": 18088.0,
+     "price": 18636.0,
      "currency": "JPY",
-     "eur": 101.45,
+     "eur": 104.52,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1758-037930df5454/eb01box_sst-thumb-320.webp"
     }
@@ -8543,8 +8537,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "underpaid": {
    "ts": "2026-11-05T11:19:22Z",
@@ -9344,8 +9338,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "cardbinder": {
    "ts": "2026-11-05T11:19:22Z",
@@ -9848,8 +9842,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   }
  }
 }
