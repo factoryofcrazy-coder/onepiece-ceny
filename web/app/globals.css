@@ -1289,3 +1289,5 @@ body.dm-open main.wrap { max-width: none; padding: 0; }
 .dm-admin-item { display: flex; flex-direction: column; gap: 6px; padding: 10px; margin-bottom: 8px; border: 1px solid var(--line); border-radius: 12px; }
 .dm-admin-item p { margin: 0; font-size: 14px; overflow-wrap: anywhere; white-space: pre-wrap; }
 .dm-admin-item .tiny { color: var(--muted); }
+.dm-admin-ctx { opacity: .72; }
+.dm-admin-hit { padding: 6px 8px; border-left: 3px solid #ff8a8a; background: rgb(255 138 138 / .1); border-radius: 4px; }

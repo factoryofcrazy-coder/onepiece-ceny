@@ -291,7 +291,7 @@ function Conversation({
   const sendReport = async (e: FormEvent) => {
     e.preventDefault();
     if (!reporting) return;
-    await act("report", { messageId: reporting, reason }, "Správa je nahlásená. Správca uvidí len ju.");
+    await act("report", { messageId: reporting, reason }, "Správa je nahlásená.");
     setReporting(null);
     setReason("");
   };
@@ -390,7 +390,7 @@ function Conversation({
           <button type="button" className="btn ghost sm" onClick={() => setReporting(null)}>
             Zrušiť
           </button>
-          <p className="tiny muted">Správca uvidí len túto správu, nie celú konverzáciu.</p>
+          <p className="tiny muted">Správca uvidí túto správu a najviac 5 správ pred ňou a po nej, nie celú konverzáciu.</p>
         </form>
       )}
 
@@ -587,10 +587,14 @@ function Settings({ onClose, onChanged }: { onClose: () => void; onChanged: () =
       {isAdmin && (
         <section>
           <h2>Nahlásené správy ({reports.length})</h2>
-          <p className="tiny muted">Vidíš len nahlásené správy, nie zvyšok konverzácie.</p>
+          <p className="tiny muted">Vidíš nahlásenú správu a najviac 5 správ pred ňou a po nej, nie zvyšok konverzácie.</p>
           {reports.map((r) => (
             <div key={r.id} className="dm-admin-item">
-              <p>{r.unreadable ? "Správu sa nepodarilo načítať." : r.body?.text || `Karta ${r.body?.card?.id ?? ""}`}</p>
+              {[...(r.context ?? []).filter((m: any) => m.created_at < r.message_at), { id: r.id, sender_name: r.sender_name, body: r.body, unreadable: r.unreadable, reported: true }, ...(r.context ?? []).filter((m: any) => m.created_at > r.message_at)].map((m: any) => (
+                <p key={m.id} className={m.reported ? "dm-admin-hit" : "dm-admin-ctx"}>
+                  <b>{m.sender_name}:</b> {m.unreadable ? "Správu sa nepodarilo načítať." : m.body?.text || `Karta ${m.body?.card?.id ?? ""}`}
+                </p>
+              ))}
               <span className="tiny">
                 Od {r.sender_name}, nahlásil {r.reporter_name}
                 {r.reason ? `: ${r.reason}` : ""}

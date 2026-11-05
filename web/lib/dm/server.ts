@@ -245,7 +245,13 @@ export function createDmHandler(env: DmEnv, deps: DmDeps = {}) {
       return Promise.all(
         rows.map(async (r) => {
           const body = await unseal({ ...r, id: r.message_id });
-          return { id: r.id, created_at: r.created_at, message_at: r.message_at, reason: r.reason, sender_id: r.sender_id, sender_name: r.sender_name, reporter_name: r.reporter_name, body, unreadable: !body };
+          const context = await Promise.all(
+            ((r.context ?? []) as any[]).map(async (m) => {
+              const b = await unseal(m);
+              return { id: m.id, created_at: m.created_at, sender_name: m.sender_name, body: b, unreadable: !b };
+            }),
+          );
+          return { id: r.id, created_at: r.created_at, message_at: r.message_at, reason: r.reason, sender_id: r.sender_id, sender_name: r.sender_name, reporter_name: r.reporter_name, body, unreadable: !body, context };
         }),
       );
     },

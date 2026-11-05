@@ -70,6 +70,7 @@ beforeAll(async () => {
   await db.exec(readFileSync("supabase/migrations/20261111_direct_messages.sql", "utf8"));
   // oprava sa musí dať spustiť nad už hotovou migráciou
   await db.exec(readFileSync("supabase/migrations/20261112_dm_open_fix.sql", "utf8"));
+  await db.exec(readFileSync("supabase/migrations/20261113_dm_report_context.sql", "utf8"));
 }, 60000);
 
 beforeEach(async () => {
@@ -382,17 +383,36 @@ describe("história a neprečítané", () => {
 });
 
 describe("nahlásenia a správca", () => {
-  it("správca vidí len nahlásenú správu, nie zvyšok konverzácie", async () => {
+  it("správca vidí nahlásenú správu a 5 správ okolo nej, nie viac", async () => {
+    const c = await accepted();
+    const other = await accepted(ANNA, CYRIL);
+    await send(ANNA, other, "iná konverzácia");
+    for (let i = 1; i <= 7; i++) await send(ANNA, c, `pred${i}`);
+    await db.exec(`update public.dm_messages set created_at = created_at - interval '5 minutes' where conversation_id = '${c}'`);
+    const bad = await send(ANNA, c, "podvodná ponuka");
+    await db.exec(`update public.dm_messages set created_at = created_at - interval '2 minutes' where sender_id = '${ANNA}' and conversation_id = '${c}' and id = '${bad.id}'`);
+    for (let i = 1; i <= 7; i++) await send(BORIS, c, `po${i}`);
+    expect((await ok(ADMIN, "history", { conversationId: c }).catch((e) => e.message))).toContain("nenašla");
+    await ok(BORIS, "report", { messageId: bad.id });
+    const [r] = await ok(ADMIN, "admin_reports");
+    const texts = r.context.map((m: any) => m.body.text);
+    expect(texts).toEqual(["pred3", "pred4", "pred5", "pred6", "pred7", "po1", "po2", "po3", "po4", "po5"]);
+    expect(r.context[0].sender_name).toBe("Anna");
+    expect(r.context[9].sender_name).toBe("Boris");
+    expect(JSON.stringify(r)).not.toContain("ciphertext");
+    expect(JSON.stringify(r)).not.toContain("iná konverzácia");
+    expect(JSON.stringify(r)).not.toContain("pred2");
+    expect(JSON.stringify(r)).not.toContain("po6");
+  });
+  it("správca vidí nahlásenú správu a dôvod", async () => {
     const c = await accepted();
     const bad = await send(ANNA, c, "podvodná ponuka");
-    await send(ANNA, c, "súkromná správa");
     expect((await ok(ADMIN, "history", { conversationId: c }).catch((e) => e.message))).toContain("nenašla");
     await ok(BORIS, "report", { messageId: bad.id, reason: "podvod" });
     const reports = await ok(ADMIN, "admin_reports");
     expect(reports).toHaveLength(1);
     expect(reports[0]).toMatchObject({ reason: "podvod", sender_name: "Anna", reporter_name: "Boris" });
     expect(reports[0].body.text).toBe("podvodná ponuka");
-    expect(JSON.stringify(reports)).not.toContain("súkromná");
     await ok(ADMIN, "admin_resolve", { id: reports[0].id });
     expect(await ok(ADMIN, "admin_reports")).toEqual([]);
   });

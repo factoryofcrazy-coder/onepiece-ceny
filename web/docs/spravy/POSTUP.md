@@ -51,6 +51,10 @@ Oprava: vek účtu sa berie z `profiles` (migrácia `20261112_dm_open_fix.sql`),
 
 Začatie konverzácie po oprave funguje. Na želanie používateľa je Napísať len na trhovisku a cez hľadanie, z rebríčka a verejného chatu je odstránené.
 
+## 5. 11. 2026: správca a okolité správy
+
+Na rozhodnutie používateľa vidí správca pri nahlásení aj 5 správ pred ňou a 5 po nej. Upravená funkcia, rozhranie, `/sukromie` a dokumentácia.
+
 ## Stav
 
 Hotové a otestované automaticky a v prehliadači so simuláciou. Ostáva [ručný test](TESTOVANIE.md). Do `main` nezlúčené, na produkcii nič.

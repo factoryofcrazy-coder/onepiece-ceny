@@ -19,7 +19,7 @@ npm test                     # celý projekt
 | Blokovanie a limity | oba smery, hľadanie, ban v chate, 20 za minútu, 3 a 10 nových hráčov denne |
 | Ponuky | cena z databázy, neexistujúca ponuka, karta bez textu |
 | Hľadanie | diakritika, len vlastné konverzácie, odmietnuté žiadosti, krátky výraz |
-| Správca | vidí len nahlásené, bežný hráč nie je správca, kópia prežije zmazanie |
+| Správca | vidí nahlásenú správu a 5 správ okolo nej, nie viac a nie z inej konverzácie, bežný hráč nie je správca, kópia prežije zmazanie |
 | Uchovávanie | zmazanie po 12 mesiacoch |
 
 | Notifikácie | nezávislé rozšifrovanie podľa RFC 8291, overenie podpisu VAPID, povolené adresy, žiadosť bez textu, skrytie textu, neplatné zariadenie, service worker |
@@ -57,7 +57,7 @@ Treba dva účty (A, B), ideálne dva telefóny alebo telefón a počítač. Sk�
 8. B: skryť text v notifikácii, overiť ďalšou správou.
 9. Nový účet C napíše B: notifikácia je bez textu.
 10. Hľadať slovo s diakritikou aj bez nej, aj na druhom zariadení.
-11. B nahlási správu, správca ju vidí v Nastaveniach a nevidí zvyšok konverzácie.
+11. B nahlási správu, správca ju vidí v Nastaveniach s najviac 5 správami pred ňou a po nej a nevidí zvyšok konverzácie.
 12. B zablokuje A: A nemôže písať, Píše… zmizne. Odblokovať.
 13. B sa odhlási: notifikácie na zariadení prestanú chodiť.
 14. V Supabase overiť, že `dm_messages.ciphertext` je nečitateľný a v logoch funkcie nie je text.

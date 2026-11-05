@@ -14,7 +14,7 @@ Stav: vo vývoji vo vetve `sukromne-spravy`, na produkcii zatiaľ nie je. Postup
 | Webové upozornenie | Ikona s počtom v hornej lište |
 | Mobil | Notifikácia s menom a textom, web pridaný na plochu (PWA) |
 | Obsah prvej verzie | Text, karta alebo ponuka, Prečítané, Píše… |
-| Správca | Vidí len nahlásené správy. Rozhranie na čítanie konverzácií neexistuje. |
+| Správca | Pri nahlásení vidí správu a najviac 5 správ pred ňou a 5 po nej. Rozhranie na čítanie celých konverzácií neexistuje. |
 
 ## Čo sa dá a nedá sľúbiť
 
@@ -66,7 +66,7 @@ Databázové funkcie `dm_*` smie volať len `service_role`. Výnimky:
 - **Správy:** najviac 1 000 znakov, riadiace znaky a skryté znaky smeru textu sa odstraňujú.
 - **Ponuka:** cena a stav sa berú z databázy, nie od odosielateľa.
 - **Ban v chate:** platí aj pre súkromné správy.
-- **Nahlásenie:** vytvorí šifrovanú kópiu, ktorá prežije zmazanie správy, najviac 12 mesiacov.
+- **Nahlásenie:** vytvorí šifrovanú kópiu, ktorá prežije zmazanie správy, najviac 12 mesiacov. Okolité správy sa berú zo živej konverzácie (`20261113_dm_report_context.sql`), po zmazaní ostane len kópia.
 
 ## Rozhranie
 
