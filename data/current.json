@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-05T05:23:04Z",
+ "updated": "2026-11-05T07:23:05Z",
  "fx": {
   "CZK": 24.309,
   "USD": 1.1267,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -553,7 +553,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -640,7 +640,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -1887,7 +1887,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -2253,7 +2253,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -2632,7 +2632,7 @@
    ]
   },
   "tolarie": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -2855,7 +2855,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3014,7 +3014,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3587,7 +3587,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3743,7 +3743,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3767,7 +3767,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3818,7 +3818,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3869,7 +3869,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -4003,7 +4003,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -4824,8 +4824,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "yonko": {
    "ts": "2026-11-05T05:18:22Z",
@@ -5436,8 +5436,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "funkelpappe": {
    "ts": "2026-11-05T05:18:22Z",
@@ -5517,12 +5517,12 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "mikis": {
-   "ts": "2026-11-05T05:18:22Z",
-   "ok": false,
+   "ts": "2026-11-05T07:23:05Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game Illustration Box IB-07 - Englisch",
@@ -5668,13 +5668,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/OnePieceCardGameAdventureonKamisIslandOP-15BoosterDisplay_Englisch.webp?v=1775934440"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "butticards": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -5843,7 +5840,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -5921,7 +5918,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -6436,11 +6433,11 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "samurai": {
-   "ts": "2026-11-05T05:23:04Z",
+   "ts": "2026-11-05T07:23:05Z",
    "ok": true,
    "items": [
     {
@@ -6473,9 +6470,9 @@
     {
      "name": "OP-17 The World’s Strongest Warriors Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box-damaged-box",
-     "price": 9034.0,
+     "price": 9014.0,
      "currency": "JPY",
-     "eur": 50.67,
+     "eur": 50.56,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
@@ -6491,9 +6488,9 @@
     {
      "name": "EB-03 Heroines Edition Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/eb-03-heroines-edition-japanese-one-piece-booster-box-damaged-box",
-     "price": 11074.0,
+     "price": 11034.0,
      "currency": "JPY",
-     "eur": 62.11,
+     "eur": 61.88,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1762-81171649d67e/eb03box_sst-thumb-320.webp"
     },
@@ -6545,18 +6542,18 @@
     {
      "name": "OP-14 The Azure Sea’s Seven Booster Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-14-the-azure-seas-seven-booster-japanese-one-piece-booster-box-damaged-box",
-     "price": 9328.0,
+     "price": 9318.0,
      "currency": "JPY",
-     "eur": 52.32,
+     "eur": 52.26,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4132-0b53b0de33e9/op14box_sst-thumb-320.webp"
     },
     {
      "name": "OP-13 Carrying on His Will Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-13-carrying-on-his-will-japanese-one-piece-booster-box-damaged-box",
-     "price": 17124.0,
+     "price": 17103.0,
      "currency": "JPY",
-     "eur": 96.04,
+     "eur": 95.92,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4130-f30c2b9ef984/op13box_sst-thumb-320.webp"
     },
@@ -6653,36 +6650,36 @@
     {
      "name": "OP-16 The Time of Battle Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-16-the-time-of-battle-japanese-one-piece-booster-box-damaged-box",
-     "price": 8354.0,
+     "price": 8344.0,
      "currency": "JPY",
-     "eur": 46.85,
+     "eur": 46.8,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/06/op16-the-time-of-battle-box-sst-logo-2-300x300.webp"
     },
     {
      "name": "OP-17 The World’s Strongest Warriors Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box",
-     "price": 9892.0,
+     "price": 9876.0,
      "currency": "JPY",
-     "eur": 55.48,
+     "eur": 55.39,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
     {
      "name": "OP-16 The Time of Battle Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op16box",
-     "price": 9332.0,
+     "price": 9314.0,
      "currency": "JPY",
-     "eur": 52.34,
+     "eur": 52.24,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/06/op16-the-time-of-battle-box-sst-logo-2-300x300.webp"
     },
     {
      "name": "PRB-02 ONE PIECE CARD THE BEST vol.2 Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/prb02box",
-     "price": 11072.0,
+     "price": 11068.0,
      "currency": "JPY",
-     "eur": 62.1,
+     "eur": 62.08,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4482-c81e01b21a23/prb02box_sst-thumb-320.webp"
     },
@@ -6698,27 +6695,27 @@
     {
      "name": "OP-15 Island of God Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op15box",
-     "price": 8888.0,
+     "price": 8887.0,
      "currency": "JPY",
-     "eur": 49.85,
+     "eur": 49.84,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4134-460f725eadf2/op15box_sst-thumb-320.webp"
     },
     {
      "name": "OP-14 The Azure Sea’s Seven Booster Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op14box",
-     "price": 10321.0,
+     "price": 10301.0,
      "currency": "JPY",
-     "eur": 57.89,
+     "eur": 57.77,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4132-0b53b0de33e9/op14box_sst-thumb-320.webp"
     },
     {
      "name": "OP-13 Carrying on His Will Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op13box",
-     "price": 18212.0,
+     "price": 18194.0,
      "currency": "JPY",
-     "eur": 102.14,
+     "eur": 102.04,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4130-f30c2b9ef984/op13box_sst-thumb-320.webp"
     },
@@ -6842,9 +6839,9 @@
     {
      "name": "EB-03 Heroines Edition Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/eb03box",
-     "price": 11661.0,
+     "price": 11622.0,
      "currency": "JPY",
-     "eur": 65.4,
+     "eur": 65.18,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1762-81171649d67e/eb03box_sst-thumb-320.webp"
     },
@@ -8540,8 +8537,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "underpaid": {
    "ts": "2026-11-05T05:18:22Z",
@@ -9341,8 +9338,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "cardbinder": {
    "ts": "2026-11-05T05:18:22Z",
@@ -9845,8 +9842,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   }
  }
 }
