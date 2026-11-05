@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { DM_ENABLED, GAME_PUBLIC } from "@/lib/config";
-import { levelProgress, loadBadges, XP_SOURCES } from "@/lib/gamify";
+import { levelProgress, loadBadges, onXpChanged, XP_SOURCES } from "@/lib/gamify";
 import { useNewReports } from "@/lib/reports";
 import { useDm } from "@/lib/dm/client";
 import { sb } from "@/lib/supabase";
@@ -72,21 +72,35 @@ const active = (path: string, href: string) => (href === "/" ? path === "/" : pa
 
 /** Dnešné XP sa dajú zobraziť v bočnom paneli aj na domovskej stránke. */
 export function useTodayXp(userId?: string) {
+  const path = usePathname();
   const [today, setToday] = useState<Record<string, number>>({});
   const [xp, setXp] = useState(0);
+  const lastLoad = useRef(0);
+  const load = useCallback(
+    (fresh: boolean) => {
+      if (!userId) return;
+      const n = ++lastLoad.current; // starší výsledok, ktorý dobehne neskôr, nesmie prepísať novší
+      sb()
+        .from("xp_log")
+        .select("source, points")
+        .eq("day", new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Bratislava" }))
+        .then(({ data }) => n === lastLoad.current && data && setToday(Object.fromEntries((data as any[]).map((x) => [x.source, x.points]))));
+      loadBadges(fresh).then((m) => n === lastLoad.current && setXp(m.get(userId)?.xp ?? 0));
+    },
+    [userId],
+  );
+  // po prechode na inú stránku (chat, report, zbierka) a po návrate do okna môžu byť XP iné
+  useEffect(() => load(false), [load, path]);
   useEffect(() => {
-    if (!userId) return;
-    let live = true;
-    sb()
-      .from("xp_log")
-      .select("source, points")
-      .eq("day", new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Bratislava" }))
-      .then(({ data }) => live && setToday(Object.fromEntries(((data as any[]) ?? []).map((x) => [x.source, x.points]))));
-    loadBadges().then((m) => live && setXp(m.get(userId)?.xp ?? 0));
+    const again = () => document.visibilityState === "visible" && load(false);
+    document.addEventListener("visibilitychange", again);
+    const off = onXpChanged(() => load(true));
     return () => {
-      live = false;
+      document.removeEventListener("visibilitychange", again);
+      off();
+      lastLoad.current++; // po odchode už nič nenastavuj
     };
-  }, [userId]);
+  }, [load]);
   return { today, xp };
 }
 

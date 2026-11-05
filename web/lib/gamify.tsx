@@ -43,6 +43,14 @@ export const XP_SOURCES: { id: string; label: string; hint: string; cap: number 
   { id: "report", label: "Report", hint: "5 XP za hlásenie", cap: 10 },
 ];
 
+/** Oznámi obrazovkám, že sa zmenili XP (napr. databáza práve pripísala dennú návštevu). */
+const XP_EVENT = "gl-xp-changed";
+export const notifyXp = () => window.dispatchEvent(new Event(XP_EVENT));
+export const onXpChanged = (fn: () => void) => {
+  window.addEventListener(XP_EVENT, fn);
+  return () => window.removeEventListener(XP_EVENT, fn);
+};
+
 export type Badge = { elo: number; games: number; xp: number };
 let cache: { at: number; map: Promise<Map<string, Badge>> } | null = null;
 
