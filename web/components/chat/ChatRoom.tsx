@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useChat } from "@/lib/chat";
 import { UserBadge, useBadges } from "@/lib/gamify";
-import Reactions from "@/components/reactions/Reactions";
+import { ReactionAdd, ReactionPanel, ReactionPills, tapToReact } from "@/components/reactions/Reactions";
 
 const MAX = 500;
 
@@ -26,6 +26,7 @@ export default function ChatRoom() {
   const list = useRef<HTMLDivElement>(null);
   const lastId = useRef(0);
   const bottom = useRef(true);
+  const [rxOpen, setRxOpen] = useState<number | null>(null);
 
   const toBottom = () => {
     if (list.current) list.current.scrollTop = list.current.scrollHeight;
@@ -86,11 +87,12 @@ export default function ChatRoom() {
           <p className="muted small">Zatiaľ tu nikto nič nenapísal. Začni ty.</p>
         ) : (
           msgs.map((m) => (
-            <div key={m.id} className={`chatx-msg ${m.user_id === user.id ? "me" : ""}`}>
+            <div key={m.id} className={`chatx-msg ${m.user_id === user.id ? "me" : ""}`} onClick={(e) => reactions && tapToReact(e, () => setRxOpen(rxOpen === m.id ? null : m.id))}>
               <div className="chatx-head">
                 <b>{m.username}</b>
                 <UserBadge badge={badges.get(m.user_id)} compact />
                 <span className="tiny muted">{fmtTime(m.created_at)}</span>
+                {reactions && <ReactionAdd open={rxOpen === m.id} onClick={() => setRxOpen(rxOpen === m.id ? null : m.id)} />}
                 {(isAdmin || m.user_id !== user.id) && (
                   <span className="chatx-tools">
                     {!isAdmin && (
@@ -113,13 +115,10 @@ export default function ChatRoom() {
               </div>
               <p>{m.body}</p>
               {reactions && (
-                <Reactions
-                  rows={reactions.get(m.id)}
-                  me={user.id}
-                  nameOf={(u) => names.get(u) ?? "Hráč"}
-                  canReact={!banned.has(user.id)}
-                  onToggle={(emote, on) => toggleReaction(m.id, emote, on)}
-                />
+                <ReactionPills rows={reactions.get(m.id)} me={user.id} nameOf={(u) => names.get(u) ?? "Hráč"} canReact={!banned.has(user.id)} onToggle={(emote, on) => toggleReaction(m.id, emote, on)} />
+              )}
+              {reactions && rxOpen === m.id && (
+                <ReactionPanel rows={reactions.get(m.id)} me={user.id} nameOf={(u) => names.get(u) ?? "Hráč"} canReact={!banned.has(user.id)} onToggle={(emote, on) => toggleReaction(m.id, emote, on)} onClose={() => setRxOpen(null)} />
               )}
             </div>
           ))

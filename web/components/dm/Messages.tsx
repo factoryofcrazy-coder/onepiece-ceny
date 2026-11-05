@@ -9,7 +9,7 @@ import { dmCall, DmConversation, DmMember, DmMessage, DmSearchHit, useDm } from 
 import { fmtDmDay, fmtDmTime, hasLink, previewOf, splitLinks } from "@/lib/dm/text";
 import { disablePush, enablePush, pushStatus, PushStatus } from "@/lib/dm/push-client";
 import { sb } from "@/lib/supabase";
-import Reactions from "@/components/reactions/Reactions";
+import { ReactionAdd, ReactionPanel, ReactionPills, tapToReact } from "@/components/reactions/Reactions";
 import { applyReaction, EmoteId, isEmote } from "@/lib/reactions";
 
 const MAX = 1000;
@@ -126,6 +126,7 @@ function Conversation({
   const [open, setOpen] = useState<Card | null>(null);
   const [reporting, setReporting] = useState<string | null>(null);
   const [reason, setReason] = useState("");
+  const [rxOpen, setRxOpen] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const typingCh = useRef<ReturnType<ReturnType<typeof sb>["channel"]> | null>(null);
   const lastTyping = useRef(0);
@@ -379,17 +380,12 @@ function Conversation({
           msgs.map((m, i) => (
             <div key={m.id} className="dm-row-wrap">
               {days[i] && <div className="dm-day">{days[i]}</div>}
-              <div className={`dm-msg ${m.sender_id === me ? "me" : "other"} ${m.state ?? ""}`}>
+              <div
+                className={`dm-msg ${m.sender_id === me ? "me" : "other"} ${m.state ?? ""}`}
+                onClick={(e) => !m.state && m.body && tapToReact(e, () => setRxOpen(rxOpen === m.id ? null : m.id))}
+              >
                 <Body m={m} trusted={trusted} onCard={setOpen} />
-                {!m.state && m.body && (
-                  <Reactions
-                    rows={m.reactions}
-                    me={me}
-                    nameOf={() => conv.other_name}
-                    canReact={trusted && !conv.blocked_by_me}
-                    onToggle={(emote, on) => toggleReaction(m.id, emote, on)}
-                  />
-                )}
+                <ReactionPills rows={m.reactions} me={me} nameOf={() => conv.other_name} canReact={trusted && !conv.blocked_by_me} onToggle={(emote, on) => toggleReaction(m.id, emote, on)} />
                 <span className="dm-meta">
                   {m.state === "sending" ? "Odosiela sa…" : m.state === "failed" ? "Neodoslané" : fmtDmTime(m.created_at, new Date(m.created_at))}
                   {m.state === "failed" && (
@@ -402,8 +398,22 @@ function Conversation({
                       Nahlásiť
                     </button>
                   )}
+                  {!m.state && m.body && (trusted && !conv.blocked_by_me || (m.reactions?.length ?? 0) > 0) && (
+                    <ReactionAdd open={rxOpen === m.id} onClick={() => setRxOpen(rxOpen === m.id ? null : m.id)} />
+                  )}
                 </span>
               </div>
+              {rxOpen === m.id && (
+                <ReactionPanel
+                  rows={m.reactions}
+                  me={me}
+                  nameOf={() => conv.other_name}
+                  canReact={trusted && !conv.blocked_by_me}
+                  align={m.sender_id === me ? "end" : undefined}
+                  onToggle={(emote, on) => toggleReaction(m.id, emote, on)}
+                  onClose={() => setRxOpen(null)}
+                />
+              )}
             </div>
           ))
         )}

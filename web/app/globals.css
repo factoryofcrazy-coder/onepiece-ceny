@@ -1306,27 +1306,37 @@ body.dm-open main.wrap { max-width: none; padding: 0; }
 }
 
 /* reakcie na správy */
-.rx { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; min-width: 0; }
 .rx-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-.rx-pill { display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 8px 0 5px; border-radius: 999px; border: 1px solid var(--stroke-2); background: rgba(127, 127, 160, .12); color: var(--text); font-size: 12px; cursor: pointer; transition: border-color .15s, background .15s; }
+.chatx-msg .rx-row { margin-top: 6px; }
+.rx-pill { display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 8px 0 5px; border-radius: 999px; border: 1px solid var(--stroke-2); background: rgba(127, 127, 160, .14); color: inherit; font-size: 12px; cursor: pointer; transition: border-color .15s, background .15s; }
 .rx-pill b { font-weight: 700; }
 .rx-pill:hover:not(:disabled) { border-color: var(--foam); }
 .rx-pill.on { border-color: var(--foam); background: rgba(138, 99, 255, .24); }
+.dm-msg.me .rx-pill { border-color: rgba(255, 255, 255, .28); background: rgba(255, 255, 255, .14); }
+.dm-msg.me .rx-pill.on { border-color: #fff; background: rgba(255, 255, 255, .26); }
 .rx-pill:disabled { cursor: default; opacity: .85; }
-.rx-add { display: inline-grid; place-items: center; width: 26px; height: 26px; padding: 0; border-radius: 999px; border: 1px solid transparent; background: none; color: inherit; opacity: .55; cursor: pointer; transition: opacity .15s, border-color .15s; }
-.rx-add:hover, .rx-add:focus-visible, .rx-add.on { opacity: 1; border-color: var(--stroke-2); }
-/* s myšou sa pridanie ukáže až nad správou; dotykom je vidieť stále */
+/* v riadku s časom: nepridáva výšku, dotyková plocha je väčšia než ikona */
+.rx-add { display: inline-grid; place-items: center; width: 28px; height: 28px; margin: -7px -6px -7px 0; padding: 0; border: 0; border-radius: 999px; background: none; color: inherit; opacity: .6; cursor: pointer; transition: opacity .15s, background .15s; }
+.rx-add:hover, .rx-add:focus-visible, .rx-add.on { opacity: 1; background: rgba(127, 127, 160, .2); }
 @media (hover: hover) and (pointer: fine) {
   .rx-add { opacity: 0; }
   .chatx-msg:hover .rx-add, .dm-msg:hover .rx-add { opacity: .7; }
   .rx-add:focus-visible, .rx-add.on, .chatx-msg:hover .rx-add:hover, .dm-msg:hover .rx-add:hover { opacity: 1; }
 }
-.rx-panel { display: flex; flex-direction: column; gap: 8px; padding: 8px; border-radius: 12px; border: 1px solid var(--stroke-2); background: rgb(var(--ink-rgb) / .92); color: var(--text); animation: pop .15s var(--ease) both; max-width: 100%; }
-.rx-picker { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
-.rx-picker button { display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 52px; padding: 5px 2px; border-radius: 10px; border: 1px solid transparent; background: none; color: inherit; font-size: 10px; font-weight: 700; letter-spacing: .02em; cursor: pointer; }
+.rx-panel { display: flex; flex-direction: column; gap: 8px; width: min(280px, 100%); margin-top: 6px; padding: 8px; border-radius: 14px; border: 1px solid var(--stroke-2); background: var(--sea-2); color: var(--text); animation: pop .15s var(--ease) both; }
+.rx-panel.end { margin-left: auto; }
+.rx-picker { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; }
+.rx-picker button { display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 50px; padding: 5px 2px; border-radius: 10px; border: 1px solid transparent; background: none; color: inherit; font-size: 10px; font-weight: 700; letter-spacing: .02em; cursor: pointer; }
 .rx-picker button:hover, .rx-picker button:focus-visible { background: rgba(138, 99, 255, .18); }
 .rx-picker button.on { border-color: var(--foam); background: rgba(138, 99, 255, .24); }
-.rx-who { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.rx-who { list-style: none; margin: 0; padding: 6px 2px 0; border-top: 1px solid var(--stroke); display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.rx-picker:empty + .rx-who, .rx-who:first-child { border-top: 0; padding-top: 0; }
 .rx-who li { display: flex; align-items: center; gap: 6px; overflow-wrap: anywhere; }
 .emote { display: block; flex: none; }
 
+/* mobil: výrez hore (Dynamic Island) je súčasťou hlavičky; pole na písanie nesmie skončiť pod dolnou lištou */
+@media (max-width: 720px) {
+  .dm-page { height: calc(100dvh - 57px - var(--tb-h) - env(safe-area-inset-bottom) - env(safe-area-inset-top)); }
+  .chatx-page { height: calc(100dvh - 56px - var(--tb-h) - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 24px); }
+  .dm-form { padding-bottom: 10px; }
+}
