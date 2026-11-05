@@ -36,7 +36,7 @@ export default function Privacy() {
       </ul>
 
       <h2>Skener a kamera</h2>
-      <p>Obraz z kamery sa spracúva priamo v tvojom zariadení. Neposiela sa na náš server a neukladáme ho.</p>
+      <p>Obraz z kamery sa spracúva priamo v tvojom zariadení a neposiela sa na náš server. Zábery naskenovaných kariet na kontrolu ostávajú len v tvojom prehliadači a zmažú sa, keď kartu odstrániš alebo pridáš do zbierky.</p>
 
       <h2>Prečo údaje spracúvame</h2>
       <p>Aby sme ti mohli poskytnúť účet a funkcie webu, ktoré si si vybral, a aby sme ho chránili pred zneužitím a opravovali chyby.</p>

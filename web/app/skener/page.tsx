@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
 import { Card, cardEur, eur, priceSource, thumb, useCards, usePrices } from "@/lib/data";
 import { Accepted, Decider, Hit } from "@/lib/scan/decide";
+import { loadShots, pruneShots, saveShot } from "@/lib/scan/shots";
 import { sb } from "@/lib/supabase";
 import { useTcg } from "@/lib/tcg";
 
@@ -33,7 +34,7 @@ type Scanned = {
 type Cond = "NM" | "LP" | "MP" | "HP" | "DMG";
 const CONDS: Cond[] = ["NM", "LP", "MP", "HP", "DMG"];
 const COND_SK: Record<Cond, string> = { NM: "Near Mint", LP: "Light Played", MP: "Moderately Played", HP: "Heavily Played", DMG: "Poškodená" };
-const STORE = "op-scan-list"; // zoznam prežije zatvorenie stránky (bez záberov)
+const STORE = "op-scan-list"; // zoznam prežije zatvorenie stránky (zábery sú v IndexedDB, viď lib/scan/shots.ts)
 const RUNNING = "op-scan-running"; // skener beží; ak to tu po štarte stránky ostalo, stránka spadla (zápis do scan_crashes)
 
 function beep() {
@@ -97,6 +98,7 @@ function ScannerPage() {
   const [zoom, setZoom] = useState(1);
   const [edit, setEdit] = useState<number | null>(null); // kľúč karty, pri ktorej je otvorená zmena
   const [q, setQ] = useState("");
+  const [listLoaded, setListLoaded] = useState(false);
 
   // záznam o reštarte: kým skener beží, značka sa priebežne obnovuje; pri odchode alebo prechode do pozadia sa zruší, pri páde ostane
   useEffect(() => {
@@ -139,8 +141,14 @@ function ScannerPage() {
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(STORE) || "[]");
-      if (Array.isArray(saved) && saved.length) setList(saved);
+      if (Array.isArray(saved) && saved.length) {
+        setList(saved);
+        loadShots(saved.map((x: Scanned) => x.key)).then(
+          (m) => m.size && setList((l) => l.map((x) => (m.has(x.key) ? { ...x, shot: m.get(x.key) } : x))),
+        );
+      }
     } catch {}
+    setListLoaded(true);
   }, []);
   useEffect(() => {
     try {
@@ -148,6 +156,11 @@ function ScannerPage() {
     } catch {}
     listLen.current = list.length;
   }, [list]);
+  // zábery kariet, ktoré už v zozname nie sú, sa mažú; až po načítaní, inak by prázdny zoznam pri štarte zmazal všetky
+  useEffect(() => {
+    if (listLoaded) pruneShots(list.map((x) => x.key));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listLoaded, list.length]);
 
   // varianty podľa herného kódu (na rýchlu opravu: základná ↔ parallel ↔ alt art)
   const byCode = useMemo(() => {
@@ -174,6 +187,7 @@ function ScannerPage() {
         cv.getContext("2d")!.putImageData(new ImageData(new Uint8ClampedArray(px), IW, IH), 0, 0);
         cv.convertToBlob({ type: "image/jpeg", quality: 0.8 })
           .then((b) => {
+            saveShot(key, b);
             const shot = URL.createObjectURL(b);
             setList((l) => l.map((x) => (x.key === key ? { ...x, shot } : x)));
           })
