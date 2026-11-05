@@ -1,3 +1,4 @@
+import { DM_ENABLED } from "@/lib/config";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -6,6 +7,7 @@ export const metadata: Metadata = { title: "Zásady súkromia – Grand Line Tra
 export default function Privacy() {
   return (
     <article className="ucet legal">
+      <img className="legal-art" src="/art/sukromie.webp" width={1672} height={941} alt="Grand-Line.eu: Luffy v troch podobách nad zasneženým hradom" />
       <h1>Zásady súkromia</h1>
       <p className="muted small">Platné od 4. 11. 2026</p>
       <p>
@@ -23,6 +25,11 @@ export default function Privacy() {
         <li><b>Hry a hodnotenie:</b> ELO a štatistiky v rebríčku vidí každý, priebeh a výsledky jednotlivých hier len prihlásení hráči, karty v ruke súper nevidí.</li>
         <li><b>Hlásenia v Reporte:</b> text, stav a odpoveď správcu sú verejné pre každého, aj neprihláseného, ale bez tvojho mena. Kontakt, typ prehliadača a väzbu na účet vidí len správca. Hlásenie z hry obsahuje aj stav hry, ktorý vidí len správca. Do textu nepíš osobné údaje.</li>
         <li><b>Level a rank:</b> XP, level a rank vidí v rebríčku každý, prehľad dnešných XP podľa aktivít vidíš len ty.</li>
+        {DM_ENABLED && (
+          <li>
+            <b>Súkromné správy:</b> text je v databáze šifrovaný a kľúč je uložený mimo nej, takže samotný únik databázy text neprezradí. Nejde o šifrovanie medzi zariadeniami: prevádzkovateľ by správy technicky vedel otvoriť. Správca nemá rozhranie na čítanie konverzácií. Keď niekto správu nahlási, správca uvidí ju a najviac 5 správ pred ňou a 5 po nej. V databáze je nešifrované, kto komu a kedy písal a kedy si správu prečítal. Správy sa mažú po 12 mesiacoch a so zrušením účtu. Ak zapneš notifikácie, text prechádza šifrovane cez notifikačnú službu tvojho prehliadača (Google, Apple alebo Mozilla) a zobrazí sa na tvojom zariadení, v nastaveniach správ ho môžeš skryť.
+          </li>
+        )}
         <li><b>Chat:</b> správy a tvoju prezývku vidia všetci prihlásení. Správca môže správy mazať a zablokovať písanie. Ak správu nahlásiš, správca vidí jej text a kto ju nahlásil. Počet ľudí online je len číslo, bez mien. Správy sa mažú po 30 dňoch alebo so zmazaním účtu.</li>
       </ul>
 

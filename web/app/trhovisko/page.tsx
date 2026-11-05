@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { CardImg, CardModal, DataError, Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
+import { WriteLink } from "@/components/dm/DmLink";
+import { DM_ENABLED } from "@/lib/config";
 import { useCollection } from "@/lib/collection";
 import { Card, cardEur, eur, useCards, usePrices } from "@/lib/data";
 import { addListing, Listing, removeListing, TradeKind, updateListing, useMyContact, useTrades } from "@/lib/trades";
@@ -150,6 +152,8 @@ export default function TradePage() {
           <Link className="btn ghost sm trx-contact" href="/login" title="Kontakt vidia prihlásení">
             Kontakt
           </Link>
+        ) : DM_ENABLED ? (
+          <WriteLink className="btn ghost sm trx-contact" userId={l.user_id} listing={l.id} card={l.card_id} />
         ) : t?.contact ? (
           <button className="btn ghost sm trx-contact" title={t.contact} onClick={() => copyContact(l.id, t.contact!)}>
             {copied === l.id ? "Skopírované" : "Kontakt"}

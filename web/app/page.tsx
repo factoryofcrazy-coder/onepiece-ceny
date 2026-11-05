@@ -72,6 +72,7 @@ export default function Home() {
   const name = profile?.username ?? "";
   return (
     <div className="dash">
+      <img className="dash-banner" src="/art/banner.webp" width={2000} height={667} alt="Grand-Line.eu: postavy z One Piece na mori pod pirátskou vlajkou" fetchPriority="high" />
       <section className="dash-hero">
         <div>
           <span className="dash-chip">{user ? `Level ${p.level}` : "Pre zberateľov a hráčov"}</span>

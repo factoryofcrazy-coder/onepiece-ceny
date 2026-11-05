@@ -8,7 +8,7 @@ import { useChat } from "@/lib/chat";
 import ChatRoom from "./ChatRoom";
 
 const OPEN_KEY = "chat-panel";
-const HIDE_ON = ["/skener", "/login", "/chat", "/nove-heslo"];
+const HIDE_ON = ["/skener", "/login", "/chat", "/nove-heslo", "/spravy"];
 const WIDE = "(min-width: 1500px)";
 const badge = (n: number) => (n > 99 ? "99+" : String(n));
 

@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { AuthProvider } from "@/lib/auth";
 import { THEME_INIT } from "@/lib/theme-init";
 import { ChatProvider } from "@/lib/chat";
+import { DmProvider } from "@/lib/dm/client";
 import ChatDock from "@/components/chat/ChatDock";
 import AppChrome from "@/components/AppChrome";
 import { cookies } from "next/headers";
@@ -37,12 +38,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <TcgProvider initial={tcg}>
           <AuthProvider>
             <ChatProvider>
+              <DmProvider>
               <AppChrome>
                 <main className="wrap">{children}</main>
                 <Footer />
               </AppChrome>
               <ChatDock />
               <TabBar />
+              </DmProvider>
             </ChatProvider>
           </AuthProvider>
         </TcgProvider>
