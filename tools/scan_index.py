@@ -8,10 +8,12 @@ ako pri pôvodnom výpočte. Model sa nepretrénúva; nové karty sa len doplnia
 
 Zdroje obrázkov na kartu (každý = samostatný záznam s rovnakým ID karty):
   - OPTCG API obrázok (v databáze kariet, s nápisom SAMPLE)
-  - oficiálny čistý obrázok Bandai (JP stránka, rovnaké ID) – fotky skutočných kariet sa mu podobajú viac
+  - oficiálny čistý obrázok Bandai – fotky skutočných kariet sa mu podobajú viac. Číslovanie verzií Bandai
+    (_p1, _p2…) sa od našich ID často líši, preto sa obrázok priradí podľa vzhľadu k najpodobnejšej verzii
+    tej istej karty; bez jasnej zhody sa vynechá. Spracované obrázky si pamätá meta["jpSeen"].
 Použitie: python3 tools/scan_index.py [--cards docs/data/cards.json] [--max 400]
 """
-import argparse, io, json, os, sys, time, urllib.error, urllib.request
+import argparse, io, json, os, re, sys, time, urllib.error, urllib.request
 import numpy as np, cv2, onnxruntime as ort
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,6 +22,7 @@ W, H, IW, IH, DIM = 300, 420, 224, 313, 256
 MEAN, STD = np.array([0.485, 0.456, 0.406]), np.array([0.229, 0.224, 0.225])
 UA = {"User-Agent": "grand-line-tracker/1.0 (card scanner index)"}
 NAUG = 4
+MIN_SIM = 0.5  # oficiálny obrázok musí byť aspoň takto podobný niektorej verzii tej istej karty
 rng = np.random.default_rng(7)
 
 
@@ -30,7 +33,7 @@ def fetch(url, tries=3):
                 return r.read()
         except urllib.error.HTTPError as e:
             if e.code == 404:
-                return None
+                return b""  # obrázok neexistuje (na rozdiel od None = dočasná chyba)
             time.sleep(3 * (t + 1))
         except Exception:
             time.sleep(3 * (t + 1))
@@ -76,6 +79,22 @@ def aug(card, bgs):
     return cv2.warpPerspective(img, cv2.getPerspectiveTransform(qq.astype(np.float32), src), (W, H))
 
 
+def base_code(i):
+    """OP06-115_r1 → OP06-115 (rovnako ako cardCode v web/lib/scan/decide.ts)."""
+    return re.split(r"[_-](?=(?:pr|p|r|cm)\d)", re.sub(r"^[A-Z0-9]+_(?=[A-Z]+\d*-)", "", i), flags=re.I)[0]
+
+
+def match_version(z, official_id, ids, idx):
+    """Ku ktorej našej verzii patrí oficiálny obrázok? Vráti ID alebo None."""
+    code = base_code(official_id)
+    cand = [n for n, i in enumerate(ids) if base_code(i) == code]
+    if not cand:
+        return None
+    sims = (idx[cand].astype(np.float32) / 127) @ z
+    b = int(sims.argmax())
+    return ids[cand[b]] if sims[b] >= MIN_SIM else None
+
+
 def prep(bgr):
     x = cv2.resize(bgr, (IW, IH), interpolation=cv2.INTER_AREA)[:, :, ::-1] / 255.0
     return ((x - MEAN) / STD).transpose(2, 0, 1).astype(np.float32)
@@ -94,16 +113,20 @@ def main():
     idx = np.fromfile(os.path.join(SCAN, "op-index.bin"), np.int8).reshape(-1, dim)
     assert len(ids) == len(idx) == len(src)
     have = set(zip(ids, src))
+    seen = set(meta.get("jpSeen") or [])
     cards = json.load(open(a.cards))["cards"]
 
     todo = []
     for c in cards:
-        if c.get("img") and c.get("set") != "CM-PROMO" and (c["id"], "optcg") not in have:  # promo verzie sú stále len z Cardmarketu, v indexe ich nechceme
+        if c.get("set") == "CM-PROMO":  # promo verzie sú stále len z Cardmarketu, v indexe ich nechceme
+            continue
+        if c.get("img") and (c["id"], "optcg") not in have:
             todo.append((c["id"], "optcg", c["img"]))
-        if not a.no_official and not c["id"].startswith("DON") and (c["id"], "jp") not in have:
+        if not a.no_official and not c["id"].startswith("DON") and c["id"] not in seen:
             todo.append((c["id"], "jp", f"https://www.onepiece-cardgame.com/images/cardlist/card/{c['id']}.png"))
     print(f"index: {len(ids)} záznamov, chýba {len(todo)} (spracujem najviac {a.max})", flush=True)
-    todo = todo[: a.max]
+    # najprv naše obrázky: oficiálne sa k nim potom priraďujú
+    todo = sorted(todo, key=lambda t: t[1] != "optcg")[: a.max]
     if not todo:
         return 0
 
@@ -113,7 +136,9 @@ def main():
     new_ids, new_src, new_vec = [], [], []
     for n, (cid, kind, url) in enumerate(todo):
         data = fetch(url)
-        if data is None and "_in_400x400" in url:  # nie každá karta má na TCGplayeri väčší obrázok
+        if kind == "jp" and data == b"":
+            seen.add(cid)  # Bandai ho nemá, viac sa nepýtame
+        if not data and "_in_400x400" in url:  # nie každá karta má na TCGplayeri väčší obrázok
             data = fetch(url.replace("_in_400x400", "_200w"))
         card = decode(data) if data else None
         if card is None:
@@ -122,16 +147,24 @@ def main():
             bgs.append(card)
         z = run([prep(card)] + [prep(aug(card, bgs)) for _ in range(NAUG)])
         v = z[0] + z[1:].mean(0); v /= np.linalg.norm(v)
-        new_ids.append(cid); new_src.append(kind); new_vec.append(np.clip(np.round(v * 127), -127, 127).astype(np.int8))
+        target = cid
+        if kind == "jp":
+            seen.add(cid)
+            target = match_version(z[0], cid, ids + new_ids, np.concatenate([idx, np.stack(new_vec)]) if new_vec else idx)
+            if target is None:
+                continue
+        new_ids.append(target); new_src.append(kind); new_vec.append(np.clip(np.round(v * 127), -127, 127).astype(np.int8))
         if kind == "jp":
             time.sleep(0.3)  # šetrne k stránke Bandai
         if n % 50 == 0:
             print(f"  {n}/{len(todo)}", flush=True)
     if not new_ids:
         print("nič nové sa nepodarilo stiahnuť")
+        meta["jpSeen"] = sorted(seen)
+        json.dump(meta, open(os.path.join(SCAN, "op-index.json"), "w"), separators=(",", ":"))
         return 0
     idx = np.concatenate([idx, np.stack(new_vec)])
-    meta.update(ids=ids + new_ids, src=src + new_src, built=time.strftime("%Y-%m-%d"))
+    meta.update(ids=ids + new_ids, src=src + new_src, jpSeen=sorted(seen), built=time.strftime("%Y-%m-%d"))
     idx.tofile(os.path.join(SCAN, "op-index.bin"))
     json.dump(meta, open(os.path.join(SCAN, "op-index.json"), "w"), separators=(",", ":"))
     print(f"doplnených {len(new_ids)} záznamov → spolu {len(meta['ids'])}")
