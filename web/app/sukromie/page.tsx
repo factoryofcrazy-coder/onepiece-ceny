@@ -31,6 +31,7 @@ export default function Privacy() {
           </li>
         )}
         <li><b>Reakcie na správy:</b> vo verejnom chate vidia všetci prihlásení, kto a ako reagoval. V súkromných správach to vidí druhá osoba a reakcia je v databáze uložená bez šifrovania, ale text správy v nej nie je. Zmaže sa spolu so správou.</li>
+        <li><b>Skener:</b> záber z kamery sa spracúva len v tvojom zariadení a nikam sa neposiela. Ak sa stránka skenera počas skenovania reštartuje, uložíme technický záznam: účet, čas, typ prehliadača, ako dlho skener bežal a počet kariet v zozname, bez záberov a názvov kariet. Záznam sa po 90 dňoch zmaže.</li>
         <li><b>Chat:</b> správy a tvoju prezývku vidia všetci prihlásení. Správca môže správy mazať a zablokovať písanie. Ak správu nahlásiš, správca vidí jej text a kto ju nahlásil. Počet ľudí online je len číslo, bez mien. Správy sa mažú po 30 dňoch alebo so zmazaním účtu.</li>
       </ul>
 

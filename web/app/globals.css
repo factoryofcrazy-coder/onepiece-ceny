@@ -1330,3 +1330,14 @@ body.dm-open main.wrap { max-width: none; padding: 0; }
 .rx-who li { display: flex; align-items: center; gap: 6px; overflow-wrap: anywhere; }
 .emote { display: block; flex: none; }
 
+/* skener: ovládanie v jednom riadku nad rámikom. Výrez hore rieši hlavička webu, tu sa znova nepočíta. */
+.scan-page.live .scan-top { padding: 10px 12px; gap: 6px; }
+.scan-top > .row { flex: none; }
+.scan-pill { white-space: nowrap; font-size: 13px; padding: 7px 12px; }
+.scan-bottom { align-items: center; gap: 8px; flex-wrap: wrap; }
+.scan-hint { white-space: nowrap; }
+@media (max-width: 420px) {
+  .scan-top .scan-round { width: 36px; height: 36px; }
+  .scan-top .scan-done { padding-inline: 12px; font-size: 14px; }
+}
+

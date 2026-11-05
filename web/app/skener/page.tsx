@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
 import { Card, cardEur, eur, priceSource, thumb, useCards, usePrices } from "@/lib/data";
 import { Accepted, Decider, Hit } from "@/lib/scan/decide";
+import { sb } from "@/lib/supabase";
 import { useTcg } from "@/lib/tcg";
 
 // verzia súborov v /public/scan (zvýš pri novom modeli/indexe → obíde cache)
@@ -33,6 +34,7 @@ type Cond = "NM" | "LP" | "MP" | "HP" | "DMG";
 const CONDS: Cond[] = ["NM", "LP", "MP", "HP", "DMG"];
 const COND_SK: Record<Cond, string> = { NM: "Near Mint", LP: "Light Played", MP: "Moderately Played", HP: "Heavily Played", DMG: "Poškodená" };
 const STORE = "op-scan-list"; // zoznam prežije zatvorenie stránky (bez záberov)
+const RUNNING = "op-scan-running"; // skener beží; ak to tu po štarte stránky ostalo, stránka spadla (zápis do scan_crashes)
 
 function beep() {
   try {
@@ -64,6 +66,8 @@ function ScannerPage() {
   const busy = useRef(false);
   const seq = useRef(0);
   const decider = useRef(new Decider());
+  const frames = useRef(0);
+  const listLen = useRef(0);
   const lastTick = useRef(0);
   const lastRect = useRef<Uint8ClampedArray | null>(null); // posledná narovnaná karta
   const viewRef = useRef<{ x: number; y: number; w: number; h: number; s: number; ox: number; oy: number; bw: number; bh: number } | null>(null);
@@ -94,6 +98,43 @@ function ScannerPage() {
   const [edit, setEdit] = useState<number | null>(null); // kľúč karty, pri ktorej je otvorená zmena
   const [q, setQ] = useState("");
 
+  // záznam o reštarte: kým skener beží, značka sa priebežne obnovuje; pri odchode alebo prechode do pozadia sa zruší, pri páde ostane
+  useEffect(() => {
+    const raw = localStorage.getItem(RUNNING);
+    if (!raw) return;
+    localStorage.removeItem(RUNNING);
+    try {
+      const r = JSON.parse(raw);
+      let after = 0;
+      try {
+        after = JSON.parse(localStorage.getItem(STORE) || "[]").length;
+      } catch {}
+      sb()
+        .from("scan_crashes")
+        .insert({ ran_s: r.s, frames: r.f, cards_before: r.c, cards_after: after, engine: r.e, user_agent: navigator.userAgent.slice(0, 300) })
+        .then(() => {}); // záznam nesmie obmedziť skener
+    } catch {}
+  }, []);
+  useEffect(() => {
+    if (state !== "on") return;
+    const t0 = Date.now();
+    const mark = () => {
+      if (document.hidden) return localStorage.removeItem(RUNNING);
+      localStorage.setItem(RUNNING, JSON.stringify({ s: Math.round((Date.now() - t0) / 1000), f: frames.current, c: listLen.current, e: engine.slice(0, 80) }));
+    };
+    const off = () => localStorage.removeItem(RUNNING);
+    mark();
+    const timer = setInterval(mark, 3000);
+    document.addEventListener("visibilitychange", mark);
+    window.addEventListener("pagehide", off);
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", mark);
+      window.removeEventListener("pagehide", off);
+      off();
+    };
+  }, [state, engine]);
+
   // zoznam v localStorage – načítanie raz, ukladanie pri každej zmene
   useEffect(() => {
     try {
@@ -105,6 +146,7 @@ function ScannerPage() {
     try {
       localStorage.setItem(STORE, JSON.stringify(list.map(({ shot, ...x }) => x)));
     } catch {}
+    listLen.current = list.length;
   }, [list]);
 
   // varianty podľa herného kódu (na rýchlu opravu: základná ↔ parallel ↔ alt art)
@@ -148,6 +190,7 @@ function ScannerPage() {
       busy.current = false;
       if (m.type === "error") return setMsg(m.error);
       if (m.type !== "result" || !streamRef.current) return; // výsledok, ktorý dobehol po vypnutí kamery
+      frames.current++;
       if (m.rect) lastRect.current = m.rect;
       const V = viewRef.current;
       // rohy karty zo záberu na obrazovku
@@ -615,9 +658,6 @@ function ScannerPage() {
                   </button>
                 )}
               </div>
-              <span className="scan-pill">
-                {count} {plural(count)} · <b>{eur(total)}</b>
-              </span>
               <span className="scan-lang" role="radiogroup" aria-label="Jazyk kariet">
                 {(["EN", "JP"] as const).map((l) => (
                   <button key={l} role="radio" aria-checked={lang === l} className={lang === l ? "on" : ""} onClick={() => setLang(l)}>
@@ -650,7 +690,12 @@ function ScannerPage() {
                   </div>
                 </div>
               ) : (
-                <div className="scan-hint">{sure ? "Odlož kartu a prilož ďalšiu" : live?.quad ? "Karta nájdená, rozpoznávam…" : "Namier na kartu"}</div>
+                <>
+                  <span className="scan-pill">
+                    {count} {plural(count)} · <b>{eur(total)}</b>
+                  </span>
+                  <div className="scan-hint">{sure ? "Odlož kartu" : live?.quad ? "Rozpoznávam…" : "Namier na kartu"}</div>
+                </>
               )}
             </div>
           </>
