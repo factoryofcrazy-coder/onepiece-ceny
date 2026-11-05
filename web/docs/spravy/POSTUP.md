@@ -41,6 +41,12 @@ Rozhodnutia v priebehu práce, ktoré treba potvrdiť:
 
 Používateľ pridal tajné hodnoty a spustil migráciu. Funkcia `dm` je nasadená: kontrola, odmietnutie bez prihlásenia a chybnej požiadavky prešli na ostro. Ručný test s dvoma účtami ešte čaká. Správy na preview sa zapínajú automaticky, lebo nastavenie premennej len pre Preview vo Verceli nešlo vybrať.
 
+## 5. 11. 2026: chyba z ručného testu
+
+Začatie konverzácie hlásilo „Správy sú dočasne nedostupné“. Funkcia `dm_open` čítala vek účtu z `auth.users`, kam `service_role` na Supabase nemá prístup. Test túto chybu nezachytil, lebo testovacia databáza ten prístup omylom povoľovala.
+
+Oprava: vek účtu sa berie z `profiles` (migrácia `20261112_dm_open_fix.sql`), test už má rovnaké práva ako produkcia a kontroluje, že funkcie `auth.users` nečítajú. Do logov funkcie pribudol kód chyby bez obsahu správ. Ostatné funkcie som overil na ostro v role `service_role`, len na čítanie.
+
 ## Stav
 
 Hotové a otestované automaticky a v prehliadači so simuláciou. Ostáva [ručný test](TESTOVANIE.md). Do `main` nezlúčené, na produkcii nič.

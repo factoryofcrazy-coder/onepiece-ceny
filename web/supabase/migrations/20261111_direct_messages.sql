@@ -164,8 +164,8 @@ begin
   select * into c from public.dm_conversations where user_a = a and user_b = b;
   if found then return jsonb_build_object('id', c.id, 'created', false); end if;
 
-  select now() - created_at into age from auth.users where id = p_me;
-  day_limit := case when age < interval '24 hours' then 3 else 10 end;
+  select now() - created_at into age from public.profiles where id = p_me;
+  day_limit := case when age is null or age < interval '24 hours' then 3 else 10 end;
   if (select count(*) from public.dm_conversations where requested_by = p_me and created_at > now() - interval '24 hours') >= day_limit then
     raise exception 'DM: Dnes si už oslovil priveľa nových hráčov. Skús to zajtra.';
   end if;

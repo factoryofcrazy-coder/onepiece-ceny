@@ -179,10 +179,14 @@ function createDmHandler(env, deps = {}) {
     const text = await r.text();
     if (!r.ok) {
       let message = "";
+      let code = "";
       try {
-        message = JSON.parse(text).message ?? "";
+        const j = JSON.parse(text);
+        message = j.message ?? "";
+        code = j.code ?? "";
       } catch {
       }
+      if (!message.includes("DM: ")) console.error(`dm: ${fn} zlyhala, k\xF3d ${code || r.status}`);
       throw new Error(message || `DB ${r.status}`);
     }
     return text ? JSON.parse(text) : null;

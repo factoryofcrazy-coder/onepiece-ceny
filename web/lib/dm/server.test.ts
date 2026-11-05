@@ -54,13 +54,12 @@ beforeAll(async () => {
     create role anon; create role authenticated; create role service_role bypassrls;
     create schema auth; create schema realtime;
     grant usage on schema auth, realtime, public to anon, authenticated, service_role;
-    create table auth.users (id uuid primary key, created_at timestamptz not null default now() - interval '30 days');
-    grant select on auth.users to service_role;
+    create table auth.users (id uuid primary key);
     create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('test.uid', true), '')::uuid $$;
     create table realtime.messages (topic text, extension text); alter table realtime.messages enable row level security;
     create function realtime.topic() returns text language sql stable as $$ select current_setting('test.topic', true) $$;
     create publication supabase_realtime;
-    create table public.profiles (id uuid primary key references auth.users on delete cascade, username text);
+    create table public.profiles (id uuid primary key references auth.users on delete cascade, username text, created_at timestamptz not null default now() - interval '30 days');
     create table public.admins (user_id uuid primary key);
     create table public.chat_bans (user_id uuid primary key);
     create table public.trade_listings (id uuid primary key, user_id uuid, card_id text, kind text, price numeric, cond text, lang text);
@@ -69,6 +68,8 @@ beforeAll(async () => {
     alter default privileges in schema public grant execute on functions to anon, authenticated;
   `);
   await db.exec(readFileSync("supabase/migrations/20261111_direct_messages.sql", "utf8"));
+  // oprava sa musí dať spustiť nad už hotovou migráciou
+  await db.exec(readFileSync("supabase/migrations/20261112_dm_open_fix.sql", "utf8"));
 }, 60000);
 
 beforeEach(async () => {
@@ -76,9 +77,9 @@ beforeEach(async () => {
   await db.exec(`
     truncate public.dm_reports, public.dm_blocks, public.dm_messages, public.dm_members, public.dm_conversations cascade;
     delete from public.chat_bans; delete from public.admins; delete from public.trade_listings; delete from public.profiles; delete from auth.users;
-    insert into auth.users (id) values ('${ANNA}'), ('${BORIS}'), ('${CYRIL}'), ('${ADMIN}');
-    insert into auth.users (id, created_at) values ('${NEW}', now());
-    insert into public.profiles values ('${ANNA}', 'Anna'), ('${BORIS}', 'Boris'), ('${CYRIL}', 'Cyril'), ('${ADMIN}', 'Admin'), ('${NEW}', 'Nováčik');
+    insert into auth.users (id) values ('${ANNA}'), ('${BORIS}'), ('${CYRIL}'), ('${ADMIN}'), ('${NEW}');
+    insert into public.profiles (id, username) values ('${ANNA}', 'Anna'), ('${BORIS}', 'Boris'), ('${CYRIL}', 'Cyril'), ('${ADMIN}', 'Admin');
+    insert into public.profiles (id, username, created_at) values ('${NEW}', 'Nováčik', now());
     insert into public.admins values ('${ADMIN}');
   `);
 });
@@ -298,7 +299,7 @@ describe("blokovanie a limity", () => {
     for (const o of others) await openConv(NEW, o);
     expect((await call(NEW, "open", { userId: ADMIN })).error).toContain("priveľa nových");
     await db.exec(`insert into auth.users (id) select ('00000000-0000-4000-8000-1' || lpad(i::text, 11, '0'))::uuid from generate_series(1, 11) i;
-      insert into public.profiles select id, 'x' || id from auth.users where id::text like '00000000-0000-4000-8000-1%'`);
+      insert into public.profiles (id, username) select id, 'x' || id from auth.users where id::text like '00000000-0000-4000-8000-1%'`);
     const made = (await db.query<any>("select id from public.profiles where username like 'x%' order by id")).rows;
     for (const u of made.slice(0, 10)) await openConv(ANNA, u.id);
     expect((await call(ANNA, "open", { userId: made[10].id })).error).toContain("priveľa nových");
@@ -506,6 +507,14 @@ describe("notifikácie", () => {
     const { run } = live();
     expect((await run(ANNA, "push_config")).data.publicKey).toBeTruthy();
     expect(JSON.stringify((await run(ANNA, "push_config")).data)).not.toContain(srv.getPrivateKey().toString("base64url"));
+  });
+});
+
+describe("zhoda s produkciou", () => {
+  it("funkcie nepoužívajú auth.users, ku ktorému service_role nemá prístup", () => {
+    const sql = readFileSync("supabase/migrations/20261111_direct_messages.sql", "utf8");
+    const reads = sql.split("\n").filter((l) => /auth\.users/.test(l) && !/references auth\.users/.test(l));
+    expect(reads).toEqual([]);
   });
 });
 

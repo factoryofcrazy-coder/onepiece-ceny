@@ -85,11 +85,16 @@ export function createDmHandler(env: DmEnv, deps: DmDeps = {}) {
       const text = await r.text();
       if (!r.ok) {
         let message = "";
+        let code = "";
         try {
-          message = JSON.parse(text).message ?? "";
+          const j = JSON.parse(text);
+          message = j.message ?? "";
+          code = j.code ?? "";
         } catch {
           /* neznáma odpoveď */
         }
+        // kód chyby pomáha pri hľadaní príčiny, obsah správ v ňom nie je
+        if (!message.includes("DM: ")) console.error(`dm: ${fn} zlyhala, kód ${code || r.status}`);
         throw new Error(message || `DB ${r.status}`);
       }
       return text ? JSON.parse(text) : null;
