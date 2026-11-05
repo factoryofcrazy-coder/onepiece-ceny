@@ -779,7 +779,7 @@ export default function Messages() {
             {requests.map(row)}
             {requests.length > 0 && normal.length > 0 && <div className="dm-group">Konverzácie</div>}
             {normal.map(row)}
-            {!list.length && <p className="muted small dm-note">Zatiaľ tu nič nie je. Napíš hráčovi z trhoviska, rebríčka alebo cez Nová správa.</p>}
+            {!list.length && <p className="muted small dm-note">Zatiaľ tu nič nie je. Napíš hráčovi z trhoviska alebo cez Nová správa.</p>}
           </div>
         )}
       </aside>

@@ -7,7 +7,7 @@ Stav: vo vývoji vo vetve `sukromne-spravy`, na produkcii zatiaľ nie je. Postup
 | Téma | Rozhodnutie |
 |---|---|
 | Kto môže písať | Hocikto hocikomu. Od cudzieho príde žiadosť s jednou správou, notifikácia je bez textu. |
-| Začiatok konverzácie | Trhovisko (ponuka sa priloží), rebríček, verejný chat, hľadanie podľa prezývky |
+| Začiatok konverzácie | Trhovisko (ponuka sa priloží) a hľadanie podľa prezývky |
 | Dostupnosť | Hneď po prihlásení na každom zariadení, s hľadaním v celej histórii |
 | Šifrovanie | Na serveri, nie end-to-end |
 | Uchovávanie | 12 mesiacov, potom automatické zmazanie |
@@ -71,7 +71,7 @@ Databázové funkcie `dm_*` smie volať len `service_role`. Výnimky:
 ## Rozhranie
 
 - Stránka `/spravy`: na počítači zoznam a konverzácia vedľa seba, na mobile po jednom. Počet neprečítaných je na ikone v hornej lište a v bočnom menu.
-- Tlačidlo **Napísať** je na trhovisku (priloží ponuku), v rebríčku a vo verejnom chate. Hráča sa dá nájsť aj cez **Nová správa**.
+- Tlačidlo **Napísať** je na trhovisku a priloží ponuku. Hráča sa dá nájsť aj cez **Nová správa**.
 - Na trhovisku nahrádza **Napísať** pri zapnutých správach tlačidlo Kontakt. Pole kontaktu v profile ostáva, kým sa nerozhodne inak.
 - Text sa vždy vykresľuje ako text. Klikateľné sú len `http` a `https` odkazy v prijatej konverzácii, s upozornením a `rel="noopener noreferrer nofollow ugc"`.
 - Neodoslaná správa sa dá poslať znova s rovnakým id, takže sa nezdvojí.

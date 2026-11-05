@@ -47,6 +47,10 @@ Začatie konverzácie hlásilo „Správy sú dočasne nedostupné“. Funkcia `
 
 Oprava: vek účtu sa berie z `profiles` (migrácia `20261112_dm_open_fix.sql`), test už má rovnaké práva ako produkcia a kontroluje, že funkcie `auth.users` nečítajú. Do logov funkcie pribudol kód chyby bez obsahu správ. Ostatné funkcie som overil na ostro v role `service_role`, len na čítanie.
 
+## 5. 11. 2026: úprava po teste
+
+Začatie konverzácie po oprave funguje. Na želanie používateľa je Napísať len na trhovisku a cez hľadanie, z rebríčka a verejného chatu je odstránené.
+
 ## Stav
 
 Hotové a otestované automaticky a v prehliadači so simuláciou. Ostáva [ručný test](TESTOVANIE.md). Do `main` nezlúčené, na produkcii nič.
