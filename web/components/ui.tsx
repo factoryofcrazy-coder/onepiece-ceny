@@ -5,6 +5,8 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { loadProfiles, Profile, useAuth } from "@/lib/auth";
 import type { Card } from "@/lib/data";
 import { loadCardAlts, cardEur, COLOR_SK, eur, thumb } from "@/lib/data";
+import PriceChart from "@/components/PriceChart";
+import { formatPct, notableMove, salesChange } from "@/lib/price-series";
 
 /** Kostra namiesto „Načítavam…“ – tvar zodpovedá obsahu, ktorý príde. */
 export function Loading({ what = "Načítavam", shape = "cards" }: { what?: string; shape?: "cards" | "rows" | "tiles" }) {
@@ -196,6 +198,17 @@ export function CardImg({
   );
 }
 
+/** Značka v mriežke: len výrazný pohyb, inak by pri rozkolísaných cenách svietila polovica kariet. */
+export function PriceMove({ card }: { card: Card }) {
+  const pct = notableMove(card);
+  if (pct == null) return null;
+  return (
+    <span className={`cmove ${pct > 0 ? "up" : "down"}`} title="Priemerný predaj za 7 dní oproti 30 dňom (Cardmarket)">
+      {formatPct(pct)}
+    </span>
+  );
+}
+
 export function CardModal({
   card,
   onClose,
@@ -240,6 +253,7 @@ export function CardModal({
     const err = await addListing({ card_id: card.id, kind });
     setTrade(err ?? (kind === "offer" ? "Pridané do tvojej ponuky na trhovisku ✓" : "Pridané do hľadaných na trhovisku ✓"));
   };
+  const sales = salesChange(card);
   const src = card.cm != null ? "Cardmarket trend" : card.usd != null ? "TCGplayer (USA)" : "";
   const stats = [
     ["Cost", card.cost],
@@ -284,6 +298,11 @@ export function CardModal({
             <span className="cd-plabel">{src || "Cena"}</span>
             <b>{main != null ? eur(main) : "–"}</b>
             {card.cmLow != null && <span className="cd-psub">najlacnejšia ponuka od {eur(card.cmLow)}</span>}
+            {sales && (
+              <span className="cd-psub">
+                priemerný predaj za 7 dní {eur(sales.avg7)}, <span className={sales.pct > 0 ? "cmove up" : sales.pct < 0 ? "cmove down" : "cmove"}>{formatPct(sales.pct)}</span> oproti 30 dňom ({eur(sales.avg30)})
+              </span>
+            )}
           </div>
           <div className="cd-palt">
             {card.cmJp != null && (
@@ -325,6 +344,7 @@ export function CardModal({
           )}
         </div>
         <div className="cd-rest">
+          {main != null && <PriceChart key={card.id} card={card} usd={usd} source={src} />}
           {alts.length > 0 && (
             <section className="cd-looks" aria-label="Možné vzhľady">
               <h3>Možné vzhľady ({alts.length})</h3>

@@ -11,11 +11,11 @@ const GAME = 18;
 const USD_EUR = 1.12; // len na porovnanie s TCGplayer pri párovaní
 
 type CmProduct = { idProduct: number; name: string; idExpansion: number };
-type CmPrice = { idProduct: number; trend: number | null; avg7: number | null; avg: number | null; low: number | null };
+type CmPrice = { idProduct: number; trend: number | null; avg7: number | null; avg30: number | null; avg: number | null; low: number | null };
 type CardLike = { id: string; code: string; set: string; usd: number | null };
-export type CmFields = { cm?: number; cmLow?: number; cmJp?: number };
+export type CmFields = { cm?: number; cmLow?: number; cmJp?: number; cm7?: number; cm30?: number };
 /** Verzia karty, ktorú má len Cardmarket (promo, pre-release, judge…) – v OPTCG API chýba. */
-export type CmExtra = { id: string; code: string; label: string; cm?: number; cmLow?: number; idProduct: number; name: string };
+export type CmExtra = { id: string; code: string; label: string; cm?: number; cmLow?: number; cm7?: number; cm30?: number; idProduct: number; name: string };
 
 /** Druh promo expanzie podľa názvov jej zapečatených produktov. */
 function promoLabel(names: string[]) {
@@ -161,6 +161,8 @@ export async function cardmarketPrices(cards: CardLike[]): Promise<{ prices: Map
     if (e != null) {
       f.cm = r2(tr(e));
       f.cmLow = r2(price.get(e)?.low);
+      f.cm7 = r2(price.get(e)?.avg7);
+      f.cm30 = r2(price.get(e)?.avg30);
     }
     if (j != null) {
       const t = tr(j);
@@ -188,6 +190,8 @@ export async function cardmarketPrices(cards: CardLike[]): Promise<{ prices: Map
       label,
       cm: r2(t),
       cmLow: r2(price.get(p.idProduct)?.low),
+      cm7: r2(price.get(p.idProduct)?.avg7),
+      cm30: r2(price.get(p.idProduct)?.avg30),
       idProduct: p.idProduct,
       name: p.name.replace(CODE_RX, "").replace(/""/g, '"').trim(),
     });

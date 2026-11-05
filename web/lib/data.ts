@@ -24,6 +24,8 @@ export type Card = {
   cm?: number; // Cardmarket trend v EUR (EN) – hlavná cena, keď je
   cmLow?: number; // Cardmarket najnižšia ponuka (EN)
   cmJp?: number; // Cardmarket trend v EUR (japonská verzia)
+  cm7?: number; // Cardmarket priemerná predajná cena za 7 dní (EN)
+  cm30?: number; // Cardmarket priemerná predajná cena za 30 dní (EN)
 };
 export type CardsDb = { updated: string; sets: { id: string; name: string }[]; cards: Card[]; byId: Map<string, Card> };
 

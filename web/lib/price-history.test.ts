@@ -16,6 +16,7 @@ const usage = async (limit: number) =>
 beforeAll(async () => {
   await db.exec("create role anon; create role authenticated; create role service_role; grant usage on schema public to anon, authenticated, service_role;");
   await db.exec(readFileSync("supabase/migrations/20261117_card_price_history.sql", "utf8"));
+  await db.exec(readFileSync("supabase/migrations/20261118_card_price_series.sql", "utf8"));
 }, 60000);
 
 describe("história cien", () => {
@@ -93,5 +94,37 @@ describe("naplnenie databázy", () => {
     const w = (await usage(1e12)).per_week!;
     expect(w).toBeGreaterThan(900_000);
     expect(w).toBeLessThan(1_100_000);
+  });
+});
+
+describe("graf v detaile karty", () => {
+  const series = async (id: string, role = "anon") => {
+    await db.exec(`set role ${role}`);
+    try {
+      return (await db.query<{ r: { through: string | null; points: { day: string; cm: number | null; usd: number | null }[] } }>("select public.card_price_series($1) r", [id])).rows[0].r;
+    } finally {
+      await db.exec("reset role");
+    }
+  };
+
+  it("návštevník dostane len dni a ceny vybranej karty, v poradí", async () => {
+    await db.exec("delete from public.card_price_latest"); // poistka proti výpadku by inak počítala karty z predošlých testov
+    await record("2027-03-01", [{ id: "GRAF", cm: 100, usd: 110 }, { id: "INA", cm: 5 }]);
+    await record("2027-03-02", [{ id: "GRAF", cm: 120, usd: 110 }, { id: "INA", cm: 5 }]);
+    const s = await series("GRAF");
+    expect(s.points).toEqual([{ day: "2027-03-01", cm: 100, usd: 110 }, { day: "2027-03-02", cm: 120, usd: 110 }]);
+    expect(Object.keys(s).sort()).toEqual(["points", "through"]);
+  });
+  it("through je posledný úspešný deň", async () => {
+    await db.query("insert into public.db_usage_log (day, bytes) values ('2099-01-01', 1)");
+    expect((await series("GRAF")).through).toBe("2099-01-01");
+    await db.query("delete from public.db_usage_log where day = '2099-01-01'");
+  });
+  it("neznáma karta je prázdna, nie chyba", async () => expect((await series("NEEXISTUJE")).points).toEqual([]));
+  it("tabuľky ostávajú bez priameho prístupu", async () => {
+    await db.exec("set role anon");
+    await expect(db.query("select * from public.card_price_history")).rejects.toThrow(/permission denied/);
+    await expect(db.query("select * from public.db_usage_log")).rejects.toThrow(/permission denied/);
+    await db.exec("reset role");
   });
 });

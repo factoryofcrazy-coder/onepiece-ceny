@@ -185,7 +185,7 @@ export async function buildCards() {
     for (const x of extras) {
       const b = base.get(x.code);
       if (!b) continue;
-      (out as any[]).push({ ...b, id: x.id, v: x.label, set: "CM-PROMO", setName: "Promo verzie (Cardmarket)", rarity: b.rarity, img: "", usd: null, cm: x.cm, cmLow: x.cmLow, cmJp: undefined, cmId: x.idProduct });
+      (out as any[]).push({ ...b, id: x.id, v: x.label, set: "CM-PROMO", setName: "Promo verzie (Cardmarket)", rarity: b.rarity, img: "", usd: null, cm: x.cm, cmLow: x.cmLow, cm7: x.cm7, cm30: x.cm30, cmJp: undefined, cmId: x.idProduct });
     }
     if (extras.length) sets.set("CM-PROMO", "Promo verzie (Cardmarket)");
   } catch (e: any) {
