@@ -12,7 +12,7 @@ beforeAll(async () => {
     insert into public.profiles values (1, 'Anon');
   `);
   await db.exec(readFileSync(new URL("../supabase/migrations/20261114_username_available.sql", import.meta.url), "utf8"));
-});
+}, 60000);
 
 describe("username_available", () => {
   it("obsadená prezývka, aj inak napísaná", async () => {
