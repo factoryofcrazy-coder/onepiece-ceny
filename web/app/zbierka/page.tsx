@@ -3,15 +3,19 @@ import { plural } from "@/lib/sk";
 import PkCollection from "@/components/pk/PkCollection";
 import { useTcg } from "@/lib/tcg";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OtherGameHint, OwnerPicker } from "@/components/ui";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { collectionChange, collectionCsv, topMoves } from "@/lib/collector";
+import { Copy, gradedCounts, loadCopies, portfolio } from "@/lib/copies";
+import { formatPct, salesChange } from "@/lib/price-series";
+import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OtherGameHint, OwnerPicker, PriceMove } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
 import { Card, eur, setKind, useCards, usePrices, cardEur } from "@/lib/data";
 
 type Item = { card: Card; n: number; unit: number | null; total: number };
 
-const SORTS = { total: "Celková hodnota", unit: "Cena za kus", qty: "Počet kusov", name: "Meno" } as const;
+const SORTS = { total: "Celková hodnota", unit: "Cena za kus", move: "Pohyb ceny", qty: "Počet kusov", name: "Meno" } as const;
+const signedEur = (v: number) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${eur(Math.abs(v))}`;
 
 function OpCollection() {
   const { user, loading } = useAuth();
@@ -25,6 +29,15 @@ function OpCollection() {
   const [sort, setSort] = useState<keyof typeof SORTS>("total");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState<Card | null>(null);
+  // null = tabuľka kusov ešte nie je v databáze, sekcia sa neukáže
+  const [copies, setCopies] = useState<Copy[] | null>(null);
+  const reloadCopies = useCallback(() => {
+    if (mine) loadCopies().then(setCopies);
+  }, [mine]);
+  useEffect(() => {
+    setCopies(null);
+    reloadCopies();
+  }, [reloadCopies]);
 
   const items = useMemo(() => {
     if (!data) return [];
@@ -60,6 +73,24 @@ function OpCollection() {
     return { value, pieces, sets, rarities, top, unpriced: items.filter((i) => i.unit == null).length };
   }, [items]);
 
+  const change = useMemo(() => collectionChange(items), [items]);
+  const moves = useMemo(() => {
+    const cards = items.map((i) => i.card);
+    return { up: topMoves(cards, usd, "up", 1).slice(0, 3), down: topMoves(cards, usd, "down", 1).slice(0, 3) };
+  }, [items, usd]);
+  const profit = useMemo(() => {
+    if (!copies || !data) return null;
+    return portfolio(copies, (id) => cardEur(data.byId.get(id), usd));
+  }, [copies, data, usd]);
+  const exportCsv = () => {
+    const url = URL.createObjectURL(new Blob([collectionCsv(items, copies ?? [])], { type: "text/csv;charset=utf-8" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `grand-line-zbierka-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const list = useMemo(() => {
     const s = q.trim().toLowerCase();
     const l = items.filter(
@@ -68,6 +99,8 @@ function OpCollection() {
     l.sort((a, b) =>
       sort === "total"
         ? b.total - a.total
+        : sort === "move"
+          ? Math.abs(salesChange(b.card)?.pct ?? -1) - Math.abs(salesChange(a.card)?.pct ?? -1)
         : sort === "unit"
           ? (b.unit ?? -1) - (a.unit ?? -1)
           : sort === "qty"
@@ -110,6 +143,11 @@ function OpCollection() {
                 Import z HoloDex
               </Link>
             )}
+            {mine && items.length > 0 && (
+              <button className="btn ghost sm" onClick={exportCsv}>
+                Export do Excelu
+              </button>
+            )}
           </div>
         </div>
         {stats.top.length > 0 && (
@@ -146,6 +184,55 @@ function OpCollection() {
         </div>
       ) : (
         <>
+          {(change || (mine && copies)) && (
+            <div className="collector-grid">
+              {mine && profit && (
+                <section className="panel collector">
+                  <h2 className="sub">Zisk a strata</h2>
+                  {copies && gradedCounts(copies).length > 0 && (
+                    <p className="small">Hodnotené karty: {gradedCounts(copies).map(([g, n]) => `${g} ${n}×`).join(", ")}</p>
+                  )}
+                  {profit.counted > 0 ? (
+                    <>
+                      <p className="collector-big">
+                        <b className={profit.diff > 0 ? "cmove up" : profit.diff < 0 ? "cmove down" : ""}>{signedEur(profit.diff)}</b>
+                        {profit.pct != null && <span className="muted"> {formatPct(profit.pct)}</span>}
+                      </p>
+                      <p className="small muted">
+                        Zaplatené {eur(profit.paid)}, dnešná hodnota {eur(profit.value)}. Počíta sa z {profit.counted} {plural(profit.counted, "kusu", "kusov", "kusov")}.
+                      </p>
+                      {profit.noPaid + profit.noValue > 0 && (
+                        <p className="tiny muted">
+                          Nezapočítané: {profit.noPaid > 0 && `${profit.noPaid} bez nákupnej ceny`}
+                          {profit.noPaid > 0 && profit.noValue > 0 && ", "}
+                          {profit.noValue > 0 && `${profit.noValue} bez hodnoty (pri gradovanej karte zadaj vlastný odhad)`}.
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <p className="small muted">Otvor kartu a v časti Moje kusy zapíš, za koľko si ju kúpil. Tu uvidíš, či si v pluse. Vidíš to len ty.</p>
+                  )}
+                </section>
+              )}
+              {change && (
+                <section className="panel collector">
+                  <h2 className="sub">Čo sa v zbierke hýbe</h2>
+                  <p className="collector-big">
+                    <b className={change.pct > 0 ? "cmove up" : change.pct < 0 ? "cmove down" : ""}>{formatPct(change.pct)}</b>
+                  </p>
+                  <p className="small muted">Priemerné predaje za 7 dní oproti 30 dňom. Ber to ako orientačné, ceny kariet bežne kolíšu.</p>
+                  {[...moves.up, ...moves.down].map((m) => (
+                    <button key={m.card.id} className="collector-row" onClick={() => setOpen(m.card)}>
+                      <span>{m.card.name} <span className="muted tiny">{m.card.id}</span></span>
+                      <span className={`cmove ${m.pct > 0 ? "up" : "down"}`}>{formatPct(m.pct)}</span>
+                    </button>
+                  ))}
+                  <Link className="small" href="/pohyby">Všetky pohyby cien →</Link>
+                </section>
+              )}
+            </div>
+          )}
+
           <div className="vault-grid">
             <section className="panel vault-sets">
               <h2 className="sub">Hodnota podľa setov</h2>
@@ -204,6 +291,7 @@ function OpCollection() {
                   <span className="small muted">
                     {i.card.id} · {setKind(i.card.set) === "other" ? "Promo" : setKind(i.card.set) === "don" ? "DON!!" : i.card.set}
                     {i.card.v && <span className="tag tiny">{i.card.v}</span>}
+                    {" "}<PriceMove card={i.card} />
                   </span>
                 </span>
                 <span className="vqty">{i.n}×</span>
@@ -222,6 +310,7 @@ function OpCollection() {
           onClose={() => setOpen(null)}
           qty={qty[open.id] ?? 0}
           onSet={mine ? (v) => setQty(open.id, v) : undefined}
+          onCopies={reloadCopies}
         />
       )}
     </>

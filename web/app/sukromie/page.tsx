@@ -20,6 +20,7 @@ export default function Privacy() {
         <li><b>E-mail a heslo:</b> slúžia na prihlásenie. E-mail ostatní hráči nevidia, heslo ukladáme len v nečitateľnej (hashovanej) podobe.</li>
         <li><b>Prezývka:</b> v rebríčku a pri ponukách na trhovisku ju vidí každý, aj neprihlásený. Inde ju vidia prihlásení hráči.</li>
         <li><b>Zbierka a sledované produkty:</b> vidíš ich len ty.</li>
+        <li><b>Nákupné ceny a kusy:</b> nákupnú cenu, dátum, stav, grading, číslo certifikátu, vlastný odhad hodnoty a poznámku ku kusu vidíš len ty. Číslo certifikátu sa inam pošle, len keď klikneš na odkaz na jeho overenie. Zmažú sa so zrušením účtu.</li>
         <li><b>Decky:</b> vidia ich ostatní prihlásení hráči.</li>
         <li><b>Ponuky na trhovisku:</b> vidí ich každý, aj neprihlásený. <b>Kontakt, ktorý k nim vyplníš,</b> vidia len prihlásení, preto uvádzaj len kontakt, ktorý chceš zverejniť. Do poznámky k ponuke kontakt nepíš, tú vidí každý.</li>
         <li><b>Hry a hodnotenie:</b> ELO a štatistiky v rebríčku vidí každý, priebeh a výsledky jednotlivých hier len prihlásení hráči, karty v ruke súper nevidí.</li>

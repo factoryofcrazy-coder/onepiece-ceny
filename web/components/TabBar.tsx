@@ -62,6 +62,7 @@ const OP_TABS: Tab[] = [
 ];
 const OP_MORE = [
   { href: "/ceny", label: "Ceny boxov" },
+  { href: "/pohyby", label: "Pohyby cien" },
   { href: "/trhovisko", label: "Trhovisko" },
   { href: "/master-sety", label: "Master sety" },
   { href: "/decky", label: "Decky" },

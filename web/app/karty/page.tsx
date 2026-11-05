@@ -3,6 +3,7 @@ import PkCards from "@/components/pk/PkCards";
 import { useTcg } from "@/lib/tcg";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { salesChange } from "@/lib/price-series";
 import { CardImg, CardModal, DataError, Foil, Loading, OwnerPicker, PriceMove, Qty, FilterBar } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
@@ -70,6 +71,10 @@ function OpCardsPage() {
     );
     if (sort === "price") out.sort((a, b) => (cardEur(b, usd) ?? -1) - (cardEur(a, usd) ?? -1));
     else if (sort === "name") out.sort((a, b) => a.name.localeCompare(b.name));
+    else if (sort === "move") {
+      const size = (c: Card) => ((c.cm ?? 0) >= 1 ? Math.abs(salesChange(c)?.pct ?? -1) : -1);
+      out.sort((a, b) => size(b) - size(a));
+    }
     return out;
   }, [data, set, q, color, type, rarity, variant, own, qty, sort]);
 
@@ -181,6 +186,7 @@ function OpCardsPage() {
           <select value={sort} onChange={(e) => setSort(e.target.value)}>
             <option value="code">Číslo</option>
             <option value="price">Cena</option>
+            <option value="move">Pohyb ceny</option>
             <option value="name">Meno</option>
           </select>
         </label>

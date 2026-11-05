@@ -5,6 +5,7 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { loadProfiles, Profile, useAuth } from "@/lib/auth";
 import type { Card } from "@/lib/data";
 import { loadCardAlts, cardEur, COLOR_SK, eur, thumb } from "@/lib/data";
+import CopiesPanel from "@/components/CopiesPanel";
 import PriceChart from "@/components/PriceChart";
 import { formatPct, notableMove, salesChange } from "@/lib/price-series";
 
@@ -215,12 +216,15 @@ export function CardModal({
   usd,
   qty,
   onSet,
+  onCopies,
 }: {
   card: Card;
   onClose: () => void;
   usd: number;
   qty?: number;
   onSet?: (n: number) => void;
+  /** zmena zapísaných kusov, nech si zbierka prepočíta zisk */
+  onCopies?: () => void;
 }) {
   useEffect(() => {
     const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -345,6 +349,7 @@ export function CardModal({
         </div>
         <div className="cd-rest">
           {main != null && <PriceChart key={card.id} card={card} usd={usd} source={src} />}
+          {me && onSet && <CopiesPanel key={`k${card.id}`} card={card} market={main} qty={qty ?? 0} onSet={onSet} onChange={onCopies} />}
           {alts.length > 0 && (
             <section className="cd-looks" aria-label="Možné vzhľady">
               <h3>Možné vzhľady ({alts.length})</h3>
