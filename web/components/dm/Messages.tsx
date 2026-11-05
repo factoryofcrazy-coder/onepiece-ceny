@@ -9,6 +9,8 @@ import { dmCall, DmConversation, DmMember, DmMessage, DmSearchHit, useDm } from 
 import { fmtDmDay, fmtDmTime, hasLink, previewOf, splitLinks } from "@/lib/dm/text";
 import { disablePush, enablePush, pushStatus, PushStatus } from "@/lib/dm/push-client";
 import { sb } from "@/lib/supabase";
+import Reactions from "@/components/reactions/Reactions";
+import { applyReaction, EmoteId, isEmote } from "@/lib/reactions";
 
 const MAX = 1000;
 const LANG_COND = (l: { cond: string; lang: string }) => `${l.cond} · ${l.lang}`;
@@ -139,6 +141,9 @@ function Conversation({
     });
   }, []);
 
+  const patchReaction = (messageId: string, emote: string, user: string, on: boolean) =>
+    setMsgs((cur) => cur && cur.map((x) => (x.id === messageId ? { ...x, reactions: applyReaction(x.reactions, emote, user, on) } : x)));
+
   const toBottom = () => requestAnimationFrame(() => {
     if (list.current) list.current.scrollTop = list.current.scrollHeight;
   });
@@ -210,6 +215,10 @@ function Conversation({
         clearTimeout(typingOff.current);
         typingOff.current = setTimeout(() => setTyping(false), 4000);
       })
+      // len signál na obrazovke druhého: skutočný stav je v databáze a načíta sa s históriou
+      .on("broadcast", { event: "react" }, ({ payload }) => {
+        if (isEmote(payload?.emote)) patchReaction(String(payload.messageId), payload.emote, conv.other_id, payload.on === true);
+      })
       .subscribe();
     typingCh.current = ch;
     return () => {
@@ -217,7 +226,20 @@ function Conversation({
       clearTimeout(typingOff.current);
       sb().removeChannel(ch);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, canSignal]);
+
+  const toggleReaction = async (messageId: string, emote: EmoteId, on: boolean) => {
+    setError("");
+    patchReaction(messageId, emote, me, on); // hneď na obrazovke, pri chybe sa vráti
+    try {
+      await dmCall("react", { messageId, emote, on });
+      typingCh.current?.send({ type: "broadcast", event: "react", payload: { messageId, emote, on } });
+    } catch (e: any) {
+      patchReaction(messageId, emote, me, !on);
+      setError(e.message);
+    }
+  };
 
   const onType = (v: string) => {
     setText(v);
@@ -359,6 +381,15 @@ function Conversation({
               {days[i] && <div className="dm-day">{days[i]}</div>}
               <div className={`dm-msg ${m.sender_id === me ? "me" : "other"} ${m.state ?? ""}`}>
                 <Body m={m} trusted={trusted} onCard={setOpen} />
+                {!m.state && m.body && (
+                  <Reactions
+                    rows={m.reactions}
+                    me={me}
+                    nameOf={() => conv.other_name}
+                    canReact={trusted && !conv.blocked_by_me}
+                    onToggle={(emote, on) => toggleReaction(m.id, emote, on)}
+                  />
+                )}
                 <span className="dm-meta">
                   {m.state === "sending" ? "Odosiela sa…" : m.state === "failed" ? "Neodoslané" : fmtDmTime(m.created_at, new Date(m.created_at))}
                   {m.state === "failed" && (

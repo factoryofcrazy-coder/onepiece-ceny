@@ -122,6 +122,20 @@ async function sendPush(sub, plain, v, doFetch = fetch) {
   return r.status;
 }
 
+// lib/reactions.ts
+var EMOTES = [
+  { id: "kek", label: "KEK", hint: "smiech" },
+  { id: "pog", label: "POG", hint: "wow" },
+  { id: "rip", label: "RIP", hint: "koniec" },
+  { id: "cope", label: "COPE", hint: "bol\xED, ale dr\u017E\xEDm sa" },
+  { id: "beli", label: "BELI", hint: "dobr\xE1 cena" },
+  { id: "pull", label: "PULL", hint: "super \u0165ah" },
+  { id: "salty", label: "SALTY", hint: "hnev" },
+  { id: "gg", label: "GG", hint: "dobr\xE1 hra" }
+];
+var isEmote = (v) => EMOTES.some((e) => e.id === v);
+var emoteLabel = (id) => EMOTES.find((e) => e.id === id)?.label ?? id;
+
 // lib/dm/server.ts
 var MAX_TEXT = 1e3;
 var MAX_REQUEST_BYTES = 16e3;
@@ -197,17 +211,29 @@ function createDmHandler(env, deps = {}) {
     return (await r.json()).id ?? null;
   });
   const vapid = env.VAPID_PUBLIC && env.VAPID_PRIVATE ? { publicKey: env.VAPID_PUBLIC, privateKey: env.VAPID_PRIVATE, subject: env.VAPID_SUBJECT || "https://www.grand-line.eu" } : null;
+  const pushTo = async (t, payload, v) => {
+    const results = await Promise.all(t.subs.map((s) => sendPush(s, payload, v, deps.pushFetch ?? fetch).catch(() => 0)));
+    const gone = t.subs.filter((_, i) => results[i] === 404 || results[i] === 410).map((s) => s.endpoint);
+    if (gone.length) await rpc("dm_push_forget", { p_endpoints: gone });
+  };
   const pushNotice = async (x) => {
     if (!vapid) return;
     const t = await rpc("dm_push_targets", { p_recipient: x.recipient, p_sender: x.senderId });
     if (!t.subs.length) return;
     const text = x.isRequest ? "\u017Diados\u0165 o spr\xE1vu" : !t.show_text ? "Nov\xE1 spr\xE1va" : x.body.text || (x.body.card ? `Karta ${x.body.card.id.split("_")[0]}` : "Nov\xE1 spr\xE1va");
     const payload = JSON.stringify({ title: t.sender_name, body: text.slice(0, 240), url: `/spravy?c=${x.conversationId}`, tag: `dm-${x.conversationId}`, conversationId: x.conversationId, unread: Number(t.unread) });
-    const results = await Promise.all(t.subs.map((s) => sendPush(s, payload, vapid, deps.pushFetch ?? fetch).catch(() => 0)));
-    const gone = t.subs.filter((_, i) => results[i] === 404 || results[i] === 410).map((s) => s.endpoint);
-    if (gone.length) await rpc("dm_push_forget", { p_endpoints: gone });
+    await pushTo(t, payload, vapid);
   };
   const notify = deps.notify ?? pushNotice;
+  const pushReaction = async (x) => {
+    if (!vapid) return;
+    const t = await rpc("dm_push_targets", { p_recipient: x.recipient, p_sender: x.senderId });
+    if (!t.subs.length) return;
+    const body = t.show_text ? `${emoteLabel(x.emote)} na tvoju spr\xE1vu` : "Nov\xE1 reakcia";
+    const payload = JSON.stringify({ title: t.sender_name, body, url: `/spravy?c=${x.conversationId}`, tag: `dm-react-${x.conversationId}`, conversationId: x.conversationId, unread: Number(t.unread) });
+    await pushTo(t, payload, vapid);
+  };
+  const notifyReaction = deps.notifyReaction ?? pushReaction;
   const unseal = async (m) => {
     try {
       return JSON.parse(await open(keys(), m.conversation_id, m.sender_id, m.id, m));
@@ -217,7 +243,7 @@ function createDmHandler(env, deps = {}) {
   };
   const present = async (m) => {
     const body = await unseal(m);
-    return { id: m.id, conversation_id: m.conversation_id, sender_id: m.sender_id, created_at: m.created_at, body, unreadable: !body };
+    return { id: m.id, conversation_id: m.conversation_id, sender_id: m.sender_id, created_at: m.created_at, body, unreadable: !body, reactions: m.reactions ?? [] };
   };
   async function bodyOf(b, me) {
     const text = cleanText(b.text);
@@ -251,11 +277,19 @@ function createDmHandler(env, deps = {}) {
       if (!row.duplicate) {
         await notify({ recipient: row.recipient, conversationId: conv, senderId: me, isRequest: !!row.is_request, body }).catch(() => console.error("dm: upozornenie zlyhalo"));
       }
-      return { id: row.id, created_at: row.created_at, conversation_id: conv, sender_id: me, body, unreadable: false };
+      return { id: row.id, created_at: row.created_at, conversation_id: conv, sender_id: me, body, unreadable: false, reactions: [] };
     },
     async history(me, b) {
       const rows = await rpc("dm_history", { p_me: me, p_conv: uuidOf(b.conversationId, "id konverz\xE1cie"), p_before: timeOf(b.before), p_limit: 50 });
       return Promise.all(rows.map(present));
+    },
+    async react(me, b) {
+      if (!isEmote(b.emote)) throw new HttpError(400, "Nezn\xE1ma reakcia.");
+      const r = await rpc("dm_react", { p_me: me, p_message: uuidOf(b.messageId, "id spr\xE1vy"), p_emote: b.emote, p_on: b.on !== false });
+      if (r.notify) {
+        await notifyReaction({ recipient: r.recipient, conversationId: r.conversation_id, senderId: me, emote: b.emote }).catch(() => console.error("dm: upozornenie zlyhalo"));
+      }
+      return { changed: r.changed };
     },
     async read(me, b) {
       return rpc("dm_mark_read", { p_me: me, p_conv: uuidOf(b.conversationId, "id konverz\xE1cie") });

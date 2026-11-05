@@ -1,7 +1,8 @@
 "use client";
 // Spoločný chat: jedno spojenie naživo pre celý web (panel na PC, stránka /chat na mobile), počítadlo nových správ.
-import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "./auth";
+import { applyReaction, EmoteId, Reaction } from "./reactions";
 import { sb } from "./supabase";
 
 export type ChatMsg = { id: number; created_at: string; user_id: string; username: string; body: string; deleted_at: string | null };
@@ -18,6 +19,10 @@ type ChatState = {
   notice: string;
   online: number; // koľko prihlásených má web práve otvorený
   bans: ChatBan[];
+  /** reakcie podľa id správy; null = tabuľka ešte nie je k dispozícii, reakcie sa neukazujú */
+  reactions: Map<number, Reaction[]> | null;
+  names: Map<string, string>;
+  toggleReaction: (id: number, emote: EmoteId, on: boolean) => Promise<void>;
   send: (body: string) => Promise<boolean>;
   remove: (id: number) => Promise<void>;
   setBan: (uid: string, banned: boolean) => Promise<void>;
@@ -32,6 +37,9 @@ const Ctx = createContext<ChatState>({
   notice: "",
   online: 0,
   bans: [],
+  reactions: null,
+  names: new Map(),
+  toggleReaction: async () => {},
   send: async () => false,
   remove: async () => {},
   setBan: async () => {},
@@ -48,6 +56,28 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const [notice, setNotice] = useState("");
   const [online, setOnline] = useState(0);
   const [bans, setBans] = useState<ChatBan[]>([]);
+  const [reactions, setReactions] = useState<Map<number, Reaction[]> | null>(null);
+  const [names, setNames] = useState<Map<string, string>>(new Map());
+  const knownNames = useRef<Map<string, string>>(new Map());
+  const reactionsReq = useRef(0);
+
+  const loadReactions = useCallback(async () => {
+    const n = ++reactionsReq.current;
+    const { data: last } = await sb().from("chat_messages").select("id").order("id", { ascending: false }).range(KEEP - 1, KEEP - 1);
+    const from = (last as { id: number }[] | null)?.[0]?.id ?? 0;
+    const { data, error: e } = await sb().from("chat_reactions").select("message_id, user_id, emote").gte("message_id", from).limit(3000);
+    if (n !== reactionsReq.current) return; // medzitým prišiel novší dopyt
+    if (e) return setReactions(null);
+    const m = new Map<number, Reaction[]>();
+    for (const r of (data as (Reaction & { message_id: number })[]) ?? []) m.set(r.message_id, [...(m.get(r.message_id) ?? []), { emote: r.emote, user_id: r.user_id }]);
+    setReactions(m);
+    const missing = [...new Set(((data as Reaction[]) ?? []).map((r) => r.user_id))].filter((u) => !knownNames.current.has(u));
+    if (missing.length) {
+      const { data: p } = await sb().from("profiles").select("id, username").in("id", missing);
+      for (const x of (p as { id: string; username: string | null }[]) ?? []) knownNames.current.set(x.id, x.username ?? "Hráč");
+      setNames(new Map(knownNames.current));
+    }
+  }, []);
 
   const merge = useCallback((incoming: ChatMsg[]) => {
     setAll((cur) => {
@@ -62,7 +92,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     if (e) return setError("Správy sa nepodarilo načítať.");
     setError("");
     merge((data as ChatMsg[]) ?? []);
-  }, [merge]);
+    loadReactions();
+  }, [merge, loadReactions]);
 
   const loadBans = useCallback(async () => {
     const { data } = await sb().rpc("chat_ban_list");
@@ -89,11 +120,22 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     };
     document.addEventListener("visibilitychange", onVisible);
     load();
+    // samostatné spojenie: problém s reakciami nesmie zastaviť správy
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const rx = sb()
+      .channel("chat-reactions")
+      .on("postgres_changes", { event: "*", schema: "public", table: "chat_reactions" }, () => {
+        clearTimeout(timer);
+        timer = setTimeout(loadReactions, 300); // viac reakcií naraz = jedno načítanie
+      })
+      .subscribe();
     return () => {
       document.removeEventListener("visibilitychange", onVisible);
+      clearTimeout(timer);
       sb().removeChannel(ch);
+      sb().removeChannel(rx);
     };
-  }, [userId, load, merge]);
+  }, [userId, load, merge, loadReactions]);
 
   useEffect(() => {
     if (isAdmin) loadBans();
@@ -164,9 +206,30 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     setNotice("Ďakujeme, správu si pozrie správca.");
   }, []);
 
+  const toggleReaction = useCallback(
+    async (id: number, emote: EmoteId, on: boolean) => {
+      if (!userId) return;
+      setError("");
+      const patch = (yes: boolean) =>
+        setReactions((cur) => {
+          const m = new Map(cur ?? []);
+          m.set(id, applyReaction(m.get(id), emote, userId, yes));
+          return m;
+        });
+      patch(on); // hneď na obrazovke, pri chybe sa vráti
+      const q = sb().from("chat_reactions");
+      const { error: e } = on ? await q.insert({ message_id: id, emote }) : await q.delete().match({ message_id: id, user_id: userId, emote });
+      if (e && e.code !== "23505") {
+        patch(!on);
+        setError(e.code === "P0001" ? e.message : "Reakciu sa nepodarilo uložiť. Skús to znova.");
+      }
+    },
+    [userId],
+  );
+
   const value = useMemo(
-    () => ({ msgs, unread, error, notice, online, bans, send, remove, setBan, report, markSeen }),
-    [msgs, unread, error, notice, online, bans, send, remove, setBan, report, markSeen],
+    () => ({ msgs, unread, error, notice, online, bans, reactions, names, toggleReaction, send, remove, setBan, report, markSeen }),
+    [msgs, unread, error, notice, online, bans, reactions, names, toggleReaction, send, remove, setBan, report, markSeen],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
