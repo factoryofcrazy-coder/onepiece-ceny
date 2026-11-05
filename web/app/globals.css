@@ -44,7 +44,8 @@ code { background: var(--sea); padding: 1px 6px; border-radius: 5px; }
 ::selection { background: var(--gold); color: var(--ink); }
 
 .wrap { max-width: 1320px; margin: 0 auto; padding: 0 16px; }
-main.wrap { animation: page-in .35s var(--ease) both; }
+/* backwards, nie both: po skončení nesmie ostať vlastná vrstva, inak by okná v main (detail karty) boli pod dolnou lištou */
+main.wrap { animation: page-in .35s var(--ease) backwards; }
 @keyframes page-in { from { opacity: 0; } } /* bez transform – inak by sa rozbili fixed okná (detail karty) */
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
