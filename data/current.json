@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-05T13:23:06Z",
+ "updated": "2026-11-05T13:34:44Z",
  "fx": {
   "CZK": 24.309,
   "USD": 1.1267,
@@ -640,7 +640,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -1887,7 +1887,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -2253,7 +2253,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -2854,11 +2854,11 @@
     }
    ],
    "error": "HTTP Error 502: Bad Gateway (https://www.tolarie.cz/koupit_produkty/katalog/70-one-piece/57-one-piece-booster-boxy/)",
-   "fails": 2,
+   "fails": 3,
    "warned": true
   },
   "cernyrytir": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -3590,7 +3590,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -3770,7 +3770,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -3821,7 +3821,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -4309,8 +4309,8 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-11-05T11:19:22Z",
-   "ok": false,
+   "ts": "2026-11-05T13:34:44Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game - OP13 Booster Display - JPN",
@@ -4358,15 +4358,6 @@
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP14_The_Azure_Seas_Seven_Booster_Display_-_JPN_b75da8d608c70b3e.webp?v=1791207170"
     },
     {
-     "name": "One Piece Card Game - Heroines Edition EB03 Display - JPN",
-     "url": "https://cardcosmos.de/products/one-piece-heroines-edition-eb03-display-japanisch",
-     "price": 144.9,
-     "currency": "EUR",
-     "eur": 144.9,
-     "inStock": true,
-     "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_Heroines_Edition_EB03_Display_-_JPN_9a05a3e171180805.webp?v=1791207176"
-    },
-    {
      "name": "One Piece Card Game - OP16 Booster Display The Time of Battle - JPN",
      "url": "https://cardcosmos.de/products/one-piece-card-game-op16-booster-display-the-time-of-battle-japanisch",
      "price": 79.9,
@@ -4374,6 +4365,15 @@
      "eur": 79.9,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP16_Booster_Display_The_Time_of_Battle_-_JPN_644d33939a2e5dac.webp?v=1791206570"
+    },
+    {
+     "name": "One Piece Card Game - Heroines Edition EB03 Display - JPN",
+     "url": "https://cardcosmos.de/products/one-piece-heroines-edition-eb03-display-japanisch",
+     "price": 144.9,
+     "currency": "EUR",
+     "eur": 144.9,
+     "inStock": true,
+     "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_Heroines_Edition_EB03_Display_-_JPN_9a05a3e171180805.webp?v=1791207176"
     },
     {
      "name": "One Piece Card Game - Heroines Edition EB03 Booster Pack - JPN",
@@ -4825,14 +4825,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP-08_-_Two_Legends_Booster_Box_-_EN_cd4ac2e07120627d.webp?v=1791208428"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "yonko": {
-   "ts": "2026-11-05T11:19:22Z",
-   "ok": false,
+   "ts": "2026-11-05T13:34:44Z",
+   "ok": true,
    "items": [
     {
      "name": "[JP] One Piece · Card Game Display - Royal Bloodline (OP-10)",
@@ -5437,13 +5434,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0814/4656/8264/files/One-Piece-Card-Game-BOOSTERPACK-Emperors-In-The-New-World-OP-09-english.jpg?v=1755092829"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "funkelpappe": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -5521,8 +5515,8 @@
    ]
   },
   "mikis": {
-   "ts": "2026-11-05T11:19:22Z",
-   "ok": false,
+   "ts": "2026-11-05T13:34:44Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game Illustration Box IB-07 - Englisch",
@@ -5668,13 +5662,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/OnePieceCardGameAdventureonKamisIslandOP-15BoosterDisplay_Englisch.webp?v=1775934440"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "butticards": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -6125,7 +6116,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -6437,7 +6428,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-11-05T13:23:06Z",
+   "ts": "2026-11-05T13:34:44Z",
    "ok": true,
    "items": [
     {
@@ -6866,8 +6857,8 @@
    ]
   },
   "crispycards": {
-   "ts": "2026-11-05T11:19:22Z",
-   "ok": false,
+   "ts": "2026-11-05T13:34:44Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece OP14 The Azure Sea's Seven Display (ENG)",
@@ -8535,14 +8526,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0950/2733/1402/files/one-piece-adventure-on-kamis-island-dash-pack-eng-kaufen.webp?v=1792788325"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "underpaid": {
-   "ts": "2026-11-05T11:19:22Z",
-   "ok": false,
+   "ts": "2026-11-05T13:34:44Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game: The Azure Sea’s Seven OP-14 Boosterpack (JP)",
@@ -9336,14 +9324,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0729/9871/5717/files/one-piece-japanese-2nd-anniversary-set-en-851361.webp?v=1746214435"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "cardbinder": {
-   "ts": "2026-11-05T11:19:22Z",
-   "ok": false,
+   "ts": "2026-11-05T13:34:44Z",
+   "ok": true,
    "items": [
     {
      "name": "The Best Volume 2 Japanese Booster Box",
@@ -9840,10 +9825,7 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-PRB01-The-Best-Volume-one-Booster-Box-English.webp?v=1759844795"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   }
  }
 }
