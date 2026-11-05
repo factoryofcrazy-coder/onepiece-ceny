@@ -3,6 +3,7 @@ import { DM_ENABLED } from "./config";
 import { createContext, useCallback, useContext, useEffect, useState, ReactNode } from "react";
 import type { User } from "@supabase/supabase-js";
 import { sb } from "./supabase";
+import { notifyXp } from "./gamify";
 
 export type Profile = { id: string; username: string | null };
 
@@ -43,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     profilesCache = null;
     setProfile(data ?? { id: userId, username: null });
     setIsAdmin(admin.data === true);
-    sb().rpc("xp_daily").then(() => {}); // XP za dennú návštevu, databáza pustí len raz za deň
+    sb().rpc("xp_daily").then(notifyXp); // XP za dennú návštevu, databáza pustí len raz za deň; úlohy sa potom obnovia
   }, [userId]);
 
   useEffect(() => {

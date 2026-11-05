@@ -65,6 +65,14 @@ export default function Login() {
     }
     setBusy(true);
     setMsg(null);
+    if (mode === "up") {
+      // obsadená prezývka: povieme to hneď, inak by databáza potichu pridala číslo (Anon → Anon1)
+      const { data: free, error } = await sb().rpc("username_available", { p_name: name.trim() });
+      if (!error && free === false) {
+        setBusy(false);
+        return setMsg({ t: `Prezývku „${name.trim()}“ už niekto má. Skús inú.` });
+      }
+    }
     const captchaToken = token ?? undefined;
     if (mode === "in") {
       const { error } = await sb().auth.signInWithPassword({ email, password: pass, options: { captchaToken } });
@@ -116,7 +124,7 @@ export default function Login() {
         {mode === "up" && (
           <label className="field">
             <span>Prezývka (uvidia ju ostatní)</span>
-            <input required minLength={3} maxLength={24} value={name} onChange={(e) => setName(e.target.value)} placeholder="napr. Anon" autoComplete="nickname" />
+            <input required minLength={3} maxLength={20} value={name} onChange={(e) => setName(e.target.value)} placeholder="napr. Modrá Fúzia" autoComplete="nickname" />
           </label>
         )}
         <label className="field">
