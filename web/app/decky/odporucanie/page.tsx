@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { ownedByCode, useCollection } from "@/lib/collection";
 import { Card, eur, MetaDeck, useCards, useMeta, usePrices, cardEur } from "@/lib/data";
 import { sb } from "@/lib/supabase";
+import { useLang } from "@/lib/lang";
 
 type Missing = { code: string; n: number; card?: Card; unit: number | null };
 type Scored = {
@@ -25,9 +26,11 @@ const SORTS = {
   cheap: "Najlacnejšie na dokúpenie",
   meta: "Najsilnejšie v mete",
 } as const;
+const SORTS_EN: Record<keyof typeof SORTS, string> = { ready: "Closest to complete", cheap: "Cheapest to finish", meta: "Strongest in the meta" };
 
 export default function Recommend() {
   const { user, loading } = useAuth();
+  const { t: L, lang, locale } = useLang();
   const { data: cards, error: cErr } = useCards();
   const { data: meta, error: mErr } = useMeta();
   const { data: prices } = usePrices();
@@ -99,15 +102,15 @@ export default function Recommend() {
   }, [meta, cards, owned, cheapest, usd, sort]);
 
   if (loading) return <Loading shape="tiles" />;
-  if (!user) return <NeedLogin what="Odporúčanie deckov" />;
+  if (!user) return <NeedLogin what={L("Odporúčanie deckov", "Deck recommendations")} />;
   if (cErr) return <DataError error={cErr} file="cards" />;
   if (mErr)
     return (
       <div className="empty warn">
-        Turnajové decky sa teraz nepodarilo načítať ({mErr}). Skús to o chvíľu znova.
+        {L("Turnajové decky sa teraz nepodarilo načítať", "Couldn't load tournament decks right now")} ({mErr}). {L("Skús to o chvíľu znova.", "Try again in a moment.")}
       </div>
     );
-  if (!cards || !meta || qLoading) return <Loading what="Porovnávam turnajové decky s tvojou zbierkou" shape="tiles" />;
+  if (!cards || !meta || qLoading) return <Loading what={L("Porovnávam turnajové decky s tvojou zbierkou", "Comparing tournament decks with your collection")} shape="tiles" />;
 
   const save = async (a: Arche) => {
     setSaving(a.leader);
@@ -118,7 +121,7 @@ export default function Recommend() {
         name: `${a.name} – ${d.tournament}`.slice(0, 120),
         leader_id: d.leader,
         cards: d.cards,
-        notes: `Podľa decku hráča ${d.player} (${d.placing}. miesto z ${d.players}), ${new Date(d.date).toLocaleDateString("sk-SK")}.`,
+        notes: L(`Podľa decku hráča ${d.player} (${d.placing}. miesto z ${d.players}), ${new Date(d.date).toLocaleDateString("sk-SK")}.`, `Based on ${d.player}'s deck (place ${d.placing} of ${d.players}), ${new Date(d.date).toLocaleDateString(locale)}.`),
       })
       .select()
       .single();
@@ -131,18 +134,17 @@ export default function Recommend() {
       <div className="head">
         <div>
           <Link href="/decky" className="small">
-            ← Decky
+            ← {L("Decky", "Decks")}
           </Link>
-          <h1>Čo si viem poskladať</h1>
+          <h1>{L("Čo si viem poskladať", "What can I build")}</h1>
           <p className="muted">
-            {meta.decks.length} top 8 deckov z {meta.tournaments} najväčších turnajov za posledný mesiac (Limitless TCG),
-            porovnaných s tvojimi {ownedTotal} kartami.
+            {L(`${meta.decks.length} top 8 deckov z ${meta.tournaments} najväčších turnajov za posledný mesiac (Limitless TCG), porovnaných s tvojimi ${ownedTotal} kartami.`, `${meta.decks.length} top 8 decks from the ${meta.tournaments} biggest tournaments of the last month (Limitless TCG), compared with your ${ownedTotal} cards.`)}
           </p>
         </div>
         <div className="seg">
           {(Object.keys(SORTS) as (keyof typeof SORTS)[]).map((k) => (
             <button key={k} className={sort === k ? "on" : ""} onClick={() => setSort(k)}>
-              {SORTS[k]}
+              {lang === "en" ? SORTS_EN[k] : SORTS[k]}
             </button>
           ))}
         </div>
@@ -150,8 +152,8 @@ export default function Recommend() {
 
       {ownedTotal === 0 && (
         <div className="empty">
-          V zbierke zatiaľ nemáš žiadne karty. <Link href="/import">Naimportuj ich z HoloDex</Link> alebo si ich označ v{" "}
-          <Link href="/karty">Kartách</Link>.
+          {L("V zbierke zatiaľ nemáš žiadne karty.", "Your collection is empty.")} <Link href="/import">{L("Naimportuj ich z HoloDex", "Import them from HoloDex")}</Link> {L("alebo si ich označ v", "or mark them in")}{" "}
+          <Link href="/karty">{L("Kartách", "Cards")}</Link>.
         </div>
       )}
 
@@ -172,33 +174,33 @@ export default function Recommend() {
                     <span className="muted small">{a.leader}</span>
                   </div>
                   <p className="small muted rec-meta">
-                    {a.top8}× v top 8{a.wins ? `, ${a.wins}× víťaz` : ""}. Najbližší decklist: {b.deck.player},{" "}
-                    {b.deck.placing}. miesto na {b.deck.tournament} ({b.deck.players} hráčov)
+                    {a.top8}× {L("v top 8", "in top 8")}{a.wins ? L(`, ${a.wins}× víťaz`, `, ${a.wins}× winner`) : ""}. {L("Najbližší decklist", "Closest decklist")}: {b.deck.player},{" "}
+                    {L(`${b.deck.placing}. miesto na ${b.deck.tournament} (${b.deck.players} hráčov)`, `place ${b.deck.placing} at ${b.deck.tournament} (${b.deck.players} players)`)}
                   </p>
                   <div className="rec-progress">
                     <b>{Math.round(b.pct * 100)} %</b>
                     <Bar value={b.have} max={b.total} />
                     <span className="small muted">
-                      {b.have}/{b.total} kariet
+                      {b.have}/{b.total} {L("kariet", "cards")}
                     </span>
                   </div>
                   <p className="rec-missing">
                     {b.missing.length === 0 ? (
-                      <span className="okc">Máš všetko – môžeš hrať hneď.</span>
+                      <span className="okc">{L("Máš všetko – môžeš hrať hneď.", "You have everything – play right away.")}</span>
                     ) : (
                       <>
-                        Chýba {b.total - b.have} kariet za <b>{eur(b.missingCost)}</b>
-                        {b.unknown > 0 && <span className="muted small"> (+ {b.unknown} kariet bez ceny)</span>}
+                        {L("Chýba", "Missing")} {b.total - b.have} {L("kariet za", "cards for")} <b>{eur(b.missingCost)}</b>
+                        {b.unknown > 0 && <span className="muted small"> (+ {b.unknown} {L("kariet bez ceny", "cards without a price")})</span>}
                       </>
                     )}
                   </p>
                   <div className="row gap wrapr">
                     <button className="btn sm" disabled={saving === a.leader} onClick={() => save(a)}>
-                      {saving === a.leader ? "Ukladám…" : "Uložiť ako môj deck"}
+                      {saving === a.leader ? L("Ukladám…", "Saving…") : L("Uložiť ako môj deck", "Save as my deck")}
                     </button>
                     {b.missing.length > 0 && (
                       <button className="btn ghost sm" onClick={() => setOpen(isOpen ? null : a.leader)}>
-                        {isOpen ? "Skryť chýbajúce" : "Čo mi chýba"}
+                        {isOpen ? L("Skryť chýbajúce", "Hide missing") : L("Čo mi chýba", "What I'm missing")}
                       </button>
                     )}
                     <a
@@ -207,7 +209,7 @@ export default function Recommend() {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      Turnaj na Limitless
+                      {L("Turnaj na Limitless", "Tournament on Limitless")}
                     </a>
                   </div>
                 </div>
@@ -222,7 +224,7 @@ export default function Recommend() {
                         <span className="grow">
                           {m.card?.name ?? m.code} <span className="muted tiny">{m.code}</span>
                         </span>
-                        <span className="muted small">{m.unit != null ? `${eur(m.unit)}/ks` : "bez ceny"}</span>
+                        <span className="muted small">{m.unit != null ? `${eur(m.unit)}/${L("ks", "pc")}` : L("bez ceny", "no price")}</span>
                         <b className="small">{m.unit != null ? eur(m.unit * m.n) : "–"}</b>
                       </li>
                     ))}

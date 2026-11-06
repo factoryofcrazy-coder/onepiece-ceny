@@ -4,12 +4,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Loading } from "@/components/ui";
 import { indexed, IndexPoint, loadMarketIndex, loadSpy, spyAligned, SpyPoint } from "@/lib/market";
 import MarketTabs from "@/components/MarketTabs";
+import { useLang } from "@/lib/lang";
 
 const H = 230, LEFT = 48, RIGHT = 16, TOP = 16, BOT = 28;
 const dayLabel = (d: string) => new Date(d + "T00:00:00Z").toLocaleDateString("sk-SK", { day: "numeric", month: "numeric", timeZone: "UTC" });
 const pctTxt = (raw: number) => {
   const v = Math.abs(raw) < 0.05 ? 0 : raw;
-  return v > 0 ? `▲ ${v.toLocaleString("sk-SK", { maximumFractionDigits: 1 })} %` : v < 0 ? `▼ ${(-v).toLocaleString("sk-SK", { maximumFractionDigits: 1 })} %` : "bez zmeny";
+  return v > 0 ? `▲ ${v.toLocaleString("sk-SK", { maximumFractionDigits: 1 })} %` : v < 0 ? `▼ ${(-v).toLocaleString("sk-SK", { maximumFractionDigits: 1 })} %` : "±0 %";
 };
 const num = (v: number) => Math.round(v).toLocaleString("sk-SK");
 // pekné hodnoty osi Y
@@ -29,6 +30,7 @@ export default function Page() {
   const [hover, setHover] = useState<number | null>(null);
   const [width, setWidth] = useState(680);
   const box = useRef<HTMLDivElement>(null);
+  const { t } = useLang();
 
   useEffect(() => {
     loadMarketIndex().then(setPoints);
@@ -86,29 +88,29 @@ export default function Page() {
   return (
     <div className="mindex">
       <MarketTabs />
-      <h1>Trhový index</h1>
+      <h1>{t("Trhový index", "Market index")}</h1>
       <p className="muted small">
-        Vývoj celého trhu One Piece podľa priemernej trend ceny kariet (od 1 €) a boxov na Cardmarkete, porovnaný s akciovým trhom (SPY, teda S&amp;P 500). Základ 1000 je prvý zaznamenaný deň.
+        {t("Vývoj celého trhu One Piece podľa priemernej trend ceny kariet (od 1 €) a boxov na Cardmarkete, porovnaný s akciovým trhom (SPY, teda S&P 500). Základ 1000 je prvý zaznamenaný deň.", "The whole One Piece market based on the average Cardmarket trend price of cards (from €1) and boxes, compared with the stock market (SPY, i.e. the S&P 500). The base of 1000 is the first recorded day.")}
       </p>
 
       {latest ? (
         <>
           <div className="mindex-big">
             <b>{num(latest.idx)}</b>
-            {pctDay != null && <span className={`cmove ${pctDay > 0 ? "up" : pctDay < 0 ? "down" : ""}`}>{pctTxt(pctDay)} za deň</span>}
+            {pctDay != null && <span className={`cmove ${pctDay > 0 ? "up" : pctDay < 0 ? "down" : ""}`}>{pctTxt(pctDay)} {t("za deň", "today")}</span>}
           </div>
           <p className="muted small">
             {pctAll != null && (
               <>
-                Od začiatku <span className={pctAll > 0 ? "cmove up" : pctAll < 0 ? "cmove down" : ""}>{pctTxt(pctAll)}</span>.{" "}
+                {t("Od začiatku", "Since start")} <span className={pctAll > 0 ? "cmove up" : pctAll < 0 ? "cmove down" : ""}>{pctTxt(pctAll)}</span>.{" "}
               </>
             )}
-            Kôš: {latest.items.toLocaleString("sk-SK")} položiek.
+            {t("Kôš", "Basket")}: {latest.items.toLocaleString("sk-SK")} {t("položiek", "items")}.
           </p>
 
           {pctAll != null && spyAll != null && (
             <p className="mindex-verdict">
-              Za toto obdobie {Math.abs(pctAll - spyAll) < 0.1 ? "išli rovnako" : pctAll > spyAll ? "rástol rýchlejšie One Piece" : "rástli rýchlejšie akcie"}:{" "}
+              {t("Za toto obdobie", "Over this period")} {Math.abs(pctAll - spyAll) < 0.1 ? t("išli rovnako", "both moved the same") : pctAll > spyAll ? t("rástol rýchlejšie One Piece", "One Piece grew faster") : t("rástli rýchlejšie akcie", "stocks grew faster")}:{" "}
               <b className="op">One Piece {pctTxt(pctAll)}</b> vs <b className="spy">SPY {pctTxt(spyAll)}</b>.
             </p>
           )}
@@ -118,7 +120,7 @@ export default function Page() {
               <table className="graded-table mindex-table">
                 <thead>
                   <tr>
-                    <th scope="col">Deň</th>
+                    <th scope="col">{t("Deň", "Day")}</th>
                     <th scope="col">One Piece</th>
                     {hasSpy && <th scope="col">SPY</th>}
                   </tr>
@@ -147,7 +149,7 @@ export default function Page() {
                     viewBox={`0 0 ${width} ${H}`}
                     role="img"
                     tabIndex={0}
-                    aria-label={`Trhový index ${num(latest.idx)}${spyLast != null ? `, SPY ${num(spyLast)}` : ""}. Šípkami prejdeš po dňoch.`}
+                    aria-label={`${t("Trhový index", "Market index")} ${num(latest.idx)}${spyLast != null ? `, SPY ${num(spyLast)}` : ""}. ${t("Šípkami prejdeš po dňoch.", "Use arrow keys to move between days.")}`}
                     onPointerMove={onMove}
                     onPointerDown={onMove}
                     onPointerLeave={(e) => e.pointerType === "mouse" && setHover(null)}
@@ -195,21 +197,21 @@ export default function Page() {
               </>
             )
           ) : (
-            <p className="muted">Graf sa doplní – index sa zbiera každý deň, treba aspoň dva dni.</p>
+            <p className="muted">{t("Graf sa doplní – index sa zbiera každý deň, treba aspoň dva dni.", "The chart will fill in – the index is collected daily and needs at least two days.")}</p>
           )}
 
           {idx.length >= 2 && (
             <button className="btn ghost sm" onClick={() => (setTable(!table), setHover(null))}>
-              {table ? "Graf" : "Tabuľka"}
+              {table ? t("Graf", "Chart") : t("Tabuľka", "Table")}
             </button>
           )}
         </>
       ) : (
-        <div className="empty">Index sa ešte nezačal zbierať. Prvý bod pribudne pri najbližšom dennom spracovaní.</div>
+        <div className="empty">{t("Index sa ešte nezačal zbierať. Prvý bod pribudne pri najbližšom dennom spracovaní.", "The index hasn't started collecting yet. The first point will appear with the next daily run.")}</div>
       )}
 
       <p className="tiny muted mindex-note">
-        Index je orientačný a nie je investičné odporúčanie: keď vyjde nový set, jeho karty a boxy pribudnú do koša. Jednotlivé ceny nájdeš v <Link href="/pohyby">Pohyboch cien</Link> a <Link href="/boxy">Hodnotách boxov</Link>.
+        {t("Index je orientačný a nie je investičné odporúčanie: keď vyjde nový set, jeho karty a boxy pribudnú do koša. Jednotlivé ceny nájdeš v", "The index is a guide, not investment advice: when a new set comes out, its cards and boxes join the basket. Individual prices are in")} <Link href="/pohyby">{t("Pohyboch cien", "Price moves")}</Link> {t("a", "and")} <Link href="/boxy">{t("Hodnotách boxov", "Box values")}</Link>.
       </p>
     </div>
   );

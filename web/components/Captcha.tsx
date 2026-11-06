@@ -1,6 +1,7 @@
 "use client";
 // Cloudflare Turnstile pri prihlásení a registrácii. Bez kľúča NEXT_PUBLIC_TURNSTILE_SITE_KEY sa nič nezobrazí.
 import { useEffect, useRef } from "react";
+import { useLang } from "@/lib/lang";
 
 export const CAPTCHA_ON = !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 const SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
@@ -26,6 +27,7 @@ function loadScript(): Promise<void> {
 }
 
 export default function Captcha({ onToken }: { onToken: (t: string | null) => void }) {
+  const { lang } = useLang();
   const box = useRef<HTMLDivElement>(null);
   const cb = useRef(onToken);
   cb.current = onToken;
@@ -40,7 +42,7 @@ export default function Captcha({ onToken }: { onToken: (t: string | null) => vo
         if (gone || !box.current) return;
         id = t.render(box.current, {
           sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
-          language: "sk",
+          language: lang,
           theme: "dark",
           callback: (v: string) => cb.current(v),
           "expired-callback": () => cb.current(null),

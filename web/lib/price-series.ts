@@ -18,7 +18,7 @@ export function notableMove(c: Averages): number | null {
   return s && (c.cm ?? 0) >= 1 && Math.abs(s.pct) >= 20 ? s.pct : null;
 }
 
-export const formatPct = (pct: number) => (pct > 0 ? `▲ ${pct} %` : pct < 0 ? `▼ ${-pct} %` : "bez zmeny");
+export const formatPct = (pct: number) => (pct > 0 ? `▲ ${pct} %` : pct < 0 ? `▼ ${-pct} %` : "±0 %");
 
 export type SeriesRow = { day: string; cm: number | null; usd: number | null };
 export type Series = { through: string | null; points: SeriesRow[] };

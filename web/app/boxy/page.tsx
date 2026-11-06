@@ -6,6 +6,7 @@ import MarketTabs from "@/components/MarketTabs";
 import { eur, Offer, SealedItem, setOrder, useSealed, usePrices } from "@/lib/data";
 import { formatPct } from "@/lib/price-series";
 import { useTcg } from "@/lib/tcg";
+import { useLang } from "@/lib/lang";
 import { useAuth } from "@/lib/auth";
 import { useSealedCollection } from "@/lib/sealed-collection";
 
@@ -18,16 +19,18 @@ const movePct = (s: SealedItem) => (s.cm != null && s.cm30 ? (s.cm / s.cm30 - 1)
 
 export default function Page() {
   const { tcg } = useTcg();
+  const { t } = useLang();
   if (tcg === "pokemon")
     return (
       <div className="empty">
-        Hodnoty boxov máme zatiaľ len pre One Piece. <Link href="/ceny">Ceny boxov v obchodoch →</Link>
+        {t("Hodnoty boxov máme zatiaľ len pre One Piece.", "Box values are only available for One Piece so far.")} <Link href="/ceny">{t("Ceny boxov v obchodoch", "Box prices in shops")} →</Link>
       </div>
     );
   return <Boxes />;
 }
 
 function Boxes() {
+  const { t } = useLang();
   const { data, error } = useSealed();
   const { data: prices } = usePrices();
   const { user } = useAuth();
@@ -82,25 +85,25 @@ function Boxes() {
   return (
     <div className="moves boxes">
       <MarketTabs />
-      <h1>Hodnoty boxov</h1>
+      <h1>{t("Hodnoty boxov", "Box values")}</h1>
       <p className="muted moves-note">
-        Reálna trhová hodnota zapečatených produktov podľa Cardmarketu (trend cena), nie pýtaná cena obchodov. Porovnanie cien v e-shopoch nájdeš v <Link href="/ceny">Ceny boxov</Link>.
+        {t("Reálna trhová hodnota zapečatených produktov podľa Cardmarketu (trend cena), nie pýtaná cena obchodov. Porovnanie cien v e-shopoch nájdeš v", "Real market value of sealed products from Cardmarket (trend price), not the asking price of shops. To compare shop prices, see")} <Link href="/ceny">{t("Ceny boxov", "Box prices")}</Link>.
       </p>
-      <div className="pchart-range moves-dir" role="group" aria-label="Jazyk">
+      <div className="pchart-range moves-dir" role="group" aria-label={t("Jazyk", "Language")}>
         {(["EN", "JP"] as const).map((l) => (
           <button key={l} className={lang === l ? "on" : ""} aria-pressed={lang === l} onClick={() => setLang(l)}>
-            {l === "EN" ? "Anglické" : "Japonské"}
+            {l === "EN" ? t("Anglické", "English") : t("Japonské", "Japanese")}
           </button>
         ))}
       </div>
       <FilterBar>
         <label className="field">
-          <span>Druh</span>
+          <span>{t("Druh", "Type")}</span>
           <select value={kind} onChange={(e) => setKind(e.target.value)}>
-            <option value="*">Všetky</option>
+            <option value="*">{t("Všetky", "All")}</option>
             {KINDS.map((k) => (
               <option key={k} value={k}>
-                {k}
+                {k === "Iné" ? t("Iné", "Other") : k}
               </option>
             ))}
           </select>
@@ -108,7 +111,7 @@ function Boxes() {
         <label className="field">
           <span>Set</span>
           <select value={set} onChange={(e) => setSet(e.target.value)}>
-            <option value="">Všetky</option>
+            <option value="">{t("Všetky", "All")}</option>
             {sets.map(([id, name]) => (
               <option key={id} value={id}>
                 {id} – {name}
@@ -117,19 +120,19 @@ function Boxes() {
           </select>
         </label>
         <label className="field">
-          <span>Zoradiť</span>
+          <span>{t("Zoradiť", "Sort")}</span>
           <select value={sort} onChange={(e) => setSort(e.target.value as "value" | "move")}>
-            <option value="value">Najdrahšie</option>
-            <option value="move">Najväčší pohyb</option>
+            <option value="value">{t("Najdrahšie", "Most expensive")}</option>
+            <option value="move">{t("Najväčší pohyb", "Biggest move")}</option>
           </select>
         </label>
         <label className="field grow">
-          <span>Hľadať</span>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Napr. OP09, Romance Dawn…" />
+          <span>{t("Hľadať", "Search")}</span>
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("Napr. OP09, Romance Dawn…", "E.g. OP09, Romance Dawn…")} />
         </label>
       </FilterBar>
       {list.length === 0 ? (
-        <div className="empty">Pre tento výber nemáme žiadne produkty. Skús iný druh alebo jazyk.</div>
+        <div className="empty">{t("Pre tento výber nemáme žiadne produkty. Skús iný druh alebo jazyk.", "No products for this selection. Try another type or language.")}</div>
       ) : (
         <>
           <div className="vlist">
@@ -149,7 +152,7 @@ function Boxes() {
                     </span>
                   </a>
                   {pct != null ? <span className={`vqty cmove ${pct > 0 ? "up" : pct < 0 ? "down" : ""}`}>{formatPct(pct)}</span> : <span className="vqty muted tiny">–</span>}
-                  {s.cmLow != null ? <span className="vunit small muted">od {eur(s.cmLow)}</span> : <span className="vunit" />}
+                  {s.cmLow != null ? <span className="vunit small muted">{t("od", "from")} {eur(s.cmLow)}</span> : <span className="vunit" />}
                   <b className="vtotal">{eur(s.cm)}</b>
                   {user && (
                     <span className="boxqty">
@@ -163,19 +166,19 @@ function Boxes() {
           {pages > 1 && (
             <div className="pager">
               <button className="btn ghost sm" disabled={page === 0} onClick={() => (setPage(page - 1), scrollTo({ top: 0 }))}>
-                ← Späť
+                ← {t("Späť", "Back")}
               </button>
               <span className="small muted">
-                Strana {page + 1} z {pages} · {list.length} produktov
+                {t(`Strana ${page + 1} z ${pages} · ${list.length} produktov`, `Page ${page + 1} of ${pages} · ${list.length} products`)}
               </span>
               <button className="btn ghost sm" disabled={page >= pages - 1} onClick={() => (setPage(page + 1), scrollTo({ top: 0 }))}>
-                Ďalej →
+                {t("Ďalej", "Next")} →
               </button>
             </div>
           )}
         </>
       )}
-      <p className="tiny muted">Pohyb je trend cena oproti 30-dňovému priemeru. Pri zriedka predávaných produktoch priemer chýba, tak sa pohyb nezobrazí. Obrázky sú z e-shopov a nemusia presne sedieť s verziou produktu.</p>
+      <p className="tiny muted">{t("Pohyb je trend cena oproti 30-dňovému priemeru. Pri zriedka predávaných produktoch priemer chýba, tak sa pohyb nezobrazí. Obrázky sú z e-shopov a nemusia presne sedieť s verziou produktu.", "The move is the trend price vs the 30-day average. Rarely sold products have no average, so no move is shown. Images come from shops and may not exactly match the product version.")}</p>
     </div>
   );
 }

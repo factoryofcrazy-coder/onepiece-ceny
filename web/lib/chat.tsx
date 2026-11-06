@@ -4,6 +4,7 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 import { useAuth } from "./auth";
 import { applyReaction, EmoteId, Reaction } from "./reactions";
 import { sb } from "./supabase";
+import { useLang } from "@/lib/lang";
 
 export type ChatMsg = { id: number; created_at: string; user_id: string; username: string; body: string; deleted_at: string | null };
 export type ChatBan = { user_id: string; username: string | null };
@@ -49,6 +50,10 @@ const Ctx = createContext<ChatState>({
 
 export function ChatProvider({ children }: { children: ReactNode }) {
   const { user, isAdmin } = useAuth();
+  const { t: tl } = useLang();
+  const Lref = useRef(tl);
+  Lref.current = tl;
+  const L = (sk: string, en: string) => Lref.current(sk, en);
   const userId = user?.id;
   const [all, setAll] = useState<ChatMsg[] | null>(null);
   const [seen, setSeen] = useState(0);
@@ -89,7 +94,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const load = useCallback(async () => {
     const { data, error: e } = await sb().from("chat_messages").select(COLUMNS).order("id", { ascending: false }).limit(LOAD);
-    if (e) return setError("Správy sa nepodarilo načítať.");
+    if (e) return setError(L("Správy sa nepodarilo načítať.", "Couldn't load messages."));
     setError("");
     merge((data as ChatMsg[]) ?? []);
     loadReactions();
@@ -171,7 +176,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       setError("");
       const { error: e } = await sb().from("chat_messages").insert({ body });
       if (e) {
-        setError(e.code === "P0001" ? e.message : "Správu sa nepodarilo odoslať. Skús to znova.");
+        setError(e.code === "P0001" ? e.message : L("Správu sa nepodarilo odoslať. Skús to znova.", "Couldn't send the message. Try again."));
         return false;
       }
       await load();
@@ -202,8 +207,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     setError("");
     setNotice("");
     const { error: e } = await sb().rpc("chat_report_message", { p_id: id });
-    if (e) return setError(e.code === "P0001" ? e.message : "Správu sa nepodarilo nahlásiť. Skús to znova.");
-    setNotice("Ďakujeme, správu si pozrie správca.");
+    if (e) return setError(e.code === "P0001" ? e.message : L("Správu sa nepodarilo nahlásiť. Skús to znova.", "Couldn't report the message. Try again."));
+    setNotice(L("Ďakujeme, správu si pozrie správca.", "Thanks, an admin will review the message."));
   }, []);
 
   const toggleReaction = useCallback(
@@ -221,7 +226,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       const { error: e } = on ? await q.insert({ message_id: id, emote }) : await q.delete().match({ message_id: id, user_id: userId, emote });
       if (e && e.code !== "23505") {
         patch(!on);
-        setError(e.code === "P0001" ? e.message : "Reakciu sa nepodarilo uložiť. Skús to znova.");
+        setError(e.code === "P0001" ? e.message : L("Reakciu sa nepodarilo uložiť. Skús to znova.", "Couldn't save the reaction. Try again."));
       }
     },
     [userId],

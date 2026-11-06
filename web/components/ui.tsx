@@ -9,9 +9,12 @@ import CopiesPanel from "@/components/CopiesPanel";
 import PriceChart from "@/components/PriceChart";
 import { gradedEur, GradedPrice, loadGraded } from "@/lib/grading";
 import { formatPct, notableMove, salesChange } from "@/lib/price-series";
+import { useLang } from "@/lib/lang";
 
 /** Kostra namiesto „Načítavam…“ – tvar zodpovedá obsahu, ktorý príde. */
-export function Loading({ what = "Načítavam", shape = "cards" }: { what?: string; shape?: "cards" | "rows" | "tiles" }) {
+export function Loading({ what, shape = "cards" }: { what?: string; shape?: "cards" | "rows" | "tiles" }) {
+  const { t } = useLang();
+  what ??= t("Načítavam", "Loading");
   const n = shape === "rows" ? 8 : 12;
   return (
     <div className={`skel skel-${shape}`} role="status" aria-label={what}>
@@ -75,12 +78,13 @@ export function CountUp({ value, format }: { value: number; format: (v: number) 
 }
 
 export function DataError({ error, file }: { error: string; file: string }) {
+  const { t } = useLang();
   return (
     <div className="empty warn">
-      {file === "cards" ? "Databázu kariet" : "Ceny"} sa teraz nepodarilo načítať ({error}).
+      {file === "cards" ? t("Databázu kariet", "The card database") : t("Ceny", "Prices")} {t("sa teraz nepodarilo načítať", "could not be loaded right now")} ({error}).
       <p className="small">
         <button className="btn ghost sm" onClick={() => window.location.reload()}>
-          Skúsiť znova
+          {t("Skúsiť znova", "Try again")}
         </button>
       </p>
     </div>
@@ -88,6 +92,7 @@ export function DataError({ error, file }: { error: string; file: string }) {
 }
 
 export function NeedLogin({ what }: { what: string }) {
+  const { t } = useLang();
   return (
     <div className="empty need">
       <span className="need-ic" aria-hidden>
@@ -96,10 +101,10 @@ export function NeedLogin({ what }: { what: string }) {
           <path d="M8 11V7a4 4 0 0 1 8 0v4" />
         </svg>
       </span>
-      <h2>{what} je pre prihlásených</h2>
-      <p>Prihlás sa a ukladaj si karty, decky aj zbierku – uvidíš ich na mobile aj na počítači.</p>
+      <h2>{t(`${what} je pre prihlásených`, `${what} is for signed-in users`)}</h2>
+      <p>{t("Prihlás sa a ukladaj si karty, decky aj zbierku – uvidíš ich na mobile aj na počítači.", "Sign in to save your cards, decks and collection – you'll see them on your phone and computer.")}</p>
       <Link className="btn" href="/login">
-        Prihlásiť sa
+        {t("Prihlásiť sa", "Sign in")}
       </Link>
     </div>
   );
@@ -174,6 +179,7 @@ export function CardImg({
   // detail: veľký obrázok, ale nie každý má na TCGplayeri väčšiu veľkosť → záloha menšia
   const sources = [...new Set((full ? [card.img, thumb(card.img, 240)] : [small, card.img]).filter(Boolean))];
   const approx = !!(card as any).imgBase;
+  const { t } = useLang();
   const [i, setI] = useState(0);
   const srcSet = !full && i === 0 && small.includes("wsrv.nl") ? `${small} 240w, ${thumb(card.img, 360)} 360w` : undefined;
   if (i >= sources.length)
@@ -188,7 +194,7 @@ export function CardImg({
     <img
       key={sources[i]}
       className={`cimg ${approx ? "approx" : ""} ${className}`}
-      title={approx ? "Ilustračný obrázok: základná verzia karty" : undefined}
+      title={approx ? t("Ilustračný obrázok: základná verzia karty", "Illustrative image: base version of the card") : undefined}
       src={sources[i]}
       srcSet={srcSet}
       sizes={srcSet ? "(max-width: 720px) 45vw, 180px" : undefined}
@@ -203,9 +209,10 @@ export function CardImg({
 /** Značka v mriežke: len výrazný pohyb, inak by pri rozkolísaných cenách svietila polovica kariet. */
 export function PriceMove({ card }: { card: Card }) {
   const pct = notableMove(card);
+  const { t } = useLang();
   if (pct == null) return null;
   return (
-    <span className={`cmove ${pct > 0 ? "up" : "down"}`} title="Priemerný predaj za 7 dní oproti 30 dňom (Cardmarket)">
+    <span className={`cmove ${pct > 0 ? "up" : "down"}`} title={t("Priemerný predaj za 7 dní oproti 30 dňom (Cardmarket)", "Average sale over 7 days vs 30 days (Cardmarket)")}>
       {formatPct(pct)}
     </span>
   );
@@ -239,6 +246,7 @@ export function CardModal({
     };
   }, [onClose]);
   const main = cardEur(card, usd);
+  const { t, lang } = useLang();
   const [preview, setPreview] = useState<string | null>(null);
   const [alts, setAlts] = useState<{ l: string; i: string }[]>([]);
   useEffect(() => {
@@ -265,7 +273,7 @@ export function CardModal({
   const toTrade = async (kind: "offer" | "want") => {
     const { addListing } = await import("@/lib/trades");
     const err = await addListing({ card_id: card.id, kind });
-    setTrade(err ?? (kind === "offer" ? "Pridané do tvojej ponuky na trhovisku ✓" : "Pridané do hľadaných na trhovisku ✓"));
+    setTrade(err ?? (kind === "offer" ? t("Pridané do tvojej ponuky na trhovisku ✓", "Added to your marketplace offers ✓") : t("Pridané do hľadaných na trhovisku ✓", "Added to your marketplace wants ✓")));
   };
   const sales = salesChange(card);
   const src = card.cm != null ? "Cardmarket trend" : card.usd != null ? "TCGplayer (USA)" : "";
@@ -279,7 +287,7 @@ export function CardModal({
     <div className="modal" onClick={onClose}>
       <div className="mbox cd" role="dialog" aria-modal="true" aria-label={card.name} onClick={(e) => e.stopPropagation()}>
         <span className="cd-grip" aria-hidden />
-        <button className="x" onClick={onClose} aria-label="Zavrieť">
+        <button className="x" onClick={onClose} aria-label={t("Zavrieť", "Close")}>
           <svg viewBox="0 0 24 24" aria-hidden>
             <path d="M6 6l12 12M18 6 6 18" />
           </svg>
@@ -294,34 +302,34 @@ export function CardModal({
             <span className="chip">{card.set === "CM-PROMO" ? "Cardmarket" : card.set}</span>
             {card.rarity && <span className="chip">{card.rarity}</span>}
             {card.v && <span className="chip hot">{card.v}</span>}
-            {card.imgBase && <span className="cd-approx tiny muted">Obrázok je len ilustračný: pri tejto verzii poznáme len základnú kartu, skutočná verzia môže vyzerať inak.</span>}
+            {card.imgBase && <span className="cd-approx tiny muted">{t("Obrázok je len ilustračný: pri tejto verzii poznáme len základnú kartu, skutočná verzia môže vyzerať inak.", "Illustrative image only: for this version we only know the base card, the real version may look different.")}</span>}
           </div>
           <h2>{card.name}</h2>
           <p className="muted small">
-            {card.code} · {TYPE_SK_UI[card.type] ?? card.type}
+            {card.code} · {lang === "en" ? card.type : TYPE_SK_UI[card.type] ?? card.type}
             {card.colors.length > 0 && (
               <>
                 {" · "}
-                <ColorDots colors={card.colors} /> {card.colors.map((c) => COLOR_SK[c] ?? c).join(" / ")}
+                <ColorDots colors={card.colors} /> {card.colors.map((c) => (lang === "en" ? c : COLOR_SK[c] ?? c)).join(" / ")}
               </>
             )}
           </p>
         </div>
         <div className="cd-price">
           <div className="cd-pmain">
-            <span className="cd-plabel">{src || "Cena"}</span>
+            <span className="cd-plabel">{src || t("Cena", "Price")}</span>
             <b>{main != null ? eur(main) : "–"}</b>
-            {card.cmLow != null && <span className="cd-psub">najlacnejšia ponuka od {eur(card.cmLow)}</span>}
+            {card.cmLow != null && <span className="cd-psub">{t("najlacnejšia ponuka od", "cheapest offer from")} {eur(card.cmLow)}</span>}
             {sales && (
               <span className="cd-psub">
-                priemerný predaj za 7 dní {eur(sales.avg7)}, <span className={sales.pct > 0 ? "cmove up" : sales.pct < 0 ? "cmove down" : "cmove"}>{formatPct(sales.pct)}</span> oproti 30 dňom ({eur(sales.avg30)})
+                {t("priemerný predaj za 7 dní", "average sale over 7 days")} {eur(sales.avg7)}, <span className={sales.pct > 0 ? "cmove up" : sales.pct < 0 ? "cmove down" : "cmove"}>{formatPct(sales.pct)}</span> {t("oproti 30 dňom", "vs 30 days")} ({eur(sales.avg30)})
               </span>
             )}
           </div>
           <div className="cd-palt">
             {card.cmJp != null && (
               <span>
-                <i>Japonská</i> {eur(card.cmJp)}
+                <i>{t("Japonská", "Japanese")}</i> {eur(card.cmJp)}
               </span>
             )}
             {card.cm != null && card.usd != null && (
@@ -344,14 +352,14 @@ export function CardModal({
           {me && (
             <div className="cd-trade">
               <button className="btn ghost sm" onClick={() => toTrade("offer")}>
-                Ponúkam na výmenu
+                {t("Ponúkam na výmenu", "Offer for trade")}
               </button>
               <button className="btn ghost sm" onClick={() => toTrade("want")}>
-                Hľadám
+                {t("Hľadám", "I'm looking for it")}
               </button>
               {trade && (
                 <span className="small">
-                  {trade} <Link href="/trhovisko">Trhovisko →</Link>
+                  {trade} <Link href="/trhovisko">{t("Trhovisko", "Marketplace")} →</Link>
                 </span>
               )}
             </div>
@@ -359,21 +367,21 @@ export function CardModal({
         </div>
         <div className="cd-rest">
           {main != null && <PriceChart key={card.id} card={card} usd={usd} source={src} />}
-          <section className="pchart graded-soon" aria-label="Hodnotené kusy">
+          <section className="pchart graded-soon" aria-label={t("Hodnotené kusy", "Graded copies")}>
             <div className="pchart-head">
-              <h3>Hodnotené kusy</h3>
-              <span className="chip">Pripravujeme</span>
+              <h3>{t("Hodnotené kusy", "Graded copies")}</h3>
+              <span className="chip">{t("Pripravujeme", "Coming soon")}</span>
             </div>
-            <p className="tiny muted">Na cenách hodnotených kariet (PSA, Beckett, CGC) pracujeme. Zatiaľ si predané kusy pozri priamo na eBay.</p>
+            <p className="tiny muted">{t("Na cenách hodnotených kariet (PSA, Beckett, CGC) pracujeme. Zatiaľ si predané kusy pozri priamo na eBay.", "We're working on graded card prices (PSA, Beckett, CGC). For now, check sold copies directly on eBay.")}</p>
             <a className="small" target="_blank" rel="noreferrer" href={`https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece ${card.code} PSA`)}&_sacat=0&LH_Sold=1&LH_Complete=1`}>
-              Predané hodnotené kusy na eBay ↗
+              {t("Predané hodnotené kusy na eBay", "Sold graded copies on eBay")} ↗
             </a>
           </section>
           {me && onSet && <CopiesPanel key={`k${card.id}`} card={card} market={main} qty={qty ?? 0} onSet={onSet} onChange={onCopies} gradedOf={(c) => (c.grader && c.grade != null ? gradedEur(graded, c.grader, c.grade, usd)?.eur ?? null : null)} />}
           {alts.length > 0 && (
-            <section className="cd-looks" aria-label="Možné vzhľady">
-              <h3>Možné vzhľady ({alts.length})</h3>
-              <p className="tiny muted">Známe verzie tejto karty. Cardmarket neuvádza, ktorá z nich patrí k tejto cene, tak si porovnaj pečiatku alebo obrázok.</p>
+            <section className="cd-looks" aria-label={t("Možné vzhľady", "Possible looks")}>
+              <h3>{t("Možné vzhľady", "Possible looks")} ({alts.length})</h3>
+              <p className="tiny muted">{t("Známe verzie tejto karty. Cardmarket neuvádza, ktorá z nich patrí k tejto cene, tak si porovnaj pečiatku alebo obrázok.", "Known versions of this card. Cardmarket doesn't say which one this price belongs to, so compare the stamp or the image.")}</p>
               <div className="cd-looks-list">
                 {alts.map((a) => (
                   <button key={a.i} className={preview === a.i ? "on" : ""} aria-pressed={preview === a.i} title={a.l} onClick={() => setPreview(preview === a.i ? null : a.i)}>
@@ -394,7 +402,7 @@ export function CardModal({
               ))}
               {card.attr && (
                 <div>
-                  <span>Atribút</span>
+                  <span>{t("Atribút", "Attribute")}</span>
                   <b className="small">{card.attr}</b>
                 </div>
               )}
@@ -421,14 +429,15 @@ export function Bar({ value, max }: { value: number; max: number }) {
 /** Prázdna zbierka v jednej hre, ale karty v druhej → ponúkni prepnutie (ľahko sa to pomýli). */
 export function OtherGameHint({ qty, game }: { qty: Record<string, number>; game: "onepiece" | "pokemon" }) {
   const { setTcg } = useTcg();
+  const { t } = useLang();
   const other = Object.entries(qty).filter(([id, n]) => n > 0 && (game === "onepiece" ? id.startsWith("pk:") : !id.startsWith("pk:"))).length;
   if (!other) return null;
   const to = game === "onepiece" ? "pokemon" : "onepiece";
   return (
     <p className="other-game">
-      V {to === "pokemon" ? "Pokémon" : "One Piece"} zbierke máš <b>{other}</b> {other === 1 ? "kartu" : other < 5 ? "karty" : "kariet"}.{" "}
+      {t("V", "In your")} {to === "pokemon" ? "Pokémon" : "One Piece"} {t("zbierke máš", "collection you have")} <b>{other}</b> {t(other === 1 ? "kartu" : other < 5 ? "karty" : "kariet", other === 1 ? "card" : "cards")}.{" "}
       <button className="btn sm" onClick={() => setTcg(to)}>
-        Prepnúť na {to === "pokemon" ? "Pokémon" : "One Piece"}
+        {t("Prepnúť na", "Switch to")} {to === "pokemon" ? "Pokémon" : "One Piece"}
       </button>
     </p>
   );
@@ -437,6 +446,7 @@ export function OtherGameHint({ qty, game }: { qty: Record<string, number>; game
 /** Lišta filtrov. Na mobile ukáže len vyhľadávanie (+ polia s triedou „keep“) a tlačidlo Filtre, ktoré rozbalí zvyšok. */
 export function FilterBar({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const { t } = useLang();
   return (
     <div className={`filters ${open ? "open" : ""}`}>
       {children}
@@ -444,7 +454,7 @@ export function FilterBar({ children }: { children: ReactNode }) {
         <svg viewBox="0 0 24 24" aria-hidden>
           <path d="M4 6h16M7 12h10M10 18h4" />
         </svg>
-        {open ? "Menej" : "Filtre"}
+        {open ? t("Menej", "Less") : t("Filtre", "Filters")}
       </button>
     </div>
   );

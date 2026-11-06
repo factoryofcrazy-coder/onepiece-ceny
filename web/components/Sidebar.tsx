@@ -8,6 +8,8 @@ import { levelProgress, loadBadges, onXpChanged, XP_SOURCES } from "@/lib/gamify
 import { useNewReports } from "@/lib/reports";
 import { useDm } from "@/lib/dm/client";
 import { sb } from "@/lib/supabase";
+import { useLang } from "@/lib/lang";
+import { navLabel } from "@/lib/i18n-nav";
 
 const ICONS: Record<string, string> = {
   home: "M3 11 12 3l9 8v10h-6v-6H9v6H3V11Z",
@@ -114,13 +116,14 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
   const { unread: dmUnread } = useDm();
   const { today, xp } = useTodayXp(user?.id);
   const p = levelProgress(xp);
+  const { lang, t } = useLang();
   const done = XP_SOURCES.filter((s) => (today[s.id] ?? 0) >= s.cap).length;
   useEffect(onClose, [path]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
       {open && <div className="sb-scrim" onClick={onClose} />}
-      <aside className={`sb ${open ? "open" : ""}`} aria-label="Hlavné menu">
+      <aside className={`sb ${open ? "open" : ""}`} aria-label={t("Hlavné menu", "Main menu")}>
         <Link href="/" className="sb-brand">
           <span className="logo" aria-hidden>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -135,11 +138,11 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
         <nav className="sb-nav">
           {GROUPS.map((g) => (
             <div key={g.title} className="sb-group">
-              <span className="sb-title">{g.title}</span>
+              <span className="sb-title">{navLabel(g.title, lang)}</span>
               {g.links.map((l) => (
                 <Link key={l.href} href={l.href} className={active(path, l.href) ? "on" : ""}>
                   <Icon name={l.icon} />
-                  <span>{l.label}</span>
+                  <span>{navLabel(l.label, lang)}</span>
                   {l.href === "/report" && newReports > 0 && <span className="sb-pill">{newReports}</span>}
                   {l.href === "/spravy" && dmUnread > 0 && <span className="sb-pill">{dmUnread > 99 ? "99+" : dmUnread}</span>}
                 </Link>
@@ -149,9 +152,9 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
         </nav>
         {user ? (
           <div className="sb-quests">
-            <span className="sb-title">Denné úlohy</span>
+            <span className="sb-title">{t("Denné úlohy", "Daily quests")}</span>
             <b>
-              {done} z {XP_SOURCES.length} hotových
+              {t(`${done} z ${XP_SOURCES.length} hotových`, `${done} of ${XP_SOURCES.length} done`)}
             </b>
             <div className="sb-dots" aria-hidden>
               {XP_SOURCES.map((s) => (
@@ -162,14 +165,14 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
         ) : (
           <Link href="/aplikacia" className="sb-app">
             <Icon name="app" />
-            <span>Aplikácia do mobilu</span>
+            <span>{navLabel("Aplikácia do mobilu", lang)}</span>
           </Link>
         )}
         {user && (
           <Link href="/ucet" className="sb-user">
             <span className="sb-av">{(profile?.username ?? "?").slice(0, 1).toUpperCase()}</span>
             <span>
-              <b>{profile?.username ?? "Môj účet"}</b>
+              <b>{profile?.username ?? t("Môj účet", "My account")}</b>
               <i>Level {p.level}</i>
             </span>
           </Link>

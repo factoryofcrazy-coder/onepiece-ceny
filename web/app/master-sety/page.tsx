@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Bar, DataError, Loading, NeedLogin, OwnerPicker } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
+import { useLang } from "@/lib/lang";
 import { useCollection } from "@/lib/collection";
 import { eur, SET_KINDS, SetKind, setKind, sortSets, useCards, usePrices, cardEur } from "@/lib/data";
 
@@ -21,6 +22,7 @@ type Row = {
 };
 
 function OpMasterSets() {
+  const { t, lang } = useLang();
   const { data, error } = useCards();
   const { data: prices } = usePrices();
   const { user, loading } = useAuth();
@@ -59,7 +61,7 @@ function OpMasterSets() {
 
   if (error) return <DataError error={error} file="cards" />;
   if (!data || loading) return <Loading shape="rows" />;
-  if (!user) return <NeedLogin what="Master sety" />;
+  if (!user) return <NeedLogin what={t("Master sety", "Master sets")} />;
 
   const tot = shown.reduce(
     (a, r) => ({ have: a.have + (mode === "base" ? r.baseHave : r.allHave), all: a.all + (mode === "base" ? r.base : r.all), value: a.value + r.value }),
@@ -70,26 +72,26 @@ function OpMasterSets() {
     <>
       <div className="head">
         <div>
-          <h1>Master sety</h1>
+          <h1>{t("Master sety", "Master sets")}</h1>
           <p className="muted small">
-            Spolu {tot.have} / {tot.all} kariet · hodnota zbierky {eur(tot.value)} (Cardmarket)
+            {t("Spolu", "Total")} {tot.have} / {tot.all} {t("kariet", "cards")} · {t("hodnota zbierky", "collection value")} {eur(tot.value)} (Cardmarket)
           </p>
         </div>
         <div className="row gap">
           <div className="seg">
             {SET_KINDS.map((k) => (
               <button key={k} className={kind === k ? "on" : ""} onClick={() => setKindF(k)}>
-                {{ booster: "Boostery", starter: "Starter decky", other: "Promo", don: "DON!!" }[k]} (
+                {(lang === "en" ? { booster: "Boosters", starter: "Starter decks", other: "Promo", don: "DON!!" } : { booster: "Boostery", starter: "Starter decky", other: "Promo", don: "DON!!" })[k]} (
                 {rows.filter((r) => setKind(r.id) === k).length})
               </button>
             ))}
           </div>
           <div className="seg">
             <button className={mode === "base" ? "on" : ""} onClick={() => setMode("base")}>
-              Základný
+              {t("Základný", "Base")}
             </button>
             <button className={mode === "master" ? "on" : ""} onClick={() => setMode("master")}>
-              Master s parallelmi
+              {t("Master s parallelmi", "Master with parallels")}
             </button>
           </div>
           <OwnerPicker value={viewing} onChange={setOwner} />
@@ -116,7 +118,7 @@ function OpMasterSets() {
                 <b>{pct} %</b> <span className="muted small">{have}/{all}</span>
               </div>
               <div className="small muted sval">
-                mám {eur(r.value, 0)} · chýba {eur(miss, 0)}
+                {t("mám", "have")} {eur(r.value, 0)} · {t("chýba", "missing")} {eur(miss, 0)}
               </div>
             </Link>
           );

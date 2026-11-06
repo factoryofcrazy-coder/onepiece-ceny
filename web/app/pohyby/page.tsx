@@ -9,6 +9,7 @@ import { useCollection } from "@/lib/collection";
 import { Card, eur, sortSets, useCards, usePrices } from "@/lib/data";
 import { formatPct, salesChange } from "@/lib/price-series";
 import { useTcg } from "@/lib/tcg";
+import { useLang } from "@/lib/lang";
 import { VARIANT_GROUPS, variantGroup, type VariantGroup } from "@/lib/variants";
 
 const PER = 20;
@@ -16,16 +17,18 @@ const MIN_PRICES = [1, 5, 20, 100];
 
 export default function Page() {
   const { tcg } = useTcg();
+  const { t } = useLang();
   if (tcg === "pokemon")
     return (
       <div className="empty">
-        Pohyby cien máme zatiaľ len pre One Piece. <Link href="/karty">Späť na karty</Link>
+        {t("Pohyby cien máme zatiaľ len pre One Piece.", "Price moves are only available for One Piece so far.")} <Link href="/karty">{t("Späť na karty", "Back to cards")}</Link>
       </div>
     );
   return <Moves />;
 }
 
 function Moves() {
+  const { t, lang } = useLang();
   const { data, error } = useCards();
   const { data: prices } = usePrices();
   const usd = prices?.fx?.USD ?? 1.12;
@@ -56,21 +59,21 @@ function Moves() {
   return (
     <div className="moves">
       <MarketTabs />
-      <h1>Pohyby cien</h1>
+      <h1>{t("Pohyby cien", "Price moves")}</h1>
       <p className="muted moves-note">
-        Priemerná predajná cena za posledných 7 dní oproti 30 dňom podľa Cardmarketu. Je to orientačné: kariet sa často predá málo a jeden predaj dokáže priemer pohnúť, preto sa oplatí pozrieť si aj ponuky.
+        {t("Priemerná predajná cena za posledných 7 dní oproti 30 dňom podľa Cardmarketu. Je to orientačné: kariet sa často predá málo a jeden predaj dokáže priemer pohnúť, preto sa oplatí pozrieť si aj ponuky.", "Average selling price over the last 7 days vs 30 days on Cardmarket. Treat it as a guide: few copies of a card often sell and a single sale can move the average, so it's worth checking the offers too.")}
       </p>
-      <div className="pchart-range moves-dir" role="group" aria-label="Smer pohybu">
+      <div className="pchart-range moves-dir" role="group" aria-label={t("Smer pohybu", "Direction")}>
         <button className={dir === "up" ? "on" : ""} aria-pressed={dir === "up"} onClick={() => (setDir("up"), reset())}>
-          Zdražujú
+          {t("Zdražujú", "Rising")}
         </button>
         <button className={dir === "down" ? "on" : ""} aria-pressed={dir === "down"} onClick={() => (setDir("down"), reset())}>
-          Zlacňujú
+          {t("Zlacňujú", "Falling")}
         </button>
       </div>
       <FilterBar>
         <label className="field">
-          <span>Cena od</span>
+          <span>{t("Cena od", "Price from")}</span>
           <select value={min} onChange={(e) => (setMin(Number(e.target.value)), reset())}>
             {MIN_PRICES.map((m) => (
               <option key={m} value={m}>
@@ -82,7 +85,7 @@ function Moves() {
         <label className="field">
           <span>Set</span>
           <select value={set} onChange={(e) => (setSet(e.target.value), reset())}>
-            <option value="">Všetky</option>
+            <option value="">{t("Všetky", "All")}</option>
             {sets.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.id}
@@ -91,18 +94,18 @@ function Moves() {
           </select>
         </label>
       </FilterBar>
-      <div className="vgroups" role="group" aria-label="Verzia karty">
+      <div className="vgroups" role="group" aria-label={t("Verzia karty", "Card version")}>
         <button className={group === "" ? "on" : ""} aria-pressed={group === ""} onClick={() => (setGroup(""), reset())}>
-          Všetky <i>{moves.length}</i>
+          {t("Všetky", "All")} <i>{moves.length}</i>
         </button>
         {VARIANT_GROUPS.map((g) => (
           <button key={g.id} className={`g-${g.id}${group === g.id ? " on" : ""}`} aria-pressed={group === g.id} disabled={!counts[g.id]} onClick={() => (setGroup(g.id), reset())}>
-            {g.label} <i>{counts[g.id] ?? 0}</i>
+            {lang === "en" ? g.en : g.label} <i>{counts[g.id] ?? 0}</i>
           </button>
         ))}
       </div>
       {list.length === 0 ? (
-        <div className="empty">Pre tento výber nemáme žiadne pohyby. Skús nižšiu cenu, iný set alebo inú verziu.</div>
+        <div className="empty">{t("Pre tento výber nemáme žiadne pohyby. Skús nižšiu cenu, iný set alebo inú verziu.", "No moves for this selection. Try a lower price, another set or another version.")}</div>
       ) : (
         <div className="vlist mv-list">
           {list.slice(cur * PER, cur * PER + PER).map((m, k) => {
@@ -124,13 +127,13 @@ function Moves() {
                 <span className={`mv-pct ${m.pct > 0 ? "up" : "down"}`}>{formatPct(m.pct)}</span>
                 <span className="mv-avg">
                   <span>
-                    <i>30 dní</i> {eur(s.avg30)}
+                    <i>{t("30 dní", "30 days")}</i> {eur(s.avg30)}
                   </span>
                   <span className="mv-arrow" aria-hidden>
                     →
                   </span>
                   <span>
-                    <i>7 dní</i> <b>{eur(s.avg7)}</b>
+                    <i>{t("7 dní", "7 days")}</i> <b>{eur(s.avg7)}</b>
                   </span>
                 </span>
                 <span className="mv-now">
@@ -145,13 +148,13 @@ function Moves() {
       {pages > 1 && (
         <div className="pager">
           <button className="btn ghost sm" disabled={cur === 0} onClick={() => (setPage(cur - 1), scrollTo({ top: 0 }))}>
-            ← Späť
+            ← {t("Späť", "Back")}
           </button>
           <span className="small muted">
-            Strana {cur + 1} z {pages} · {list.length} kariet
+            {t(`Strana ${cur + 1} z ${pages} · ${list.length} kariet`, `Page ${cur + 1} of ${pages} · ${list.length} cards`)}
           </span>
           <button className="btn ghost sm" disabled={cur >= pages - 1} onClick={() => (setPage(cur + 1), scrollTo({ top: 0 }))}>
-            Ďalej →
+            {t("Ďalej", "Next")} →
           </button>
         </div>
       )}

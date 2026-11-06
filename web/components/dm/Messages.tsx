@@ -11,6 +11,7 @@ import { disablePush, enablePush, pushStatus, PushStatus } from "@/lib/dm/push-c
 import { sb } from "@/lib/supabase";
 import { ReactionAdd, ReactionPanel, ReactionPills, tapToReact } from "@/components/reactions/Reactions";
 import { applyReaction, EmoteId, isEmote } from "@/lib/reactions";
+import { useLang } from "@/lib/lang";
 
 const MAX = 1000;
 const LANG_COND = (l: { cond: string; lang: string }) => `${l.cond} · ${l.lang}`;
@@ -25,8 +26,9 @@ function Avatar({ name }: { name: string }) {
 }
 
 function Body({ m, trusted, onCard }: { m: DmMessage; trusted: boolean; onCard: (c: Card) => void }) {
+  const { t: L, lang, locale } = useLang();
   const { data: cards } = useCards();
-  if (!m.body) return <p className="dm-unreadable">Správu sa nepodarilo načítať.</p>;
+  if (!m.body) return <p className="dm-unreadable">{L("Správu sa nepodarilo načítať.", "Couldn't load the message.")}</p>;
   const card = m.body.card;
   const c = card ? cards?.byId.get(card.id) : undefined;
   const listing = card?.listing;
@@ -41,7 +43,7 @@ function Body({ m, trusted, onCard }: { m: DmMessage; trusted: boolean; onCard: 
               {card.id.split("_")[0]}
               {listing ? ` · ${LANG_COND(listing)}` : ""}
             </i>
-            {listing && <strong>{listing.price != null ? (listing.kind === "want" ? `hľadá do ${eur(listing.price)}` : eur(listing.price)) : listing.kind === "want" ? "Hľadá" : "Na výmenu"}</strong>}
+            {listing && <strong>{listing.price != null ? (listing.kind === "want" ? L(`hľadá do ${eur(listing.price)}`, `wants up to ${eur(listing.price)}`) : eur(listing.price)) : listing.kind === "want" ? L("Hľadá", "Wanted") : L("Na výmenu", "For trade")}</strong>}
           </span>
         </button>
       )}
@@ -58,12 +60,13 @@ function Body({ m, trusted, onCard }: { m: DmMessage; trusted: boolean; onCard: 
           )}
         </p>
       )}
-      {m.body.text && trusted && hasLink(m.body.text) && <p className="dm-warn">Odkaz od hráča. Pred zadaním údajov si over, kam vedie.</p>}
+      {m.body.text && trusted && hasLink(m.body.text) && <p className="dm-warn">{L("Odkaz od hráča. Pred zadaním údajov si over, kam vedie.", "Link from a player. Check where it leads before entering any details.")}</p>}
     </>
   );
 }
 
 function CardPicker({ onPick, onClose }: { onPick: (c: Card) => void; onClose: () => void }) {
+  const { t: L, lang, locale } = useLang();
   const { data: cards } = useCards();
   const [q, setQ] = useState("");
   const s = q.trim().toLowerCase();
@@ -71,9 +74,9 @@ function CardPicker({ onPick, onClose }: { onPick: (c: Card) => void; onClose: (
   return (
     <div className="dm-picker">
       <div className="dm-picker-head">
-        <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Meno alebo kód karty" aria-label="Karta na priloženie" />
+        <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder={L("Meno alebo kód karty", "Card name or code")} aria-label={L("Karta na priloženie", "Card to attach")} />
         <button type="button" className="btn ghost sm" onClick={onClose}>
-          Zavrieť
+          {L("Zavrieť", "Close")}
         </button>
       </div>
       {found.length > 0 && (
@@ -109,6 +112,7 @@ function Conversation({
   onBack: () => void;
   onChanged: () => void;
 }) {
+  const { t: L, lang, locale } = useLang();
   const { user } = useAuth();
   const me = user!.id;
   const { listen, refresh } = useDm();
@@ -314,7 +318,7 @@ function Conversation({
   const sendReport = async (e: FormEvent) => {
     e.preventDefault();
     if (!reporting) return;
-    await act("report", { messageId: reporting, reason }, "Správa je nahlásená.");
+    await act("report", { messageId: reporting, reason }, L("Správa je nahlásená.", "Message reported."));
     setReporting(null);
     setReason("");
   };
@@ -329,7 +333,7 @@ function Conversation({
   const days = useMemo(() => {
     let last = "";
     return (msgs ?? []).map((m) => {
-      const d = fmtDmDay(m.created_at);
+      const d = fmtDmDay(m.created_at, new Date(), locale);
       const show = d !== last;
       last = d;
       return show ? d : "";
@@ -337,9 +341,9 @@ function Conversation({
   }, [msgs]);
 
   return (
-    <section className="dm-conv" aria-label={`Konverzácia s hráčom ${conv.other_name}`}>
+    <section className="dm-conv" aria-label={L(`Konverzácia s hráčom ${conv.other_name}`, `Conversation with ${conv.other_name}`)}>
       <header className="dm-conv-head">
-        <button className="dm-back" onClick={onBack} aria-label="Späť na zoznam">
+        <button className="dm-back" onClick={onBack} aria-label={L("Späť na zoznam", "Back to list")}>
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="m15 18-6-6 6-6" />
           </svg>
@@ -347,18 +351,18 @@ function Conversation({
         <Avatar name={conv.other_name} />
         <b className="dm-conv-name">{conv.other_name}</b>
         <div className="dm-menu-wrap">
-          <button className="dm-menu-btn" onClick={() => setMenu(!menu)} aria-expanded={menu} aria-label="Možnosti konverzácie">
+          <button className="dm-menu-btn" onClick={() => setMenu(!menu)} aria-expanded={menu} aria-label={L("Možnosti konverzácie", "Conversation options")}>
             ⋯
           </button>
           {menu && (
             <div className="dm-menu" role="menu">
               {conv.blocked_by_me ? (
-                <button role="menuitem" onClick={() => act("block", { userId: conv.other_id, on: false }, "Hráč je odblokovaný.")}>
-                  Odblokovať hráča
+                <button role="menuitem" onClick={() => act("block", { userId: conv.other_id, on: false }, L("Hráč je odblokovaný.", "Player unblocked."))}>
+                  {L("Odblokovať hráča", "Unblock player")}
                 </button>
               ) : (
-                <button role="menuitem" onClick={() => act("block", { userId: conv.other_id, on: true }, "Hráč je zablokovaný.")}>
-                  Zablokovať hráča
+                <button role="menuitem" onClick={() => act("block", { userId: conv.other_id, on: true }, L("Hráč je zablokovaný.", "Player blocked."))}>
+                  {L("Zablokovať hráča", "Block player")}
                 </button>
               )}
             </div>
@@ -369,13 +373,13 @@ function Conversation({
       <div className="dm-list" ref={list} aria-live="polite">
         {more && (
           <button className="link dm-older" onClick={older}>
-            Staršie správy
+            {L("Staršie správy", "Older messages")}
           </button>
         )}
         {!msgs ? (
-          <p className="muted small">Načítavam správy…</p>
+          <p className="muted small">{L("Načítavam správy…", "Loading messages…")}</p>
         ) : msgs.length === 0 ? (
-          <p className="muted small dm-empty-conv">Prvá správa príde hráčovi ako žiadosť. Ďalšie môžeš poslať, keď ju prijme.</p>
+          <p className="muted small dm-empty-conv">{L("Prvá správa príde hráčovi ako žiadosť. Ďalšie môžeš poslať, keď ju prijme.", "Your first message arrives as a request. You can send more once they accept it.")}</p>
         ) : (
           msgs.map((m, i) => (
             <div key={m.id} className="dm-row-wrap">
@@ -387,15 +391,15 @@ function Conversation({
                 <Body m={m} trusted={trusted} onCard={setOpen} />
                 <ReactionPills rows={m.reactions} me={me} nameOf={() => conv.other_name} canReact={trusted && !conv.blocked_by_me} onToggle={(emote, on) => toggleReaction(m.id, emote, on)} />
                 <span className="dm-meta">
-                  {m.state === "sending" ? "Odosiela sa…" : m.state === "failed" ? "Neodoslané" : fmtDmTime(m.created_at, new Date(m.created_at))}
+                  {m.state === "sending" ? L("Odosiela sa…", "Sending…") : m.state === "failed" ? L("Neodoslané", "Not sent") : fmtDmTime(m.created_at, new Date(m.created_at), locale)}
                   {m.state === "failed" && (
                     <button className="link" onClick={() => (merge([{ ...m, state: "sending" }]), deliver(m))}>
-                      Skúsiť znova
+                      {L("Skúsiť znova", "Retry")}
                     </button>
                   )}
                   {m.sender_id !== me && !m.state && m.body && (
                     <button className="link dm-report" onClick={() => setReporting(m.id)}>
-                      Nahlásiť
+                      {L("Nahlásiť", "Report")}
                     </button>
                   )}
                   {!m.state && m.body && (trusted && !conv.blocked_by_me || (m.reactions?.length ?? 0) > 0) && (
@@ -417,8 +421,8 @@ function Conversation({
             </div>
           ))
         )}
-        {seen && <div className="dm-seen">Prečítané {fmtDmTime(otherRead!, new Date(otherRead!))}</div>}
-        {typing && <div className="dm-typing">{conv.other_name} píše…</div>}
+        {seen && <div className="dm-seen">{L("Prečítané", "Read")} {fmtDmTime(otherRead!, new Date(otherRead!), locale)}</div>}
+        {typing && <div className="dm-typing">{conv.other_name} {L("píše…", "is typing…")}</div>}
       </div>
 
       {error && <p className="badc small dm-note">{error}</p>}
@@ -426,36 +430,36 @@ function Conversation({
 
       {reporting && (
         <form className="dm-report-form" onSubmit={sendReport}>
-          <input value={reason} maxLength={300} onChange={(e) => setReason(e.target.value)} placeholder="Prečo správu nahlasuješ? (nepovinné)" aria-label="Dôvod nahlásenia" />
-          <button className="btn sm">Nahlásiť</button>
+          <input value={reason} maxLength={300} onChange={(e) => setReason(e.target.value)} placeholder={L("Prečo správu nahlasuješ? (nepovinné)", "Why are you reporting it? (optional)")} aria-label={L("Dôvod nahlásenia", "Report reason")} />
+          <button className="btn sm">{L("Nahlásiť", "Report")}</button>
           <button type="button" className="btn ghost sm" onClick={() => setReporting(null)}>
-            Zrušiť
+            {L("Zrušiť", "Cancel")}
           </button>
-          <p className="tiny muted">Správca uvidí túto správu a najviac 5 správ pred ňou a po nej, nie celú konverzáciu.</p>
+          <p className="tiny muted">{L("Správca uvidí túto správu a najviac 5 správ pred ňou a po nej, nie celú konverzáciu.", "The admin will see this message and at most 5 messages before and after it, not the whole conversation.")}</p>
         </form>
       )}
 
       {conv.incoming_request ? (
         <div className="dm-request">
           <p>
-            <b>{conv.other_name}</b> ti chce napísať. Kým žiadosť neprijmeš, nevie, či si správu videl.
+            <b>{conv.other_name}</b> {L("ti chce napísať. Kým žiadosť neprijmeš, nevie, či si správu videl.", "wants to message you. Until you accept, they won't know if you've seen it.")}
           </p>
           <div className="row gap">
-            <button className="btn sm" onClick={() => act("respond", { conversationId: id, accept: true }, "Žiadosť je prijatá.")}>
-              Prijať
+            <button className="btn sm" onClick={() => act("respond", { conversationId: id, accept: true }, L("Žiadosť je prijatá.", "Request accepted."))}>
+              {L("Prijať", "Accept")}
             </button>
-            <button className="btn ghost sm" onClick={() => act("respond", { conversationId: id, accept: false }, "Žiadosť je odmietnutá.")}>
-              Odmietnuť
+            <button className="btn ghost sm" onClick={() => act("respond", { conversationId: id, accept: false }, L("Žiadosť je odmietnutá.", "Request declined."))}>
+              {L("Odmietnuť", "Decline")}
             </button>
-            <button className="btn ghost sm danger" onClick={() => act("block", { userId: conv.other_id, on: true }, "Hráč je zablokovaný.")}>
-              Zablokovať
+            <button className="btn ghost sm danger" onClick={() => act("block", { userId: conv.other_id, on: true }, L("Hráč je zablokovaný.", "Player blocked."))}>
+              {L("Zablokovať", "Block")}
             </button>
           </div>
         </div>
       ) : conv.blocked_by_me ? (
-        <p className="dm-closed small muted">Tento hráč je zablokovaný. Odblokuješ ho v ponuke vpravo hore.</p>
+        <p className="dm-closed small muted">{L("Tento hráč je zablokovaný. Odblokuješ ho v ponuke vpravo hore.", "This player is blocked. Unblock them in the menu at the top right.")}</p>
       ) : waiting ? (
-        <p className="dm-closed small muted">Žiadosť je odoslaná. Ďalšie správy môžeš poslať, keď ju hráč prijme.</p>
+        <p className="dm-closed small muted">{L("Žiadosť je odoslaná. Ďalšie správy môžeš poslať, keď ju hráč prijme.", "Request sent. You can send more messages once the player accepts.")}</p>
       ) : null}
 
       {canWrite && (
@@ -471,14 +475,14 @@ function Conversation({
           )}
           {attachment && (
             <div className="dm-attached">
-              <span>{attachment.listingId ? "Priložená ponuka" : "Priložená karta"}: {attachedCard?.name ?? attachment.cardId ?? "ponuka"}</span>
+              <span>{attachment.listingId ? L("Priložená ponuka", "Attached listing") : L("Priložená karta", "Attached card")}: {attachedCard?.name ?? attachment.cardId ?? L("ponuka", "listing")}</span>
               <button type="button" className="link" onClick={() => setAttachment(null)}>
-                Odstrániť
+                {L("Odstrániť", "Remove")}
               </button>
             </div>
           )}
           <form className="dm-form" onSubmit={submit}>
-            <button type="button" className="dm-attach" onClick={() => setPicker(!picker)} aria-label="Priložiť kartu" title="Priložiť kartu">
+            <button type="button" className="dm-attach" onClick={() => setPicker(!picker)} aria-label={L("Priložiť kartu", "Attach card")} title={L("Priložiť kartu", "Attach card")}>
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <rect x="6" y="3" width="12" height="18" rx="2" />
                 <path d="M12 9v6M9 12h6" />
@@ -495,10 +499,10 @@ function Conversation({
                   e.currentTarget.form?.requestSubmit();
                 }
               }}
-              placeholder="Napíš správu"
-              aria-label="Správa"
+              placeholder={L("Napíš správu", "Write a message")}
+              aria-label={L("Správa", "Message")}
             />
-            <button className="dm-send" disabled={!text.trim() && !attachment} aria-label="Odoslať">
+            <button className="dm-send" disabled={!text.trim() && !attachment} aria-label={L("Odoslať", "Send")}>
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden>
                 <path d="M4 12 3 4l18 8-18 8 1-8Zm0 0h9" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
               </svg>
@@ -512,6 +516,7 @@ function Conversation({
 }
 
 function NewConversation({ onClose }: { onClose: () => void }) {
+  const { t: L, lang, locale } = useLang();
   const router = useRouter();
   const [q, setQ] = useState("");
   const [found, setFound] = useState<{ id: string; name: string }[]>([]);
@@ -526,9 +531,9 @@ function NewConversation({ onClose }: { onClose: () => void }) {
   return (
     <div className="dm-new">
       <div className="dm-picker-head">
-        <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Prezývka hráča" aria-label="Hľadať hráča" />
+        <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder={L("Prezývka hráča", "Player nickname")} aria-label={L("Hľadať hráča", "Find player")} />
         <button className="btn ghost sm" onClick={onClose}>
-          Zavrieť
+          {L("Zavrieť", "Close")}
         </button>
       </div>
       {found.map((u) => (
@@ -537,12 +542,13 @@ function NewConversation({ onClose }: { onClose: () => void }) {
           {u.name}
         </button>
       ))}
-      {q.trim().length >= 2 && !found.length && <p className="tiny muted">Nikoho takého sme nenašli.</p>}
+      {q.trim().length >= 2 && !found.length && <p className="tiny muted">{L("Nikoho takého sme nenašli.", "No one found.")}</p>}
     </div>
   );
 }
 
 function Settings({ onClose, onChanged }: { onClose: () => void; onChanged: () => void }) {
+  const { t: L, lang, locale } = useLang();
   const { isAdmin } = useAuth();
   const [status, setStatus] = useState<PushStatus | null>(null);
   const [showText, setShowText] = useState(true);
@@ -573,44 +579,44 @@ function Settings({ onClose, onChanged }: { onClose: () => void; onChanged: () =
       <div className="row between gap">
         <h2>Nastavenia</h2>
         <button className="btn ghost sm" onClick={onClose}>
-          Zavrieť
+          {L("Zavrieť", "Close")}
         </button>
       </div>
       <section>
-        <h2>Notifikácie</h2>
+        <h2>{L("Notifikácie", "Notifications")}</h2>
         {status === "ios-install" ? (
           <p className="small muted">
-            Na iPhone fungujú notifikácie až po <Link href="/aplikacia">pridaní webu na plochu</Link>. Potom sa sem vráť a zapni ich.
+            {L("Na iPhone fungujú notifikácie až po", "On iPhone, notifications only work after")} <Link href="/aplikacia">{L("pridaní webu na plochu", "adding the site to your home screen")}</Link>. {L("Potom sa sem vráť a zapni ich.", "Then come back here and turn them on.")}
           </p>
         ) : status === "unsupported" ? (
-          <p className="small muted">Tento prehliadač notifikácie nepodporuje.</p>
+          <p className="small muted">{L("Tento prehliadač notifikácie nepodporuje.", "This browser doesn't support notifications.")}</p>
         ) : status === "denied" ? (
           <p className="small muted">
-            Notifikácie sú pre tento web zablokované. Android: v prehliadači ťukni na ikonu vedľa adresy, Povolenia, Notifikácie. iPhone: Nastavenia, Hlásenia, Grand Line. Potom sa sem vráť.
+            {L("Notifikácie sú pre tento web zablokované. Android: v prehliadači ťukni na ikonu vedľa adresy, Povolenia, Notifikácie. iPhone: Nastavenia, Hlásenia, Grand Line. Potom sa sem vráť.", "Notifications are blocked for this site. Android: tap the icon next to the address, Permissions, Notifications. iPhone: Settings, Notifications, Grand Line. Then come back here.")}
           </p>
         ) : status === "off-server" ? (
-          <p className="small muted">Notifikácie zatiaľ nie sú na serveri zapnuté.</p>
+          <p className="small muted">{L("Notifikácie zatiaľ nie sú na serveri zapnuté.", "Notifications aren't enabled on the server yet.")}</p>
         ) : (
           <label className="dm-setting">
             <input type="checkbox" checked={status === "on"} disabled={!status} onChange={(e) => togglePush(e.target.checked)} />
             <span>
-              Notifikácie na tomto zariadení
-              <small>Po odhlásení sa na zariadení vypnú.</small>
+              {L("Notifikácie na tomto zariadení", "Notifications on this device")}
+              <small>{L("Po odhlásení sa na zariadení vypnú.", "They turn off on this device when you sign out.")}</small>
             </span>
           </label>
         )}
         <label className="dm-setting" style={{ marginTop: 10 }}>
           <input type="checkbox" checked={showText} onChange={(e) => toggleText(e.target.checked)} />
           <span>
-            Zobraziť text správy v notifikácii
-            <small>Text uvidí každý, kto sa pozrie na zamknutú obrazovku. Žiadosti od cudzích sú vždy bez textu.</small>
+            {L("Zobraziť text správy v notifikácii", "Show message text in notifications")}
+            <small>{L("Text uvidí každý, kto sa pozrie na zamknutú obrazovku. Žiadosti od cudzích sú vždy bez textu.", "Anyone looking at your lock screen will see the text. Requests from strangers never show text.")}</small>
           </span>
         </label>
         {msg && <p className="badc small">{msg}</p>}
       </section>
       <section>
-        <h2>Zablokovaní hráči</h2>
-        {!blocks.length && <p className="small muted">Nikoho nemáš zablokovaného.</p>}
+        <h2>{L("Zablokovaní hráči", "Blocked players")}</h2>
+        {!blocks.length && <p className="small muted">{L("Nikoho nemáš zablokovaného.", "You haven't blocked anyone.")}</p>}
         {blocks.map((b) => (
           <div key={b.id} className="dm-block-row">
             {b.name}
@@ -622,24 +628,24 @@ function Settings({ onClose, onChanged }: { onClose: () => void; onChanged: () =
                 onChanged();
               }}
             >
-              Odblokovať
+              {L("Odblokovať", "Unblock")}
             </button>
           </div>
         ))}
       </section>
       {isAdmin && (
         <section>
-          <h2>Nahlásené správy ({reports.length})</h2>
-          <p className="tiny muted">Vidíš nahlásenú správu a najviac 5 správ pred ňou a po nej, nie zvyšok konverzácie.</p>
+          <h2>{L("Nahlásené správy", "Reported messages")} ({reports.length})</h2>
+          <p className="tiny muted">{L("Vidíš nahlásenú správu a najviac 5 správ pred ňou a po nej, nie zvyšok konverzácie.", "You see the reported message and at most 5 messages before and after it, not the rest of the conversation.")}</p>
           {reports.map((r) => (
             <div key={r.id} className="dm-admin-item">
               {[...(r.context ?? []).filter((m: any) => m.created_at < r.message_at), { id: r.id, sender_name: r.sender_name, body: r.body, unreadable: r.unreadable, reported: true }, ...(r.context ?? []).filter((m: any) => m.created_at > r.message_at)].map((m: any) => (
                 <p key={m.id} className={m.reported ? "dm-admin-hit" : "dm-admin-ctx"}>
-                  <b>{m.sender_name}:</b> {m.unreadable ? "Správu sa nepodarilo načítať." : m.body?.text || `Karta ${m.body?.card?.id ?? ""}`}
+                  <b>{m.sender_name}:</b> {m.unreadable ? L("Správu sa nepodarilo načítať.", "Couldn't load the message.") : m.body?.text || `${L("Karta", "Card")} ${m.body?.card?.id ?? ""}`}
                 </p>
               ))}
               <span className="tiny">
-                Od {r.sender_name}, nahlásil {r.reporter_name}
+                {L(`Od ${r.sender_name}, nahlásil ${r.reporter_name}`, `From ${r.sender_name}, reported by ${r.reporter_name}`)}
                 {r.reason ? `: ${r.reason}` : ""}
               </span>
               <button
@@ -650,7 +656,7 @@ function Settings({ onClose, onChanged }: { onClose: () => void; onChanged: () =
                   setReports((x) => x.filter((y) => y.id !== r.id));
                 }}
               >
-                Vybavené
+                {L("Vybavené", "Resolved")}
               </button>
             </div>
           ))}
@@ -661,6 +667,7 @@ function Settings({ onClose, onChanged }: { onClose: () => void; onChanged: () =
 }
 
 export default function Messages() {
+  const { t: L, lang, locale } = useLang();
   const { user, loading } = useAuth();
   const { listen } = useDm();
   const router = useRouter();
@@ -740,8 +747,8 @@ export default function Messages() {
     setSearching(false);
   };
 
-  if (loading) return <Loading what="Načítavam správy" shape="rows" />;
-  if (!user) return <NeedLogin what="Súkromné správy" />;
+  if (loading) return <Loading what={L("Načítavam správy", "Loading messages")} shape="rows" />;
+  if (!user) return <NeedLogin what={L("Súkromné správy", "Messages")} />;
 
   const conv = list?.find((c) => c.id === active);
   const requests = (list ?? []).filter((c) => c.incoming_request);
@@ -751,10 +758,10 @@ export default function Messages() {
       <Avatar name={c.other_name} />
       <span className="dm-item-text">
         <b>{c.other_name}</b>
-        <span>{c.last_message ? `${c.last_message.sender_id === user.id ? "Ty: " : ""}${previewOf(c.last_message.body)}` : "Bez správ"}</span>
+        <span>{c.last_message ? `${c.last_message.sender_id === user.id ? L("Ty: ", "You: ") : ""}${previewOf(c.last_message.body, lang === "en")}` : L("Bez správ", "No messages")}</span>
       </span>
       <span className="dm-item-side">
-        <time>{fmtDmTime(c.last_message_at)}</time>
+        <time>{fmtDmTime(c.last_message_at, new Date(), locale)}</time>
         {c.unread > 0 && <span className="dm-count">{c.unread > 99 ? "99+" : c.unread}</span>}
       </span>
     </Link>
@@ -764,12 +771,12 @@ export default function Messages() {
     <div className={`dm-page ${active ? "has-conv" : ""}`}>
       <aside className="dm-side">
         <header className="dm-side-head">
-          <h1>Správy</h1>
+          <h1>{L("Správy", "Messages")}</h1>
           <div className="row gap">
             <button className="btn ghost sm" onClick={() => setNewOpen(!newOpen)}>
-              Nová správa
+              {L("Nová správa", "New message")}
             </button>
-            <button className="dm-menu-btn" onClick={() => setSettings(!settings)} aria-expanded={settings} aria-label="Nastavenia správ" title="Nastavenia">
+            <button className="dm-menu-btn" onClick={() => setSettings(!settings)} aria-expanded={settings} aria-label={L("Nastavenia správ", "Message settings")} title={L("Nastavenia", "Settings")}>
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" aria-hidden>
                 <path d="M4 7h10M18 7h2M4 17h2M10 17h10" />
                 <circle cx="16" cy="7" r="2" />
@@ -787,17 +794,17 @@ export default function Messages() {
               setQ(e.target.value);
               if (!e.target.value) setHits(null);
             }}
-            placeholder="Hľadať v správach"
-            aria-label="Hľadať v správach"
+            placeholder={L("Hľadať v správach", "Search messages")}
+            aria-label={L("Hľadať v správach", "Search messages")}
           />
         </form>
         {error && <p className="badc small dm-note">{error}</p>}
         {settings ? null : hits ? (
           <div className="dm-scroll">
             <div className="dm-hits-head">
-              <span className="tiny muted">{searching ? "Hľadám…" : hits.length ? `Nájdené: ${hits.length}` : "Nič sa nenašlo."}</span>
+              <span className="tiny muted">{searching ? L("Hľadám…", "Searching…") : hits.length ? `${L("Nájdené", "Found")}: ${hits.length}` : L("Nič sa nenašlo.", "Nothing found.")}</span>
               <button className="link tiny" onClick={() => (setHits(null), setQ(""))}>
-                Zrušiť
+                {L("Zrušiť", "Cancel")}
               </button>
             </div>
             {hits.map((h) => (
@@ -808,25 +815,25 @@ export default function Messages() {
                   <span className="dm-snip">{h.snippet}</span>
                 </span>
                 <span className="dm-item-side">
-                  <time>{fmtDmTime(h.created_at)}</time>
+                  <time>{fmtDmTime(h.created_at, new Date(), locale)}</time>
                 </span>
               </Link>
             ))}
             {next && !searching && (
               <button className="link dm-older" onClick={() => runSearch(undefined, next)}>
-                Hľadať v starších
+                {L("Hľadať v starších", "Search older")}
               </button>
             )}
           </div>
         ) : !list ? (
-          <p className="muted small dm-note">Načítavam konverzácie…</p>
+          <p className="muted small dm-note">{L("Načítavam konverzácie…", "Loading conversations…")}</p>
         ) : (
           <div className="dm-scroll">
-            {requests.length > 0 && <div className="dm-group">Žiadosti ({requests.length})</div>}
+            {requests.length > 0 && <div className="dm-group">{L("Žiadosti", "Requests")} ({requests.length})</div>}
             {requests.map(row)}
-            {requests.length > 0 && normal.length > 0 && <div className="dm-group">Konverzácie</div>}
+            {requests.length > 0 && normal.length > 0 && <div className="dm-group">{L("Konverzácie", "Conversations")}</div>}
             {normal.map(row)}
-            {!list.length && <p className="muted small dm-note">Zatiaľ tu nič nie je. Napíš hráčovi z trhoviska alebo cez Nová správa.</p>}
+            {!list.length && <p className="muted small dm-note">{L("Zatiaľ tu nič nie je. Napíš hráčovi z trhoviska alebo cez Nová správa.", "Nothing here yet. Message a player from the marketplace or via New message.")}</p>}
           </div>
         )}
       </aside>
@@ -835,8 +842,8 @@ export default function Messages() {
           <Conversation key={conv.id} conv={conv} attach={attach} onBack={() => router.push("/spravy")} onChanged={load} />
         ) : (
           <div className="dm-placeholder">
-            <p className="muted">{active && list ? "Konverzácia sa nenašla." : "Vyber si konverzáciu."}</p>
-            <p className="tiny muted">Správy sú na serveri šifrované a po 12 mesiacoch sa zmažú.</p>
+            <p className="muted">{active && list ? L("Konverzácia sa nenašla.", "Conversation not found.") : L("Vyber si konverzáciu.", "Pick a conversation.")}</p>
+            <p className="tiny muted">{L("Správy sú na serveri šifrované a po 12 mesiacoch sa zmažú.", "Messages are encrypted on the server and deleted after 12 months.")}</p>
           </div>
         )}
       </div>

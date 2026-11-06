@@ -9,20 +9,24 @@ import { useCollection } from "@/lib/collection";
 import { Card, cardEur, eur, useCards, usePrices } from "@/lib/data";
 import { addListing, Listing, removeListing, TradeKind, updateListing, useMyContact, useTrades } from "@/lib/trades";
 import { useTcg } from "@/lib/tcg";
+import { useLang } from "@/lib/lang";
 
 type Tab = "offer" | "want" | "mine";
 const TAB_SK: Record<Tab, string> = { offer: "Ponuky", want: "Hľadané", mine: "Moje" };
+const TAB_EN: Record<Tab, string> = { offer: "Offers", want: "Wanted", mine: "Mine" };
 const COND: Listing["cond"][] = ["NM", "LP", "MP", "HP", "DMG"];
 
-function ago(ts: string) {
+function ago(ts: string, en = false) {
   const m = Math.round((Date.now() - new Date(ts).getTime()) / 60000);
-  if (m < 60) return `pred ${Math.max(m, 1)} min`;
-  if (m < 48 * 60) return `pred ${Math.round(m / 60)} h`;
-  return `pred ${Math.round(m / 1440)} d`;
+  if (m < 60) return en ? `${Math.max(m, 1)} min ago` : `pred ${Math.max(m, 1)} min`;
+  if (m < 48 * 60) return en ? `${Math.round(m / 60)} h ago` : `pred ${Math.round(m / 60)} h`;
+  return en ? `${Math.round(m / 1440)} d ago` : `pred ${Math.round(m / 1440)} d`;
 }
 
 export default function TradePage() {
   const { tcg } = useTcg();
+  const { t: L, lang } = useLang();
+  const en = lang === "en";
   const { user, loading } = useAuth();
   const { data: cards, error } = useCards();
   const { data: prices } = usePrices();
@@ -58,13 +62,13 @@ export default function TradePage() {
   if (tcg === "pokemon")
     return (
       <div className="tr-page">
-        <h1>Trhovisko</h1>
-        <p className="muted">Trhovisko je zatiaľ pre One Piece karty – prepni hore na One Piece.</p>
+        <h1>{L("Trhovisko", "Marketplace")}</h1>
+        <p className="muted">{L("Trhovisko je zatiaľ pre One Piece karty – prepni hore na One Piece.", "The marketplace is only for One Piece cards so far – switch to One Piece at the top.")}</p>
       </div>
     );
   if (loading) return <Loading shape="rows" />;
   if (error) return <DataError error={error} file="cards" />;
-  if (!cards) return <Loading what="Načítavam karty" shape="rows" />;
+  if (!cards) return <Loading what={L("Načítavam karty", "Loading cards")} shape="rows" />;
 
   const card = (id: string) => cards.byId.get(id);
   const s = q.trim().toLowerCase();
@@ -129,7 +133,7 @@ export default function TradePage() {
   };
   const add = async (c: Card, kind: TradeKind) => {
     const err = await addListing({ card_id: c.id, kind });
-    flash(err ?? `${c.name} – ${kind === "offer" ? "pridané do ponuky" : "pridané do hľadaných"}`);
+    flash(err ?? `${c.name} – ${kind === "offer" ? L("pridané do ponuky", "added to offers") : L("pridané do hľadaných", "added to wanted")}`);
     if (!err) reload();
   };
   const found =
@@ -145,21 +149,21 @@ export default function TradePage() {
           {(t?.username ?? "?").slice(0, 1).toUpperCase()}
         </span>
         <span className="trx-sname">
-          <b>{t?.username ?? "hráč"}</b>
-          <i>{ago(l.created_at)}</i>
+          <b>{t?.username ?? L("hráč", "player")}</b>
+          <i>{ago(l.created_at, en)}</i>
         </span>
         {!user ? (
-          <Link className="btn ghost sm trx-contact" href="/login" title="Kontakt vidia prihlásení">
-            Kontakt
+          <Link className="btn ghost sm trx-contact" href="/login" title={L("Kontakt vidia prihlásení", "Signed-in users see the contact")}>
+            {L("Kontakt", "Contact")}
           </Link>
         ) : DM_ENABLED ? (
           <WriteLink className="btn ghost sm trx-contact" userId={l.user_id} listing={l.id} card={l.card_id} />
         ) : t?.contact ? (
           <button className="btn ghost sm trx-contact" title={t.contact} onClick={() => copyContact(l.id, t.contact!)}>
-            {copied === l.id ? "Skopírované" : "Kontakt"}
+            {copied === l.id ? L("Skopírované", "Copied") : L("Kontakt", "Contact")}
           </button>
         ) : (
-          <span className="tiny muted">bez kontaktu</span>
+          <span className="tiny muted">{L("bez kontaktu", "no contact")}</span>
         )}
       </div>
     );
@@ -169,7 +173,7 @@ export default function TradePage() {
     const cm = cmOf(l);
     return (
       <div className="trx-price">
-        <strong>{l.kind === "want" ? (l.price != null ? `do ${eur(l.price)}` : "Hľadá") : l.price != null ? eur(l.price) : "Na výmenu"}</strong>
+        <strong>{l.kind === "want" ? (l.price != null ? `${L("do", "up to")} ${eur(l.price)}` : L("Hľadá", "Wanted")) : l.price != null ? eur(l.price) : L("Na výmenu", "For trade")}</strong>
         {d != null && l.kind === "offer" && <span className={d < 0 ? "trx-good" : "trx-over"}>{d > 0 ? "+" : ""}{Math.round(d)} %</span>}
         {cm != null && <i>Cardmarket {eur(cm)}</i>}
       </div>
@@ -180,29 +184,29 @@ export default function TradePage() {
     <div className="tr-page trx">
       <div className="trx-head">
         <div>
-          <h1>Trhovisko</h1>
-          <p className="muted">Ponúkni karty na predaj alebo výmenu a nájdi tie, ktoré ti chýbajú. Dohodnete sa medzi sebou cez kontakt.</p>
+          <h1>{L("Trhovisko", "Marketplace")}</h1>
+          <p className="muted">{L("Ponúkni karty na predaj alebo výmenu a nájdi tie, ktoré ti chýbajú. Dohodnete sa medzi sebou cez kontakt.", "Offer cards for sale or trade and find the ones you're missing. You arrange the deal yourselves via contact.")}</p>
         </div>
         {user ? (
           <button className="btn" onClick={() => setTab("mine")}>
-            Pridať ponuku
+            {L("Pridať ponuku", "Add listing")}
           </button>
         ) : (
           <Link className="btn" href="/login">
-            Prihlásiť sa a pridať ponuku
+            {L("Prihlásiť sa a pridať ponuku", "Sign in to add a listing")}
           </Link>
         )}
       </div>
 
-      {missing && <div className="empty warn">Trhovisko sa práve pripravuje – databáza ešte nemá tabuľku ponúk. Skús to o chvíľu.</div>}
+      {missing && <div className="empty warn">{L("Trhovisko sa práve pripravuje – databáza ešte nemá tabuľku ponúk. Skús to o chvíľu.", "The marketplace is being set up – the database doesn't have the listings table yet. Try again in a moment.")}</div>}
       {!missing && tError && <div className="empty warn">{tError}</div>}
 
       {forYou.length > 0 && (
-        <section className="trx-foryou" aria-label="Zhody pre teba">
+        <section className="trx-foryou" aria-label={L("Zhody pre teba", "Matches for you")}>
           <div className="trx-fhead">
-            <h2>Pre teba</h2>
+            <h2>{L("Pre teba", "For you")}</h2>
             <span className="tiny">
-              {matches} {matches === 1 ? "zhoda" : matches < 5 ? "zhody" : "zhôd"} so zbierkou a hľadanými kartami
+              {matches} {L(matches === 1 ? "zhoda" : matches < 5 ? "zhody" : "zhôd", matches === 1 ? "match" : "matches")} {L("so zbierkou a hľadanými kartami", "with your collection and wanted cards")}
             </span>
           </div>
           <div className="trx-strip">
@@ -213,7 +217,7 @@ export default function TradePage() {
                   {c ? <CardImg card={c} /> : <span className="cimg ph">{l.card_id}</span>}
                   <b>{c?.name ?? l.card_id}</b>
                   <span className="tiny">
-                    {l.kind === "offer" ? "Ponúka" : "Hľadá"} {traders.get(l.user_id)?.username ?? "hráč"}
+                    {l.kind === "offer" ? L("Ponúka", "Offered by") : L("Hľadá", "Wanted by")} {traders.get(l.user_id)?.username ?? L("hráč", "player")}
                   </span>
                 </button>
               );
@@ -223,20 +227,20 @@ export default function TradePage() {
       )}
 
       <div className="trx-bar">
-        <div className="rep-kinds" role="tablist" aria-label="Zobrazenie">
+        <div className="rep-kinds" role="tablist" aria-label={L("Zobrazenie", "View")}>
           {(Object.keys(TAB_SK) as Tab[]).filter((t) => user || t !== "mine").map((t) => (
             <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? "on" : ""} onClick={() => setTab(t)}>
-              {TAB_SK[t]} ({t === "mine" ? list.filter((l) => l.user_id === uid).length : others.filter((l) => l.kind === t).length})
+              {(en ? TAB_EN : TAB_SK)[t]} ({t === "mine" ? list.filter((l) => l.user_id === uid).length : others.filter((l) => l.kind === t).length})
             </button>
           ))}
         </div>
         {tab !== "mine" && (
-          <div className="seg" role="radiogroup" aria-label="Rozloženie">
+          <div className="seg" role="radiogroup" aria-label={L("Rozloženie", "Layout")}>
             <button role="radio" aria-checked={view === "grid"} className={view === "grid" ? "on" : ""} onClick={() => setView("grid")}>
-              Mriežka
+              {L("Mriežka", "Grid")}
             </button>
             <button role="radio" aria-checked={view === "list"} className={view === "list" ? "on" : ""} onClick={() => setView("list")}>
-              Zoznam
+              {L("Zoznam", "List")}
             </button>
           </div>
         )}
@@ -245,16 +249,16 @@ export default function TradePage() {
       {tab === "mine" && (
         <section className="tr-mine ucet-card">
           <label className="tr-contact">
-            <span>Tvoj kontakt (Discord, Instagram, Messenger…), uvidia ho ostatní pri tvojich ponukách</span>
+            <span>{L("Tvoj kontakt (Discord, Instagram, Messenger…), uvidia ho ostatní pri tvojich ponukách", "Your contact (Discord, Instagram, Messenger…), others see it on your listings")}</span>
             <div className="row gap">
-              <input value={me.contact} onChange={(e) => me.setContact(e.target.value)} placeholder="napr. Discord: Anon" maxLength={120} />
-              <button className="btn sm" onClick={async () => flash((await me.save(me.contact)) ?? "Kontakt uložený")}>
-                Uložiť
+              <input value={me.contact} onChange={(e) => me.setContact(e.target.value)} placeholder={L("napr. Discord: Anon", "e.g. Discord: Anon")} maxLength={120} />
+              <button className="btn sm" onClick={async () => flash((await me.save(me.contact)) ?? L("Kontakt uložený", "Contact saved"))}>
+                {L("Uložiť", "Save")}
               </button>
             </div>
           </label>
           <div className="tr-add">
-            <input value={addQ} onChange={(e) => setAddQ(e.target.value)} placeholder="Pridať kartu: meno alebo kód, napríklad OP05-119" />
+            <input value={addQ} onChange={(e) => setAddQ(e.target.value)} placeholder={L("Pridať kartu: meno alebo kód, napríklad OP05-119", "Add a card: name or code, e.g. OP05-119")} />
             {found.length > 0 && (
               <ul>
                 {found.map((c) => (
@@ -264,10 +268,10 @@ export default function TradePage() {
                       <b>{c.name}</b> <span className="small muted">{c.code}{c.v ? ` · ${c.v}` : ""} · {eur(cardEur(c, usd))}</span>
                     </span>
                     <button className="btn sm" onClick={() => add(c, "offer")}>
-                      Ponúkam
+                      {L("Ponúkam", "Offer")}
                     </button>
                     <button className="btn ghost sm" onClick={() => add(c, "want")}>
-                      Hľadám
+                      {L("Hľadám", "Want")}
                     </button>
                   </li>
                 ))}
@@ -279,41 +283,41 @@ export default function TradePage() {
 
       {tab !== "mine" && (
         <div className={`trx-filters ${showFilters ? "open" : ""}`}>
-          <input className="trx-q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Hľadať kartu alebo hráča" aria-label="Hľadať kartu alebo hráča" />
+          <input className="trx-q" value={q} onChange={(e) => setQ(e.target.value)} placeholder={L("Hľadať kartu alebo hráča", "Search card or player")} aria-label={L("Hľadať kartu alebo hráča", "Search card or player")} />
           <button type="button" className="btn ghost trx-ftoggle" aria-expanded={showFilters} onClick={() => setShowFilters(!showFilters)}>
-            {showFilters ? "Menej" : "Filtre"}
+            {showFilters ? L("Menej", "Less") : L("Filtre", "Filters")}
           </button>
           <select value={fSet} onChange={(e) => setFSet(e.target.value)} aria-label="Set">
-            <option value="">Všetky sety</option>
+            <option value="">{L("Všetky sety", "All sets")}</option>
             {setsHere.map(([id, name]) => (
               <option key={id} value={id}>
                 {id === "CM-PROMO" ? "Promo" : id} {name && id !== "CM-PROMO" ? `– ${name}` : ""}
               </option>
             ))}
           </select>
-          <select value={fLang} onChange={(e) => setFLang(e.target.value)} aria-label="Jazyk">
-            <option value="">EN aj JP</option>
+          <select value={fLang} onChange={(e) => setFLang(e.target.value)} aria-label={L("Jazyk", "Language")}>
+            <option value="">{L("EN aj JP", "EN and JP")}</option>
             <option>EN</option>
             <option>JP</option>
           </select>
-          <select value={fCond} onChange={(e) => setFCond(e.target.value)} aria-label="Stav karty">
-            <option value="">Každý stav</option>
+          <select value={fCond} onChange={(e) => setFCond(e.target.value)} aria-label={L("Stav karty", "Card condition")}>
+            <option value="">{L("Každý stav", "Any condition")}</option>
             {COND.map((x) => (
               <option key={x}>{x}</option>
             ))}
           </select>
           {tab === "offer" && (
-            <select value={fDeal} onChange={(e) => setFDeal(e.target.value as any)} aria-label="Predaj alebo výmena">
-              <option value="">Predaj aj výmena</option>
-              <option value="sale">Len predaj</option>
-              <option value="swap">Len výmena</option>
+            <select value={fDeal} onChange={(e) => setFDeal(e.target.value as any)} aria-label={L("Predaj alebo výmena", "Sale or trade")}>
+              <option value="">{L("Predaj aj výmena", "Sale and trade")}</option>
+              <option value="sale">{L("Len predaj", "Sale only")}</option>
+              <option value="swap">{L("Len výmena", "Trade only")}</option>
             </select>
           )}
-          <select value={sort} onChange={(e) => setSort(e.target.value as any)} aria-label="Zoradiť">
-            <option value="new">Najnovšie</option>
-            <option value="cheap">Najlacnejšie</option>
-            <option value="dear">Najdrahšie</option>
-            {tab === "offer" && <option value="deal">Najlepšie oproti Cardmarketu</option>}
+          <select value={sort} onChange={(e) => setSort(e.target.value as any)} aria-label={L("Zoradiť", "Sort")}>
+            <option value="new">{L("Najnovšie", "Newest")}</option>
+            <option value="cheap">{L("Najlacnejšie", "Cheapest")}</option>
+            <option value="dear">{L("Najdrahšie", "Most expensive")}</option>
+            {tab === "offer" && <option value="deal">{L("Najlepšie oproti Cardmarketu", "Best vs Cardmarket")}</option>}
           </select>
         </div>
       )}
@@ -325,16 +329,16 @@ export default function TradePage() {
       ) : shown.length === 0 ? (
         <div className="empty">
           {tab === "mine" ? (
-            "Zatiaľ nič neponúkaš ani nehľadáš. Pridaj kartu vyššie alebo v detaile karty."
+            L("Zatiaľ nič neponúkaš ani nehľadáš. Pridaj kartu vyššie alebo v detaile karty.", "You're not offering or looking for anything yet. Add a card above or in the card detail.")
           ) : filtersOn ? (
             <>
-              Tomuto výberu nič nezodpovedá.{" "}
+              {L("Tomuto výberu nič nezodpovedá.", "Nothing matches this selection.")}{" "}
               <button className="link" onClick={resetFilters}>
-                Zrušiť filtre
+                {L("Zrušiť filtre", "Clear filters")}
               </button>
             </>
           ) : (
-            user ? "Zatiaľ tu nič nie je. Buď prvý a pridaj svoju ponuku." : "Zatiaľ tu nič nie je."
+            user ? L("Zatiaľ tu nič nie je. Buď prvý a pridaj svoju ponuku.", "Nothing here yet. Be the first to add a listing.") : L("Zatiaľ tu nič nie je.", "Nothing here yet.")
           )}
         </div>
       ) : tab !== "mine" && view === "grid" ? (
@@ -343,9 +347,9 @@ export default function TradePage() {
             const c = card(l.card_id);
             return (
               <article key={l.id} className={`trx-card ${isMatch(l) ? "match" : ""}`}>
-                <button className="trx-img" onClick={() => c && setOpen(c)} aria-label={`Detail karty ${c?.name ?? l.card_id}`}>
+                <button className="trx-img" onClick={() => c && setOpen(c)} aria-label={`${L("Detail karty", "Card detail")} ${c?.name ?? l.card_id}`}>
                   {c ? <CardImg card={c} /> : <span className="cimg ph">{l.card_id}</span>}
-                  {isMatch(l) && <span className="trx-flag">Zhoda</span>}
+                  {isMatch(l) && <span className="trx-flag">{L("Zhoda", "Match")}</span>}
                 </button>
                 <div className="trx-body">
                   <b className="trx-name">{c?.name ?? l.card_id}</b>
@@ -373,14 +377,14 @@ export default function TradePage() {
             const mine = l.user_id === uid;
             return (
               <li key={l.id} className={isMatch(l) ? "match" : ""}>
-                <button className="tr-img" onClick={() => c && setOpen(c)} aria-label="Detail karty">
+                <button className="tr-img" onClick={() => c && setOpen(c)} aria-label={L("Detail karty", "Card detail")}>
                   {c ? <CardImg card={c} /> : <span className="cimg ph">{l.card_id}</span>}
                 </button>
                 <div className="tr-body">
                   <div className="row between gap">
                     <b className="tr-name">{c?.name ?? l.card_id}</b>
-                    {isMatch(l) && <span className="chip hot">Zhoda</span>}
-                    {mine && <span className="tag dim">{l.kind === "offer" ? "Ponúkam" : "Hľadám"}</span>}
+                    {isMatch(l) && <span className="chip hot">{L("Zhoda", "Match")}</span>}
+                    {mine && <span className="tag dim">{l.kind === "offer" ? L("Ponúkam", "Offering") : L("Hľadám", "Wanted")}</span>}
                   </div>
                   <span className="small muted">
                     {l.card_id.split("_")[0]}
@@ -390,12 +394,12 @@ export default function TradePage() {
                   {l.note && !mine && <span className="small tr-note">„{l.note}“</span>}
                   {mine ? (
                     <div className="tr-edit">
-                      <select value={l.cond} onChange={async (e) => (await updateListing(l.id, { cond: e.target.value as any }), reload())} aria-label="Stav">
+                      <select value={l.cond} onChange={async (e) => (await updateListing(l.id, { cond: e.target.value as any }), reload())} aria-label={L("Stav", "Condition")}>
                         {COND.map((x) => (
                           <option key={x}>{x}</option>
                         ))}
                       </select>
-                      <select value={l.lang} onChange={async (e) => (await updateListing(l.id, { lang: e.target.value as any }), reload())} aria-label="Jazyk">
+                      <select value={l.lang} onChange={async (e) => (await updateListing(l.id, { lang: e.target.value as any }), reload())} aria-label={L("Jazyk", "Language")}>
                         <option>EN</option>
                         <option>JP</option>
                       </select>
@@ -404,19 +408,19 @@ export default function TradePage() {
                         min={0}
                         step="0.5"
                         defaultValue={l.price ?? ""}
-                        placeholder="cena €"
+                        placeholder={L("cena €", "price €")}
                         onBlur={async (e) => (await updateListing(l.id, { price: e.target.value === "" ? null : Number(e.target.value) }), reload())}
-                        aria-label="Cena v €"
+                        aria-label={L("Cena v €", "Price in €")}
                       />
                       <input
                         defaultValue={l.note ?? ""}
-                        placeholder="poznámka"
+                        placeholder={L("poznámka", "note")}
                         maxLength={300}
                         onBlur={async (e) => (await updateListing(l.id, { note: e.target.value || null }), reload())}
-                        aria-label="Poznámka"
+                        aria-label={L("Poznámka", "Note")}
                       />
                       <button className="btn ghost sm danger" onClick={async () => (await removeListing(l.id), reload())}>
-                        Zrušiť
+                        {L("Zrušiť", "Remove")}
                       </button>
                     </div>
                   ) : (
@@ -431,7 +435,7 @@ export default function TradePage() {
 
       {open && <CardModal card={open} usd={usd} onClose={() => setOpen(null)} />}
       <p className="tiny muted" style={{ marginTop: 24 }}>
-        Grand Line Tracker len spája ľudí, výmenu či predaj si dohodnete sami. {user && <><Link href="/zbierka">Tvoja zbierka</Link> je súkromná.</>}
+        {L("Grand Line Tracker len spája ľudí, výmenu či predaj si dohodnete sami.", "Grand Line Tracker only connects people, you arrange the trade or sale yourselves.")} {user && <><Link href="/zbierka">{L("Tvoja zbierka", "Your collection")}</Link> {L("je súkromná.", "is private.")}</>}
       </p>
     </div>
   );

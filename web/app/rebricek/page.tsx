@@ -11,9 +11,11 @@ import { loadProfiles, useAuth } from "@/lib/auth";
 import { useCards } from "@/lib/data";
 import { ago, byCodeOf, GameRow, Rating } from "@/lib/game";
 import { sb } from "@/lib/supabase";
+import { useLang } from "@/lib/lang";
 
 function RankingPage() {
   const badges = useBadges();
+  const { t, lang } = useLang();
   const { user, loading } = useAuth();
   const { data: cards } = useCards();
   const byCode = useMemo(() => byCodeOf(cards?.cards), [cards]);
@@ -30,7 +32,7 @@ function RankingPage() {
         user ? sb().from("games").select("*").eq("status", "done").order("updated_at", { ascending: false }).limit(15) : Promise.resolve({ data: [] }),
       ]);
       setRows((r as Rating[]) ?? []);
-      setNames(new Map(profs.map((p) => [p.id, p.username ?? "hráč"])));
+      setNames(new Map(profs.map((p) => [p.id, p.username ?? t("hráč", "player")])));
       setGames((gs as GameRow[]) ?? []);
     };
     load();
@@ -44,10 +46,10 @@ function RankingPage() {
     };
   }, [user, loading]);
 
-  if (loading) return <Loading what="Načítavam rebríček" shape="rows" />;
-  if (!rows) return <Loading what="Načítavam rebríček" shape="rows" />;
+  if (loading) return <Loading what={t("Načítavam rebríček", "Loading leaderboard")} shape="rows" />;
+  if (!rows) return <Loading what={t("Načítavam rebríček", "Loading leaderboard")} shape="rows" />;
 
-  const nm = (id: string) => names.get(id) ?? "hráč";
+  const nm = (id: string) => names.get(id) ?? t("hráč", "player");
   const top = rows.slice(0, 3);
   const pct = (r: Rating) => (r.games ? Math.round((100 * r.wins) / r.games) : 0);
   const order = [1, 0, 2].filter((i) => top[i]);
@@ -56,15 +58,15 @@ function RankingPage() {
     <div className="glob">
       <div className="glob-hero">
         <div>
-          <h1>Rebríček</h1>
+          <h1>{t("Rebríček", "Leaderboard")}</h1>
           <p className="muted">
-            ELO z hodnotených online hier. Každý začína na 1000; za výhru nad silnejším súperom získaš viac bodov. <Link href={user ? "/hra" : "/login"}>{user ? "Vyzvi kamoša →" : "Prihlás sa a hraj →"}</Link>
+            {t("ELO z hodnotených online hier. Každý začína na 1000; za výhru nad silnejším súperom získaš viac bodov.", "ELO from ranked online games. Everyone starts at 1000; beating a stronger opponent earns more points.")} <Link href={user ? "/hra" : "/login"}>{user ? t("Vyzvi kamoša →", "Challenge a friend →") : t("Prihlás sa a hraj →", "Sign in and play →")}</Link>
           </p>
         </div>
       </div>
 
       {!rows.length ? (
-        <div className="empty">Zatiaľ nikto neodohral hodnotenú hru. Buď prvý – vytvor výzvu v sekcii Hra.</div>
+        <div className="empty">{t("Zatiaľ nikto neodohral hodnotenú hru. Buď prvý – vytvor výzvu v sekcii Hra.", "No one has played a ranked game yet. Be the first – create a challenge in Play.")}</div>
       ) : (
         <>
           {top.length >= 2 && (
@@ -88,11 +90,11 @@ function RankingPage() {
             <thead>
               <tr>
                 <th>#</th>
-                <th>Hráč</th>
+                <th>{t("Hráč", "Player")}</th>
                 <th>ELO</th>
-                <th>V – P</th>
-                <th className="hide-m">Úspešnosť</th>
-                <th className="hide-m">Séria</th>
+                <th>{t("V – P", "W – L")}</th>
+                <th className="hide-m">{t("Úspešnosť", "Win rate")}</th>
+                <th className="hide-m">{t("Séria", "Streak")}</th>
                 <th className="hide-m">Max</th>
               </tr>
             </thead>
@@ -114,7 +116,7 @@ function RankingPage() {
                   </td>
                   <td className="hide-m">{pct(r)} %</td>
                   <td className="hide-m">
-                    {r.streak ? <span className={`streak ${r.streak < 0 ? "neg" : ""}`}>{r.streak > 0 ? `${r.streak} ${plural(r.streak, "výhra", "výhry", "výhier")}` : `${-r.streak} ${plural(-r.streak, "prehra", "prehry", "prehier")}`}</span> : "–"}
+                    {r.streak ? <span className={`streak ${r.streak < 0 ? "neg" : ""}`}>{r.streak > 0 ? `${r.streak} ${t(plural(r.streak, "výhra", "výhry", "výhier"), r.streak === 1 ? "win" : "wins")}` : `${-r.streak} ${t(plural(-r.streak, "prehra", "prehry", "prehier"), -r.streak === 1 ? "loss" : "losses")}`}</span> : "–"}
                   </td>
                   <td className="hide-m muted">{r.best_elo}</td>
                 </tr>
@@ -126,7 +128,7 @@ function RankingPage() {
 
       {games.length > 0 && (
         <>
-          <h2 className="sub">Posledné zápasy</h2>
+          <h2 className="sub">{t("Posledné zápasy", "Recent matches")}</h2>
           <div className="glist">
             {games.map((g) => {
               const winHost = g.winner === g.host;
@@ -137,10 +139,10 @@ function RankingPage() {
                   <span className="lth">{c ? <CardImg card={c} /> : <i className="back" style={{ display: "block", height: "100%" }} />}</span>
                   <span style={{ minWidth: 0 }}>
                     <div className="t">
-                      <span style={{ color: "#7ff0b8" }}>{winHost ? g.host_name : g.guest_name}</span> porazil {winHost ? g.guest_name : g.host_name}
+                      <span style={{ color: "#7ff0b8" }}>{winHost ? g.host_name : g.guest_name}</span> {t("porazil", "beat")} {winHost ? g.guest_name : g.host_name}
                     </div>
                     <div className="s">
-                      {g.end_reason === "resign" ? "súper sa vzdal" : g.end_reason === "time" ? "vypršal čas" : `${g.turn} ťahov`} · {g.rated ? "hodnotená" : "priateľská"} · {ago(g.updated_at)}
+                      {g.end_reason === "resign" ? t("súper sa vzdal", "opponent resigned") : g.end_reason === "time" ? t("vypršal čas", "time ran out") : t(`${g.turn} ťahov`, `${g.turn} turns`)} · {g.rated ? t("hodnotená", "ranked") : t("priateľská", "friendly")} · {ago(g.updated_at, lang)}
                     </div>
                   </span>
                   {g.rated && g.elo_delta != null && <span className="streak">±{g.elo_delta}</span>}

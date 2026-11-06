@@ -6,6 +6,7 @@ import { CardImg, ColorDots, DataError, Loading, NeedLogin } from "@/components/
 import { loadProfiles, useAuth } from "@/lib/auth";
 import { useCards } from "@/lib/data";
 import { sb } from "@/lib/supabase";
+import { useLang } from "@/lib/lang";
 
 export type Deck = {
   id: string;
@@ -19,6 +20,7 @@ export type Deck = {
 
 export default function DecksPage() {
   const { user, loading } = useAuth();
+  const { t } = useLang();
   const { data, error } = useCards();
   const [decks, setDecks] = useState<Deck[] | null>(null);
   const [names, setNames] = useState<Record<string, string>>({});
@@ -38,11 +40,11 @@ export default function DecksPage() {
   if (loading) return <Loading />;
   if (!user) return <NeedLogin what="Deckbuilder" />;
   if (error) return <DataError error={error} file="cards" />;
-  if (!data || !decks) return <Loading what="Načítavam decky" shape="tiles" />;
+  if (!data || !decks) return <Loading what={t("Načítavam decky", "Loading decks")} shape="tiles" />;
 
   const create = async () => {
     setBusy(true);
-    const { data: d, error } = await sb().from("decks").insert({ name: "Nový deck" }).select().single();
+    const { data: d, error } = await sb().from("decks").insert({ name: t("Nový deck", "New deck") }).select().single();
     setBusy(false);
     if (error) return alert(error.message);
     router.push(`/decky/${d.id}`);
@@ -56,7 +58,7 @@ export default function DecksPage() {
     const count = Object.values(d.cards || {}).reduce((a, b) => a + b, 0);
     return (
       <Link href={`/decky/${d.id}`} className="dtile">
-        {leader ? <CardImg card={leader} /> : <div className="cimg ph">bez leadera</div>}
+        {leader ? <CardImg card={leader} /> : <div className="cimg ph">{t("bez leadera", "no leader")}</div>}
         <div>
           <b>{d.name}</b>
           <div className="small muted">
@@ -68,8 +70,8 @@ export default function DecksPage() {
               "–"
             )}
           </div>
-          <div className={`small ${count === 50 ? "okc" : "muted"}`}>{count}/50 kariet</div>
-          {d.user_id !== user.id && <div className="small muted">od {names[d.user_id] ?? "kamoša"}</div>}
+          <div className={`small ${count === 50 ? "okc" : "muted"}`}>{count}/50 {t("kariet", "cards")}</div>
+          {d.user_id !== user.id && <div className="small muted">{t("od", "by")} {names[d.user_id] ?? t("kamoša", "a friend")}</div>}
         </div>
       </Link>
     );
@@ -79,19 +81,19 @@ export default function DecksPage() {
     <>
       <div className="head">
         <div>
-          <h1>Decky</h1>
-          <p className="muted small">1 leader + 50 kariet, max. 4 kópie, farby podľa leadera</p>
+          <h1>{t("Decky", "Decks")}</h1>
+          <p className="muted small">{t("1 leader + 50 kariet, max. 4 kópie, farby podľa leadera", "1 leader + 50 cards, max. 4 copies, colors by leader")}</p>
         </div>
         <div className="row gap wrapr">
           <Link className="btn ghost" href="/decky/odporucanie">
-            Čo si viem poskladať
+            {t("Čo si viem poskladať", "What can I build")}
           </Link>
           <button className="btn" onClick={create} disabled={busy}>
-            + Nový deck
+            + {t("Nový deck", "New deck")}
           </button>
         </div>
       </div>
-      <h2 className="sub">Moje decky</h2>
+      <h2 className="sub">{t("Moje decky", "My decks")}</h2>
       {mine.length ? (
         <div className="dgrid">
           {mine.map((d) => (
@@ -99,11 +101,11 @@ export default function DecksPage() {
           ))}
         </div>
       ) : (
-        <div className="empty">Zatiaľ žiadny deck.</div>
+        <div className="empty">{t("Zatiaľ žiadny deck.", "No decks yet.")}</div>
       )}
       {others.length > 0 && (
         <>
-          <h2 className="sub">Decky kamošov</h2>
+          <h2 className="sub">{t("Decky kamošov", "Friends' decks")}</h2>
           <div className="dgrid">
             {others.map((d) => (
               <Tile key={d.id} d={d} />

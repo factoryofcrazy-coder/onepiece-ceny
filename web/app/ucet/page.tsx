@@ -5,12 +5,14 @@ import { Loading, NeedLogin } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { authError, nickError } from "@/lib/authErrors";
 import { sb } from "@/lib/supabase";
-import { levelProgress, loadBadges, RankIcon, RANKS, rankOf, XP_SOURCES, type Badge } from "@/lib/gamify";
+import { levelProgress, loadBadges, RankIcon, rankName, RANKS, rankOf, XP_SOURCES, type Badge } from "@/lib/gamify";
+import { useLang } from "@/lib/lang";
 
-const CONFIRM = "ZMAZAŤ";
 
 export default function Account() {
   const { user, profile, loading, refreshProfile } = useAuth();
+  const { t, lang } = useLang();
+  const CONFIRM = lang === "en" ? "DELETE" : "ZMAZAŤ";
   const [nick, setNick] = useState("");
   const [nickMsg, setNickMsg] = useState<{ t: string; ok?: boolean } | null>(null);
   const [saving, setSaving] = useState(false);
@@ -33,20 +35,20 @@ export default function Account() {
   }, [user]);
   useEffect(() => setPassOk(new URLSearchParams(window.location.search).get("heslo") === "ok"), []);
 
-  if (loading) return <Loading what="Načítavam účet" />;
-  if (!user) return <NeedLogin what="Účet" />;
+  if (loading) return <Loading what={t("Načítavam účet", "Loading account")} />;
+  if (!user) return <NeedLogin what={t("Účet", "Account")} />;
 
   const saveNick = async (e: React.FormEvent) => {
     e.preventDefault();
-    const bad = nickError(nick);
+    const bad = nickError(nick, lang);
     if (bad) return setNickMsg({ t: bad });
     setSaving(true);
     setNickMsg(null);
     const { error } = await sb().from("profiles").update({ username: nick.trim() }).eq("id", user.id);
     setSaving(false);
-    if (error) return setNickMsg({ t: error.code === "23505" ? "Túto prezývku už niekto má." : error.code === "23514" ? "Takáto prezývka sa nedá použiť." : authError(error) });
+    if (error) return setNickMsg({ t: error.code === "23505" ? t("Túto prezývku už niekto má.", "This nickname is taken.") : error.code === "23514" ? t("Takáto prezývka sa nedá použiť.", "This nickname can't be used.") : authError(error, lang) });
     await refreshProfile();
-    setNickMsg({ t: "Prezývka je uložená. V už rozohraných hrách ostane stará.", ok: true });
+    setNickMsg({ t: t("Prezývka je uložená. V už rozohraných hrách ostane stará.", "Nickname saved. Games in progress keep the old one."), ok: true });
   };
 
   const remove = async () => {
@@ -55,7 +57,7 @@ export default function Account() {
     const { error } = await sb().rpc("delete_my_account");
     if (error) {
       setDeleting(false);
-      return setDelErr(authError(error));
+      return setDelErr(authError(error, lang));
     }
     await sb().auth.signOut({ scope: "local" });
     window.location.assign("/");
@@ -63,12 +65,12 @@ export default function Account() {
 
   return (
     <div className="ucet">
-      <h1>Môj účet</h1>
-      {passOk && <p className="okc">Heslo je zmenené.</p>}
+      <h1>{t("Môj účet", "My account")}</h1>
+      {passOk && <p className="okc">{t("Heslo je zmenené.", "Password changed.")}</p>}
 
       {badge && (
         <section className="ucet-card rk-card">
-          <h2>Tvoj postup</h2>
+          <h2>{t("Tvoj postup", "Your progress")}</h2>
           {(() => {
             const p = levelProgress(badge.xp);
             const rank = rankOf(badge.elo);
@@ -78,40 +80,40 @@ export default function Account() {
                 <div className="rk-top">
                   <div>
                     <b className="rk-big">Level {p.level}</b>
-                    <div className="rk-bar" role="progressbar" aria-valuenow={p.pct} aria-valuemin={0} aria-valuemax={100} aria-label="Postup na ďalší level">
+                    <div className="rk-bar" role="progressbar" aria-valuenow={p.pct} aria-valuemin={0} aria-valuemax={100} aria-label={t("Postup na ďalší level", "Progress to next level")}>
                       <i style={{ width: `${p.pct}%` }} />
                     </div>
                     <span className="tiny muted">
-                      {badge.xp} XP, do levelu {p.level + 1} chýba {p.toNext} XP
+                      {t(`${badge.xp} XP, do levelu ${p.level + 1} chýba ${p.toNext} XP`, `${badge.xp} XP, ${p.toNext} XP to level ${p.level + 1}`)}
                     </span>
                   </div>
                   <div>
                     {badge.games > 0 ? (
                       <>
                         <b className="rk-big" style={{ color: rank.color }}>
-                          <RankIcon rank={rank} size={20} /> {rank.name}
+                          <RankIcon rank={rank} size={20} /> {rankName(rank, lang)}
                         </b>
                         <span className="tiny muted">
                           ELO {badge.elo}
-                          {next ? `, ${next.name} od ${next.min}` : ", najvyšší rank"}
+                          {next ? `, ${rankName(next, lang)} ${t("od", "from")} ${next.min}` : t(", najvyšší rank", ", top rank")}
                         </span>
                       </>
                     ) : (
                       <>
-                        <b className="rk-big">Bez ranku</b>
+                        <b className="rk-big">{t("Bez ranku", "No rank")}</b>
                         <span className="tiny muted">
-                          Rank získaš prvou <Link href="/hra">hodnotenou online hrou</Link>.
+                          {t("Rank získaš prvou", "You get a rank with your first")} <Link href="/hra">{t("hodnotenou online hrou", "ranked online game")}</Link>.
                         </span>
                       </>
                     )}
                   </div>
                 </div>
-                <h3 className="rk-h">Dnešné XP</h3>
+                <h3 className="rk-h">{t("Dnešné XP", "Today's XP")}</h3>
                 <ul className="rk-list">
                   {XP_SOURCES.map((x) => (
                     <li key={x.id}>
                       <span>
-                        {x.label} <i className="tiny muted">{x.hint}</i>
+                        {lang === "en" ? x.en : x.label} <i className="tiny muted">{lang === "en" ? x.hintEn : x.hint}</i>
                       </span>
                       <b className={(today[x.id] ?? 0) >= x.cap ? "okc" : ""}>
                         {today[x.id] ?? 0}/{x.cap}
@@ -119,13 +121,13 @@ export default function Account() {
                     </li>
                   ))}
                 </ul>
-                <h3 className="rk-h">Ranky podľa ELO</h3>
+                <h3 className="rk-h">{t("Ranky podľa ELO", "Ranks by ELO")}</h3>
                 <ul className="rk-ranks">
                   {RANKS.map((r) => (
                     <li key={r.id} className={badge.games > 0 && r.id === rank.id ? "on" : ""}>
                       <RankIcon rank={r} size={18} />
-                      <span>{r.name}</span>
-                      <i className="tiny muted">{r.min ? `od ${r.min}` : "štart"}</i>
+                      <span>{rankName(r, lang)}</span>
+                      <i className="tiny muted">{r.min ? `${t("od", "from")} ${r.min}` : t("štart", "start")}</i>
                     </li>
                   ))}
                 </ul>
@@ -136,42 +138,42 @@ export default function Account() {
       )}
 
       <section className="ucet-card">
-        <h2>Prezývka</h2>
-        <p className="muted small">Uvidia ju ostatní hráči v rebríčku, v hre aj na trhovisku.</p>
+        <h2>{t("Prezývka", "Nickname")}</h2>
+        <p className="muted small">{t("Uvidia ju ostatní hráči v rebríčku, v hre aj na trhovisku.", "Other players see it on the leaderboard, in games and on the marketplace.")}</p>
         <form onSubmit={saveNick} className="ucet-row">
-          <input aria-label="Prezývka" required minLength={3} maxLength={24} value={nick} onChange={(e) => setNick(e.target.value)} />
+          <input aria-label={t("Prezývka", "Nickname")} required minLength={3} maxLength={24} value={nick} onChange={(e) => setNick(e.target.value)} />
           <button className="btn" disabled={saving || nick.trim() === (profile?.username ?? "")}>
-            {saving ? "Ukladám…" : "Uložiť"}
+            {saving ? t("Ukladám…", "Saving…") : t("Uložiť", "Save")}
           </button>
         </form>
         {nickMsg && <p className={nickMsg.ok ? "okc small" : "badc small"}>{nickMsg.t}</p>}
       </section>
 
       <section className="ucet-card">
-        <h2>Prihlásenie</h2>
-        <p className="muted small">E-mail: {user.email}. Ostatní ho nevidia.</p>
+        <h2>{t("Prihlásenie", "Sign-in")}</h2>
+        <p className="muted small">E-mail: {user.email}. {t("Ostatní ho nevidia.", "Others can't see it.")}</p>
         <Link className="btn ghost sm" href="/nove-heslo">
-          Zmeniť heslo
+          {t("Zmeniť heslo", "Change password")}
         </Link>
       </section>
 
       <section className="ucet-card ucet-danger">
-        <h2>Zmazať účet</h2>
+        <h2>{t("Zmazať účet", "Delete account")}</h2>
         <p className="muted small">
-          Natrvalo zmaže účet, zbierku, decky, ponuky na trhovisku a hodnotenie v rebríčku. Zmažú sa aj hry, ktoré si založil, takže zmiznú aj súperom z histórie. Vrátiť sa to nedá.
+          {t("Natrvalo zmaže účet, zbierku, decky, ponuky na trhovisku a hodnotenie v rebríčku. Zmažú sa aj hry, ktoré si založil, takže zmiznú aj súperom z histórie. Vrátiť sa to nedá.", "Permanently deletes your account, collection, decks, marketplace listings and leaderboard rating. Games you created are deleted too, so they disappear from your opponents' history. This can't be undone.")}
         </p>
         <label className="field">
-          <span>Na potvrdenie napíš {CONFIRM}</span>
+          <span>{t("Na potvrdenie napíš", "To confirm, type")} {CONFIRM}</span>
           <input value={confirm} onChange={(e) => setConfirm(e.target.value)} autoComplete="off" />
         </label>
         <button className="btn danger ghost" disabled={confirm !== CONFIRM || deleting} onClick={remove}>
-          {deleting ? "Mažem…" : "Natrvalo zmazať účet"}
+          {deleting ? t("Mažem…", "Deleting…") : t("Natrvalo zmazať účet", "Permanently delete account")}
         </button>
         {delErr && <p className="badc small">{delErr}</p>}
       </section>
 
       <p className="small muted">
-        Viac o tom, aké údaje ukladáme, nájdeš v <Link href="/sukromie">zásadách súkromia</Link>.
+        {t("Viac o tom, aké údaje ukladáme, nájdeš v", "More about what data we store is in the")} <Link href="/sukromie">{t("zásadách súkromia", "privacy policy")}</Link>.
       </p>
     </div>
   );

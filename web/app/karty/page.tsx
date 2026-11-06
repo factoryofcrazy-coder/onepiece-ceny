@@ -7,11 +7,14 @@ import { salesChange } from "@/lib/price-series";
 import { CardImg, CardModal, DataError, Foil, Loading, OwnerPicker, PriceMove, Qty, FilterBar } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { Card, COLOR_SK, COLORS, eur, SET_KIND_SK, SET_KINDS, setKind, sortSets, TYPE_SK, useCards, usePrices, cardEur } from "@/lib/data";
+import { useLang } from "@/lib/lang";
+import { Card, COLOR_SK, COLORS, eur, SET_KIND_EN, SET_KIND_SK, SET_KINDS, setKind, sortSets, TYPE_SK, useCards, usePrices, cardEur } from "@/lib/data";
 
 const PAGE = 120;
 
 function OpCardsPage() {
+  const { t, lang } = useLang();
+  const en = lang === "en";
   const { data, error } = useCards();
   const { data: prices } = usePrices();
   const { user } = useAuth();
@@ -79,7 +82,7 @@ function OpCardsPage() {
   }, [data, set, q, color, type, rarity, variant, own, qty, sort]);
 
   if (error) return <DataError error={error} file="cards" />;
-  if (!data) return <Loading what="Načítavam karty" shape="cards" />;
+  if (!data) return <Loading what={t("Načítavam karty", "Loading cards")} shape="cards" />;
 
   const owned = list.filter((c) => qty[c.id] > 0);
   const value = owned.reduce((s, c) => s + (cardEur(c, usd) ?? 0) * qty[c.id], 0);
@@ -88,22 +91,22 @@ function OpCardsPage() {
     <>
       <div className="head">
         <div>
-          <h1>Karty</h1>
+          <h1>{t("Karty", "Cards")}</h1>
           <p className="muted small">
-            {list.length} kariet
+            {list.length} {t("kariet", "cards")}
             {viewing && (
               <>
                 {" "}
-                · vlastnené {owned.length} · hodnota {eur(value)}
+                · {t("vlastnené", "owned")} {owned.length} · {t("hodnota", "value")} {eur(value)}
               </>
             )}
-            {!user && " · prihlás sa a môžeš si značiť karty v zbierke"}
+            {!user && t(" · prihlás sa a môžeš si značiť karty v zbierke", " · sign in to mark cards in your collection")}
           </p>
         </div>
         <div className="row gap wrapr">
           {user && (
             <Link className="btn ghost sm" href="/import">
-              Import z HoloDex
+              {t("Import z HoloDex", "Import from HoloDex")}
             </Link>
           )}
           <OwnerPicker value={viewing} onChange={setOwner} />
@@ -112,13 +115,13 @@ function OpCardsPage() {
 
       <FilterBar>
         <label className={`field keep ${q.trim() ? "dimmed" : ""}`}>
-          <span>{q.trim() ? "Set (hľadá sa vo všetkých)" : "Set"}</span>
+          <span>{q.trim() ? t("Set (hľadá sa vo všetkých)", "Set (searching all)") : "Set"}</span>
           <select value={set} onChange={(e) => setSet(e.target.value)}>
-            <option value="">Všetky sety</option>
+            <option value="">{t("Všetky sety", "All sets")}</option>
             {SET_KINDS.map((k) => {
               const g = sets.filter((x) => setKind(x.id) === k);
               return g.length ? (
-                <optgroup key={k} label={`${SET_KIND_SK[k]} (${g.length})`}>
+                <optgroup key={k} label={`${(en ? SET_KIND_EN : SET_KIND_SK)[k]} (${g.length})`}>
                   {g.map((x) => (
                     <option key={x.id} value={x.id}>
                       {x.id} – {x.name}
@@ -129,65 +132,65 @@ function OpCardsPage() {
             })}          </select>
         </label>
         <label className="field grow">
-          <span>Hľadať</span>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Hľadá vo všetkých setoch: Luffy, OP01-001, Straw Hat…" />
+          <span>{t("Hľadať", "Search")}</span>
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("Hľadá vo všetkých setoch: Luffy, OP01-001, Straw Hat…", "Searches all sets: Luffy, OP01-001, Straw Hat…")} />
         </label>
         <label className="field">
-          <span>Farba</span>
+          <span>{t("Farba", "Color")}</span>
           <select value={color} onChange={(e) => setColor(e.target.value)}>
-            <option value="">Všetky</option>
+            <option value="">{t("Všetky", "All")}</option>
             {COLORS.map((c) => (
               <option key={c} value={c}>
-                {COLOR_SK[c]}
+                {en ? c : COLOR_SK[c]}
               </option>
             ))}
           </select>
         </label>
         <label className="field">
-          <span>Typ</span>
+          <span>{t("Typ", "Type")}</span>
           <select value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="">Všetky</option>
+            <option value="">{t("Všetky", "All")}</option>
             {Object.entries(TYPE_SK).map(([k, v]) => (
               <option key={k} value={k}>
-                {v}
+                {en ? k : v}
               </option>
             ))}
           </select>
         </label>
         <label className="field">
-          <span>Rarita</span>
+          <span>{t("Rarita", "Rarity")}</span>
           <select value={rarity} onChange={(e) => setRarity(e.target.value)}>
-            <option value="">Všetky</option>
+            <option value="">{t("Všetky", "All")}</option>
             {rarities.map((r) => (
               <option key={r}>{r}</option>
             ))}
           </select>
         </label>
         <label className="field">
-          <span>Verzia</span>
+          <span>{t("Verzia", "Version")}</span>
           <select value={variant} onChange={(e) => setVariant(e.target.value)}>
-            <option value="all">Všetky</option>
-            <option value="base">Len základné</option>
-            <option value="alt">Len parallel / alt art</option>
+            <option value="all">{t("Všetky", "All")}</option>
+            <option value="base">{t("Len základné", "Base only")}</option>
+            <option value="alt">{t("Len parallel / alt art", "Parallel / alt art only")}</option>
           </select>
         </label>
         {viewing && (
           <label className="field">
-            <span>Vlastníctvo</span>
+            <span>{t("Vlastníctvo", "Owned")}</span>
             <select value={own} onChange={(e) => setOwn(e.target.value)}>
-              <option value="all">Všetky</option>
-              <option value="have">Mám</option>
-              <option value="missing">Chýba</option>
+              <option value="all">{t("Všetky", "All")}</option>
+              <option value="have">{t("Mám", "Have")}</option>
+              <option value="missing">{t("Chýba", "Missing")}</option>
             </select>
           </label>
         )}
         <label className="field">
-          <span>Zoradiť</span>
+          <span>{t("Zoradiť", "Sort")}</span>
           <select value={sort} onChange={(e) => setSort(e.target.value)}>
-            <option value="code">Číslo</option>
-            <option value="price">Cena</option>
-            <option value="move">Pohyb ceny</option>
-            <option value="name">Meno</option>
+            <option value="code">{t("Číslo", "Number")}</option>
+            <option value="price">{t("Cena", "Price")}</option>
+            <option value="move">{t("Pohyb ceny", "Price move")}</option>
+            <option value="name">{t("Meno", "Name")}</option>
           </select>
         </label>
       </FilterBar>
@@ -214,7 +217,7 @@ function OpCardsPage() {
       {list.length > limit && (
         <div className="center">
           <button className="btn ghost" onClick={() => setLimit(limit + PAGE)}>
-            Zobraziť ďalšie ({list.length - limit})
+            {t("Zobraziť ďalšie", "Show more")} ({list.length - limit})
           </button>
         </div>
       )}

@@ -9,6 +9,7 @@ import { Accepted, Decider, Hit } from "@/lib/scan/decide";
 import { loadShots, pruneShots, saveShot } from "@/lib/scan/shots";
 import { sb } from "@/lib/supabase";
 import { useTcg } from "@/lib/tcg";
+import { useLang } from "@/lib/lang";
 
 // verzia súborov v /public/scan (zvýš pri novom modeli/indexe → obíde cache)
 const SCAN_V = "2";
@@ -54,6 +55,10 @@ function beep() {
 
 function ScannerPage() {
   const { tcg } = useTcg();
+  const { t: L, lang: ui } = useLang();
+  const en = ui === "en";
+  const Lref = useRef(L);
+  Lref.current = L;
   const { data: cards, error } = useCards();
   const { data: prices } = usePrices();
   const { user } = useAuth();
@@ -274,7 +279,7 @@ function ScannerPage() {
 
   const start = useCallback(async () => {
     setState("loading");
-    setMsg("Spúšťam kameru…");
+    setMsg(Lref.current("Spúšťam kameru…", "Starting camera…"));
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { ideal: "environment" }, width: { ideal: 1920 }, height: { ideal: 1080 } },
@@ -291,7 +296,7 @@ function ScannerPage() {
       v.srcObject = stream;
       await v.play();
       if (!workerRef.current) {
-        setMsg("Načítavam rozpoznávanie kariet (prvýkrát pár MB)…");
+        setMsg(Lref.current("Načítavam rozpoznávanie kariet (prvýkrát pár MB)…", "Loading card recognition (a few MB the first time)…"));
         const w = new Worker(`/scan/worker.js?v=${SCAN_V}`);
         workerRef.current = w;
         await new Promise<void>((res, rej) => {
@@ -310,8 +315,8 @@ function ScannerPage() {
       setState("error");
       setMsg(
         e?.name === "NotAllowedError"
-          ? "Prístup ku kamere je zamietnutý – povoľ ho v nastaveniach prehliadača."
-          : `Kameru sa nepodarilo spustiť: ${e?.message || e}`,
+          ? Lref.current("Prístup ku kamere je zamietnutý – povoľ ho v nastaveniach prehliadača.", "Camera access is denied – allow it in your browser settings.")
+          : `${Lref.current("Kameru sa nepodarilo spustiť", "The camera could not be started")}: ${e?.message || e}`,
       );
     }
   }, []);
@@ -351,12 +356,12 @@ function ScannerPage() {
   if (tcg === "pokemon")
     return (
       <div className="scan-page">
-        <h1>Skener</h1>
-        <p className="muted">Skener zatiaľ pozná len One Piece karty – prepni hore na One Piece. Pokémon pribudne neskôr.</p>
+        <h1>{L("Skener", "Scanner")}</h1>
+        <p className="muted">{L("Skener zatiaľ pozná len One Piece karty – prepni hore na One Piece. Pokémon pribudne neskôr.", "The scanner only knows One Piece cards so far – switch to One Piece at the top. Pokémon will come later.")}</p>
       </div>
     );
   if (error) return <DataError error={error} file="cards" />;
-  if (!cards) return <Loading what="Načítavam karty" />;
+  if (!cards) return <Loading what={L("Načítavam karty", "Loading cards")} />;
 
   const price = (id: string, lang: "EN" | "JP" = "EN") => cardEur(cards.byId.get(id), usd, lang);
   const xp = (x: Scanned) => price(x.id, x.lang ?? "EN"); // cena podľa jazyka naskenovanej karty
@@ -396,19 +401,19 @@ function ScannerPage() {
       (r) => `${r.qty}× ${r.name} ${r.code}${r.v ? ` (${r.v})` : ""} · ${r.lang} ${r.cond} · ${eur(r.eur)}`,
     );
     const sum = rows(xs).reduce((s, r) => s + (r.eur ?? 0) * r.qty, 0);
-    const text = `${lines.join("\n")}\nSpolu ${rows(xs).reduce((s, r) => s + r.qty, 0)} kariet · ${eur(sum)}\n(ceny Cardmarket trend, Grand Line Tracker)`;
+    const text = `${lines.join("\n")}\n${L("Spolu", "Total")} ${rows(xs).reduce((s, r) => s + r.qty, 0)} ${L("kariet", "cards")} · ${eur(sum)}\n(${L("ceny Cardmarket trend", "Cardmarket trend prices")}, Grand Line Tracker)`;
     try {
-      if (navigator.share) await navigator.share({ title: "Moje One Piece karty", text });
+      if (navigator.share) await navigator.share({ title: L("Moje One Piece karty", "My One Piece cards"), text });
       else {
         await navigator.clipboard.writeText(text);
-        alert("Zoznam je skopírovaný – vlož ho do správy.");
+        alert(L("Zoznam je skopírovaný – vlož ho do správy.", "The list is copied – paste it into a message."));
       }
     } catch {}
   };
   const csv = () => {
     const xs = confirmed.length ? confirmed : list;
     const esc = (v: any) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-    const head = ["Počet", "Meno", "Kód", "Verzia", "Rarita", "Jazyk", "Stav", "Cena EUR", "Zdroj ceny"];
+    const head = en ? ["Qty", "Name", "Code", "Version", "Rarity", "Language", "Condition", "Price EUR", "Price source"] : ["Počet", "Meno", "Kód", "Verzia", "Rarita", "Jazyk", "Stav", "Cena EUR", "Zdroj ceny"];
     const body = rows(xs).map((r) => [r.qty, r.name, r.code, r.v, r.rarity, r.lang, r.cond, r.eur?.toFixed(2) ?? "", r.src].map(esc).join(";"));
     const blob = new Blob(["\ufeff" + [head.map(esc).join(";"), ...body].join("\r\n")], { type: "text/csv;charset=utf-8" });
     const a = document.createElement("a");
@@ -435,7 +440,7 @@ function ScannerPage() {
     setMode("scan"); // kamera sa spustí až po vykreslení videa (efekt nižšie)
     resume.current = true;
   };
-  const plural = (n: number) => (n === 1 ? "karta" : n >= 2 && n <= 4 ? "karty" : "kariet");
+  const plural = (n: number) => (en ? (n === 1 ? "card" : "cards") : n === 1 ? "karta" : n >= 2 && n <= 4 ? "karty" : "kariet");
 
   // hľadanie inej karty (meno alebo kód)
   const found =
@@ -459,39 +464,38 @@ function ScannerPage() {
     return (
       <div className="scan-page rv">
         <div className="row between wrapr gap">
-          <h1>Kontrola kariet</h1>
+          <h1>{L("Kontrola kariet", "Check cards")}</h1>
           <button className="btn ghost sm" onClick={back}>
-            ← Skenovať ďalej
+            ← {L("Skenovať ďalej", "Keep scanning")}
           </button>
         </div>
         <p className="muted small">
-          Porovnaj svoj záber s nájdenou kartou. Ak nesedí verzia alebo karta, ťukni na <b>Zmeniť</b>. Ceny sú Cardmarket
-          trend (EN alebo JP podľa jazyka karty), kde chýba, TCGplayer. Stav karty sa zatiaľ ukladá len do exportu.
+          {L("Porovnaj svoj záber s nájdenou kartou. Ak nesedí verzia alebo karta, ťukni na", "Compare your shot with the found card. If the version or card is wrong, tap")} <b>{L("Zmeniť", "Change")}</b>. {L("Ceny sú Cardmarket trend (EN alebo JP podľa jazyka karty), kde chýba, TCGplayer. Stav karty sa zatiaľ ukladá len do exportu.", "Prices are the Cardmarket trend (EN or JP by card language), where missing TCGplayer. Card condition is only saved to the export for now.")}
         </p>
-        {added && <div className="rv-done">Pridané do zbierky ✓</div>}
+        {added && <div className="rv-done">{L("Pridané do zbierky ✓", "Added to collection ✓")}</div>}
         {list.length === 0 ? (
           <div className="center muted">
-            Žiadne karty na kontrolu.{" "}
+            {L("Žiadne karty na kontrolu.", "No cards to check.")}{" "}
             <button className="btn sm" onClick={back}>
-              Skenovať
+              {L("Skenovať", "Scan")}
             </button>
           </div>
         ) : (
           <>
             <div className="rv-bar row between wrapr gap">
               <span className="small">
-                <b>{toCheck.length}</b> na kontrolu · <b>{confirmed.length}</b> potvrdených
+                <b>{toCheck.length}</b> {L("na kontrolu", "to check")} · <b>{confirmed.length}</b> {L("potvrdených", "confirmed")}
               </span>
               <span className="row gap wrapr">
                 <button className="btn ghost sm" onClick={share}>
-                  Zdieľať
+                  {L("Zdieľať", "Share")}
                 </button>
                 <button className="btn ghost sm" onClick={csv}>
                   CSV
                 </button>
                 {toCheck.length > 0 && (
                   <button className="btn ghost sm" onClick={() => setList((l) => l.map((x) => ({ ...x, ok: true })))}>
-                    Potvrdiť všetky
+                    {L("Potvrdiť všetky", "Confirm all")}
                   </button>
                 )}
               </span>
@@ -503,16 +507,16 @@ function ScannerPage() {
                   <li key={x.key} className={`rv-item ${x.ok ? "ok" : x.unsure ? "warn" : ""}`}>
                     <div className="rv-imgs">
                       <figure>
-                        {x.shot ? <img src={x.shot} alt="Tvoj záber" /> : <div className="rv-noshot">bez záberu</div>}
-                        <figcaption>tvoj záber</figcaption>
+                        {x.shot ? <img src={x.shot} alt={L("Tvoj záber", "Your shot")} /> : <div className="rv-noshot">{L("bez záberu", "no shot")}</div>}
+                        <figcaption>{L("tvoj záber", "your shot")}</figcaption>
                       </figure>
                       <figure>
                         {c?.img && <img src={thumb(c.img, 300)} alt={c.name} />}
-                        <figcaption>nájdená</figcaption>
+                        <figcaption>{L("nájdená", "found")}</figcaption>
                       </figure>
                     </div>
                     <div className="rv-info">
-                      {!x.ok && x.unsure && <span className="rv-badge">{x.checkVersion ? "Over verziu" : "Skontroluj"}</span>}
+                      {!x.ok && x.unsure && <span className="rv-badge">{x.checkVersion ? L("Over verziu", "Check version") : L("Skontroluj", "Check")}</span>}
                       <b className="rv-name">{c?.name ?? x.id}</b>
                       <span className="small muted">
                         {c?.code}
@@ -523,24 +527,24 @@ function ScannerPage() {
                         {eur(xp(x))}
                         {n(x) > 1 && <span className="small muted"> × {n(x)} = {eur((xp(x) ?? 0) * n(x))}</span>}
                       </b>
-                      <span className="tiny muted">{priceSource(c, x.lang ?? "EN") || "cena nie je známa"}</span>
+                      <span className="tiny muted">{priceSource(c, x.lang ?? "EN") || L("cena nie je známa", "price unknown")}</span>
                       <div className="rv-opts">
-                        <span className="rv-qty" role="group" aria-label="Počet kusov">
-                          <button onClick={() => patch(x.key, { qty: Math.max(1, n(x) - 1) })} aria-label="Menej">
+                        <span className="rv-qty" role="group" aria-label={L("Počet kusov", "Number of copies")}>
+                          <button onClick={() => patch(x.key, { qty: Math.max(1, n(x) - 1) })} aria-label={L("Menej", "Fewer")}>
                             −
                           </button>
                           <b>{n(x)}×</b>
-                          <button onClick={() => patch(x.key, { qty: Math.min(99, n(x) + 1) })} aria-label="Viac">
+                          <button onClick={() => patch(x.key, { qty: Math.min(99, n(x) + 1) })} aria-label={L("Viac", "More")}>
                             +
                           </button>
                         </span>
-                        <select value={x.lang ?? "EN"} onChange={(e) => patch(x.key, { lang: e.target.value as any })} aria-label="Jazyk karty">
+                        <select value={x.lang ?? "EN"} onChange={(e) => patch(x.key, { lang: e.target.value as any })} aria-label={L("Jazyk karty", "Card language")}>
                           <option value="EN">EN</option>
                           <option value="JP">JP</option>
                         </select>
-                        <select value={x.cond ?? "NM"} onChange={(e) => patch(x.key, { cond: e.target.value as Cond })} aria-label="Stav karty">
+                        <select value={x.cond ?? "NM"} onChange={(e) => patch(x.key, { cond: e.target.value as Cond })} aria-label={L("Stav karty", "Card condition")}>
                           {CONDS.map((c) => (
-                            <option key={c} value={c} title={COND_SK[c]}>
+                            <option key={c} value={c} title={c === "DMG" && en ? "Damaged" : COND_SK[c]}>
                               {c}
                             </option>
                           ))}
@@ -548,13 +552,13 @@ function ScannerPage() {
                       </div>
                       <div className="rv-actions">
                         <button className={`btn sm ${x.ok ? "" : "ghost"}`} onClick={() => setOk(x.key, !x.ok)}>
-                          {x.ok ? "✓ Potvrdené" : "✓ Sedí"}
+                          {x.ok ? L("✓ Potvrdené", "✓ Confirmed") : L("✓ Sedí", "✓ Correct")}
                         </button>
                         <button className="btn ghost sm" onClick={() => (setEdit(edit === x.key ? null : x.key), setQ(""))}>
-                          Zmeniť
+                          {L("Zmeniť", "Change")}
                         </button>
                         <button className="btn ghost sm danger" onClick={() => remove(x.key)}>
-                          Odstrániť
+                          {L("Odstrániť", "Remove")}
                         </button>
                       </div>
                     </div>
@@ -562,14 +566,14 @@ function ScannerPage() {
                       <div className="rv-edit">
                         {x.alts.length > 0 && (
                           <>
-                            <span className="tiny muted">Iná verzia alebo podobná karta</span>
+                            <span className="tiny muted">{L("Iná verzia alebo podobná karta", "Another version or a similar card")}</span>
                             <div className="rv-pick">
                               {x.alts.slice(0, 8).map((a) => {
                                 const ac = cards.byId.get(a);
                                 return (
                                   <button key={a} onClick={() => change(x.key, a)}>
                                     {ac?.img && <img src={thumb(ac.img, 200)} alt="" loading="lazy" />}
-                                    <span>{ac?.code === c?.code ? ac?.v || "Základná" : ac?.name}</span>
+                                    <span>{ac?.code === c?.code ? ac?.v || L("Základná", "Base") : ac?.name}</span>
                                     <span className="muted">{eur(price(a))}</span>
                                   </button>
                                 );
@@ -579,7 +583,7 @@ function ScannerPage() {
                         )}
                         <input
                           className="rv-search"
-                          placeholder="Hľadať inú kartu – meno alebo kód (napr. OP05-119)"
+                          placeholder={L("Hľadať inú kartu – meno alebo kód (napr. OP05-119)", "Search another card – name or code (e.g. OP05-119)")}
                           value={q}
                           onChange={(e) => setQ(e.target.value)}
                           autoFocus
@@ -610,16 +614,16 @@ function ScannerPage() {
         {list.length > 0 && (
           <div className="rv-foot">
             <div>
-              <span className="small muted">Potvrdené {countOk} {plural(countOk)}</span>
+              <span className="small muted">{L("Potvrdené", "Confirmed")} {countOk} {plural(countOk)}</span>
               <b className="scan-total">{eur(totalOk)}</b>
             </div>
             {user ? (
               <button className="btn" disabled={!confirmed.length} onClick={addConfirmed}>
-                Pridať do zbierky
+                {L("Pridať do zbierky", "Add to collection")}
               </button>
             ) : (
               <Link className="btn ghost" href="/login">
-                Prihlás sa a pridaj
+                {L("Prihlás sa a pridaj", "Sign in to add")}
               </Link>
             )}
           </div>
@@ -632,9 +636,9 @@ function ScannerPage() {
   return (
     <div className={`scan-page ${state === "on" ? "live" : ""}`}>
       <div className="scan-head row between wrapr gap">
-        <h1>Skener</h1>
+        <h1>{L("Skener", "Scanner")}</h1>
         <label className="small muted row gap">
-          <input type="checkbox" checked={debug} onChange={(e) => setDebug(e.target.checked)} /> ladenie
+          <input type="checkbox" checked={debug} onChange={(e) => setDebug(e.target.checked)} /> {L("ladenie", "debug")}
         </label>
       </div>
 
@@ -656,23 +660,23 @@ function ScannerPage() {
           <>
             <div className="scan-top">
               <div className="row gap">
-                <button className="scan-round" onClick={stop} aria-label="Vypnúť kameru">
+                <button className="scan-round" onClick={stop} aria-label={L("Vypnúť kameru", "Turn off camera")}>
                   ×
                 </button>
                 {cam.torch && (
-                  <button className={`scan-round ${torchOn ? "on" : ""}`} onClick={toggleTorch} aria-label="Baterka" aria-pressed={torchOn}>
+                  <button className={`scan-round ${torchOn ? "on" : ""}`} onClick={toggleTorch} aria-label={L("Baterka", "Flashlight")} aria-pressed={torchOn}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                       <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
                     </svg>
                   </button>
                 )}
                 {cam.zoom && (
-                  <button className="scan-round scan-zoom" onClick={nextZoom} aria-label="Priblíženie">
+                  <button className="scan-round scan-zoom" onClick={nextZoom} aria-label={L("Priblíženie", "Zoom")}>
                     {zoom}×
                   </button>
                 )}
               </div>
-              <span className="scan-lang" role="radiogroup" aria-label="Jazyk kariet">
+              <span className="scan-lang" role="radiogroup" aria-label={L("Jazyk kariet", "Card language")}>
                 {(["EN", "JP"] as const).map((l) => (
                   <button key={l} role="radio" aria-checked={lang === l} className={lang === l ? "on" : ""} onClick={() => setLang(l)}>
                     {l}
@@ -680,7 +684,7 @@ function ScannerPage() {
                 ))}
               </span>
               <button className="scan-done" onClick={finish} disabled={!list.length}>
-                Hotovo
+                {L("Hotovo", "Done")}
               </button>
             </div>
             <div className="scan-bottom">
@@ -700,7 +704,7 @@ function ScannerPage() {
                 <div className="scan-toast">
                   <div>
                     <b>{curCard.name}</b>
-                    <span>{curCard.code} · drž kartu v rámiku…</span>
+                    <span>{curCard.code} · {L("drž kartu v rámiku…", "hold the card in the frame…")}</span>
                   </div>
                 </div>
               ) : (
@@ -708,7 +712,7 @@ function ScannerPage() {
                   <span className="scan-pill">
                     {count} {plural(count)} · <b>{eur(total)}</b>
                   </span>
-                  <div className="scan-hint">{sure ? "Odlož kartu" : live?.quad ? "Rozpoznávam…" : "Namier na kartu"}</div>
+                  <div className="scan-hint">{sure ? L("Odlož kartu", "Put the card away") : live?.quad ? L("Rozpoznávam…", "Recognizing…") : L("Namier na kartu", "Point at a card")}</div>
                 </>
               )}
             </div>
@@ -722,9 +726,9 @@ function ScannerPage() {
             ) : (
               <>
                 <button className="btn" onClick={start}>
-                  {list.length ? "Pokračovať v skenovaní" : "Zapnúť kameru"}
+                  {list.length ? L("Pokračovať v skenovaní", "Continue scanning") : L("Zapnúť kameru", "Turn on camera")}
                 </button>
-                <p className="small">Namier na kartu – nájde sa a rozpozná sama, netreba fotiť.</p>
+                <p className="small">{L("Namier na kartu – nájde sa a rozpozná sama, netreba fotiť.", "Point at a card – it's found and recognized automatically, no need to take a photo.")}</p>
                 {msg && <p className="small badc">{msg}</p>}
               </>
             )}
@@ -747,14 +751,14 @@ function ScannerPage() {
         <>
           <div className="scan-sum row between wrapr gap">
             <div>
-              <b>{count}</b> {plural(count)} · spolu <b className="scan-total">{eur(total)}</b>
+              <b>{count}</b> {plural(count)} · {L("spolu", "total")} <b className="scan-total">{eur(total)}</b>
             </div>
             <div className="row gap">
-              <button className="btn ghost sm" onClick={() => confirm("Vymazať naskenované karty?") && setList([])}>
-                Vymazať
+              <button className="btn ghost sm" onClick={() => confirm(L("Vymazať naskenované karty?", "Clear scanned cards?")) && setList([])}>
+                {L("Vymazať", "Clear")}
               </button>
               <button className="btn sm" onClick={finish}>
-                Skontrolovať a potvrdiť
+                {L("Skontrolovať a potvrdiť", "Check and confirm")}
               </button>
             </div>
           </div>
@@ -772,10 +776,10 @@ function ScannerPage() {
                     <div className="small muted">
                       {c?.code} {c?.v ? `· ${c.v}` : ""} · {c?.rarity}
                       {x.lang === "JP" ? " · JP" : ""}
-                      {x.unsure && !x.ok ? " · skontroluj" : ""}
+                      {x.unsure && !x.ok ? L(" · skontroluj", " · check") : ""}
                     </div>
                   </div>
-                  <button className="scan-x" aria-label="Odstrániť" onClick={() => remove(x.key)}>
+                  <button className="scan-x" aria-label={L("Odstrániť", "Remove")} onClick={() => remove(x.key)}>
                     ×
                   </button>
                 </li>
@@ -791,7 +795,8 @@ function ScannerPage() {
 /** Skener a sťahovanie jeho modelu sa spustia až po prihlásení. */
 export default function Page() {
   const { user, loading } = useAuth();
-  if (loading) return <Loading what="Načítavam skener" />;
-  if (!user) return <NeedLogin what="Skener" />;
+  const { t } = useLang();
+  if (loading) return <Loading what={t("Načítavam skener", "Loading scanner")} />;
+  if (!user) return <NeedLogin what={t("Skener", "The scanner")} />;
   return <ScannerPage />;
 }

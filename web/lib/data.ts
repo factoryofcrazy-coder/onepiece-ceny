@@ -83,8 +83,13 @@ export function useData<T>(file: string | null, prep?: (d: any) => T) {
   return { data, error };
 }
 
+// staršie databázy mali jediný slovenský štítok verzie, ostatné sú anglické názvy z Cardmarketu
+const fixV = (c: Card) => (c.v === "Turnajové promo" ? { ...c, v: "Tournament promo" } : c);
 export const useCards = () =>
-  useData<CardsDb>("cards", (d) => ({ ...d, byId: new Map((d.cards as Card[]).map((c) => [c.id, c])) }));
+  useData<CardsDb>("cards", (d) => {
+    const cards = (d.cards as Card[]).map(fixV);
+    return { ...d, cards, byId: new Map(cards.map((c) => [c.id, c])) };
+  });
 export const usePrices = (game: "onepiece" | "pokemon" = "onepiece") =>
   useData<PricesDb>(game === "pokemon" ? "prices?game=pokemon" : "prices");
 
@@ -150,6 +155,7 @@ export function setKind(id: string): SetKind {
   return "other";
 }
 export const SET_KIND_SK = { booster: "Booster sety", starter: "Starter decky", other: "Promo karty", don: "DON!! karty" } as const;
+export const SET_KIND_EN = { booster: "Booster sets", starter: "Starter decks", other: "Promo cards", don: "DON!! cards" } as const;
 
 export function sortSets<T extends { id: string }>(sets: T[]) {
   return [...sets].sort((a, b) => {

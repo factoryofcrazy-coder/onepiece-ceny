@@ -2,11 +2,11 @@
 // Na filtre a farbu štítku ich zoskupujeme do pár skupín, ktorým zberateľ rozumie.
 export type VariantGroup = "base" | "alt" | "manga" | "promo";
 
-export const VARIANT_GROUPS: { id: VariantGroup; label: string }[] = [
-  { id: "base", label: "Základné" },
-  { id: "alt", label: "Alt art a parallel" },
-  { id: "manga", label: "Manga" },
-  { id: "promo", label: "Promo a turnaje" },
+export const VARIANT_GROUPS: { id: VariantGroup; label: string; en: string }[] = [
+  { id: "base", label: "Základné", en: "Base" },
+  { id: "alt", label: "Alt art a parallel", en: "Alt art & parallel" },
+  { id: "manga", label: "Manga", en: "Manga" },
+  { id: "promo", label: "Promo a turnaje", en: "Promo & tournaments" },
 ];
 
 const ALT_RX = /Alternate|Parallel|Full Art|\bSPR?\b|\bTR\b|Foil|Wanted|Box Topper|Heroine Leader|Pandaman|Gold|Signature|\bGem\b|Navy/i;

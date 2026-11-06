@@ -11,6 +11,7 @@ import GradingAdvice from "@/components/GradingAdvice";
 import { gradedEur, GradedPrice, loadGraded } from "@/lib/grading";
 import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OtherGameHint, OwnerPicker, PriceMove } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
+import { useLang } from "@/lib/lang";
 import { useCollection } from "@/lib/collection";
 import { useSealedCollection } from "@/lib/sealed-collection";
 import { Card, eur, setKind, SealedItem, useCards, usePrices, useSealed, cardEur } from "@/lib/data";
@@ -18,10 +19,13 @@ import { Card, eur, setKind, SealedItem, useCards, usePrices, useSealed, cardEur
 type Item = { card: Card; n: number; unit: number | null; total: number };
 
 const SORTS = { total: "Celková hodnota", unit: "Cena za kus", move: "Pohyb ceny", qty: "Počet kusov", name: "Meno" } as const;
+const SORTS_EN: Record<keyof typeof SORTS, string> = { total: "Total value", unit: "Price per copy", move: "Price move", qty: "Copies", name: "Name" };
 const signedEur = (v: number) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${eur(Math.abs(v))}`;
 
 function OpCollection() {
   const { user, loading } = useAuth();
+  const { t, lang } = useLang();
+  const en = lang === "en";
   const { data, error } = useCards();
   const { data: prices } = usePrices();
   const usd = prices?.fx?.USD ?? 1.12;
@@ -117,8 +121,11 @@ function OpCollection() {
     const a = document.createElement("a");
     a.href = url;
     a.download = `grand-line-zbierka-${new Date().toISOString().slice(0, 10)}.csv`;
+    // Firefox a Safari potrebujú odkaz v stránke a adresu ešte chvíľu platnú, inak sťahovanie potichu zruší
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const list = useMemo(() => {
@@ -141,9 +148,9 @@ function OpCollection() {
   }, [items, q, sort]);
 
   if (loading) return <Loading shape="tiles" />;
-  if (!user) return <NeedLogin what="Zbierka" />;
+  if (!user) return <NeedLogin what={t("Zbierka", "Collection")} />;
   if (error) return <DataError error={error} file="cards" />;
-  if (!data || qLoading) return <Loading what="Počítam hodnotu zbierky" shape="tiles" />;
+  if (!data || qLoading) return <Loading what={t("Počítam hodnotu zbierky", "Calculating collection value")} shape="tiles" />;
 
   const maxSet = stats.sets[0]?.value || 1;
 
@@ -151,37 +158,39 @@ function OpCollection() {
     <>
       <section className="vault">
         <div className="vault-copy">
-          <p className="vault-label">{mine ? "Tvoja zbierka má hodnotu" : "Zbierka má hodnotu"}</p>
+          <p className="vault-label">{mine ? t("Tvoja zbierka má hodnotu", "Your collection is worth") : t("Zbierka má hodnotu", "Collection is worth")}</p>
           <div className="vault-value">
             <CountUp value={stats.value} format={(v) => v.toLocaleString("sk-SK", { maximumFractionDigits: 0 })} />
             <small>€</small>
           </div>
           <p className="muted">
-            Kusy: {stats.pieces}, rôzne karty: {items.length}, sety: {stats.sets.length}. Ceny: Cardmarket trend, kde chýba,
-            TCGplayer prepočítaný na eurá
-            {stats.unpriced > 0 && <>; {stats.unpriced} {plural(stats.unpriced, "karta zatiaľ nemá", "karty zatiaľ nemajú", "kariet zatiaľ nemá")} cenu</>}.
+            {t(
+              `Kusy: ${stats.pieces}, rôzne karty: ${items.length}, sety: ${stats.sets.length}. Ceny: Cardmarket trend, kde chýba, TCGplayer prepočítaný na eurá`,
+              `Copies: ${stats.pieces}, unique cards: ${items.length}, sets: ${stats.sets.length}. Prices: Cardmarket trend, where missing TCGplayer converted to euros`,
+            )}
+            {stats.unpriced > 0 && <>; {stats.unpriced} {t(`${plural(stats.unpriced, "karta zatiaľ nemá", "karty zatiaľ nemajú", "kariet zatiaľ nemá")} cenu`, stats.unpriced === 1 ? "card has no price yet" : "cards have no price yet")}</>}.
           </p>
           {mine && (
             <p className="tiny muted">
-              Prihlásený ako <b>{user.email}</b>
+              {t("Prihlásený ako", "Signed in as")} <b>{user.email}</b>
             </p>
           )}
           <div className="row gap wrapr vault-actions">
             <OwnerPicker value={viewing} onChange={setOwner} />
             {mine && (
               <Link className="btn ghost sm" href="/import">
-                Import z HoloDex
+                {t("Import z HoloDex", "Import from HoloDex")}
               </Link>
             )}
             {mine && items.length > 0 && (
               <button className="btn ghost sm" onClick={exportCsv}>
-                Export do Excelu
+                {t("Stiahnuť CSV", "Download CSV")}
               </button>
             )}
           </div>
         </div>
         {stats.top.length > 0 && (
-          <div className="vault-top" aria-label="Najcennejšie karty">
+          <div className="vault-top" aria-label={t("Najcennejšie karty", "Most valuable cards")}>
             {stats.top.map((i, k) => (
               <button
                 key={i.card.id}
@@ -203,9 +212,9 @@ function OpCollection() {
       {myBoxes.list.length > 0 && (
         <section className="panel vault-boxes">
           <div className="vault-head">
-            <h2 className="sub">Moje boxy a sealed</h2>
+            <h2 className="sub">{t("Moje boxy a sealed", "My boxes & sealed")}</h2>
             <span className="muted">
-              spolu <b>{eur(myBoxes.total)}</b>
+              {t("spolu", "total")} <b>{eur(myBoxes.total)}</b>
             </span>
           </div>
           <div className="vlist">
@@ -214,7 +223,7 @@ function OpCollection() {
                 <span className="vname">
                   <b>{s.name}</b>
                   <span className="small muted">
-                    {s.set && <span className="tag tiny">{s.set}</span>} {s.kind} · {eur(s.cm)} / ks
+                    {s.set && <span className="tag tiny">{s.set}</span>} {s.kind} · {eur(s.cm)} / {t("ks", "pc")}
                   </span>
                 </span>
                 <span className="vqty">×{n}</span>
@@ -222,7 +231,7 @@ function OpCollection() {
               </Link>
             ))}
           </div>
-          {mine && <p className="tiny muted">Počet kusov upravíš v sekcii Hodnoty boxov. Hodnota je z trend ceny Cardmarketu.</p>}
+          {mine && <p className="tiny muted">{t("Počet kusov upravíš v sekcii Hodnoty boxov. Hodnota je z trend ceny Cardmarketu.", "Change the number of copies in Box values. The value comes from the Cardmarket trend price.")}</p>}
         </section>
       )}
 
@@ -230,12 +239,12 @@ function OpCollection() {
         <div className="empty">
           {mine ? (
             <>
-              Zbierka je zatiaľ prázdna. Pridaj karty v <Link href="/karty">Kartách</Link>, naskenuj ich{" "}
-              <Link href="/skener">Skenerom</Link> alebo ich <Link href="/import">naimportuj z HoloDex</Link>.
+              {t("Zbierka je zatiaľ prázdna. Pridaj karty v", "Your collection is empty so far. Add cards in")} <Link href="/karty">{t("Kartách", "Cards")}</Link>, {t("naskenuj ich", "scan them with the")}{" "}
+              <Link href="/skener">{t("Skenerom", "Scanner")}</Link> {t("alebo ich", "or")} <Link href="/import">{t("naimportuj z HoloDex", "import them from HoloDex")}</Link>.
               <OtherGameHint qty={qty} game="onepiece" />
             </>
           ) : (
-            "Tento kamoš zatiaľ nemá v zbierke žiadne karty."
+            t("Tento kamoš zatiaľ nemá v zbierke žiadne karty.", "This friend has no cards in their collection yet.")
           )}
         </div>
       ) : (
@@ -244,9 +253,9 @@ function OpCollection() {
             <div className="collector-grid">
               {mine && profit && (
                 <section className="panel collector">
-                  <h2 className="sub">Zisk a strata</h2>
+                  <h2 className="sub">{t("Zisk a strata", "Profit and loss")}</h2>
                   {copies && gradedCounts(copies).length > 0 && (
-                    <p className="small">Hodnotené karty: {gradedCounts(copies).map(([g, n]) => `${g} ${n}×`).join(", ")}</p>
+                    <p className="small">{t("Hodnotené karty", "Graded cards")}: {gradedCounts(copies).map(([g, n]) => `${g} ${n}×`).join(", ")}</p>
                   )}
                   {profit.counted > 0 ? (
                     <>
@@ -255,35 +264,35 @@ function OpCollection() {
                         {profit.pct != null && <span className="muted"> {formatPct(profit.pct)}</span>}
                       </p>
                       <p className="small muted">
-                        Zaplatené {eur(profit.paid)}, dnešná hodnota {eur(profit.value)}. Počíta sa z {profit.counted} {plural(profit.counted, "kusu", "kusov", "kusov")}.
+                        {t(`Zaplatené ${eur(profit.paid)}, dnešná hodnota ${eur(profit.value)}. Počíta sa z ${profit.counted} ${plural(profit.counted, "kusu", "kusov", "kusov")}.`, `Paid ${eur(profit.paid)}, today's value ${eur(profit.value)}. Based on ${profit.counted} ${profit.counted === 1 ? "copy" : "copies"}.`)}
                       </p>
                       {profit.noPaid + profit.noValue > 0 && (
                         <p className="tiny muted">
-                          Nezapočítané: {profit.noPaid > 0 && `${profit.noPaid} bez nákupnej ceny`}
+                          {t("Nezapočítané", "Not counted")}: {profit.noPaid > 0 && t(`${profit.noPaid} bez nákupnej ceny`, `${profit.noPaid} without purchase price`)}
                           {profit.noPaid > 0 && profit.noValue > 0 && ", "}
-                          {profit.noValue > 0 && `${profit.noValue} bez hodnoty (pri gradovanej karte zapíš hodnotu podľa predajov)`}.
+                          {profit.noValue > 0 && t(`${profit.noValue} bez hodnoty (pri gradovanej karte zapíš hodnotu podľa predajov)`, `${profit.noValue} without value (for a graded card, enter a value based on sales)`)}.
                         </p>
                       )}
                     </>
                   ) : (
-                    <p className="small muted">Otvor kartu a v časti Moje kusy zapíš, za koľko si ju kúpil. Tu uvidíš, či si v pluse. Vidíš to len ty.</p>
+                    <p className="small muted">{t("Otvor kartu a v časti Moje kusy zapíš, za koľko si ju kúpil. Tu uvidíš, či si v pluse. Vidíš to len ty.", "Open a card and enter what you paid for it under My copies. You'll see here whether you're in profit. Only you can see this.")}</p>
                   )}
                 </section>
               )}
               {change && (
                 <section className="panel collector">
-                  <h2 className="sub">Čo sa v zbierke hýbe</h2>
+                  <h2 className="sub">{t("Čo sa v zbierke hýbe", "What's moving in your collection")}</h2>
                   <p className="collector-big">
                     <b className={change.pct > 0 ? "cmove up" : change.pct < 0 ? "cmove down" : ""}>{formatPct(change.pct)}</b>
                   </p>
-                  <p className="small muted">Priemerné predaje za 7 dní oproti 30 dňom. Ber to ako orientačné, ceny kariet bežne kolíšu.</p>
+                  <p className="small muted">{t("Priemerné predaje za 7 dní oproti 30 dňom. Ber to ako orientačné, ceny kariet bežne kolíšu.", "Average sales over 7 days vs 30 days. Treat it as a guide, card prices fluctuate.")}</p>
                   {[...moves.up, ...moves.down].map((m) => (
                     <button key={m.card.id} className="collector-row" onClick={() => setOpen(m.card)}>
                       <span>{m.card.name} <span className="muted tiny">{m.card.code}{m.card.v ? ` · ${m.card.v}` : ""}</span></span>
                       <span className={`cmove ${m.pct > 0 ? "up" : "down"}`}>{formatPct(m.pct)}</span>
                     </button>
                   ))}
-                  <Link className="small" href="/pohyby">Všetky pohyby cien →</Link>
+                  <Link className="small" href="/pohyby">{t("Všetky pohyby cien", "All price moves")} →</Link>
                 </section>
               )}
             </div>
@@ -293,7 +302,7 @@ function OpCollection() {
 
           <div className="vault-grid">
             <section className="panel vault-sets">
-              <h2 className="sub">Hodnota podľa setov</h2>
+              <h2 className="sub">{t("Hodnota podľa setov", "Value by set")}</h2>
               {stats.sets.map((s) => (
                 <Link key={s.id} href={`/karty?set=${encodeURIComponent(s.id)}&own=have`} className="vs-row">
                   <span className="vs-name">
@@ -301,19 +310,19 @@ function OpCollection() {
                   </span>
                   <Bar value={s.value} max={maxSet} />
                   <span className="vs-val">
-                    {eur(s.value, 0)} <span className="muted tiny">{s.n} ks</span>
+                    {eur(s.value, 0)} <span className="muted tiny">{s.n} {t("ks", "pcs")}</span>
                   </span>
                 </Link>
               ))}
             </section>
             <section className="panel vault-rar">
-              <h2 className="sub">Podľa rarity</h2>
+              <h2 className="sub">{t("Podľa rarity", "By rarity")}</h2>
               <div className="rar-chips">
                 {stats.rarities.map(([r, v]) => (
                   <div key={r} className="rar">
                     <b>{r}</b>
                     <span>{eur(v.value, 0)}</span>
-                    <span className="muted tiny">{v.n} ks</span>
+                    <span className="muted tiny">{v.n} {t("ks", "pcs")}</span>
                   </div>
                 ))}
               </div>
@@ -322,15 +331,15 @@ function OpCollection() {
 
           <div className="filters">
             <label className="field grow">
-              <span>Hľadať v zbierke</span>
-              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="meno, kód alebo set" />
+              <span>{t("Hľadať v zbierke", "Search collection")}</span>
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("meno, kód alebo set", "name, code or set")} />
             </label>
             <label className="field">
-              <span>Zoradiť</span>
+              <span>{t("Zoradiť", "Sort")}</span>
               <select value={sort} onChange={(e) => setSort(e.target.value as keyof typeof SORTS)}>
                 {Object.entries(SORTS).map(([k, v]) => (
                   <option key={k} value={k}>
-                    {v}
+                    {en ? SORTS_EN[k as keyof typeof SORTS] : v}
                   </option>
                 ))}
               </select>
@@ -353,7 +362,7 @@ function OpCollection() {
                   </span>
                 </span>
                 <span className="vqty">{i.n}×</span>
-                <span className="vunit small muted">{i.unit != null ? eur(i.unit) : "bez ceny"}</span>
+                <span className="vunit small muted">{i.unit != null ? eur(i.unit) : t("bez ceny", "no price")}</span>
                 <b className="vtotal">{i.unit != null ? eur(i.total) : "–"}</b>
               </div>
             ))}

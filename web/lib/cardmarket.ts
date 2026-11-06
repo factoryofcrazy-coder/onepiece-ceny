@@ -24,7 +24,7 @@ function promoLabel(names: string[]) {
   if (/Pre-Release/i.test(t)) return "Pre-Release";
   if (/Release Event/i.test(t)) return "Release Event";
   if (/Judge/i.test(t)) return "Judge";
-  if (/Championship|Regional|Treasure Cup|Tournament/i.test(t)) return "Turnajové promo";
+  if (/Championship|Regional|Treasure Cup|Tournament/i.test(t)) return "Tournament promo";
   return "Promo";
 }
 

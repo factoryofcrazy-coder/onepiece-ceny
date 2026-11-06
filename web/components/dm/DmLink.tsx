@@ -3,15 +3,17 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth";
 import { DM_ENABLED } from "@/lib/config";
 import { dmHref, useDm } from "@/lib/dm/client";
+import { useLang } from "@/lib/lang";
 
 /** ikona správ v hornej lište s počtom neprečítaných */
 export function DmNavIcon() {
   const { user } = useAuth();
   const { unread } = useDm();
+  const { t } = useLang();
   if (!DM_ENABLED || !user) return null;
   const n = unread > 99 ? "99+" : String(unread);
   return (
-    <Link href="/spravy" className="dm-nav" aria-label={unread ? `Súkromné správy, neprečítané: ${unread}` : "Súkromné správy"} title="Súkromné správy">
+    <Link href="/spravy" className="dm-nav" aria-label={unread ? t(`Súkromné správy, neprečítané: ${unread}`, `Messages, unread: ${unread}`) : t("Súkromné správy", "Messages")} title={t("Súkromné správy", "Messages")}>
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
         <rect x="3" y="5" width="18" height="14" rx="3" />
         <path d="m4 7 8 6 8-6" />
@@ -24,10 +26,11 @@ export function DmNavIcon() {
 /** tlačidlo Napísať; pre seba a neprihlásených sa nezobrazí */
 export function WriteLink({ userId, listing, card, className = "btn ghost sm" }: { userId: string; listing?: string; card?: string; className?: string }) {
   const { user } = useAuth();
+  const { t } = useLang();
   if (!DM_ENABLED || !user || user.id === userId) return null;
   return (
     <Link className={className} href={dmHref(userId, { listing, card })}>
-      Napísať
+      {t("Napísať", "Message")}
     </Link>
   );
 }
