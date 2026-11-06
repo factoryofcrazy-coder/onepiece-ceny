@@ -1,13 +1,13 @@
 // Reakcie na správy vo verejnom chate aj v súkromných správach. Zoznam musí sedieť s kontrolou v migrácii 20261115_reactions.sql.
 export const EMOTES = [
-  { id: "kek", label: "KEK", hint: "smiech" },
-  { id: "pog", label: "POG", hint: "wow" },
-  { id: "rip", label: "RIP", hint: "koniec" },
-  { id: "cope", label: "COPE", hint: "bolí, ale držím sa" },
-  { id: "beli", label: "BELI", hint: "dobrá cena" },
-  { id: "pull", label: "PULL", hint: "super ťah" },
-  { id: "salty", label: "SALTY", hint: "hnev" },
-  { id: "gg", label: "GG", hint: "dobrá hra" },
+  { id: "kek", label: "KEK", hint: "smiech", hintEn: "laugh" },
+  { id: "pog", label: "POG", hint: "wow", hintEn: "wow" },
+  { id: "rip", label: "RIP", hint: "koniec", hintEn: "it's over" },
+  { id: "cope", label: "COPE", hint: "bolí, ale držím sa", hintEn: "hurts, but holding on" },
+  { id: "beli", label: "BELI", hint: "dobrá cena", hintEn: "good price" },
+  { id: "pull", label: "PULL", hint: "super ťah", hintEn: "great pull" },
+  { id: "salty", label: "SALTY", hint: "hnev", hintEn: "salty" },
+  { id: "gg", label: "GG", hint: "dobrá hra", hintEn: "good game" },
 ] as const;
 
 export type EmoteId = (typeof EMOTES)[number]["id"];

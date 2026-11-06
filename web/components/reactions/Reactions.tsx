@@ -3,9 +3,10 @@
 import type { MouseEvent } from "react";
 import { EMOTES, EmoteId, groupReactions, Reaction } from "@/lib/reactions";
 import Emote from "./Emote";
+import { useLang } from "@/lib/lang";
 
 type Base = { rows: readonly Reaction[] | undefined; me: string; nameOf: (userId: string) => string };
-const whoOf = ({ me, nameOf }: Pick<Base, "me" | "nameOf">, users: string[]) => users.map((u) => (u === me ? "Ty" : nameOf(u))).join(", ");
+const whoOf = ({ me, nameOf }: Pick<Base, "me" | "nameOf">, users: string[], you = "Ty") => users.map((u) => (u === me ? you : nameOf(u))).join(", ");
 const label = (id: string) => EMOTES.find((e) => e.id === id)!.label;
 
 /** Na dotykovej obrazovke otvorí výber aj ťuknutie na správu; odkazy a tlačidlá v správe fungujú ďalej. */
@@ -18,8 +19,9 @@ export function tapToReact(e: MouseEvent, open: () => void) {
 
 /** Malé tlačidlo do riadku s časom. */
 export function ReactionAdd({ open, onClick }: { open: boolean; onClick: () => void }) {
+  const { t } = useLang();
   return (
-    <button type="button" className={`rx-add ${open ? "on" : ""}`} aria-expanded={open} aria-label="Reagovať na správu" title="Reagovať" onClick={onClick}>
+    <button type="button" className={`rx-add ${open ? "on" : ""}`} aria-expanded={open} aria-label={t("Reagovať na správu", "React to message")} title={t("Reagovať", "React")} onClick={onClick}>
       <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
         <circle cx="11" cy="13" r="8" />
         <path d="M8 15c1.600 1.500 4.400 1.500 6 0M8.500 10.500h.01M13.500 10.500h.01M19 2v5M16.500 4.500h5" />
@@ -31,11 +33,12 @@ export function ReactionAdd({ open, onClick }: { open: boolean; onClick: () => v
 /** Reakcie, ktoré na správe už sú. Keď nie sú žiadne, nezaberá miesto. */
 export function ReactionPills({ rows, me, nameOf, canReact, onToggle }: Base & { canReact: boolean; onToggle: (emote: EmoteId, on: boolean) => void }) {
   const groups = groupReactions(rows, me);
+  const { t } = useLang();
   if (!groups.length) return null;
   return (
     <div className="rx-row">
       {groups.map((g) => {
-        const who = whoOf({ me, nameOf }, g.users);
+        const who = whoOf({ me, nameOf }, g.users, t("Ty", "You"));
         return (
           <button
             key={g.emote}
@@ -59,10 +62,11 @@ export function ReactionPills({ rows, me, nameOf, canReact, onToggle }: Base & {
 /** Výber emotu a kto reagoval. */
 export function ReactionPanel({ rows, me, nameOf, canReact, align, onToggle, onClose }: Base & { canReact: boolean; align?: "end"; onToggle: (emote: EmoteId, on: boolean) => void; onClose: () => void }) {
   const groups = groupReactions(rows, me);
+  const { t, lang } = useLang();
   return (
     <div className={`rx-panel ${align === "end" ? "end" : ""}`}>
       {canReact && (
-        <div className="rx-picker" role="group" aria-label="Vyber reakciu">
+        <div className="rx-picker" role="group" aria-label={t("Vyber reakciu", "Pick a reaction")}>
           {EMOTES.map((e) => {
             const mine = groups.find((g) => g.emote === e.id)?.mine ?? false;
             return (
@@ -71,7 +75,7 @@ export function ReactionPanel({ rows, me, nameOf, canReact, align, onToggle, onC
                 type="button"
                 className={mine ? "on" : ""}
                 aria-pressed={mine}
-                title={e.hint}
+                title={lang === "en" ? e.hintEn : e.hint}
                 onClick={() => {
                   onToggle(e.id, !mine);
                   onClose();
@@ -88,7 +92,7 @@ export function ReactionPanel({ rows, me, nameOf, canReact, align, onToggle, onC
         <ul className="rx-who">
           {groups.map((g) => (
             <li key={g.emote}>
-              <Emote id={g.emote} size={16} /> <span>{whoOf({ me, nameOf }, g.users)}</span>
+              <Emote id={g.emote} size={16} /> <span>{whoOf({ me, nameOf }, g.users, t("Ty", "You"))}</span>
             </li>
           ))}
         </ul>

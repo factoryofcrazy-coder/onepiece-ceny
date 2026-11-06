@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useChat } from "@/lib/chat";
 import ChatRoom from "./ChatRoom";
+import { useLang } from "@/lib/lang";
 
 const OPEN_KEY = "chat-panel";
 const HIDE_ON = ["/skener", "/login", "/chat", "/nove-heslo", "/spravy"];
@@ -22,6 +23,7 @@ export default function ChatDock() {
   const path = usePathname();
   const { user, loading } = useAuth();
   const { unread, online } = useChat();
+  const { t } = useLang();
   const [open, setOpen] = useState(false);
   const hidden = HIDE_ON.some((p) => path === p || path.startsWith(p + "/"));
 
@@ -43,7 +45,7 @@ export default function ChatDock() {
   }, [open, hidden]);
 
   if (hidden) return null;
-  const label = unread ? `Chat, nové správy: ${unread}` : "Chat";
+  const label = unread ? t(`Chat, nové správy: ${unread}`, `Chat, new messages: ${unread}`) : "Chat";
 
   return (
     <div className="chatd">
@@ -58,7 +60,7 @@ export default function ChatDock() {
               <b>Chat</b>
               {online > 0 && <span className="tiny muted chatx-online">online: {online}</span>}
             </span>
-            <button className="x-plain" onClick={() => toggle(false)} aria-label="Zbaliť chat">
+            <button className="x-plain" onClick={() => toggle(false)} aria-label={t("Zbaliť chat", "Collapse chat")}>
               ×
             </button>
           </header>
@@ -66,9 +68,9 @@ export default function ChatDock() {
             <ChatRoom />
           ) : (
             <div className="chatd-login">
-              <p className="small muted">Do chatu môžu prihlásení hráči.</p>
+              <p className="small muted">{t("Do chatu môžu prihlásení hráči.", "The chat is for signed-in players.")}</p>
               <Link className="btn sm" href="/login">
-                Prihlásiť sa
+                {t("Prihlásiť sa", "Sign in")}
               </Link>
             </div>
           )}
