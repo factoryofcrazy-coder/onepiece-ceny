@@ -1321,18 +1321,20 @@ body.in-game .app-main { padding-left: 0; }
 
 /* Svetlejší režim: stále tmavý web, ale o poznanie vzdušnejší */
 html[data-theme="soft"] {
-  --ink: #2b2843;
-  --sea: #363252;
-  --sea-2: #423d60;
-  --line: #554f78;
-  --gold: #c4b5fd;
+  --ink: #221f3a;
+  --sea: #302b4e;
+  --sea-2: #3d3760;
+  --line: #5b5488;
+  --edge: #7b72b4;         /* hover-okraj viditeľný aj na svetlom */
+  --gold: #eab63f;         /* sýte zlato pre hodnoty (nie bledá levanduľa) */
+  --violet-ink: #8e74ff;   /* sýta fialová pre index, nech nie je vyblednutá */
   --red: #7c4dff;
   --text: #f6f4fc;
-  --muted: #bdb8d4;
-  --ink-rgb: 43 40 67;
-  --sea-rgb: 54 50 82;
-  --sea2-rgb: 66 61 96;
-  --sb-bg: #24213a;
+  --muted: #b7b1d4;
+  --ink-rgb: 34 31 58;
+  --sea-rgb: 48 43 78;
+  --sea2-rgb: 61 55 96;
+  --sb-bg: #201d36;
   --title-dim: #a39dbf;
 }
 html[data-theme="soft"] input:not(.tb-search input), html[data-theme="soft"] select, html[data-theme="soft"] textarea { background: rgb(36 33 58 / .8); }
