@@ -1,14 +1,10 @@
-// Ceny zo scrapera (GitHub Pages). Najprv docs/data/prices.json, inak vytiahne dáta zo stránky (const P={...}).
+// Ceny zo scrapera. Najprv docs/data/prices.json (z Pages alebo z gitu, novší), inak vytiahne dáta zo stránky (const P={...}).
 // ?game=pokemon → docs/data/pokemon.json
-import { OLD_SITE } from "@/lib/data-source";
+import { fetchData, OLD_SITE } from "@/lib/data-source";
 
 export const dynamic = "force-dynamic";
 
-async function tryJson(file: string) {
-  const r = await fetch(OLD_SITE + "data/" + file, { cache: "no-store", signal: AbortSignal.timeout(15000) });
-  if (!r.ok) return null;
-  return r.json();
-}
+const tryJson = (file: string) => fetchData("data/" + file);
 
 async function fromHtml() {
   const r = await fetch(OLD_SITE, { cache: "no-store", signal: AbortSignal.timeout(15000) });
