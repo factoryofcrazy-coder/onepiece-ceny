@@ -7,7 +7,6 @@ import type { Card } from "@/lib/data";
 import { loadCardAlts, cardEur, COLOR_SK, eur, thumb } from "@/lib/data";
 import CopiesPanel from "@/components/CopiesPanel";
 import PriceChart from "@/components/PriceChart";
-import GradedTable from "@/components/GradedTable";
 import { gradedEur, GradedPrice, loadGraded } from "@/lib/grading";
 import { formatPct, notableMove, salesChange } from "@/lib/price-series";
 
@@ -360,7 +359,16 @@ export function CardModal({
         </div>
         <div className="cd-rest">
           {main != null && <PriceChart key={card.id} card={card} usd={usd} source={src} />}
-          <GradedTable key={`g${card.id}`} code={card.code} prices={graded} usd={usd} />
+          <section className="pchart graded-soon" aria-label="Hodnotené kusy">
+            <div className="pchart-head">
+              <h3>Hodnotené kusy</h3>
+              <span className="chip">Pripravujeme</span>
+            </div>
+            <p className="tiny muted">Na cenách hodnotených kariet (PSA, Beckett, CGC) pracujeme. Zatiaľ si predané kusy pozri priamo na eBay.</p>
+            <a className="small" target="_blank" rel="noreferrer" href={`https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece ${card.code} PSA`)}&_sacat=0&LH_Sold=1&LH_Complete=1`}>
+              Predané hodnotené kusy na eBay ↗
+            </a>
+          </section>
           {me && onSet && <CopiesPanel key={`k${card.id}`} card={card} market={main} qty={qty ?? 0} onSet={onSet} onChange={onCopies} gradedOf={(c) => (c.grader && c.grade != null ? gradedEur(graded, c.grader, c.grade, usd)?.eur ?? null : null)} />}
           {alts.length > 0 && (
             <section className="cd-looks" aria-label="Možné vzhľady">
