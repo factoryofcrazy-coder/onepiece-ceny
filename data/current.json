@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-06T11:23:05Z",
+ "updated": "2026-11-06T13:23:05Z",
  "fx": {
   "CZK": 24.289,
   "USD": 1.1224,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -553,7 +553,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -643,13 +643,13 @@
      "price": 16.5,
      "currency": "EUR",
      "eur": 16.5,
-     "inStock": true,
+     "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.pikazard.eu/user/shop/detail/6917_img-item01-2.png?6a635589"
     }
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -1896,7 +1896,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -2262,7 +2262,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -2863,11 +2863,11 @@
     }
    ],
    "error": "obchod vrátil 0 produktov – možno zmenil web alebo URL kategórie",
-   "fails": 9,
+   "fails": 10,
    "warned": true
   },
   "cernyrytir": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3026,7 +3026,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3599,7 +3599,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3755,7 +3755,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3779,7 +3779,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3830,7 +3830,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -3881,7 +3881,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -4015,7 +4015,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -4837,8 +4837,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "yonko": {
    "ts": "2026-11-06T11:16:09Z",
@@ -5449,8 +5449,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "funkelpappe": {
    "ts": "2026-11-06T11:16:09Z",
@@ -5530,8 +5530,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "mikis": {
    "ts": "2026-11-06T11:16:09Z",
@@ -5683,11 +5683,11 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "butticards": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -5856,7 +5856,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -5934,7 +5934,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -6449,11 +6449,11 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "samurai": {
-   "ts": "2026-11-06T11:23:05Z",
+   "ts": "2026-11-06T13:23:05Z",
    "ok": true,
    "items": [
     {
@@ -6504,9 +6504,9 @@
     {
      "name": "EB-03 Heroines Edition Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/eb-03-heroines-edition-japanese-one-piece-booster-box-damaged-box",
-     "price": 11074.0,
+     "price": 11084.0,
      "currency": "JPY",
-     "eur": 62.27,
+     "eur": 62.32,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1762-81171649d67e/eb03box_sst-thumb-320.webp"
     },
@@ -6675,9 +6675,9 @@
     {
      "name": "OP-17 The World’s Strongest Warriors Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box",
-     "price": 9731.0,
+     "price": 9724.0,
      "currency": "JPY",
-     "eur": 54.71,
+     "eur": 54.68,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
@@ -6810,9 +6810,9 @@
     {
      "name": "OP-04 Kingdoms of Intrigue Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op04box",
-     "price": 16996.0,
+     "price": 16992.0,
      "currency": "JPY",
-     "eur": 95.56,
+     "eur": 95.54,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4112-d22581bdbdb8/op04box_sst-thumb-320.webp"
     },
@@ -6855,9 +6855,9 @@
     {
      "name": "EB-03 Heroines Edition Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/eb03box",
-     "price": 11658.0,
+     "price": 11668.0,
      "currency": "JPY",
-     "eur": 65.55,
+     "eur": 65.61,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1762-81171649d67e/eb03box_sst-thumb-320.webp"
     },
@@ -8553,8 +8553,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "underpaid": {
    "ts": "2026-11-06T11:16:09Z",
@@ -9354,8 +9354,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "cardbinder": {
    "ts": "2026-11-06T11:16:09Z",
@@ -9858,8 +9858,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   }
  }
 }
