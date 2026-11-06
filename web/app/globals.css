@@ -702,7 +702,7 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .moves .vqty { font-weight: 700; }
 @media (max-width: 640px) { .moves .vrow { grid-template-columns: 40px minmax(0, 1fr) auto; } }
 .graded-prices { margin: 4px 0 8px; display: grid; gap: 4px; }
-.graded-prices div { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 8px; align-items: baseline; }
+.graded-prices div { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 8px; align-items: baseline; }
 .graded-prices dt { font-size: 13px; font-weight: 700; color: var(--muted); }
 .graded-prices dd { margin: 0; font-variant-numeric: tabular-nums; }
 .grading { margin: 14px 0; }

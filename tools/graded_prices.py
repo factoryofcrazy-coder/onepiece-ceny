@@ -19,11 +19,18 @@ BATCH = 5  # synchrónne volanie Apify skončí po 300 s, preto po malých dávk
 MAX_SALES = 15  # na kód a firmu; pri 2,25 USD za 1 000 záznamov je to najviac asi 0,10 USD za kód
 # Známky, ktoré sa dajú bežne dosiahnuť a predávajú sa. Každá firma zvlášť, inak by predaje PSA vytlačili ostatné.
 GRADES = {"PSA": ["10", "9"], "BGS": ["10", "9.5", "9"], "CGC": ["10", "9.5", "9"]}
-# Black Label a Pristine sú oveľa drahšie než bežná desiatka, v jednom mediáne by klamali.
-TOP_LABEL = re.compile(r"\b(black\s*label|pristine|perfect)\b", re.I)
+# Najvyššie štítky sú oveľa drahšie než bežná desiatka, preto majú vlastnú cenu. BGS Pristine 10 je bežná desiatka Beckettu, tá sem nepatrí.
+TOP_LABELS = (("BGS", re.compile(r"\bblack\s*label\b", re.I), "BGS-BL"), ("CGC", re.compile(r"\bpristine\b", re.I), "CGC-PR"), ("CGC", re.compile(r"\bperfect\b", re.I), "CGC-PF"))
 OTHER_LANG = re.compile(r"\b(japanese|japan|jpn|jp|chinese|korean)\b", re.I)
 MANGA = re.compile(r"\b(manga|comic)\b", re.I)
 ALT = re.compile(r"\b(parallel|alt(ernate)?[ -]?art|aa)\b", re.I)
+
+
+def grader_label(grader, title):
+    for firm, rx, label in TOP_LABELS:
+        if firm == grader and rx.search(title):
+            return label
+    return grader
 
 
 def title_kind(title):
@@ -57,13 +64,13 @@ def build_rows(code, variants, sales):
         price, grade, grader = s.get("price"), s.get("grade"), s.get("grader")
         if not s.get("graded") or not price or grade is None or grader not in GRADES:
             continue
-        if code.lower() not in title.lower() or OTHER_LANG.search(title) or TOP_LABEL.search(title):
+        if code.lower() not in title.lower() or OTHER_LANG.search(title):
             continue
         try:
             g = float(grade)
         except (TypeError, ValueError):
             continue
-        by_kind.setdefault((title_kind(title), grader, g), []).append(s)
+        by_kind.setdefault((title_kind(title), grader_label(grader, title), g), []).append(s)
     rows = []
     for card in variants:
         kind = variant_kind(card)

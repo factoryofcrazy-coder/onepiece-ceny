@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adviseGrading, GradedPrice } from "./grading";
+import { adviseGrading, GradedPrice, gradedLabel } from "./grading";
 
 const row = (grade: number, usd: number, sales = 8, grader = "PSA"): GradedPrice => ({ card_id: "A", grader, grade, median: usd * 100, p25: 0, p75: 0, sales, last_sold: null, fetched_on: "2026-11-06" });
 const cost = { fee: 50, sellPct: 10 };
@@ -43,6 +43,12 @@ describe("oplatí sa grading", () => {
     const cgc = adviseGrading(20, rows, 1, { fee: 50, sellPct: 0 }, "CGC")!;
     expect([cgc.top, cgc.vTop, cgc.vNext]).toEqual([10, 400, 100]);
     expect(adviseGrading(20, [row(10, 900)], 1, cost, "BGS")).toBeNull();
+  });
+  it("Black Label a Pristine majú vlastný názov a nemenia odporúčanie", () => {
+    expect(gradedLabel({ grader: "BGS-BL", grade: 10 })).toBe("BGS 10 Black Label");
+    expect(gradedLabel({ grader: "CGC-PR", grade: 10 })).toBe("CGC 10 Pristine");
+    expect(gradedLabel({ grader: "PSA", grade: 9 })).toBe("PSA 9");
+    expect(adviseGrading(20, [row(10, 9000, 8, "BGS-BL"), row(9.5, 300, 8, "BGS")], 1, cost, "BGS")!.vTop).toBe(300);
   });
   it("prepočet z dolárov", () => expect(adviseGrading(10, [row(10, 112)], 1.12, { fee: 0, sellPct: 0 })!.vTop).toBeCloseTo(100));
 });

@@ -29,6 +29,9 @@ export const GRADERS = { PSA: { top: 10, next: 9 }, BGS: { top: 9.5, next: 9 }, 
 export type Grader = keyof typeof GRADERS;
 export const GRADER_SK: Record<Grader, string> = { PSA: "PSA", BGS: "Beckett (BGS)", CGC: "CGC" };
 
+const TOP_LABELS: Record<string, string> = { "BGS-BL": "BGS 10 Black Label", "CGC-PR": "CGC 10 Pristine", "CGC-PF": "CGC 10 Perfect" };
+export const gradedLabel = (g: Pick<GradedPrice, "grader" | "grade">) => TOP_LABELS[g.grader] ?? `${g.grader} ${g.grade}`;
+
 export type Costs = { fee: number; sellPct: number };
 export type Verdict = "good" | "maybe" | "perfect" | "no" | "unknown";
 export type Advice = { grader: Grader; top: number; next: number; verdict: Verdict; vTop: number; vNext: number | null; gainTop: number; gainNext: number; needed: number | null; salesTop: number; salesNext: number };

@@ -33,9 +33,10 @@ class Rows(unittest.TestCase):
         rows = g.build_rows("OP01-120", [BASE], [sale("OP01-120 PSA 10", 100), sale("OP01-120 BGS 9.5", 80, "9.5", "BGS"), sale("OP01-120 CGC 10", 90, "10", "CGC")])
         self.assertEqual(sorted((r["grader"], r["grade"], r["median"]) for r in rows), [("BGS", 9.5, 8000), ("CGC", 10.0, 9000), ("PSA", 10.0, 10000)])
 
-    def test_black_label_a_pristine_nekazia_medián(self):
-        rows = g.build_rows("OP01-120", [BASE], [sale("OP01-120 BGS 10 Black Label", 9000, "10", "BGS"), sale("OP01-120 CGC Pristine 10", 5000, "10", "CGC"), sale("OP01-120 CGC 10", 90, "10", "CGC")])
-        self.assertEqual([(r["grader"], r["median"]) for r in rows], [("CGC", 9000)])
+    def test_najvyššie_štítky_majú_vlastnú_cenu(self):
+        rows = g.build_rows("OP01-120", [BASE], [sale("OP01-120 BGS 10 Black Label", 9000, "10", "BGS"), sale("OP01-120 BGS 10 Pristine", 700, "10", "BGS"),
+            sale("OP01-120 CGC Pristine 10", 5000, "10", "CGC"), sale("OP01-120 CGC Perfect 10", 8000, "10", "CGC"), sale("OP01-120 CGC 10", 90, "10", "CGC"), sale("OP01-120 PSA 10 perfect", 100)])
+        self.assertEqual(sorted((r["grader"], r["median"]) for r in rows), [("BGS", 70000), ("BGS-BL", 900000), ("CGC", 9000), ("CGC-PF", 800000), ("CGC-PR", 500000), ("PSA", 10000)])
 
     def test_vyradí_cudzie(self):
         sales = [sale("OP01-120 Japanese PSA 10", 1), sale("OP01-121 PSA 10", 2), sale("OP01-120 SGC 10", 3, grader="SGC"),

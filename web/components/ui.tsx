@@ -8,7 +8,7 @@ import { loadCardAlts, cardEur, COLOR_SK, eur, thumb } from "@/lib/data";
 import CopiesPanel from "@/components/CopiesPanel";
 import PriceChart from "@/components/PriceChart";
 import { soldSearchUrl } from "@/lib/copies";
-import { gradedEur, GradedPrice, loadGraded } from "@/lib/grading";
+import { gradedEur, gradedLabel, GradedPrice, loadGraded } from "@/lib/grading";
 import { formatPct, notableMove, salesChange } from "@/lib/price-series";
 
 /** Kostra namiesto „Načítavam…“ – tvar zodpovedá obsahu, ktorý príde. */
@@ -366,7 +366,7 @@ export function CardModal({
               <dl className="graded-prices">
                 {[...graded].sort((a, b) => a.grader.localeCompare(b.grader) || b.grade - a.grade).map((g) => (
                   <div key={`${g.grader}${g.grade}`}>
-                    <dt>{g.grader} {g.grade}</dt>
+                    <dt>{gradedLabel(g)}</dt>
                     <dd>
                       <b>{eur(g.median / 100 / usd)}</b> <span className="muted tiny">medián, {g.sales} {g.sales === 1 ? "predaj" : g.sales < 5 ? "predaje" : "predajov"}{g.last_sold && `, naposledy ${new Date(g.last_sold + "T00:00:00Z").toLocaleDateString("sk-SK", { timeZone: "UTC" })}`}</span>
                     </dd>
