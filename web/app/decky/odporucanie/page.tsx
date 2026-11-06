@@ -8,6 +8,7 @@ import { ownedByCode, useCollection } from "@/lib/collection";
 import { Card, eur, MetaDeck, useCards, useMeta, usePrices, cardEur } from "@/lib/data";
 import { sb } from "@/lib/supabase";
 import { useLang } from "@/lib/lang";
+import { IMPORT_PUBLIC } from "@/lib/config";
 
 type Missing = { code: string; n: number; card?: Card; unit: number | null };
 type Scored = {
@@ -152,7 +153,13 @@ export default function Recommend() {
 
       {ownedTotal === 0 && (
         <div className="empty">
-          {L("V zbierke zatiaľ nemáš žiadne karty.", "Your collection is empty.")} <Link href="/import">{L("Naimportuj ich z HoloDex", "Import them from HoloDex")}</Link> {L("alebo si ich označ v", "or mark them in")}{" "}
+          {L("V zbierke zatiaľ nemáš žiadne karty.", "Your collection is empty.")}{" "}
+          {IMPORT_PUBLIC && (
+            <>
+              <Link href="/import">{L("Naimportuj ich z HoloDex", "Import them from HoloDex")}</Link> {L("alebo si ich", "or")}{" "}
+            </>
+          )}
+          {IMPORT_PUBLIC ? L("označ v", "mark them in") : L("Označ si ich v", "Mark them in")}{" "}
           <Link href="/karty">{L("Kartách", "Cards")}</Link>.
         </div>
       )}

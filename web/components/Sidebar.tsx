@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { DM_ENABLED, GAME_PUBLIC } from "@/lib/config";
+import { DM_ENABLED, GAME_PUBLIC, IMPORT_PUBLIC } from "@/lib/config";
 import { levelProgress, loadBadges, onXpChanged, XP_SOURCES } from "@/lib/gamify";
 import { useNewReports } from "@/lib/reports";
 import { useDm } from "@/lib/dm/client";
@@ -50,7 +50,7 @@ const GROUPS: { title: string; links: { href: string; label: string; icon: strin
       { href: "/zbierka", label: "Zbierka", icon: "vault" },
       { href: "/decky", label: "Decky", icon: "decks" },
       { href: "/master-sety", label: "Master sety", icon: "sets" },
-      { href: "/import", label: "Import", icon: "import" },
+      ...(IMPORT_PUBLIC ? [{ href: "/import", label: "Import", icon: "import" }] : []),
     ],
   },
   {

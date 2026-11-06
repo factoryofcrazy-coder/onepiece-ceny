@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
-import { GAME_PUBLIC } from "@/lib/config";
+import { GAME_PUBLIC, IMPORT_PUBLIC } from "@/lib/config";
 import { useNewReports } from "@/lib/reports";
 import { useTcg } from "@/lib/tcg";
 import { useLang } from "@/lib/lang";
@@ -74,7 +74,7 @@ const OP_MORE = [
         { href: "/rebricek", label: "Rebríček" },
       ]
     : []),
-  { href: "/import", label: "Import z HoloDex" },
+  ...(IMPORT_PUBLIC ? [{ href: "/import", label: "Import z HoloDex" }] : []),
   { href: "/novinky", label: "Novinky" },
   { href: "/chat", label: "Chat" },
   { href: "/report", label: "Report" },
