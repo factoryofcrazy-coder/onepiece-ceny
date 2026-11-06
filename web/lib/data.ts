@@ -45,7 +45,7 @@ export type PricesDb = {
 };
 
 // zvýš pri zmene formátu dát z /api/* → obíde sa stará CDN cache
-const DATA_VERSION = "6";
+const DATA_VERSION = "7";
 const cache: Record<string, Promise<any>> = {};
 
 export function load<T>(file: string, prep?: (d: any) => T): Promise<T> {
