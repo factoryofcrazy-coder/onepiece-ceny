@@ -5,6 +5,7 @@ import { CountUp, DataError, Loading, FilterBar } from "@/components/ui";
 import { eur, Offer, usePrices } from "@/lib/data";
 import { Tcg, useTcg } from "@/lib/tcg";
 import MarketTabs from "@/components/MarketTabs";
+import { useLang } from "@/lib/lang";
 
 type Product = {
   key: string;
@@ -24,19 +25,23 @@ const KINDS: Record<Tcg, string[]> = {
   pokemon: ["Box", "ETB", "Bundle", "Pack", "Blister", "Tin", "Kolekcia", "Starter", "Case", "Doplnky", "Iné"],
 };
 const KIND_SK: Record<string, string> = { ETB: "Elite Trainer Box", Bundle: "Booster Bundle", Tin: "Tin", Blister: "Blister" };
+const KIND_EN: Record<string, string> = { Kolekcia: "Collection", Doplnky: "Accessories", "Iné": "Other" };
+const kindLabel = (k: string, en: boolean) => (en ? KIND_EN[k] ?? KIND_SK[k] ?? k : KIND_SK[k] ?? k);
 const LANGS: Record<Tcg, string[]> = { onepiece: ["EN", "JP", "CN", "KR"], pokemon: ["EN", "DE", "JP", "CN", "KR"] };
 const HINT: Record<Tcg, string> = { onepiece: "OP16, Azure Sea…", pokemon: "ME05, Pitch Black, Dunkelnacht…" };
 
-function ago(ts?: string) {
+function ago(ts: string | undefined, en: boolean) {
   if (!ts) return "";
   const m = Math.round((Date.now() - new Date(ts).getTime()) / 60000);
-  if (m < 60) return `pred ${m} min`;
-  if (m < 48 * 60) return `pred ${Math.round(m / 60)} h`;
-  return `pred ${Math.round(m / 1440)} dňami`;
+  if (m < 60) return en ? `${m} min ago` : `pred ${m} min`;
+  if (m < 48 * 60) return en ? `${Math.round(m / 60)} h ago` : `pred ${Math.round(m / 60)} h`;
+  return en ? `${Math.round(m / 1440)} days ago` : `pred ${Math.round(m / 1440)} dňami`;
 }
 
 export default function PricesPage() {
   const { tcg } = useTcg();
+  const { t, lang: ui } = useLang();
+  const en = ui === "en";
   const { data, error } = usePrices(tcg);
   const [kind, setKind] = useState("Box");
   const [lang, setLang] = useState("EN");
@@ -96,7 +101,7 @@ export default function PricesPage() {
   }, [products, kind, lang, q, stock, ba, sort, data]);
 
   if (error) return <DataError error={error} file="prices" />;
-  if (!data) return <Loading what="Načítavam ceny" shape="tiles" />;
+  if (!data) return <Loading what={t("Načítavam ceny", "Loading prices")} shape="tiles" />;
 
   const failing = Object.entries(data.status).filter(([, s]) => !s.ok);
 
@@ -106,10 +111,10 @@ export default function PricesPage() {
       <section className="hero">
         <div className="hero-copy">
           <h1>
-            {tcg === "pokemon" ? "Pokémon boxy" : "Kde kúpiť box"} <em>čo najbližšie k MSRP</em>
+            {tcg === "pokemon" ? t("Pokémon boxy", "Pokémon boxes") : t("Kde kúpiť box", "Where to buy a box")} <em>{t("čo najbližšie k MSRP", "closest to MSRP")}</em>
           </h1>
           <p className="muted">
-            {Object.keys(data.shops).length} obchodov v SK, CZ, DE, AT a JP, aktualizované {ago(data.updated)}.
+            {t(`${Object.keys(data.shops).length} obchodov v SK, CZ, DE, AT a JP, aktualizované ${ago(data.updated, false)}.`, `${Object.keys(data.shops).length} shops in SK, CZ, DE, AT and JP, updated ${ago(data.updated, true)}.`)}
           </p>
         </div>
         <WantedBoard products={products} shops={data.shops} langs={tcg === "pokemon" ? ["EN", "DE", "JP"] : ["EN", "JP"]} />
@@ -117,52 +122,52 @@ export default function PricesPage() {
 
       <FilterBar>
         <label className="field keep">
-          <span>Typ</span>
+          <span>{t("Typ", "Type")}</span>
           <select value={kind} onChange={(e) => setKind(e.target.value)}>
-            <option value="*">Všetko</option>
+            <option value="*">{t("Všetko", "All")}</option>
             {KINDS[tcg].map((k) => (
               <option key={k} value={k}>
-                {KIND_SK[k] ?? k}
+                {kindLabel(k, en)}
               </option>
             ))}
           </select>
         </label>
         <label className="field">
-          <span>Jazyk</span>
+          <span>{t("Jazyk", "Language")}</span>
           <select value={lang} onChange={(e) => setLang(e.target.value)}>
-            <option value="*">Všetky</option>
+            <option value="*">{t("Všetky", "All")}</option>
             {LANGS[tcg].map((l) => (
               <option key={l}>{l}</option>
             ))}
           </select>
         </label>
         <label className="field grow">
-          <span>Hľadať</span>
+          <span>{t("Hľadať", "Search")}</span>
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={HINT[tcg]} />
         </label>
         <label className="field">
-          <span>Zoradiť</span>
+          <span>{t("Zoradiť", "Sort")}</span>
           <select value={sort} onChange={(e) => setSort(e.target.value)}>
-            <option value="pct">Najbližšie k MSRP</option>
-            <option value="price">Najlacnejšie</option>
-            <option value="code">Najnovšie edície</option>
+            <option value="pct">{t("Najbližšie k MSRP", "Closest to MSRP")}</option>
+            <option value="price">{t("Najlacnejšie", "Cheapest")}</option>
+            <option value="code">{t("Najnovšie edície", "Newest sets")}</option>
           </select>
         </label>
         <label className="check">
-          <input type="checkbox" checked={stock} onChange={(e) => setStock(e.target.checked)} /> Skladom
+          <input type="checkbox" checked={stock} onChange={(e) => setStock(e.target.checked)} /> {t("Skladom", "In stock")}
         </label>
         <label className="check">
-          <input type="checkbox" checked={ba} onChange={(e) => setBa(e.target.checked)} /> 📍 Osobne v BA
+          <input type="checkbox" checked={ba} onChange={(e) => setBa(e.target.checked)} /> 📍 {t("Osobne v BA", "Pickup in Bratislava")}
         </label>
       </FilterBar>
 
       {failing.length > 0 && (
         <p className="small warnline">
-          ⚠ Nefungujú: {failing.map(([k]) => data.shops[k] ?? k).join(", ")} (ukazujú sa posledné známe ceny)
+          ⚠ {t("Nefungujú", "Not working")}: {failing.map(([k]) => data.shops[k] ?? k).join(", ")} ({t("ukazujú sa posledné známe ceny", "showing last known prices")})
         </p>
       )}
 
-      <p className="muted small">{shown.length} {plural(shown.length, "produkt", "produkty", "produktov")}</p>
+      <p className="muted small">{shown.length} {t(plural(shown.length, "produkt", "produkty", "produktov"), shown.length === 1 ? "product" : "products")}</p>
       <div className="pgrid">
         {shown.map((p) => (
           <ProductCard key={p.key} p={p} shops={data.shops} pickup={data.pickup} th={data.th} />
@@ -184,6 +189,7 @@ function ProductCard({
   th: Record<string, number>;
 }) {
   const [open, setOpen] = useState(false);
+  const { t, lang: ui } = useLang();
   const good = p.pct != null && p.pct <= (th[p.lang] ?? 30);
   const list = open ? p.offers : p.offers.slice(0, 4);
   return (
@@ -193,12 +199,12 @@ function ProductCard({
         <div>
           <div className="row gap wrapr">
             {p.code && <span className="tag">{p.code}</span>}
-            <span className="tag dim">{KIND_SK[p.kind] ?? p.kind}</span>
+            <span className="tag dim">{kindLabel(p.kind, ui === "en")}</span>
             <span className="tag dim">{p.lang}</span>
           </div>
           <h3 title={p.title}>{p.title}</h3>
           <div className="pprice">
-            <b>{p.best ? eur(p.best[5]) : "nie je skladom"}</b>
+            <b>{p.best ? eur(p.best[5]) : t("nie je skladom", "out of stock")}</b>
             {p.pct != null && (
               <span className={`pct ${good ? "ok" : p.pct > 100 ? "bad" : ""}`}>
                 {p.pct > 0 ? "+" : ""}
@@ -216,7 +222,7 @@ function ProductCard({
               <i className={`sd ${o[6] ? "in" : ""}`} />
               {shops[o[0]] ?? o[0]}
               {pickup[o[0]] && <span title={pickup[o[0]]}> 📍</span>}
-              {o[12] && <span className="tag tiny">predobj.</span>}
+              {o[12] && <span className="tag tiny">{t("predobj.", "pre-order")}</span>}
             </a>
             <span>
               {eur(o[5])}
@@ -228,7 +234,7 @@ function ProductCard({
       <div className="row between">
         {p.offers.length > 4 ? (
           <button className="link small" onClick={() => setOpen(!open)}>
-            {open ? "menej" : `všetky obchody (${p.offers.length})`}
+            {open ? t("menej", "less") : t(`všetky obchody (${p.offers.length})`, `all shops (${p.offers.length})`)}
           </button>
         ) : (
           <span />
@@ -252,9 +258,10 @@ function WantedBoard({ products, shops, langs }: { products: Product[]; shops: R
     .flatMap(pick)
     .sort((a, b) => a.pct! - b.pct!)
     .slice(0, 3);
+  const { t } = useLang();
   if (!top.length) return null;
   return (
-    <div className="wanted-board" aria-label="Najlepšie ponuky boxov">
+    <div className="wanted-board" aria-label={t("Najlepšie ponuky boxov", "Best box offers")}>
       {top.map((p, i) => (
         <a
           key={p.key}
@@ -275,7 +282,7 @@ function WantedBoard({ products, shops, langs }: { products: Product[]; shops: R
           </span>
           <span className="w-foot">
             {shops[p.best![0]] ?? p.best![0]} · {p.pct! > 0 ? "+" : ""}
-            {p.pct!.toFixed(0)} % voči MSRP
+            {p.pct!.toFixed(0)} % {t("voči MSRP", "vs MSRP")}
           </span>
         </a>
       ))}
