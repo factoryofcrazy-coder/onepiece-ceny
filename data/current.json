@@ -1,9 +1,9 @@
 {
- "updated": "2026-11-06T13:28:47Z",
+ "updated": "2026-11-06T15:04:46Z",
  "fx": {
-  "CZK": 24.289,
-  "USD": 1.1224,
-  "JPY": 177.85
+  "CZK": 24.35,
+  "USD": 1.1165,
+  "JPY": 176.77
  },
  "shops": {
   "cardempire": {
@@ -649,7 +649,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -1896,7 +1896,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -2262,7 +2262,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -2863,11 +2863,11 @@
     }
    ],
    "error": "obchod vrátil 0 produktov – možno zmenil web alebo URL kategórie",
-   "fails": 11,
+   "fails": 12,
    "warned": true
   },
   "cernyrytir": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -2875,7 +2875,7 @@
      "url": "https://cernyrytir.cz/merch/detail/ae2d688e-95ab-48a3-adf3-a92cf88036a1",
      "price": 499.0,
      "currency": "CZK",
-     "eur": 20.54,
+     "eur": 20.49,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=c3ae778d-077d-4c0d-baf1-2e0737a031b4&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2884,7 +2884,7 @@
      "url": "https://cernyrytir.cz/merch/detail/f2e5d227-6acc-48ac-a4e1-17e242c17148",
      "price": 225.0,
      "currency": "CZK",
-     "eur": 9.26,
+     "eur": 9.24,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=a4ded208-63b1-4bb5-ac9a-203ae42ec97e&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2893,7 +2893,7 @@
      "url": "https://cernyrytir.cz/merch/detail/e4b80847-c963-4651-b9b3-cd3a23a85c5a",
      "price": 5499.0,
      "currency": "CZK",
-     "eur": 226.4,
+     "eur": 225.83,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=ebc3da0d-be7d-454c-82f7-09f27cfc0355&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2902,7 +2902,7 @@
      "url": "https://cernyrytir.cz/merch/detail/358f9693-1abd-40c6-8598-b279251d32a1",
      "price": 799.0,
      "currency": "CZK",
-     "eur": 32.9,
+     "eur": 32.81,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=12b3d4f1-64d3-404c-b2d4-4bb037322e14&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2911,7 +2911,7 @@
      "url": "https://cernyrytir.cz/merch/detail/2b2580ea-ed3b-46d6-915e-cfd95255dab5",
      "price": 649.0,
      "currency": "CZK",
-     "eur": 26.72,
+     "eur": 26.65,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=b8bff6b9-dde0-4ad7-814a-b08d55861f04&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2920,7 +2920,7 @@
      "url": "https://cernyrytir.cz/merch/detail/861e475b-e7bd-4305-81d8-cea95d92cae8",
      "price": 349.0,
      "currency": "CZK",
-     "eur": 14.37,
+     "eur": 14.33,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=29fb0e01-2ccb-4ac0-a5f3-678244ad6caa&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2929,7 +2929,7 @@
      "url": "https://cernyrytir.cz/merch/detail/23e46a23-fd25-4ff1-9536-4e8619d291f2",
      "price": 1999.0,
      "currency": "CZK",
-     "eur": 82.3,
+     "eur": 82.09,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=bf0b3590-4d2c-49e6-970a-1a61c3a4be92&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2938,7 +2938,7 @@
      "url": "https://cernyrytir.cz/merch/detail/8f1478ec-6abe-4380-aa7c-bd6b4ae8c20e",
      "price": 1999.0,
      "currency": "CZK",
-     "eur": 82.3,
+     "eur": 82.09,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=7ae239b5-fdcf-48a0-8996-04f69a4ca720&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2947,7 +2947,7 @@
      "url": "https://cernyrytir.cz/merch/detail/8ec2c433-2be1-4426-9a55-955d7dafc770",
      "price": 1999.0,
      "currency": "CZK",
-     "eur": 82.3,
+     "eur": 82.09,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=c32c46f8-4317-4d4e-8aa9-8643bea97a1f&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2956,7 +2956,7 @@
      "url": "https://cernyrytir.cz/merch/detail/12d3ee26-16e2-475c-afac-f3c7cc39ed1d",
      "price": 999.0,
      "currency": "CZK",
-     "eur": 41.13,
+     "eur": 41.03,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=fd002dcd-8585-49e1-9612-ca9d51d8678f&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2965,7 +2965,7 @@
      "url": "https://cernyrytir.cz/merch/detail/a1db2f99-644a-4bb0-9e37-7d0c5c623d9e",
      "price": 1999.0,
      "currency": "CZK",
-     "eur": 82.3,
+     "eur": 82.09,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=df917d2c-5486-4bad-94ee-65fd315badb7&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2974,7 +2974,7 @@
      "url": "https://cernyrytir.cz/merch/detail/48b23f3f-2a75-45b0-846b-c5587d4548b5",
      "price": 1999.0,
      "currency": "CZK",
-     "eur": 82.3,
+     "eur": 82.09,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=374cf300-d9c9-46eb-a295-69b372dfb333&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2983,7 +2983,7 @@
      "url": "https://cernyrytir.cz/merch/detail/d570be5f-c8bd-4f8f-b615-fd5d8e8139fa",
      "price": 349.0,
      "currency": "CZK",
-     "eur": 14.37,
+     "eur": 14.33,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=277ecf04-f0db-4c21-9922-aa123a650ba9&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -2992,7 +2992,7 @@
      "url": "https://cernyrytir.cz/merch/detail/f0b96b9c-3141-467e-9666-56a7179cc5c6",
      "price": 499.0,
      "currency": "CZK",
-     "eur": 20.54,
+     "eur": 20.49,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=0b6abf9f-0637-42b7-8f8f-d6e91d1cc75b&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -3001,7 +3001,7 @@
      "url": "https://cernyrytir.cz/merch/detail/9acfbbb1-254e-42bc-ade4-7edc4dd6a5db",
      "price": 1299.0,
      "currency": "CZK",
-     "eur": 53.48,
+     "eur": 53.35,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=4518b6b7-6d9b-4abb-b898-fb1b98c22b66&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -3010,7 +3010,7 @@
      "url": "https://cernyrytir.cz/merch/detail/a99f93d7-a833-4da7-9a45-25cf2c629716",
      "price": 299.0,
      "currency": "CZK",
-     "eur": 12.31,
+     "eur": 12.28,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=4d3af777-1f46-441e-9251-c299a9f3a76c&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     },
@@ -3019,7 +3019,7 @@
      "url": "https://cernyrytir.cz/merch/detail/ab940377-28b9-47da-9759-c767b1eefe58",
      "price": 699.0,
      "currency": "CZK",
-     "eur": 28.78,
+     "eur": 28.71,
      "inStock": true,
      "img": "https://images.cernyrytir.eu/image/cernyrytir/v2?uid=32af00b8-66b2-4f62-9b32-547627bd49ca&faceType=FRONT&imageType=MERCHANDISE&sizeType=BIG"
     }
@@ -3599,7 +3599,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -3607,7 +3607,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-heroines-edition-vol-2-extra-booster-box-eb-05-24-boosteru",
      "price": 4999.0,
      "currency": "CZK",
-     "eur": 205.81,
+     "eur": 205.3,
      "inStock": true,
      "hint": "Box",
      "img": "https://hrana.s27.cdn-upgates.com/_cache/9/f/9f65ba857aaa979ad97504a6bc6fac63-onepieceextraboosterheroineseditionvol-2boosterbox-940x-2x.webp"
@@ -3617,7 +3617,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-op-17-the-world-s-strongest-warriors-booster-box-24-boosteru",
      "price": 6999.0,
      "currency": "CZK",
-     "eur": 288.16,
+     "eur": 287.43,
      "inStock": true,
      "hint": "Box",
      "img": "https://hrana.s27.cdn-upgates.com/_cache/9/7/972a0e13d4541cf1f0f74dbd783620cf-122975-1-one-piece-tcg-the-world-s-strongest-warriors-booster.webp"
@@ -3627,7 +3627,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-the-time-of-battle-booster-box-op-16",
      "price": 4299.0,
      "currency": "CZK",
-     "eur": 176.99,
+     "eur": 176.55,
      "inStock": true,
      "hint": "Box",
      "img": "https://hrana.s27.cdn-upgates.com/_cache/3/e/3ea66022d7c136194961a7cdfb0778cd-img-item02-2.webp"
@@ -3637,7 +3637,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-adventure-on-kami-s-island-booster-box-op-15",
      "price": 4999.0,
      "currency": "CZK",
-     "eur": 205.81,
+     "eur": 205.3,
      "inStock": true,
      "hint": "Box",
      "img": "https://hrana.s27.cdn-upgates.com/_cache/3/3/336153e2ab6ad3aae39b8e662593e525-adventure-on-kami-s-island-booster-box-display-940x-2x.webp"
@@ -3647,7 +3647,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-op14-the-azure-sea-s-seven-booster-box-24-boosteru",
      "price": 4499.0,
      "currency": "CZK",
-     "eur": 185.23,
+     "eur": 184.76,
      "inStock": true,
      "hint": "Box",
      "img": "https://hrana.s27.cdn-upgates.com/_cache/9/d/9ddf8a2a5faa45c9b88ecc6890dc9754-31732.jpg"
@@ -3657,7 +3657,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-op-17-the-world-s-strongest-warriors-booster-12-karet",
      "price": 169.0,
      "currency": "CZK",
-     "eur": 6.96,
+     "eur": 6.94,
      "inStock": false,
      "hint": "Pack",
      "img": "https://hrana.s27.cdn-upgates.com/_cache/3/b/3b51e7fcef926724b53624d9e03e0831-z6a870db9b2be7-one-piece-op17-the-world-s-strongest-warrior-booster-550x550h.webp"
@@ -3667,7 +3667,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-card-game-set-sail-deck-startovni-sada-pro-dva-hrace",
      "price": 599.0,
      "currency": "CZK",
-     "eur": 24.66,
+     "eur": 24.6,
      "inStock": true,
      "img": "https://hrana.s27.cdn-upgates.com/_cache/0/1/017a628f9818392de6f22a9c7aeefc1f-2200608603a13f2847060084aa5c9c66.webp"
     },
@@ -3676,7 +3676,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-card-game-illustration-box-vol-7-en",
      "price": 849.0,
      "currency": "CZK",
-     "eur": 34.95,
+     "eur": 34.87,
      "inStock": true,
      "img": "https://hrana.s27.cdn-upgates.com/_cache/7/8/7803f6a3ceb24f5cb8f42fa649e4c1f4-451931-one-piece-card-game-illustration-box-vol-7-en.webp"
     },
@@ -3685,7 +3685,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-card-game-illustration-box-vol-8-en",
      "price": 849.0,
      "currency": "CZK",
-     "eur": 34.95,
+     "eur": 34.87,
      "inStock": true,
      "img": "https://hrana.s27.cdn-upgates.com/_cache/3/f/3fd1dc70648701deeb4c57e8706b303b-451934-one-piece-card-game-illustration-box-vol-8-en.webp"
     },
@@ -3694,7 +3694,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-podlozka-a-krabicka-former-four-emperors",
      "price": 1299.0,
      "currency": "CZK",
-     "eur": 53.48,
+     "eur": 53.35,
      "inStock": true,
      "img": "https://hrana.s27.cdn-upgates.com/_cache/b/3/b33e2eecf28aea301daf1221e4e184c9-podlozka-a-krabica-four-emperors.png"
     },
@@ -3703,7 +3703,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-playmat-and-card-case-set-25th-edition",
      "price": 1299.0,
      "currency": "CZK",
-     "eur": 53.48,
+     "eur": 53.35,
      "inStock": true,
      "img": "https://hrana.s27.cdn-upgates.com/_cache/d/9/d9fcc2e63897ac390ffe84a2ee2d171d-h67a35cab5fc6b-podlozka-a-krabicka-25th-vyroci-one-piece.webp"
     },
@@ -3712,7 +3712,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-card-game-st-36-yellow-eustass-captain-kid",
      "price": 399.0,
      "currency": "CZK",
-     "eur": 16.43,
+     "eur": 16.39,
      "inStock": true,
      "img": "https://hrana.s27.cdn-upgates.com/_cache/2/3/233b583b625bfb30a71021dbe87dfe44-rp4wb-large.webp"
     },
@@ -3721,7 +3721,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-card-game-st-35-red-sabo",
      "price": 399.0,
      "currency": "CZK",
-     "eur": 16.43,
+     "eur": 16.39,
      "inStock": true,
      "img": "https://hrana.s27.cdn-upgates.com/_cache/e/1/e1996b047ada5feea35cd8ac7b770d85-one-piece-red-black-sabo-starter-deck-st-33.webp"
     },
@@ -3730,7 +3730,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-card-game-st-33-purple-charlotte-katakuri",
      "price": 399.0,
      "currency": "CZK",
-     "eur": 16.43,
+     "eur": 16.39,
      "inStock": true,
      "img": "https://hrana.s27.cdn-upgates.com/_cache/e/b/eb7aecddcace345b9c50f8eba2a5cb72-one-piece-purple-charlotte-katakuri-starter-deck-st-34.webp"
     },
@@ -3739,7 +3739,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-card-game-st-33-blue-kuzan",
      "price": 399.0,
      "currency": "CZK",
-     "eur": 16.43,
+     "eur": 16.39,
      "inStock": true,
      "img": "https://hrana.s27.cdn-upgates.com/_cache/6/8/68e155804262694f3a7e83ccb983ece2-one-piece-blue-kuzan-starter-deck-st-33.webp"
     },
@@ -3748,7 +3748,7 @@
      "url": "https://www.hrananetu.cz/p/one-piece-card-game-premium-card-collection-best-selection-vol-6",
      "price": 999.0,
      "currency": "CZK",
-     "eur": 41.13,
+     "eur": 41.03,
      "inStock": true,
      "img": "https://hrana.s27.cdn-upgates.com/_cache/a/8/a8efab533113e777cc9b1b889f984211-451928-bez-nazvu.webp"
     }
@@ -3779,7 +3779,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -3830,7 +3830,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -3838,7 +3838,7 @@
      "url": "https://hrydoruky.cz/one-piece-cg-op17-booster-pack",
      "price": 5999.0,
      "currency": "CZK",
-     "eur": 246.98,
+     "eur": 246.37,
      "inStock": true,
      "img": "https://hrydoruky.cz/images/thumbs/0169687_one-piece-op-17-the-worlds-strongest-warriors-booster-box-24-boosteru_360.webp"
     },
@@ -3847,7 +3847,7 @@
      "url": "https://hrydoruky.cz/one-piece-cg-starter-deck-st-34",
      "price": 399.0,
      "currency": "CZK",
-     "eur": 16.43,
+     "eur": 16.39,
      "inStock": true,
      "img": "https://hrydoruky.cz/images/thumbs/0166582_bandai-one-piece-tcg-starter-deck-purple-charlotte-katakuri_360.webp"
     },
@@ -3856,7 +3856,7 @@
      "url": "https://hrydoruky.cz/one-piece-cg-starter-deck-st-33",
      "price": 299.0,
      "currency": "CZK",
-     "eur": 12.31,
+     "eur": 12.28,
      "inStock": true,
      "img": "https://hrydoruky.cz/images/thumbs/0166578_bandai-one-piece-tcg-starter-deck-blue-kuzan_360.webp"
     },
@@ -3865,7 +3865,7 @@
      "url": "https://hrydoruky.cz/one-piece-cg-starter-deck-st-35",
      "price": 299.0,
      "currency": "CZK",
-     "eur": 12.31,
+     "eur": 12.28,
      "inStock": true,
      "img": "https://hrydoruky.cz/images/thumbs/0166581_bandai-one-piece-tcg-starter-deck-redblack-sabo_360.webp"
     },
@@ -3874,7 +3874,7 @@
      "url": "https://hrydoruky.cz/one-piece-cg-starter-deck-st-36",
      "price": 299.0,
      "currency": "CZK",
-     "eur": 12.31,
+     "eur": 12.28,
      "inStock": true,
      "img": "https://hrydoruky.cz/images/thumbs/0166576_bandai-one-piece-tcg-starter-deck-yellow-eustass-captain-kid_360.webp"
     }
@@ -4318,7 +4318,7 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -4838,7 +4838,7 @@
    ]
   },
   "yonko": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -5447,7 +5447,7 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -5525,7 +5525,7 @@
    ]
   },
   "mikis": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -5675,7 +5675,7 @@
    ]
   },
   "butticards": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -6126,7 +6126,7 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -6438,7 +6438,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -6446,7 +6446,7 @@
      "url": "https://samuraiswordtokyo.com/products/eb05box-regular",
      "price": 13200.0,
      "currency": "JPY",
-     "eur": 74.22,
+     "eur": 74.67,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/10/eb05-heroines-edition-vol2-booster-box-official-300x300.webp"
     },
@@ -6455,7 +6455,7 @@
      "url": "https://samuraiswordtokyo.com/products/op06box-damaged-box",
      "price": 20118.0,
      "currency": "JPY",
-     "eur": 113.12,
+     "eur": 113.81,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4116-0e1f258c7a54/op06box_sst-thumb-320.webp"
     },
@@ -6464,7 +6464,7 @@
      "url": "https://samuraiswordtokyo.com/products/op01box-damaged-box",
      "price": 35079.0,
      "currency": "JPY",
-     "eur": 197.24,
+     "eur": 198.44,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4106-b4c20ebc0716/op01box_sst_88bb8ccc-0939-4e52-b392-8d54ae1ce257-thumb-320.webp"
     },
@@ -6473,7 +6473,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box-damaged-box",
      "price": 8882.0,
      "currency": "JPY",
-     "eur": 49.94,
+     "eur": 50.25,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
@@ -6482,7 +6482,7 @@
      "url": "https://samuraiswordtokyo.com/products/eb-04-egghead-crisis-japanese-one-piece-booster-box-damaged-box",
      "price": 12901.0,
      "currency": "JPY",
-     "eur": 72.54,
+     "eur": 72.98,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1764-1b98a43c9905/eb04box_sst-thumb-320.webp"
     },
@@ -6491,7 +6491,7 @@
      "url": "https://samuraiswordtokyo.com/products/eb-03-heroines-edition-japanese-one-piece-booster-box-damaged-box",
      "price": 11084.0,
      "currency": "JPY",
-     "eur": 62.32,
+     "eur": 62.7,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1762-81171649d67e/eb03box_sst-thumb-320.webp"
     },
@@ -6500,7 +6500,7 @@
      "url": "https://samuraiswordtokyo.com/products/eb-02-anime-25th-collection-japanese-one-piece-booster-box-damaged-box",
      "price": 28705.0,
      "currency": "JPY",
-     "eur": 161.4,
+     "eur": 162.39,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1760-783ddcdc3aff/eb02box_sst-thumb-320.webp"
     },
@@ -6509,7 +6509,7 @@
      "url": "https://samuraiswordtokyo.com/products/eb-01-memorial-collection-japanese-one-piece-booster-box-damaged-box",
      "price": 16971.0,
      "currency": "JPY",
-     "eur": 95.42,
+     "eur": 96.01,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1758-037930df5454/eb01box_sst-thumb-320.webp"
     },
@@ -6518,7 +6518,7 @@
      "url": "https://samuraiswordtokyo.com/products/prb-02-one-piece-card-the-best-vol-2-japanese-one-piece-booster-box-damaged-box",
      "price": 9907.0,
      "currency": "JPY",
-     "eur": 55.7,
+     "eur": 56.04,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4482-c81e01b21a23/prb02box_sst-thumb-320.webp"
     },
@@ -6527,7 +6527,7 @@
      "url": "https://samuraiswordtokyo.com/products/prb-01-one-piece-card-the-best-japanese-one-piece-booster-box-damaged-box",
      "price": 19955.0,
      "currency": "JPY",
-     "eur": 112.2,
+     "eur": 112.89,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4480-6ed547b0e5e4/prb01box_sst_d4b56848-43ef-4ac7-b81e-32e30b0930bf-thumb-320.webp"
     },
@@ -6536,7 +6536,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-15-island-of-god-japanese-one-piece-booster-box-damaged-box",
      "price": 7522.0,
      "currency": "JPY",
-     "eur": 42.29,
+     "eur": 42.55,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4134-460f725eadf2/op15box_sst-thumb-320.webp"
     },
@@ -6545,7 +6545,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-14-the-azure-seas-seven-booster-japanese-one-piece-booster-box-damaged-box",
      "price": 9156.0,
      "currency": "JPY",
-     "eur": 51.48,
+     "eur": 51.8,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4132-0b53b0de33e9/op14box_sst-thumb-320.webp"
     },
@@ -6554,7 +6554,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-13-carrying-on-his-will-japanese-one-piece-booster-box-damaged-box",
      "price": 17073.0,
      "currency": "JPY",
-     "eur": 96.0,
+     "eur": 96.58,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4130-f30c2b9ef984/op13box_sst-thumb-320.webp"
     },
@@ -6563,7 +6563,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-12-legacy-of-the-master-japanese-one-piece-booster-box-damaged-box",
      "price": 15236.0,
      "currency": "JPY",
-     "eur": 85.67,
+     "eur": 86.19,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4128-f576cdebe44a/op12box_sst-thumb-320.webp"
     },
@@ -6572,7 +6572,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-11-a-fist-of-divine-speed-japanese-one-piece-booster-box-damaged-box",
      "price": 27263.0,
      "currency": "JPY",
-     "eur": 153.29,
+     "eur": 154.23,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4126-ef7aadb572ed/op11box_sst-thumb-320.webp"
     },
@@ -6581,7 +6581,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-10-royal-blood-japanese-one-piece-booster-box-damaged-box",
      "price": 9643.0,
      "currency": "JPY",
-     "eur": 54.22,
+     "eur": 54.55,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4124-4ff898448a99/op10box_sst-thumb-320.webp"
     },
@@ -6590,7 +6590,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-09-the-new-emperor-japanese-one-piece-booster-box-damaged-box",
      "price": 16291.0,
      "currency": "JPY",
-     "eur": 91.6,
+     "eur": 92.16,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4122-7d51d8b80f93/op09box_sst_b1b724f6-dabc-460d-81f5-d44b25d33101-thumb-320.webp"
     },
@@ -6599,7 +6599,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-08-two-legends-japanese-one-piece-booster-box-damaged-box",
      "price": 10607.0,
      "currency": "JPY",
-     "eur": 59.64,
+     "eur": 60.0,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4120-27accad58b4e/op08box_sst-thumb-320.webp"
     },
@@ -6608,7 +6608,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-07-500-years-in-the-future-japanese-one-piece-booster-box-damaged-box",
      "price": 14556.0,
      "currency": "JPY",
-     "eur": 81.84,
+     "eur": 82.34,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4118-cf4993f57082/op07box_sst-thumb-320.webp"
     },
@@ -6617,7 +6617,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-05-awakening-of-the-new-era-japanese-one-piece-booster-box-damaged-box",
      "price": 45544.0,
      "currency": "JPY",
-     "eur": 256.08,
+     "eur": 257.65,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4114-55dcc7370b4a/op05box_sst-thumb-320.webp"
     },
@@ -6626,7 +6626,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-04-kingdoms-of-intrigue-japanese-one-piece-booster-box-damaged-box",
      "price": 14941.0,
      "currency": "JPY",
-     "eur": 84.01,
+     "eur": 84.52,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4112-d22581bdbdb8/op04box_sst-thumb-320.webp"
     },
@@ -6635,7 +6635,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-03-pillars-of-strength-japanese-one-piece-booster-box-damaged-box",
      "price": 13977.0,
      "currency": "JPY",
-     "eur": 78.59,
+     "eur": 79.07,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4110-35d94f066fd9/op03box_sst-thumb-320.webp"
     },
@@ -6644,7 +6644,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-02-paramount-war-japanese-one-piece-booster-box-damaged-box",
      "price": 16789.0,
      "currency": "JPY",
-     "eur": 94.4,
+     "eur": 94.98,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4108-686aa9402225/op02box_sst-thumb-320.webp"
     },
@@ -6653,7 +6653,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-16-the-time-of-battle-japanese-one-piece-booster-box-damaged-box",
      "price": 7857.0,
      "currency": "JPY",
-     "eur": 44.18,
+     "eur": 44.45,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/06/op16-the-time-of-battle-box-sst-logo-2-300x300.webp"
     },
@@ -6662,7 +6662,7 @@
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box",
      "price": 9724.0,
      "currency": "JPY",
-     "eur": 54.68,
+     "eur": 55.01,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
@@ -6671,7 +6671,7 @@
      "url": "https://samuraiswordtokyo.com/products/op16box",
      "price": 8773.0,
      "currency": "JPY",
-     "eur": 49.33,
+     "eur": 49.63,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/06/op16-the-time-of-battle-box-sst-logo-2-300x300.webp"
     },
@@ -6680,7 +6680,7 @@
      "url": "https://samuraiswordtokyo.com/products/prb02box",
      "price": 11064.0,
      "currency": "JPY",
-     "eur": 62.21,
+     "eur": 62.59,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4482-c81e01b21a23/prb02box_sst-thumb-320.webp"
     },
@@ -6689,7 +6689,7 @@
      "url": "https://samuraiswordtokyo.com/products/prb01box",
      "price": 21852.0,
      "currency": "JPY",
-     "eur": 122.87,
+     "eur": 123.62,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4480-6ed547b0e5e4/prb01box_sst_d4b56848-43ef-4ac7-b81e-32e30b0930bf-thumb-320.webp"
     },
@@ -6698,7 +6698,7 @@
      "url": "https://samuraiswordtokyo.com/products/op15box",
      "price": 8234.0,
      "currency": "JPY",
-     "eur": 46.3,
+     "eur": 46.58,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4134-460f725eadf2/op15box_sst-thumb-320.webp"
     },
@@ -6707,7 +6707,7 @@
      "url": "https://samuraiswordtokyo.com/products/op14box",
      "price": 10126.0,
      "currency": "JPY",
-     "eur": 56.94,
+     "eur": 57.28,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4132-0b53b0de33e9/op14box_sst-thumb-320.webp"
     },
@@ -6716,7 +6716,7 @@
      "url": "https://samuraiswordtokyo.com/products/op13box",
      "price": 18161.0,
      "currency": "JPY",
-     "eur": 102.11,
+     "eur": 102.74,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4130-f30c2b9ef984/op13box_sst-thumb-320.webp"
     },
@@ -6725,7 +6725,7 @@
      "url": "https://samuraiswordtokyo.com/products/op12box",
      "price": 16519.0,
      "currency": "JPY",
-     "eur": 92.88,
+     "eur": 93.45,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4128-f576cdebe44a/op12box_sst-thumb-320.webp"
     },
@@ -6734,7 +6734,7 @@
      "url": "https://samuraiswordtokyo.com/products/op11box",
      "price": 28701.0,
      "currency": "JPY",
-     "eur": 161.38,
+     "eur": 162.36,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4126-ef7aadb572ed/op11box_sst-thumb-320.webp"
     },
@@ -6743,7 +6743,7 @@
      "url": "https://samuraiswordtokyo.com/products/op10box",
      "price": 10861.0,
      "currency": "JPY",
-     "eur": 61.07,
+     "eur": 61.44,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4124-4ff898448a99/op10box_sst-thumb-320.webp"
     },
@@ -6752,7 +6752,7 @@
      "url": "https://samuraiswordtokyo.com/products/op09box",
      "price": 18012.0,
      "currency": "JPY",
-     "eur": 101.28,
+     "eur": 101.9,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4122-7d51d8b80f93/op09box_sst_b1b724f6-dabc-460d-81f5-d44b25d33101-thumb-320.webp"
     },
@@ -6761,7 +6761,7 @@
      "url": "https://samuraiswordtokyo.com/products/op08box",
      "price": 12282.0,
      "currency": "JPY",
-     "eur": 69.06,
+     "eur": 69.48,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4120-27accad58b4e/op08box_sst-thumb-320.webp"
     },
@@ -6770,7 +6770,7 @@
      "url": "https://samuraiswordtokyo.com/products/op07box",
      "price": 15634.0,
      "currency": "JPY",
-     "eur": 87.91,
+     "eur": 88.44,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4118-cf4993f57082/op07box_sst-thumb-320.webp"
     },
@@ -6779,7 +6779,7 @@
      "url": "https://samuraiswordtokyo.com/products/op06box",
      "price": 21601.0,
      "currency": "JPY",
-     "eur": 121.46,
+     "eur": 122.2,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4116-0e1f258c7a54/op06box_sst-thumb-320.webp"
     },
@@ -6788,7 +6788,7 @@
      "url": "https://samuraiswordtokyo.com/products/op05box",
      "price": 49145.0,
      "currency": "JPY",
-     "eur": 276.33,
+     "eur": 278.02,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4114-55dcc7370b4a/op05box_sst-thumb-320.webp"
     },
@@ -6797,7 +6797,7 @@
      "url": "https://samuraiswordtokyo.com/products/op04box",
      "price": 16992.0,
      "currency": "JPY",
-     "eur": 95.54,
+     "eur": 96.12,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4112-d22581bdbdb8/op04box_sst-thumb-320.webp"
     },
@@ -6806,7 +6806,7 @@
      "url": "https://samuraiswordtokyo.com/products/op03box",
      "price": 16485.0,
      "currency": "JPY",
-     "eur": 92.69,
+     "eur": 93.26,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4110-35d94f066fd9/op03box_sst-thumb-320.webp"
     },
@@ -6815,7 +6815,7 @@
      "url": "https://samuraiswordtokyo.com/products/op02box",
      "price": 19097.0,
      "currency": "JPY",
-     "eur": 107.38,
+     "eur": 108.03,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4108-686aa9402225/op02box_sst-thumb-320.webp"
     },
@@ -6824,7 +6824,7 @@
      "url": "https://samuraiswordtokyo.com/products/op01box",
      "price": 38777.0,
      "currency": "JPY",
-     "eur": 218.03,
+     "eur": 219.36,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4106-b4c20ebc0716/op01box_sst_88bb8ccc-0939-4e52-b392-8d54ae1ce257-thumb-320.webp"
     },
@@ -6833,7 +6833,7 @@
      "url": "https://samuraiswordtokyo.com/products/eb04box",
      "price": 14940.0,
      "currency": "JPY",
-     "eur": 84.0,
+     "eur": 84.52,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1764-1b98a43c9905/eb04box_sst-thumb-320.webp"
     },
@@ -6842,7 +6842,7 @@
      "url": "https://samuraiswordtokyo.com/products/eb03box",
      "price": 11668.0,
      "currency": "JPY",
-     "eur": 65.61,
+     "eur": 66.01,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1762-81171649d67e/eb03box_sst-thumb-320.webp"
     },
@@ -6851,7 +6851,7 @@
      "url": "https://samuraiswordtokyo.com/products/eb02box",
      "price": 30225.0,
      "currency": "JPY",
-     "eur": 169.95,
+     "eur": 170.98,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1760-783ddcdc3aff/eb02box_sst-thumb-320.webp"
     },
@@ -6860,14 +6860,14 @@
      "url": "https://samuraiswordtokyo.com/products/eb01box",
      "price": 19294.0,
      "currency": "JPY",
-     "eur": 108.48,
+     "eur": 109.15,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/1758-037930df5454/eb01box_sst-thumb-320.webp"
     }
    ]
   },
   "crispycards": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -8539,7 +8539,7 @@
    ]
   },
   "underpaid": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
@@ -8818,7 +8818,7 @@
      "price": 5.5,
      "currency": "EUR",
      "eur": 5.5,
-     "inStock": true,
+     "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0729/9871/5717/files/one-piece-card-game-the-time-of-the-final-battle-op16-booster-jp-1901515.png?v=1781784549"
     },
     {
@@ -9337,7 +9337,7 @@
    ]
   },
   "cardbinder": {
-   "ts": "2026-11-06T13:28:47Z",
+   "ts": "2026-11-06T15:04:46Z",
    "ok": true,
    "items": [
     {
