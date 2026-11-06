@@ -5,10 +5,10 @@ import { applyAction, blockersFor, cost, counterOf, counterOptions, def, donOnFi
 import { Action, AnswerChoice, GameState, other, P } from "./types";
 
 export type BotLevel = "easy" | "medium" | "hard";
-export const BOT_LEVELS: { id: BotLevel; label: string; hint: string }[] = [
-  { id: "easy", label: "Ľahký", hint: "Na zoznámenie s hrou, často urobí chybu." },
-  { id: "medium", label: "Stredný", hint: "Hrá rozumne a útočí, ale ďaleko nerozmýšľa." },
-  { id: "hard", label: "Ťažký", hint: "Porovnáva ťahy, šetrí obranu a hľadá výhru. Tvoje karty nevidí." },
+export const BOT_LEVELS: { id: BotLevel; label: string; hint: string; en: string; hintEn: string }[] = [
+  { id: "easy", label: "Ľahký", hint: "Na zoznámenie s hrou, často urobí chybu.", en: "Easy", hintEn: "To get to know the game, often makes mistakes." },
+  { id: "medium", label: "Stredný", hint: "Hrá rozumne a útočí, ale ďaleko nerozmýšľa.", en: "Medium", hintEn: "Plays sensibly and attacks, but doesn't think far ahead." },
+  { id: "hard", label: "Ťažký", hint: "Porovnáva ťahy, šetrí obranu a hľadá výhru. Tvoje karty nevidí.", en: "Hard", hintEn: "Compares moves, saves defense and looks for the win. It can't see your cards." },
 ];
 
 export function botAction(s: GameState, me: P, level: BotLevel = "medium", rng: () => number = Math.random): Action | null {
