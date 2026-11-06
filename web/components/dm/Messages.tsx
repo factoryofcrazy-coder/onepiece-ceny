@@ -34,7 +34,7 @@ function Body({ m, trusted, onCard }: { m: DmMessage; trusted: boolean; onCard: 
     <>
       {card && (
         <button type="button" className="dm-card" onClick={() => c && onCard(c)} disabled={!c} aria-label={`Detail karty ${c?.name ?? card.id}`}>
-          {c ? <CardImg card={c} /> : <span className="cimg ph">{card.id}</span>}
+          {c ? <CardImg card={c} /> : <span className="cimg ph">{card.id.split("_")[0]}</span>}
           <span className="dm-card-text">
             <b>{c?.name ?? card.id}</b>
             <i>
@@ -85,7 +85,7 @@ function CardPicker({ onPick, onClose }: { onPick: (c: Card) => void; onClose: (
                 <span>
                   <b>{c.name}</b>
                   <i>
-                    {c.id}
+                    {c.code}
                     {c.v ? ` · ${c.v}` : ""}
                   </i>
                 </span>

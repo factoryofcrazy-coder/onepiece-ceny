@@ -77,7 +77,7 @@ export default function GradingAdvice({ cards, usd, onOpen }: { cards: Card[]; u
       {list.slice(0, 15).map(({ card, a }) => (
         <button key={card.id} className="grading-row" onClick={() => onOpen(card)}>
           <span className="grading-name">
-            <b>{card.name}</b> <span className="muted tiny">{card.id}</span>
+            <b>{card.name}</b> <span className="muted tiny">{card.code}{card.v ? ` · ${card.v}` : ""}</span>
             <small className={`grading-v ${a.verdict}`}>{VERDICT_SK[a.verdict]}</small>
           </span>
           <span className="grading-nums">

@@ -193,7 +193,7 @@ export default function Home() {
                   <li key={m.card.id}>
                     <Link href="/pohyby" className="dash-mv-name">
                       <b>{m.card.name}</b>
-                      <i className="muted tiny">{m.card.id}</i>
+                      <i className="muted tiny">{m.card.code}{m.card.v ? ` · ${m.card.v}` : ""}</i>
                     </Link>
                     {s && pct(s.pct)}
                     <b className="dash-mv-price">{eur(m.price)}</b>

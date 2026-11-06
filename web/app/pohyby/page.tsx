@@ -9,8 +9,9 @@ import { useCollection } from "@/lib/collection";
 import { Card, eur, sortSets, useCards, usePrices } from "@/lib/data";
 import { formatPct, salesChange } from "@/lib/price-series";
 import { useTcg } from "@/lib/tcg";
+import { VARIANT_GROUPS, variantGroup, type VariantGroup } from "@/lib/variants";
 
-const PAGE = 50;
+const PER = 20;
 const MIN_PRICES = [1, 5, 20, 100];
 
 export default function Page() {
@@ -33,11 +34,21 @@ function Moves() {
   const [dir, setDir] = useState<"up" | "down">("up");
   const [min, setMin] = useState(5);
   const [set, setSet] = useState("");
-  const [limit, setLimit] = useState(PAGE);
+  const [group, setGroup] = useState<VariantGroup | "">("");
+  const [page, setPage] = useState(0);
   const [open, setOpen] = useState<Card | null>(null);
 
   const sets = useMemo(() => (data ? sortSets(data.sets) : []), [data]);
-  const list = useMemo(() => (data ? topMoves(set ? data.cards.filter((c) => c.set === set) : data.cards, usd, dir, min) : []), [data, usd, dir, min, set]);
+  const moves = useMemo(() => (data ? topMoves(set ? data.cards.filter((c) => c.set === set) : data.cards, usd, dir, min) : []), [data, usd, dir, min, set]);
+  const counts = useMemo(() => {
+    const c: Record<string, number> = {};
+    for (const m of moves) c[variantGroup(m.card.v)] = (c[variantGroup(m.card.v)] ?? 0) + 1;
+    return c;
+  }, [moves]);
+  const list = useMemo(() => (group ? moves.filter((m) => variantGroup(m.card.v) === group) : moves), [moves, group]);
+  const pages = Math.max(1, Math.ceil(list.length / PER));
+  const cur = Math.min(page, pages - 1);
+  const reset = () => setPage(0);
 
   if (error) return <DataError error={error} file="cards" />;
   if (!data) return <Loading shape="rows" />;
@@ -50,17 +61,17 @@ function Moves() {
         Priemerná predajná cena za posledných 7 dní oproti 30 dňom podľa Cardmarketu. Je to orientačné: kariet sa často predá málo a jeden predaj dokáže priemer pohnúť, preto sa oplatí pozrieť si aj ponuky.
       </p>
       <div className="pchart-range moves-dir" role="group" aria-label="Smer pohybu">
-        <button className={dir === "up" ? "on" : ""} aria-pressed={dir === "up"} onClick={() => (setDir("up"), setLimit(PAGE))}>
+        <button className={dir === "up" ? "on" : ""} aria-pressed={dir === "up"} onClick={() => (setDir("up"), reset())}>
           Zdražujú
         </button>
-        <button className={dir === "down" ? "on" : ""} aria-pressed={dir === "down"} onClick={() => (setDir("down"), setLimit(PAGE))}>
+        <button className={dir === "down" ? "on" : ""} aria-pressed={dir === "down"} onClick={() => (setDir("down"), reset())}>
           Zlacňujú
         </button>
       </div>
       <FilterBar>
         <label className="field">
           <span>Cena od</span>
-          <select value={min} onChange={(e) => (setMin(Number(e.target.value)), setLimit(PAGE))}>
+          <select value={min} onChange={(e) => (setMin(Number(e.target.value)), reset())}>
             {MIN_PRICES.map((m) => (
               <option key={m} value={m}>
                 {m} €
@@ -70,7 +81,7 @@ function Moves() {
         </label>
         <label className="field">
           <span>Set</span>
-          <select value={set} onChange={(e) => (setSet(e.target.value), setLimit(PAGE))}>
+          <select value={set} onChange={(e) => (setSet(e.target.value), reset())}>
             <option value="">Všetky</option>
             {sets.map((s) => (
               <option key={s.id} value={s.id}>
@@ -80,39 +91,67 @@ function Moves() {
           </select>
         </label>
       </FilterBar>
+      <div className="vgroups" role="group" aria-label="Verzia karty">
+        <button className={group === "" ? "on" : ""} aria-pressed={group === ""} onClick={() => (setGroup(""), reset())}>
+          Všetky <i>{moves.length}</i>
+        </button>
+        {VARIANT_GROUPS.map((g) => (
+          <button key={g.id} className={`g-${g.id}${group === g.id ? " on" : ""}`} aria-pressed={group === g.id} disabled={!counts[g.id]} onClick={() => (setGroup(g.id), reset())}>
+            {g.label} <i>{counts[g.id] ?? 0}</i>
+          </button>
+        ))}
+      </div>
       {list.length === 0 ? (
-        <div className="empty">Pre tento výber nemáme žiadne pohyby. Skús nižšiu cenu alebo iný set.</div>
+        <div className="empty">Pre tento výber nemáme žiadne pohyby. Skús nižšiu cenu, iný set alebo inú verziu.</div>
       ) : (
-        <div className="vlist">
-          {list.slice(0, limit).map((m, k) => {
+        <div className="vlist mv-list">
+          {list.slice(cur * PER, cur * PER + PER).map((m, k) => {
             const s = salesChange(m.card)!;
+            const g = variantGroup(m.card.v);
             return (
-              <div key={m.card.id} className="vrow" role="button" tabIndex={0} onClick={() => setOpen(m.card)} onKeyDown={(e) => e.key === "Enter" && setOpen(m.card)}>
-                <span className="vrank">{k + 1}</span>
+              <div key={m.card.id} className="vrow mv-row" role="button" tabIndex={0} onClick={() => setOpen(m.card)} onKeyDown={(e) => e.key === "Enter" && setOpen(m.card)}>
+                <span className="vrank">{cur * PER + k + 1}</span>
                 <Foil holo={!!m.card.v} className="vthumb">
                   <CardImg card={m.card} />
                 </Foil>
                 <span className="vname">
                   <b>{m.card.name}</b>
-                  <span className="small muted">
-                    {m.card.id}
-                    {m.card.v && <span className="tag tiny">{m.card.v}</span>}
+                  <span className="mv-meta">
+                    <span className="muted">{m.card.code}</span>
+                    {m.card.v && <span className={`vtag g-${g}`}>{m.card.v}</span>}
                   </span>
                 </span>
-                <span className={`vqty cmove ${m.pct > 0 ? "up" : "down"}`}>{formatPct(m.pct)}</span>
-                <span className="vunit small muted">
-                  {eur(s.avg30)} → {eur(s.avg7)}
+                <span className={`mv-pct ${m.pct > 0 ? "up" : "down"}`}>{formatPct(m.pct)}</span>
+                <span className="mv-avg">
+                  <span>
+                    <i>30 dní</i> {eur(s.avg30)}
+                  </span>
+                  <span className="mv-arrow" aria-hidden>
+                    →
+                  </span>
+                  <span>
+                    <i>7 dní</i> <b>{eur(s.avg7)}</b>
+                  </span>
                 </span>
-                <b className="vtotal">{eur(m.price)}</b>
+                <span className="mv-now">
+                  <i>trend</i>
+                  <b className="vtotal">{eur(m.price)}</b>
+                </span>
               </div>
             );
           })}
         </div>
       )}
-      {list.length > limit && (
-        <div className="center">
-          <button className="btn ghost" onClick={() => setLimit(limit + PAGE)}>
-            Zobraziť ďalšie ({list.length - limit})
+      {pages > 1 && (
+        <div className="pager">
+          <button className="btn ghost sm" disabled={cur === 0} onClick={() => (setPage(cur - 1), scrollTo({ top: 0 }))}>
+            ← Späť
+          </button>
+          <span className="small muted">
+            Strana {cur + 1} z {pages} · {list.length} kariet
+          </span>
+          <button className="btn ghost sm" disabled={cur >= pages - 1} onClick={() => (setPage(cur + 1), scrollTo({ top: 0 }))}>
+            Ďalej →
           </button>
         </div>
       )}
