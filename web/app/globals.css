@@ -8,6 +8,7 @@
   --paper-ink: #3b2a17;
   --gold: #f2b84b;       /* odmena / hodnota / peniaze */
   --violet: #6d3bff;     /* brandový akcent: interakcia, hero, focus */
+  --violet-ink: #b4a2ff; /* svetlá fialová na text a čiary (index) */
   --edge: #2a5172;       /* okraj pri hover / aktívny stav */
   --red: #e63946;        /* slamený klobúk */
   --foam: #5ec8c8;       /* skladom / ok / trh */
@@ -42,7 +43,7 @@ h1 { font-size: clamp(30px, 5vw, 52px); font-weight: 800; margin: 0 0 8px; }
 h2 { font-size: 22px; font-weight: 700; margin: 0 0 6px; }
 h3 { font-size: 15px; margin: 4px 0; }
 code { background: var(--sea); padding: 1px 6px; border-radius: 5px; }
-:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 6px; }
 ::selection { background: var(--gold); color: var(--ink); }
 
 .wrap { max-width: 1320px; margin: 0 auto; padding: 0 16px; }
@@ -720,22 +721,22 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .market-tabs + .hero { margin-top: 10px; }
 .mindex { max-width: 780px; }
 .mindex-big { display: flex; align-items: baseline; gap: 14px; margin: 10px 0 2px; }
-.mindex-big b { font: 800 44px var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.mindex-big b { font: 800 44px var(--display); color: var(--violet-ink); font-variant-numeric: tabular-nums; }
 .mindex-chart { margin: 14px 0 10px; position: relative; }
 .mindex-chart svg { width: 100%; height: auto; display: block; touch-action: none; }
 .mindex-chart svg:focus { outline: none; }
 .mindex-cross { stroke: var(--muted); stroke-width: 1; opacity: .6; }
-.mindex-dot { fill: var(--gold); stroke: var(--sea); stroke-width: 2; }
+.mindex-dot { fill: var(--violet-ink); stroke: var(--sea); stroke-width: 2; }
 .mindex-dot.spy { fill: var(--foam); }
 .mindex-tip { position: absolute; top: 6px; transform: translateX(-50%); background: rgb(var(--sea2-rgb) / .97); border: 1px solid var(--line); border-radius: 10px; padding: 7px 10px; pointer-events: none; white-space: nowrap; box-shadow: 0 6px 18px rgb(0 0 0 / .35); z-index: 2; }
 .mindex-tip-day { display: block; color: var(--muted); font-size: 11px; margin-bottom: 3px; }
 .mindex-tip-row { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); }
 .mindex-tip-row b { color: var(--text); font-variant-numeric: tabular-nums; }
 .mindex-tip-row i { width: 12px; height: 3px; border-radius: 2px; flex-shrink: 0; }
-.mindex-tip-row.op i { background: var(--gold); }
+.mindex-tip-row.op i { background: var(--violet-ink); }
 .mindex-tip-row.spy i { background: var(--foam); }
-.mindex-line { stroke: var(--gold); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-.mindex-area { fill: var(--gold); opacity: .12; }
+.mindex-line { stroke: var(--violet-ink); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.mindex-area { fill: var(--violet-ink); opacity: .12; }
 .mindex-base { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; opacity: .55; }
 .mindex-grid { stroke: var(--line); stroke-width: 1; opacity: .5; }
 .mindex-dot { fill: var(--gold); }
@@ -746,10 +747,10 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .mindex-legend { display: flex; gap: 18px; margin: 10px 0 2px; font-size: 13px; }
 .mindex-legend span { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); }
 .mindex-legend span::before { content: ""; width: 16px; height: 3px; border-radius: 2px; }
-.mindex-legend .op::before { background: var(--gold); }
+.mindex-legend .op::before { background: var(--violet-ink); }
 .mindex-legend .spy::before { background: var(--foam); }
 .mindex-verdict { margin: 8px 0 2px; }
-.mindex-verdict .op { color: var(--gold); }
+.mindex-verdict .op { color: var(--violet-ink); }
 .mindex-verdict .spy { color: var(--foam); }
 .vrow.boxrow { grid-template-columns: minmax(0, 1fr) 46px 108px; text-decoration: none; }
 .vrow.boxrow .vname b { white-space: normal; line-height: 1.25; }
@@ -1201,6 +1202,7 @@ body.in-game .app-main { padding-left: 0; }
 .dash-stat:hover { transform: translateY(-2px); border-color: var(--edge); text-decoration: none; }
 .dash-stat-label { color: var(--muted); font-size: 13px; }
 .dash-stat-big { font: 800 34px/1.05 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.dash-stat.is-market .dash-stat-big { color: var(--violet-ink); }
 .dash-stat-sub { display: block; }
 .dash-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
 .dash-mv { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }

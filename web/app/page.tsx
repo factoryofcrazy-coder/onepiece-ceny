@@ -156,7 +156,7 @@ export default function Home() {
             {vault && <span className="dash-stat-sub muted small">{vault.pieces} kusov · {vault.kinds} kariet</span>}
           </Link>
         )}
-        <Link href="/trh" className="dash-stat">
+        <Link href="/trh" className="dash-stat is-market">
           <span className="dash-stat-label">Trhový index</span>
           <b className="dash-stat-big">{market ? market.value.toLocaleString("sk-SK") : "…"}</b>
           <span className="dash-stat-sub small">
