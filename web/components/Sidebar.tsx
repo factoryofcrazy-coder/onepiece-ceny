@@ -37,20 +37,17 @@ const GROUPS: { title: string; links: { href: string; label: string; icon: strin
     title: "Prehľad",
     links: [
       { href: "/", label: "Domov", icon: "home" },
-      { href: "/ceny", label: "Ceny boxov", icon: "prices" },
-      { href: "/boxy", label: "Hodnoty boxov", icon: "prices" },
       { href: "/karty", label: "Karty", icon: "cards" },
-      { href: "/pohyby", label: "Pohyby cien", icon: "prices" },
-      { href: "/trh", label: "Trhový index", icon: "prices" },
+      { href: "/boxy", label: "Trh", icon: "prices" },
       { href: "/skener", label: "Skener", icon: "scan" },
     ],
   },
   {
-    title: "Moje karty",
+    title: "Moje",
     links: [
       { href: "/zbierka", label: "Zbierka", icon: "vault" },
-      { href: "/master-sety", label: "Master sety", icon: "sets" },
       { href: "/decky", label: "Decky", icon: "decks" },
+      { href: "/master-sety", label: "Master sety", icon: "sets" },
       { href: "/import", label: "Import", icon: "import" },
     ],
   },
@@ -72,7 +69,9 @@ const GROUPS: { title: string; links: { href: string; label: string; icon: strin
   },
 ];
 
-const active = (path: string, href: string) => (href === "/" ? path === "/" : path === href || path.startsWith(href + "/"));
+const MARKET = ["/boxy", "/ceny", "/pohyby", "/trh"];
+const active = (path: string, href: string) =>
+  href === "/" ? path === "/" : href === "/boxy" ? MARKET.includes(path) : path === href || path.startsWith(href + "/");
 
 /** Dnešné XP sa dajú zobraziť v bočnom paneli aj na domovskej stránke. */
 export function useTodayXp(userId?: string) {

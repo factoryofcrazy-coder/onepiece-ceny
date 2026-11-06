@@ -2,13 +2,14 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { DataError, FilterBar, Loading, Qty } from "@/components/ui";
+import MarketTabs from "@/components/MarketTabs";
 import { eur, Offer, SealedItem, setOrder, useSealed, usePrices } from "@/lib/data";
 import { formatPct } from "@/lib/price-series";
 import { useTcg } from "@/lib/tcg";
 import { useAuth } from "@/lib/auth";
 import { useSealedCollection } from "@/lib/sealed-collection";
 
-const PER = 24;
+const PER = 10;
 const KINDS = ["Box", "Case", "Pack", "Double Pack", "Starter", "Premium", "Iné"];
 const cmUrl = (name: string) => `https://www.cardmarket.com/en/OnePiece/Products/Search?searchString=${encodeURIComponent(name)}`;
 const norm = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -80,6 +81,7 @@ function Boxes() {
 
   return (
     <div className="moves boxes">
+      <MarketTabs />
       <h1>Hodnoty boxov</h1>
       <p className="muted moves-note">
         Reálna trhová hodnota zapečatených produktov podľa Cardmarketu (trend cena), nie pýtaná cena obchodov. Porovnanie cien v e-shopoch nájdeš v <Link href="/ceny">Ceny boxov</Link>.

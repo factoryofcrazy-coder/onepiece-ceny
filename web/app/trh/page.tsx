@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Loading } from "@/components/ui";
 import { indexed, IndexPoint, loadMarketIndex, loadSpy, spyAligned, SpyPoint } from "@/lib/market";
 import { niceTicks } from "@/lib/price-series";
+import MarketTabs from "@/components/MarketTabs";
 
 const W = 720, H = 240, LEFT = 48, RIGHT = 14, TOP = 14, BOT = 28;
 const dayLabel = (d: string) => new Date(d + "T00:00:00Z").toLocaleDateString("sk-SK", { day: "numeric", month: "numeric", timeZone: "UTC" });
@@ -47,6 +48,7 @@ export default function Page() {
 
   return (
     <div className="mindex">
+      <MarketTabs />
       <h1>Trhový index</h1>
       <p className="muted small">
         Vývoj celého trhu One Piece podľa priemernej trend ceny kariet (od 1 €) a boxov na Cardmarkete, porovnaný s akciovým trhom (SPY, teda S&amp;P 500). Základ 1000 je prvý zaznamenaný deň.

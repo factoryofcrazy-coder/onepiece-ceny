@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { CardImg, CardModal, DataError, FilterBar, Foil, Loading } from "@/components/ui";
+import MarketTabs from "@/components/MarketTabs";
 import { useAuth } from "@/lib/auth";
 import { topMoves } from "@/lib/collector";
 import { useCollection } from "@/lib/collection";
@@ -43,6 +44,7 @@ function Moves() {
 
   return (
     <div className="moves">
+      <MarketTabs />
       <h1>Pohyby cien</h1>
       <p className="muted moves-note">
         Priemerná predajná cena za posledných 7 dní oproti 30 dňom podľa Cardmarketu. Je to orientačné: kariet sa často predá málo a jeden predaj dokáže priemer pohnúť, preto sa oplatí pozrieť si aj ponuky.
