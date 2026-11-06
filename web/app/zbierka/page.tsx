@@ -15,6 +15,7 @@ import { useLang } from "@/lib/lang";
 import { useCollection } from "@/lib/collection";
 import { useSealedCollection } from "@/lib/sealed-collection";
 import { Card, eur, setKind, SealedItem, useCards, usePrices, useSealed, cardEur } from "@/lib/data";
+import { IMPORT_PUBLIC } from "@/lib/config";
 
 type Item = { card: Card; n: number; unit: number | null; total: number };
 
@@ -177,7 +178,7 @@ function OpCollection() {
           )}
           <div className="row gap wrapr vault-actions">
             <OwnerPicker value={viewing} onChange={setOwner} />
-            {mine && (
+            {mine && IMPORT_PUBLIC && (
               <Link className="btn ghost sm" href="/import">
                 {t("Import z HoloDex", "Import from HoloDex")}
               </Link>
@@ -240,7 +241,14 @@ function OpCollection() {
           {mine ? (
             <>
               {t("Zbierka je zatiaľ prázdna. Pridaj karty v", "Your collection is empty so far. Add cards in")} <Link href="/karty">{t("Kartách", "Cards")}</Link>, {t("naskenuj ich", "scan them with the")}{" "}
-              <Link href="/skener">{t("Skenerom", "Scanner")}</Link> {t("alebo ich", "or")} <Link href="/import">{t("naimportuj z HoloDex", "import them from HoloDex")}</Link>.
+              <Link href="/skener">{t("Skenerom", "Scanner")}</Link>
+              {IMPORT_PUBLIC && (
+                <>
+                  {" "}
+                  {t("alebo ich", "or")} <Link href="/import">{t("naimportuj z HoloDex", "import them from HoloDex")}</Link>
+                </>
+              )}
+              .
               <OtherGameHint qty={qty} game="onepiece" />
             </>
           ) : (

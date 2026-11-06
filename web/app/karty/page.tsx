@@ -9,6 +9,7 @@ import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
 import { useLang } from "@/lib/lang";
 import { Card, COLOR_SK, COLORS, eur, SET_KIND_EN, SET_KIND_SK, SET_KINDS, setKind, sortSets, TYPE_SK, useCards, usePrices, cardEur } from "@/lib/data";
+import { IMPORT_PUBLIC } from "@/lib/config";
 
 const PAGE = 120;
 
@@ -104,7 +105,7 @@ function OpCardsPage() {
           </p>
         </div>
         <div className="row gap wrapr">
-          {user && (
+          {user && IMPORT_PUBLIC && (
             <Link className="btn ghost sm" href="/import">
               {t("Import z HoloDex", "Import from HoloDex")}
             </Link>
