@@ -719,8 +719,19 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .mindex { max-width: 780px; }
 .mindex-big { display: flex; align-items: baseline; gap: 14px; margin: 10px 0 2px; }
 .mindex-big b { font: 800 44px var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
-.mindex-chart { margin: 14px 0 10px; }
-.mindex-chart svg { width: 100%; height: auto; display: block; }
+.mindex-chart { margin: 14px 0 10px; position: relative; }
+.mindex-chart svg { width: 100%; height: auto; display: block; touch-action: none; }
+.mindex-chart svg:focus { outline: none; }
+.mindex-cross { stroke: var(--muted); stroke-width: 1; opacity: .6; }
+.mindex-dot { fill: var(--gold); stroke: var(--sea); stroke-width: 2; }
+.mindex-dot.spy { fill: var(--foam); }
+.mindex-tip { position: absolute; top: 6px; transform: translateX(-50%); background: rgb(var(--sea2-rgb) / .97); border: 1px solid var(--line); border-radius: 10px; padding: 7px 10px; pointer-events: none; white-space: nowrap; box-shadow: 0 6px 18px rgb(0 0 0 / .35); z-index: 2; }
+.mindex-tip-day { display: block; color: var(--muted); font-size: 11px; margin-bottom: 3px; }
+.mindex-tip-row { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); }
+.mindex-tip-row b { color: var(--text); font-variant-numeric: tabular-nums; }
+.mindex-tip-row i { width: 12px; height: 3px; border-radius: 2px; flex-shrink: 0; }
+.mindex-tip-row.op i { background: var(--gold); }
+.mindex-tip-row.spy i { background: var(--foam); }
 .mindex-line { stroke: var(--gold); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
 .mindex-area { fill: var(--gold); opacity: .12; }
 .mindex-base { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; opacity: .55; }
