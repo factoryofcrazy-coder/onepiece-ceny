@@ -1,14 +1,15 @@
 "use client";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DataError, FilterBar, Loading } from "@/components/ui";
-import { eur, SealedItem, setOrder, useSealed } from "@/lib/data";
+import { eur, Offer, SealedItem, setOrder, useSealed, usePrices } from "@/lib/data";
 import { formatPct } from "@/lib/price-series";
 import { useTcg } from "@/lib/tcg";
 
-const PAGE = 50;
+const PER = 24;
 const KINDS = ["Box", "Case", "Pack", "Double Pack", "Starter", "Premium", "Iné"];
 const cmUrl = (name: string) => `https://www.cardmarket.com/en/OnePiece/Products/Search?searchString=${encodeURIComponent(name)}`;
+const norm = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, "");
 /** Pohyb hodnoty: trend oproti 30-dňovému priemeru, ak ho poznáme. */
 const movePct = (s: SealedItem) => (s.cm != null && s.cm30 ? (s.cm / s.cm30 - 1) * 100 : null);
 
@@ -25,12 +26,26 @@ export default function Page() {
 
 function Boxes() {
   const { data, error } = useSealed();
+  const { data: prices } = usePrices();
   const [kind, setKind] = useState("Box");
   const [lang, setLang] = useState<"EN" | "JP">("EN");
   const [set, setSet] = useState("");
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<"value" | "move">("value");
-  const [limit, setLimit] = useState(PAGE);
+  const [page, setPage] = useState(0);
+
+  // obrázky z e-shopov (prices.json): set+druh+jazyk → obrázok
+  const imgOf = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const o of (prices?.offers ?? []) as Offer[]) {
+      const img = o[15];
+      if (!img) continue;
+      const key = `${norm(o[2])}|${o[3]}|${o[4]}`;
+      if (!m.has(key)) m.set(key, img);
+    }
+    return m;
+  }, [prices]);
+  const thumbFor = (s: SealedItem) => (s.set ? imgOf.get(`${norm(s.set)}|${s.kind}|${s.lang}`) : undefined);
 
   const sets = useMemo(() => {
     if (!data) return [];
@@ -52,6 +67,10 @@ function Boxes() {
     return out;
   }, [data, kind, lang, set, q, sort]);
 
+  const pages = Math.max(1, Math.ceil(list.length / PER));
+  useEffect(() => setPage(0), [kind, lang, set, q, sort]);
+  const shown = list.slice(page * PER, page * PER + PER);
+
   if (error) return <DataError error={error} file="sealed" />;
   if (!data) return <Loading shape="rows" />;
 
@@ -63,7 +82,7 @@ function Boxes() {
       </p>
       <div className="pchart-range moves-dir" role="group" aria-label="Jazyk">
         {(["EN", "JP"] as const).map((l) => (
-          <button key={l} className={lang === l ? "on" : ""} aria-pressed={lang === l} onClick={() => (setLang(l), setLimit(PAGE))}>
+          <button key={l} className={lang === l ? "on" : ""} aria-pressed={lang === l} onClick={() => setLang(l)}>
             {l === "EN" ? "Anglické" : "Japonské"}
           </button>
         ))}
@@ -71,7 +90,7 @@ function Boxes() {
       <FilterBar>
         <label className="field">
           <span>Druh</span>
-          <select value={kind} onChange={(e) => (setKind(e.target.value), setLimit(PAGE))}>
+          <select value={kind} onChange={(e) => setKind(e.target.value)}>
             <option value="*">Všetky</option>
             {KINDS.map((k) => (
               <option key={k} value={k}>
@@ -82,7 +101,7 @@ function Boxes() {
         </label>
         <label className="field">
           <span>Set</span>
-          <select value={set} onChange={(e) => (setSet(e.target.value), setLimit(PAGE))}>
+          <select value={set} onChange={(e) => setSet(e.target.value)}>
             <option value="">Všetky</option>
             {sets.map(([id, name]) => (
               <option key={id} value={id}>
@@ -100,40 +119,50 @@ function Boxes() {
         </label>
         <label className="field grow">
           <span>Hľadať</span>
-          <input value={q} onChange={(e) => (setQ(e.target.value), setLimit(PAGE))} placeholder="Napr. OP09, Romance Dawn…" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Napr. OP09, Romance Dawn…" />
         </label>
       </FilterBar>
       {list.length === 0 ? (
         <div className="empty">Pre tento výber nemáme žiadne produkty. Skús iný druh alebo jazyk.</div>
       ) : (
-        <div className="vlist">
-          {list.slice(0, limit).map((s, k) => {
-            const pct = movePct(s);
-            return (
-              <a key={s.id} className="vrow" href={cmUrl(s.name)} target="_blank" rel="noreferrer">
-                <span className="vrank">{k + 1}</span>
-                <span className="vname">
-                  <b>{s.name}</b>
-                  <span className="small muted">
-                    {s.set && <span className="tag tiny">{s.set}</span>} {s.kind}
+        <>
+          <div className="vlist">
+            {shown.map((s, k) => {
+              const pct = movePct(s);
+              const img = thumbFor(s);
+              return (
+                <a key={s.id} className="vrow" href={cmUrl(s.name)} target="_blank" rel="noreferrer">
+                  <span className="vrank">{page * PER + k + 1}</span>
+                  <span className="boxthumb">{img ? <img src={img} alt="" loading="lazy" /> : <span className="boxthumb-ph" aria-hidden />}</span>
+                  <span className="vname">
+                    <b>{s.name}</b>
+                    <span className="small muted">
+                      {s.set && <span className="tag tiny">{s.set}</span>} {s.kind}
+                    </span>
                   </span>
-                </span>
-                {pct != null ? <span className={`vqty cmove ${pct > 0 ? "up" : pct < 0 ? "down" : ""}`}>{formatPct(pct)}</span> : <span className="vqty muted tiny">–</span>}
-                {s.cmLow != null && <span className="vunit small muted">od {eur(s.cmLow)}</span>}
-                <b className="vtotal">{eur(s.cm)}</b>
-              </a>
-            );
-          })}
-        </div>
+                  {pct != null ? <span className={`vqty cmove ${pct > 0 ? "up" : pct < 0 ? "down" : ""}`}>{formatPct(pct)}</span> : <span className="vqty muted tiny">–</span>}
+                  {s.cmLow != null && <span className="vunit small muted">od {eur(s.cmLow)}</span>}
+                  <b className="vtotal">{eur(s.cm)}</b>
+                </a>
+              );
+            })}
+          </div>
+          {pages > 1 && (
+            <div className="pager">
+              <button className="btn ghost sm" disabled={page === 0} onClick={() => (setPage(page - 1), scrollTo({ top: 0 }))}>
+                ← Späť
+              </button>
+              <span className="small muted">
+                Strana {page + 1} z {pages} · {list.length} produktov
+              </span>
+              <button className="btn ghost sm" disabled={page >= pages - 1} onClick={() => (setPage(page + 1), scrollTo({ top: 0 }))}>
+                Ďalej →
+              </button>
+            </div>
+          )}
+        </>
       )}
-      {list.length > limit && (
-        <div className="center">
-          <button className="btn ghost" onClick={() => setLimit(limit + PAGE)}>
-            Zobraziť ďalšie ({list.length - limit})
-          </button>
-        </div>
-      )}
-      <p className="tiny muted">Pohyb je trend cena oproti 30-dňovému priemeru. Pri zriedka predávaných produktoch priemer chýba, tak sa pohyb nezobrazí.</p>
+      <p className="tiny muted">Pohyb je trend cena oproti 30-dňovému priemeru. Pri zriedka predávaných produktoch priemer chýba, tak sa pohyb nezobrazí. Obrázky sú z e-shopov a nemusia presne sedieť s verziou produktu.</p>
     </div>
   );
 }
