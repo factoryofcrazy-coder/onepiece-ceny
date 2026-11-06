@@ -17,6 +17,6 @@ describe("variantGroup", () => {
     for (const v of ["Alternate Art", "Parallel", "SP", "SPR", "Full Art", "Textured Foil", "Jolly Roger Foil", "Wanted Poster", "SP · Gold", "Super Alternate Art", "TR"]) expect(variantGroup(v)).toBe("alt");
   });
   it("promo, turnajové a eventové karty", () => {
-    for (const v of ["Promo", "Turnajové promo", "Release Event", "Pre-Release", "Judge", "Event Pack Vol. 1", "CS 2024 Event Pack", "Winner Pack Vol. 7", "Store Championship Trophy Card"]) expect(variantGroup(v)).toBe("promo");
+    for (const v of ["Promo", "Tournament promo", "Turnajové promo", "Release Event", "Pre-Release", "Judge", "Event Pack Vol. 1", "CS 2024 Event Pack", "Winner Pack Vol. 7", "Store Championship Trophy Card"]) expect(variantGroup(v)).toBe("promo");
   });
 });

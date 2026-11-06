@@ -9,6 +9,9 @@ import { GAME_PUBLIC } from "@/lib/config";
 import { TCGS, useTcg } from "@/lib/tcg";
 import SearchBox from "./SearchBox";
 import ThemeToggle from "./ThemeToggle";
+import LangToggle from "./LangToggle";
+import { useLang } from "@/lib/lang";
+import { navLabel } from "@/lib/i18n-nav";
 import { DmNavIcon } from "./dm/DmLink";
 
 // Pokémon: ceny, karty, zbierka a master sety (decky a hra sú len pre One Piece)
@@ -46,6 +49,7 @@ export default function Nav({ onMenu }: { onMenu?: () => void }) {
   const links = tcg === "pokemon" ? PK_LINKS : LINKS;
   const newReports = useNewReports();
   const badges = useBadges(!!user);
+  const { lang, t: tx } = useLang();
   const pick = (t: typeof tcg) => {
     if (t === tcg) return;
     setTcg(t);
@@ -55,7 +59,7 @@ export default function Nav({ onMenu }: { onMenu?: () => void }) {
   return (
     <header className="nav">
       <div className="wrap navin">
-        <button className="tb-menu" onClick={onMenu} aria-label="Otvoriť menu">
+        <button className="tb-menu" onClick={onMenu} aria-label={tx("Otvoriť menu", "Open menu")}>
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
             <path d="M4 7h16M4 12h16M4 17h16" />
           </svg>
@@ -73,7 +77,7 @@ export default function Nav({ onMenu }: { onMenu?: () => void }) {
           </span>
         </Link>
         {TCGS.length > 1 && (
-        <div className="tcg-switch" role="radiogroup" aria-label="Kartová hra">
+        <div className="tcg-switch" role="radiogroup" aria-label={tx("Kartová hra", "Card game")}>
           {TCGS.map((t) => (
             <button
               key={t.id}
@@ -97,18 +101,19 @@ export default function Nav({ onMenu }: { onMenu?: () => void }) {
               href={l.href}
               className={(l.href === "/" ? path === "/" : path.startsWith(l.href)) ? "on" : ""}
             >
-              {l.label}
+              {navLabel(l.label, lang)}
               {l.href === "/report" && newReports > 0 && <span className="nav-badge">{newReports}</span>}
             </Link>
           ))}
         </nav>
         <SearchBox />
+        <LangToggle />
         <ThemeToggle />
         <DmNavIcon />
         <div className="who">
           {loading ? null : user ? (
             <div className="acct">
-              <button className="avatar" onClick={() => setMenu(!menu)} aria-expanded={menu} aria-label="Účet">
+              <button className="avatar" onClick={() => setMenu(!menu)} aria-expanded={menu} aria-label={tx("Účet", "Account")}>
                 {(profile?.username ?? user.email ?? "?").slice(0, 1).toUpperCase()}
               </button>
               {menu && (
@@ -117,31 +122,31 @@ export default function Nav({ onMenu }: { onMenu?: () => void }) {
                   <div className="acct-menu" role="menu">
                     <div className="acct-who">
                       <b>
-                        {profile?.username ?? "Môj účet"} <UserBadge badge={user ? badges.get(user.id) : undefined} compact />
+                        {profile?.username ?? tx("Môj účet", "My account")} <UserBadge badge={user ? badges.get(user.id) : undefined} compact />
                       </b>
                       <span className="tiny muted">{user.email}</span>
                     </div>
                     <Link href="/ucet" onClick={() => setMenu(false)}>
-                      Môj účet
+                      {tx("Môj účet", "My account")}
                     </Link>
                     <Link href="/zbierka" onClick={() => setMenu(false)}>
-                      Moja zbierka
+                      {tx("Moja zbierka", "My collection")}
                     </Link>
                     <Link href="/decky" onClick={() => setMenu(false)}>
-                      Moje decky
+                      {tx("Moje decky", "My decks")}
                     </Link>
-                    <button onClick={() => (setMenu(false), signOut())}>Odhlásiť sa</button>
+                    <button onClick={() => (setMenu(false), signOut())}>{tx("Odhlásiť sa", "Sign out")}</button>
                   </div>
                 </>
               )}
             </div>
           ) : (
-            <Link className="login-btn" href="/login" aria-label="Prihlásiť sa">
+            <Link className="login-btn" href="/login" aria-label={tx("Prihlásiť sa", "Sign in")}>
               <svg viewBox="0 0 24 24" aria-hidden>
                 <circle cx="12" cy="8" r="4" />
                 <path d="M4 21a8 8 0 0 1 16 0" />
               </svg>
-              <span>Prihlásiť</span>
+              <span>{tx("Prihlásiť", "Sign in")}</span>
             </Link>
           )}
         </div>

@@ -5,6 +5,8 @@ import { ReactNode, useEffect, useState } from "react";
 import { GAME_PUBLIC } from "@/lib/config";
 import { useNewReports } from "@/lib/reports";
 import { useTcg } from "@/lib/tcg";
+import { useLang } from "@/lib/lang";
+import { navLabel } from "@/lib/i18n-nav";
 
 // Dolná navigácia na mobile (ako natívna appka). Na desktope sa nezobrazuje – tam je horné menu.
 type Tab = { href: string; label: string; icon: ReactNode; main?: boolean };
@@ -92,6 +94,7 @@ export default function TabBar() {
   const { tcg } = useTcg();
   const [more, setMore] = useState(false);
   const newReports = useNewReports();
+  const { lang, t: tx } = useLang();
   useEffect(() => setMore(false), [path]);
   const tabs = tcg === "pokemon" ? PK_TABS : OP_TABS;
   const moreOn = tcg !== "pokemon" && OP_MORE.some((l) => active(path, l.href));
@@ -100,26 +103,26 @@ export default function TabBar() {
     <>
       {more && <div className="tb-scrim" onClick={() => setMore(false)} />}
       {more && (
-        <div className="tb-sheet" role="dialog" aria-label="Ďalšie stránky">
+        <div className="tb-sheet" role="dialog" aria-label={tx("Ďalšie stránky", "More pages")}>
           {OP_MORE.map((l) => (
             <Link key={l.href} href={l.href} className={active(path, l.href) ? "on" : ""}>
-              {l.label}
+              {navLabel(l.label, lang)}
               {l.href === "/report" && newReports > 0 && <span className="nav-badge">{newReports}</span>}
             </Link>
           ))}
         </div>
       )}
-      <nav className="tabbar" aria-label="Hlavné menu">
+      <nav className="tabbar" aria-label={tx("Hlavné menu", "Main menu")}>
         {tabs.map((t) => (
           <Link key={t.href} href={t.href} className={`${t.main ? "main" : ""} ${active(path, t.href) ? "on" : ""}`}>
             <span className="tb-ic">{t.icon}</span>
-            <span className="tb-l">{t.label}</span>
+            <span className="tb-l">{navLabel(t.label, lang)}</span>
           </Link>
         ))}
         {tcg !== "pokemon" && (
           <button className={moreOn || more ? "on" : ""} onClick={() => setMore(!more)} aria-expanded={more}>
             <span className="tb-ic">{I.more}{newReports > 0 && <span className="nav-dot" aria-hidden />}</span>
-            <span className="tb-l">Viac</span>
+            <span className="tb-l">{tx("Viac", "More")}</span>
           </button>
         )}
       </nav>

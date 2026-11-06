@@ -1550,3 +1550,4 @@ body.dm-open main.wrap { max-width: none; padding: 0; }
   .chatx-page { height: calc(100dvh - 56px - var(--tb-h) - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 24px); }
   .dm-form { padding-bottom: 10px; }
 }
+.lang-toggle button { width: auto; min-width: 30px; padding: 0 7px; font: 700 11.5px var(--body); letter-spacing: .03em; }
