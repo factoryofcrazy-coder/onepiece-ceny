@@ -8,6 +8,7 @@ import { loadCardAlts, cardEur, COLOR_SK, eur, thumb } from "@/lib/data";
 import CopiesPanel from "@/components/CopiesPanel";
 import PriceChart from "@/components/PriceChart";
 import { soldSearchUrl } from "@/lib/copies";
+import { gradedEur, GradedPrice, loadGraded } from "@/lib/grading";
 import { formatPct, notableMove, salesChange } from "@/lib/price-series";
 
 /** Kostra namiesto „Načítavam…“ – tvar zodpovedá obsahu, ktorý príde. */
@@ -251,6 +252,15 @@ export function CardModal({
       live = false;
     };
   }, [card.id, card.code, card.imgBase]);
+  const [graded, setGraded] = useState<GradedPrice[]>([]);
+  useEffect(() => {
+    setGraded([]);
+    let live = true;
+    loadGraded([card.id]).then((m) => live && setGraded(m.get(card.id) ?? []));
+    return () => {
+      live = false;
+    };
+  }, [card.id]);
   const { user: me } = useAuth();
   const [trade, setTrade] = useState("");
   const toTrade = async (kind: "offer" | "want") => {
@@ -352,16 +362,28 @@ export function CardModal({
           {main != null && <PriceChart key={card.id} card={card} usd={usd} source={src} />}
           <section className="pchart graded-links" aria-label="Predaje hodnotených kariet">
             <h3>Hodnotené kusy: skutočné predaje</h3>
-            <p className="pchart-sum">Otvorí predané kusy na eBay. Skontroluj, že ide o rovnakú verziu karty.</p>
+            {graded.length > 0 && (
+              <dl className="graded-prices">
+                {[...graded].sort((a, b) => a.grader.localeCompare(b.grader) || b.grade - a.grade).map((g) => (
+                  <div key={`${g.grader}${g.grade}`}>
+                    <dt>{g.grader} {g.grade}</dt>
+                    <dd>
+                      <b>{eur(g.median / 100 / usd)}</b> <span className="muted tiny">medián, {g.sales} {g.sales === 1 ? "predaj" : g.sales < 5 ? "predaje" : "predajov"}{g.last_sold && `, naposledy ${new Date(g.last_sold + "T00:00:00Z").toLocaleDateString("sk-SK", { timeZone: "UTC" })}`}</span>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            <p className="pchart-sum">{graded.length > 0 ? "Zdroj: predaje na eBay, najmä USA, prepočítané na eurá. " : ""}Tlačidlá otvoria predané kusy na eBay. Skontroluj, že ide o rovnakú verziu karty.</p>
             <div className="graded-row">
-              {([["PSA", 10], ["PSA", 9], ["CGC", 10], ["BGS", 9.5]] as const).map(([g, n]) => (
+              {([["PSA", 10], ["PSA", 9], ["BGS", 9.5], ["BGS", 9], ["CGC", 10], ["CGC", 9.5]] as const).map(([g, n]) => (
                 <a key={`${g}${n}`} className="btn ghost sm" href={soldSearchUrl(card.code, g, n)} target="_blank" rel="noreferrer">
                   {g} {n} ↗
                 </a>
               ))}
             </div>
           </section>
-          {me && onSet && <CopiesPanel key={`k${card.id}`} card={card} market={main} qty={qty ?? 0} onSet={onSet} onChange={onCopies} />}
+          {me && onSet && <CopiesPanel key={`k${card.id}`} card={card} market={main} qty={qty ?? 0} onSet={onSet} onChange={onCopies} gradedOf={(c) => (c.grader && c.grade != null ? gradedEur(graded, c.grader, c.grade, usd)?.eur ?? null : null)} />}
           {alts.length > 0 && (
             <section className="cd-looks" aria-label="Možné vzhľady">
               <h3>Možné vzhľady ({alts.length})</h3>

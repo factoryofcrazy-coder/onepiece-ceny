@@ -25,6 +25,8 @@ describe("hodnota kusu a zisk", () => {
     expect(copyValue(copy({ grader: "PSA", grade: 10, own_value: 300 }), 50)).toBe(300);
     expect(copyValue(copy({}), 50)).toBe(50);
     expect(copyValue(copy({ own_value: 70 }), 50)).toBe(70);
+    expect(copyValue(copy({ grader: "PSA", grade: 10 }), 50, 410)).toBe(410);
+    expect(copyValue(copy({ grader: "PSA", grade: 10, own_value: 300 }), 50, 410)).toBe(300);
   });
   it("zisk ráta len kusy s nákupom aj hodnotou", () => {
     const p = portfolio(

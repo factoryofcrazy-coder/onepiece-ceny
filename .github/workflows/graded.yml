@@ -1,0 +1,23 @@
+name: Ceny hodnotených kariet
+
+# Raz týždenne malá dávka, nech to vyjde z bezplatného kreditu Apify. Bez APIFY_TOKEN sa krok preskočí.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  graded:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zistiť ceny
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python3 tools/graded_prices.py --cards docs/data/cards.json

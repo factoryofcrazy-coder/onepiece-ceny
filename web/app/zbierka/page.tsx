@@ -7,6 +7,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { collectionChange, collectionCsv, topMoves } from "@/lib/collector";
 import { Copy, gradedCounts, loadCopies, portfolio } from "@/lib/copies";
 import { formatPct, salesChange } from "@/lib/price-series";
+import GradingAdvice from "@/components/GradingAdvice";
+import { gradedEur, GradedPrice, loadGraded } from "@/lib/grading";
 import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OtherGameHint, OwnerPicker, PriceMove } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
@@ -78,10 +80,20 @@ function OpCollection() {
     const cards = items.map((i) => i.card);
     return { up: topMoves(cards, usd, "up", 1).slice(0, 3), down: topMoves(cards, usd, "down", 1).slice(0, 3) };
   }, [items, usd]);
+  const [slabPrices, setSlabPrices] = useState<Map<string, GradedPrice[]>>(new Map());
+  useEffect(() => {
+    const ids = [...new Set((copies ?? []).filter((c) => c.grader).map((c) => c.card_id))];
+    if (ids.length) loadGraded(ids).then(setSlabPrices);
+  }, [copies]);
   const profit = useMemo(() => {
     if (!copies || !data) return null;
-    return portfolio(copies, (id) => cardEur(data.byId.get(id), usd));
-  }, [copies, data, usd]);
+    return portfolio(
+      copies,
+      (id) => cardEur(data.byId.get(id), usd),
+      (c) => (c.grader && c.grade != null ? gradedEur(slabPrices.get(c.card_id), c.grader, c.grade, usd)?.eur ?? null : null),
+    );
+  }, [copies, data, usd, slabPrices]);
+  const adviceCards = useMemo(() => items.map((i) => i.card), [items]);
   const exportCsv = () => {
     const url = URL.createObjectURL(new Blob([collectionCsv(items, copies ?? [])], { type: "text/csv;charset=utf-8" }));
     const a = document.createElement("a");
@@ -232,6 +244,8 @@ function OpCollection() {
               )}
             </div>
           )}
+
+          {mine && <GradingAdvice cards={adviceCards} usd={usd} onOpen={setOpen} />}
 
           <div className="vault-grid">
             <section className="panel vault-sets">

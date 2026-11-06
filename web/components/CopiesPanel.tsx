@@ -7,7 +7,7 @@ import { addCopy, certUrl, CONDS, Copy, copyLabel, copyValue, GRADERS, loadCopie
 const today = () => new Date().toISOString().slice(0, 10);
 
 /** Moje kusy v detaile karty. Kým tabuľka nie je v databáze, sekcia sa vôbec neukáže. */
-export default function CopiesPanel({ card, market, qty, onSet, onChange }: { card: Card; market: number | null; qty: number; onSet: (n: number) => void; onChange?: () => void }) {
+export default function CopiesPanel({ card, market, qty, onSet, onChange, gradedOf }: { card: Card; market: number | null; qty: number; onSet: (n: number) => void; onChange?: () => void; gradedOf?: (c: Copy) => number | null }) {
   const [copies, setCopies] = useState<Copy[] | null>(null);
   const [form, setForm] = useState(false);
   const [kind, setKind] = useState("");
@@ -81,7 +81,7 @@ export default function CopiesPanel({ card, market, qty, onSet, onChange }: { ca
       </div>
       <p className="copies-private">Nákupnú cenu, stav a certifikát vidíš len ty. Cena pri karte platí pre negradovanú kartu. Pri gradovanej si pozri skutočné predaje a zapíš hodnotu podľa nich.</p>
       {copies.map((c) => {
-        const v = copyValue(c, market);
+        const v = copyValue(c, market, gradedOf?.(c) ?? null);
         const diff = c.paid != null && v != null ? v - c.paid : null;
         return (
           <div key={c.id} className="copy-row">

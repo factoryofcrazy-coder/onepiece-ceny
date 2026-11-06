@@ -86,17 +86,17 @@ export function parseMoney(v: string): number | null | undefined {
 
 export const copyLabel = (c: Pick<Copy, "grader" | "grade" | "cond">) => (c.grader ? `${c.grader} ${c.grade}` : c.cond ?? "Bez stavu");
 
-/** Hodnota kusu: vlastný odhad, inak trhová cena. Gradovaná karta trhovú cenu nemá, cena negradovanej by ju skresľovala. */
-export function copyValue(c: Pick<Copy, "own_value" | "grader">, market: number | null): number | null {
+/** Hodnota kusu: čo si človek zapísal, inak predaje rovnakej známky. Cena negradovanej karty by gradovaný kus skresľovala. */
+export function copyValue(c: Pick<Copy, "own_value" | "grader">, market: number | null, graded: number | null = null): number | null {
   if (c.own_value != null) return c.own_value;
-  return c.grader ? null : market;
+  return c.grader ? graded : market;
 }
 
 /** Zisk a strata len z kusov, kde poznáme nákup aj hodnotu. Ostatné sa len spočítajú, aby výsledok nebol zavádzajúci. */
-export function portfolio(copies: Copy[], marketOf: (cardId: string) => number | null) {
+export function portfolio(copies: Copy[], marketOf: (cardId: string) => number | null, gradedOf: (c: Copy) => number | null = () => null) {
   let paid = 0, value = 0, counted = 0, noPaid = 0, noValue = 0;
   for (const c of copies) {
-    const v = copyValue(c, marketOf(c.card_id));
+    const v = copyValue(c, marketOf(c.card_id), gradedOf(c));
     if (c.paid == null) noPaid++;
     else if (v == null) noValue++;
     else {

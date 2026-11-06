@@ -50,6 +50,7 @@ export default function Privacy() {
           Ak je pri prihlásení zapnuté overenie, že nie si robot, zabezpečuje ho <b>Cloudflare Turnstile</b>. E-maily na zmenu hesla posiela e-mailová služba, ktorej odovzdáme tvoju adresu.
         </li>
         <li><b>Discord:</b> text nového hlásenia, bez kontaktu a mena, dostane správca ako upozornenie.</li>
+        <li><b>Ceny hodnotených kariet:</b> z toho, ktoré karty sú v zbierkach, vyberáme, ktorým zistíme cenu. Do služby Apify ide len kód karty, bez účtu a údajov o tom, kto kartu má.</li>
         <li>Odkazy na predaje na eBay a overenie certifikátu sa otvoria až po tvojom kliknutí, dovtedy sa tam nič neposiela.</li>
         <li>Obrázky kariet a knižnica skenera sa načítavajú z externých serverov, ktoré tak vidia tvoju IP adresu.</li>
       </ul>
