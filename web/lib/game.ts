@@ -106,13 +106,14 @@ export async function loadRatings(ids?: string[]): Promise<Map<string, Rating>> 
   return new Map(((data as Rating[]) ?? []).map((r) => [r.user_id, r]));
 }
 
-export const ago = (iso: string) => {
+export const ago = (iso: string, lang: "sk" | "en" = "sk") => {
+  const en = lang === "en";
   const m = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
-  if (m < 1) return "práve teraz";
-  if (m < 60) return `pred ${m} min`;
+  if (m < 1) return en ? "just now" : "práve teraz";
+  if (m < 60) return en ? `${m} min ago` : `pred ${m} min`;
   const h = Math.round(m / 60);
-  if (h < 24) return `pred ${h} h`;
-  return `pred ${Math.round(h / 24)} d`;
+  if (h < 24) return en ? `${h} h ago` : `pred ${h} h`;
+  return en ? `${Math.round(h / 24)} d ago` : `pred ${Math.round(h / 24)} d`;
 };
 
 /** herný kód → karta (prednostne základná verzia, nie parallel) */

@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { addNews, loadNews, NewsItem, readMins, removeNews } from "@/lib/news";
+import { useLang } from "@/lib/lang";
 
-const fmt = (d: string) => new Date(d).toLocaleDateString("sk-SK", { day: "numeric", month: "long", year: "numeric" });
+const fmt = (d: string, locale: string) => new Date(d).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" });
 
 export default function Page() {
   const { isAdmin } = useAuth();
+  const { t, locale } = useLang();
   const [items, setItems] = useState<NewsItem[] | null>(null);
   const reload = () => loadNews().then(setItems);
   useEffect(() => {
@@ -16,13 +18,13 @@ export default function Page() {
 
   return (
     <div className="news">
-      <h1>Novinky</h1>
-      <p className="muted small">Nové sety, updaty a dôležité informácie zo sveta One Piece.</p>
+      <h1>{t("Novinky", "News")}</h1>
+      <p className="muted small">{t("Nové sety, updaty a dôležité informácie zo sveta One Piece.", "New sets, updates and important news from the world of One Piece.")}</p>
       {isAdmin && <NewsForm onSaved={reload} />}
       {items === null ? (
         <Loading shape="rows" />
       ) : items.length === 0 ? (
-        <div className="empty">Zatiaľ žiadne novinky.</div>
+        <div className="empty">{t("Zatiaľ žiadne novinky.", "No news yet.")}</div>
       ) : (
         <div className="news-list">
           {items.map((n) => (
@@ -34,11 +36,11 @@ export default function Page() {
               )}
               <div className="news-top">
                 <h2>{n.title}</h2>
-                <time className="muted small">{fmt(n.created_at)}</time>
+                <time className="muted small">{fmt(n.created_at, locale)}</time>
               </div>
               {n.body && (
                 <>
-                  <p className="news-meta tiny muted">{readMins(n.body)} min čítania</p>
+                  <p className="news-meta tiny muted">{readMins(n.body)} {t("min čítania", "min read")}</p>
                   <p className="news-body">{n.body}</p>
                 </>
               )}
@@ -52,12 +54,12 @@ export default function Page() {
                   <button
                     className="news-del small"
                     onClick={async () => {
-                      if (!confirm("Zmazať túto novinku?")) return;
+                      if (!confirm(t("Zmazať túto novinku?", "Delete this news item?"))) return;
                       await removeNews(n.id);
                       reload();
                     }}
                   >
-                    Zmazať
+                    {t("Zmazať", "Delete")}
                   </button>
                 )}
               </div>
@@ -76,6 +78,7 @@ function NewsForm({ onSaved }: { onSaved: () => void }) {
   const [image, setImage] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const { t } = useLang();
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,26 +96,26 @@ function NewsForm({ onSaved }: { onSaved: () => void }) {
 
   return (
     <form className="panel news-form" onSubmit={submit}>
-      <h2 className="sub">Pridať novinku</h2>
+      <h2 className="sub">{t("Pridať novinku", "Add news")}</h2>
       <label className="field">
-        <span>Nadpis</span>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={200} required placeholder="Napr. Nový set OP-18 oznámený" />
+        <span>{t("Nadpis", "Title")}</span>
+        <input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={200} required placeholder={t("Napr. Nový set OP-18 oznámený", "E.g. New set OP-18 announced")} />
       </label>
       <label className="field">
         <span>Text</span>
-        <textarea value={body} onChange={(e) => setBody(e.target.value)} maxLength={4000} rows={4} placeholder="Krátky popis…" />
+        <textarea value={body} onChange={(e) => setBody(e.target.value)} maxLength={4000} rows={4} placeholder={t("Krátky popis…", "Short description…")} />
       </label>
       <label className="field">
-        <span>Odkaz (nepovinné)</span>
+        <span>{t("Odkaz (nepovinné)", "Link (optional)")}</span>
         <input value={url} onChange={(e) => setUrl(e.target.value)} maxLength={500} placeholder="https://…" />
       </label>
       <label className="field">
-        <span>Obrázok – odkaz (nepovinné)</span>
+        <span>{t("Obrázok – odkaz (nepovinné)", "Image – link (optional)")}</span>
         <input value={image} onChange={(e) => setImage(e.target.value)} maxLength={500} placeholder="https://…/obrazok.jpg" />
       </label>
       {err && <p className="news-err small">{err}</p>}
       <button className="btn" disabled={busy || !title.trim()}>
-        {busy ? "Ukladám…" : "Pridať"}
+        {busy ? t("Ukladám…", "Saving…") : t("Pridať", "Add")}
       </button>
     </form>
   );
