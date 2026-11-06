@@ -706,6 +706,18 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .boxthumb { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; }
 .boxthumb img { max-width: 52px; max-height: 52px; border-radius: 6px; object-fit: contain; }
 .boxthumb-ph { width: 40px; height: 52px; border-radius: 6px; background: linear-gradient(135deg, rgb(var(--sea2-rgb) / .9), rgb(var(--sea-rgb) / .6)); border: 1px solid var(--line); }
+.news { max-width: 760px; }
+.news-form { display: flex; flex-direction: column; gap: 10px; margin: 14px 0 22px; }
+.news-list { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+.news-item { background: rgb(var(--sea-rgb) / .6); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; animation: fade .3s both; }
+.news-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.news-top h2 { font-size: 17px; margin: 0; }
+.news-top time { white-space: nowrap; }
+.news-body { margin: 8px 0 0; white-space: pre-wrap; line-height: 1.45; }
+.news-foot { display: flex; align-items: center; gap: 16px; margin-top: 10px; }
+.news-del { background: none; border: 0; color: var(--muted); cursor: pointer; padding: 0; }
+.news-del:hover { color: #e06a6a; }
+.news-err { color: #e06a6a; }
 .pager { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 16px 0 4px; }
 .pager .btn[disabled] { opacity: .4; pointer-events: none; }
 @media (max-width: 640px) { .boxes .vrow { grid-template-columns: 44px minmax(0, 1fr) auto; } .boxes .vrank { display: none; } .boxthumb { width: 44px; height: 44px; } .boxthumb img { max-width: 44px; max-height: 44px; } .boxes .vqty { grid-column: 2; text-align: left; font-size: 13px; } }

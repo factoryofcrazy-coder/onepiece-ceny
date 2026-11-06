@@ -75,6 +75,7 @@ const OP_MORE = [
       ]
     : []),
   { href: "/import", label: "Import z HoloDex" },
+  { href: "/novinky", label: "Novinky" },
   { href: "/chat", label: "Chat" },
   { href: "/report", label: "Report" },
   { href: "/aplikacia", label: "Aplikácia do mobilu" },

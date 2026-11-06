@@ -63,6 +63,7 @@ const GROUPS: { title: string; links: { href: string; label: string; icon: strin
           ]
         : []),
       { href: "/trhovisko", label: "Trhovisko", icon: "trade" },
+      { href: "/novinky", label: "Novinky", icon: "mail" },
       { href: "/chat", label: "Chat", icon: "chat" },
       ...(DM_ENABLED ? [{ href: "/spravy", label: "Správy", icon: "mail" }] : []),
       { href: "/report", label: "Report", icon: "report" },
