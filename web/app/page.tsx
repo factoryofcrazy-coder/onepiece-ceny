@@ -37,7 +37,7 @@ export default function Home() {
   const { user, profile, loading } = useAuth();
   const { tcg } = useTcg();
   const { data: prices } = usePrices(tcg);
-  const { data: cards } = useCards();
+  const { data: cards, error: cardsErr } = useCards();
   const usd = prices?.fx?.USD ?? 1.12;
   const { qty } = useCollection(user?.id, !!user);
   const { today, xp } = useTodayXp(user?.id);
@@ -179,8 +179,12 @@ export default function Home() {
             <h2>Čo sa hýbe</h2>
             <Link href="/pohyby">Všetky pohyby</Link>
           </div>
-          {movers.length === 0 ? (
+          {cardsErr ? (
+            <p className="muted small">Pohyby sa nepodarilo načítať. <Link href="/pohyby">Skús Pohyby cien</Link>.</p>
+          ) : !cards ? (
             <p className="muted small">Načítavam…</p>
+          ) : movers.length === 0 ? (
+            <p className="muted small">Teraz sa nič výrazne nehýbe.</p>
           ) : (
             <ul className="dash-mv">
               {movers.map((m) => {
