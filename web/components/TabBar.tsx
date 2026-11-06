@@ -64,6 +64,7 @@ const OP_MORE = [
   { href: "/ceny", label: "Ceny boxov" },
   { href: "/boxy", label: "Hodnoty boxov" },
   { href: "/pohyby", label: "Pohyby cien" },
+  { href: "/trh", label: "Trhový index" },
   { href: "/trhovisko", label: "Trhovisko" },
   { href: "/master-sety", label: "Master sety" },
   { href: "/decky", label: "Decky" },

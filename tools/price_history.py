@@ -73,9 +73,19 @@ def discord(text):
     urllib.request.urlopen(req, timeout=20).read()
 
 
+def market_index(cards, sealed):
+    """Priemerná trend cena koša v eurách: karty od 1 € a zapečatené boxy/startery. Index so základom 1000 počíta web."""
+    vals = [c["cm"] for c in cards if not c["id"].startswith("pk:") and c.get("cm") and c["cm"] >= 1]
+    vals += [s["cm"] for s in sealed if s.get("cm") and s.get("lang") == "EN" and s.get("kind") in ("Box", "Starter", "Premium")]
+    if not vals:
+        return None
+    return {"value": round(sum(vals) / len(vals), 2), "items": len(vals)}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cards", required=True)
+    ap.add_argument("--sealed")
     a = ap.parse_args()
     key = os.environ.get("SUPABASE_SERVICE_KEY", "").strip()
     if not key:
@@ -91,12 +101,24 @@ def main():
             discord(m)
     except Exception as e:
         print(f"chyba: {e}", file=sys.stderr)
-        # samotný text chyby na Discord nejde, je v logu úlohy
         try:
             discord("**História cien:** dnešné uloženie alebo kontrola databázy zlyhali, pozri log úlohy Databáza kariet.")
         except Exception as e2:
             print(f"Discord: {e2}", file=sys.stderr)
         return 1
+    # trhový index – zlyhanie nezhodí uloženie cien
+    try:
+        if a.sealed:
+            with open(a.cards, encoding="utf-8") as f:
+                cards = json.load(f)["cards"]
+            with open(a.sealed, encoding="utf-8") as f:
+                sealed = json.load(f).get("sealed", [])
+            mi = market_index(cards, sealed)
+            if mi:
+                rpc("record_market_index", {"p_day": today.isoformat(), "p_value": mi["value"], "p_items": mi["items"]}, key)
+                print(f"index: {mi['value']} € priemer, {mi['items']} položiek")
+    except Exception as e:
+        print(f"index zlyhal (nekritické): {e}", file=sys.stderr)
     return 0
 
 

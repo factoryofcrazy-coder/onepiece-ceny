@@ -51,7 +51,7 @@ jobs:
         env:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: python3 ../tools/price_history.py --cards ../docs/data/cards.json
+        run: python3 ../tools/price_history.py --cards ../docs/data/cards.json --sealed ../docs/data/sealed.json
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"

@@ -710,6 +710,18 @@ html[data-tcg="pokemon"] .logo svg { grid-area: 1 / 1; }
 .boxqty { justify-self: end; }
 .vault-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; }
 .vault-boxes { margin-top: 18px; }
+.mindex { max-width: 780px; }
+.mindex-big { display: flex; align-items: baseline; gap: 14px; margin: 10px 0 2px; }
+.mindex-big b { font: 800 44px var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.mindex-chart { margin: 14px 0 10px; }
+.mindex-chart svg { width: 100%; height: auto; display: block; }
+.mindex-line { stroke: var(--gold); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.mindex-area { fill: var(--gold); opacity: .12; }
+.mindex-base { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; opacity: .5; }
+.mindex-dot { fill: var(--gold); }
+.mindex-ax { fill: var(--muted); font-size: 11px; }
+.mindex-table { max-width: 320px; }
+.mindex-note { margin-top: 16px; }
 .vrow.boxrow { grid-template-columns: minmax(0, 1fr) 46px 108px; text-decoration: none; }
 .vrow.boxrow .vname b { white-space: normal; line-height: 1.25; }
 @media (max-width: 640px) { .boxes .vrow.qrow { grid-template-columns: 44px minmax(0, 1fr) auto; } .boxes .vrow.qrow .vtotal { grid-column: 3; grid-row: 1; } .boxes .vrow.qrow .boxqty { grid-column: 3; grid-row: 2; } }

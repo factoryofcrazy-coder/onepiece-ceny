@@ -41,6 +41,7 @@ const GROUPS: { title: string; links: { href: string; label: string; icon: strin
       { href: "/boxy", label: "Hodnoty boxov", icon: "prices" },
       { href: "/karty", label: "Karty", icon: "cards" },
       { href: "/pohyby", label: "Pohyby cien", icon: "prices" },
+      { href: "/trh", label: "Trhový index", icon: "prices" },
       { href: "/skener", label: "Skener", icon: "scan" },
     ],
   },
