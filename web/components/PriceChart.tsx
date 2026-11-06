@@ -4,11 +4,12 @@ import type { Card } from "@/lib/data";
 import { eur } from "@/lib/data";
 import { dayLabel, formatPct, lastDay, niceTicks, priceAt, Series, Step, toSteps, viewOf } from "@/lib/price-series";
 import { sb } from "@/lib/supabase";
+import { useLang } from "@/lib/lang";
 
-const RANGES: { label: string; days: number | null }[] = [
-  { label: "7 dní", days: 7 },
-  { label: "30 dní", days: 30 },
-  { label: "Všetko", days: null },
+const RANGES: { label: string; en: string; days: number | null }[] = [
+  { label: "7 dní", en: "7 days", days: 7 },
+  { label: "30 dní", en: "30 days", days: 30 },
+  { label: "Všetko", en: "All", days: null },
 ];
 const H = 170, LEFT = 58, RIGHT = 10, TOP = 28, BOTTOM = 22;
 
@@ -32,6 +33,7 @@ export default function PriceChart({ card, usd, source }: { card: Card; usd: num
   const [hover, setHover] = useState<number | null>(null);
   const [width, setWidth] = useState(480);
   const box = useRef<HTMLDivElement>(null);
+  const { t, lang } = useLang();
 
   useEffect(() => {
     let live = true;
@@ -59,15 +61,15 @@ export default function PriceChart({ card, usd, source }: { card: Card; usd: num
   const to = series ? lastDay(series, steps) : 0;
   const view = useMemo(() => viewOf(steps, to, RANGES[range].days), [steps, to, range]);
 
-  if (failed) return <section className="pchart"><h3>Vývoj ceny</h3><p className="pchart-sum">Graf sa nepodarilo načítať.</p></section>;
-  if (!series) return <section className="pchart" aria-busy="true"><h3>Vývoj ceny</h3><p className="pchart-sum">Načítavam…</p></section>;
+  if (failed) return <section className="pchart"><h3>{t("Vývoj ceny", "Price history")}</h3><p className="pchart-sum">{t("Graf sa nepodarilo načítať.", "The chart could not be loaded.")}</p></section>;
+  if (!series) return <section className="pchart" aria-busy="true"><h3>{t("Vývoj ceny", "Price history")}</h3><p className="pchart-sum">{t("Načítavam…", "Loading…")}</p></section>;
   const prices = view ? view.steps.flatMap((s) => (s.eur == null ? [] : [s.eur])) : [];
-  if (!view || !prices.length) return <section className="pchart"><h3>Vývoj ceny</h3><p className="pchart-sum">Históriu tejto ceny zatiaľ nemáme.</p></section>;
+  if (!view || !prices.length) return <section className="pchart"><h3>{t("Vývoj ceny", "Price history")}</h3><p className="pchart-sum">{t("Históriu tejto ceny zatiaľ nemáme.", "We don't have a history for this price yet.")}</p></section>;
   if (to - steps[0].day < 1)
     return (
       <section className="pchart">
-        <h3>Vývoj ceny</h3>
-        <p className="pchart-sum">Cenu tejto karty sledujeme od {dayLabel(steps[0].day)} Graf sa začne kresliť po ďalšom dennom zázname.</p>
+        <h3>{t("Vývoj ceny", "Price history")}</h3>
+        <p className="pchart-sum">{t(`Cenu tejto karty sledujeme od ${dayLabel(steps[0].day)} Graf sa začne kresliť po ďalšom dennom zázname.`, `We've been tracking this card's price since ${dayLabel(steps[0].day)} The chart starts after the next daily record.`)}</p>
       </section>
     );
 
@@ -89,16 +91,16 @@ export default function PriceChart({ card, usd, source }: { card: Card; usd: num
     e.preventDefault();
     setHover(clampDay((hover ?? view.to) + (e.key === "ArrowLeft" ? -1 : 1)));
   };
-  const summary = `${eur(view.last)}, ${view.pct != null ? formatPct(view.pct) : "bez porovnania"} od ${dayLabel(view.from)}`;
+  const summary = `${eur(view.last)}, ${view.pct != null ? formatPct(view.pct) : t("bez porovnania", "no comparison")} ${t("od", "since")} ${dayLabel(view.from)}`;
 
   return (
     <section className="pchart">
       <div className="pchart-head">
-        <h3>Vývoj ceny</h3>
-        <div className="pchart-range" role="group" aria-label="Obdobie grafu">
+        <h3>{t("Vývoj ceny", "Price history")}</h3>
+        <div className="pchart-range" role="group" aria-label={t("Obdobie grafu", "Chart period")}>
           {RANGES.map((r, i) => (
             <button key={r.label} className={i === range ? "on" : ""} aria-pressed={i === range} onClick={() => (setRange(i), setHover(null))}>
-              {r.label}
+              {lang === "en" ? r.en : r.label}
             </button>
           ))}
         </div>
@@ -111,7 +113,7 @@ export default function PriceChart({ card, usd, source }: { card: Card; usd: num
           viewBox={`0 0 ${width} ${H}`}
           role="img"
           tabIndex={0}
-          aria-label={`Vývoj ceny: ${summary}. Šípkami vľavo a vpravo prejdeš po dňoch.`}
+          aria-label={`${t("Vývoj ceny", "Price history")}: ${summary}. ${t("Šípkami vľavo a vpravo prejdeš po dňoch.", "Use left and right arrows to move between days.")}`}
           onPointerMove={onMove}
           onPointerDown={onMove}
           onPointerLeave={(e) => e.pointerType === "mouse" && setHover(null)}
@@ -139,19 +141,19 @@ export default function PriceChart({ card, usd, source }: { card: Card; usd: num
         </svg>
         {hover != null && (
           <div className="pchart-tip" style={{ left: Math.min(width - 70, Math.max(70, x(hover))) }} role="status">
-            <b>{hoverPrice != null ? eur(hoverPrice) : "bez ceny"}</b>
+            <b>{hoverPrice != null ? eur(hoverPrice) : t("bez ceny", "no price")}</b>
             <span>{dayLabel(hover)}</span>
           </div>
         )}
       </div>
       <details>
-        <summary>Zmeny ceny v tabuľke</summary>
+        <summary>{t("Zmeny ceny v tabuľke", "Price changes as a table")}</summary>
         <table>
           <tbody>
             {[...view.steps].reverse().map((s) => (
               <tr key={s.day}>
                 <td>{dayLabel(s.day)}</td>
-                <td>{s.eur != null ? eur(s.eur) : "bez ceny"}</td>
+                <td>{s.eur != null ? eur(s.eur) : t("bez ceny", "no price")}</td>
               </tr>
             ))}
           </tbody>
