@@ -29,8 +29,28 @@ export const GRADERS = { PSA: { top: 10, next: 9 }, BGS: { top: 9.5, next: 9 }, 
 export type Grader = keyof typeof GRADERS;
 export const GRADER_SK: Record<Grader, string> = { PSA: "PSA", BGS: "Beckett (BGS)", CGC: "CGC" };
 
-const TOP_LABELS: Record<string, string> = { "BGS-BL": "BGS 10 Black Label", "CGC-PR": "CGC 10 Pristine", "CGC-PF": "CGC 10 Perfect" };
-export const gradedLabel = (g: Pick<GradedPrice, "grader" | "grade">) => TOP_LABELS[g.grader] ?? `${g.grader} ${g.grade}`;
+export type FirmId = "PSA" | "BGS" | "CGC";
+export const FIRMS: { id: FirmId; label: string }[] = [{ id: "PSA", label: "PSA" }, { id: "BGS", label: "Beckett" }, { id: "CGC", label: "CGC" }];
+/** Známky v tabuľke od najvyššej. grader je kľúč v databáze, search je text pre hľadanie na eBay. */
+export const FIRM_ROWS: Record<FirmId, { label: string; grader: string; grade: number; search: string }[]> = {
+  PSA: [
+    { label: "PSA 10", grader: "PSA", grade: 10, search: "PSA" },
+    { label: "PSA 9", grader: "PSA", grade: 9, search: "PSA" },
+  ],
+  BGS: [
+    { label: "10 Black Label", grader: "BGS-BL", grade: 10, search: "BGS Black Label" },
+    { label: "10 Pristine", grader: "BGS", grade: 10, search: "BGS" },
+    { label: "9.5 Gem Mint", grader: "BGS", grade: 9.5, search: "BGS" },
+    { label: "9 Mint", grader: "BGS", grade: 9, search: "BGS" },
+  ],
+  CGC: [
+    { label: "10 Perfect", grader: "CGC-PF", grade: 10, search: "CGC Perfect" },
+    { label: "10 Pristine", grader: "CGC-PR", grade: 10, search: "CGC Pristine" },
+    { label: "10 Gem Mint", grader: "CGC", grade: 10, search: "CGC" },
+    { label: "9.5 Mint+", grader: "CGC", grade: 9.5, search: "CGC" },
+    { label: "9 Mint", grader: "CGC", grade: 9, search: "CGC" },
+  ],
+};
 
 export type Costs = { fee: number; sellPct: number };
 export type Verdict = "good" | "maybe" | "perfect" | "no" | "unknown";

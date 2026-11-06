@@ -80,9 +80,15 @@ export default function GradingAdvice({ cards, usd, onOpen }: { cards: Card[]; u
             <b>{card.name}</b> <span className="muted tiny">{card.id}</span>
             <small className={`grading-v ${a.verdict}`}>{VERDICT_SK[a.verdict]}</small>
           </span>
-          <span className="small">
-            {a.grader} {a.top} {eur(a.vTop, 0)} ({a.salesTop} predajov): {signed(a.gainTop)}
-            {a.vNext != null ? `, ${a.grader} ${a.next} ${eur(a.vNext, 0)}: ${signed(a.gainNext)}` : `, pri nižšej známke ${signed(a.gainNext)}`}
+          <span className="grading-nums">
+            <span>
+              Pri {a.grader} {a.top} ({eur(a.vTop, 0)}, {a.salesTop}×)
+              <b className={a.gainTop > 0 ? "up" : "down"}>{signed(a.gainTop)}</b>
+            </span>
+            <span>
+              {a.vNext != null ? `Pri ${a.grader} ${a.next} (${eur(a.vNext, 0)})` : "Pri nižšej známke"}
+              <b className={a.gainNext > 0 ? "up" : "down"}>{signed(a.gainNext)}</b>
+            </span>
           </span>
           {a.needed != null && a.needed > 0 && a.verdict !== "unknown" && <span className="tiny muted">Vyplatí sa pri šanci na {a.grader} {a.top} aspoň {Math.ceil(a.needed * 100)} %.</span>}
         </button>
