@@ -2,36 +2,39 @@
 // DON!! skiny: vzhľad mojich DON!! žetónov na hracej ploche. Odomykajú sa hraním –
 // výhry proti botovi a odohrané hry sa počítajú v prehliadači, online výhry a hry sa berú z rebríčka.
 import { useCallback, useEffect, useState } from "react";
-import { RANKS } from "./gamify";
+import { RANKS, rankName } from "./gamify";
+import type { Lang } from "./lang-shared";
+
+export const skinName = (k: DonSkin, lang: Lang) => (lang === "en" ? k.en : k.name);
 
 export type DonStats = { botGames: number; botWins: number; onlineGames: number; onlineWins: number; level?: number; rankIndex?: number };
 type Rule = { kind: "free" } | { kind: "botWins" | "games" | "onlineWins" | "level"; n: number } | { kind: "rank"; rank: string };
-export type DonSkin = { id: string; name: string; img: string | null; rule: Rule };
+export type DonSkin = { id: string; name: string; en: string; img: string | null; rule: Rule };
 
 export const DON_SKINS: DonSkin[] = [
-  { id: "classic", name: "Klasický", img: null, rule: { kind: "free" } },
-  { id: "ancient_map", name: "Stará mapa", img: "/game/don/ancient_map.webp", rule: { kind: "free" } },
-  { id: "blue_wave", name: "Veľká vlna", img: "/game/don/blue_wave.webp", rule: { kind: "botWins", n: 1 } },
-  { id: "clear_sky", name: "Jasná obloha", img: "/game/don/clear_sky.webp", rule: { kind: "botWins", n: 3 } },
-  { id: "teal_ocean", name: "Tyrkysový oceán", img: "/game/don/teal_ocean.webp", rule: { kind: "botWins", n: 5 } },
-  { id: "wood_grain", name: "Drevená paluba", img: "/game/don/wood_grain.webp", rule: { kind: "botWins", n: 10 } },
-  { id: "monochrome", name: "Čiernobiely", img: "/game/don/monochrome.webp", rule: { kind: "games", n: 5 } },
-  { id: "moonlight", name: "Mesačný svit", img: "/game/don/moonlight.webp", rule: { kind: "games", n: 15 } },
-  { id: "sakura", name: "Sakura", img: "/game/don/sakura.webp", rule: { kind: "games", n: 30 } },
-  { id: "sunset_ship", name: "Západ slnka", img: "/game/don/sunset_ship.webp", rule: { kind: "onlineWins", n: 1 } },
-  { id: "crimson_storm", name: "Karmínová búrka", img: "/game/don/crimson_storm.webp", rule: { kind: "onlineWins", n: 3 } },
-  { id: "golden_flame", name: "Zlatý plameň", img: "/game/don/golden_flame.webp", rule: { kind: "onlineWins", n: 5 } },
-  { id: "black_gold", name: "Čierne zlato", img: "/game/don/black_gold.webp", rule: { kind: "onlineWins", n: 10 } },
-  { id: "level_05", name: "Rajský ostrov", img: "/game/don/level_05.webp", rule: { kind: "level", n: 5 } },
-  { id: "level_10", name: "Hviezdna mapa", img: "/game/don/level_10.webp", rule: { kind: "level", n: 10 } },
-  { id: "level_20", name: "Koralové kráľovstvo", img: "/game/don/level_20.webp", rule: { kind: "level", n: 20 } },
-  { id: "level_30", name: "Lietajúci ostrov", img: "/game/don/level_30.webp", rule: { kind: "level", n: 30 } },
-  { id: "level_40", name: "Krvavá obloha", img: "/game/don/level_40.webp", rule: { kind: "level", n: 40 } },
-  { id: "rank_captain", name: "Kapitánska búrka", img: "/game/don/rank_captain.webp", rule: { kind: "rank", rank: "captain" } },
-  { id: "rank_supernova", name: "Výbuch Supernovy", img: "/game/don/rank_supernova.webp", rule: { kind: "rank", rank: "supernova" } },
-  { id: "rank_warlord", name: "Búrka Warlorda", img: "/game/don/rank_warlord.webp", rule: { kind: "rank", rank: "warlord" } },
-  { id: "rank_yonko", name: "Hnev Yonka", img: "/game/don/rank_yonko.webp", rule: { kind: "rank", rank: "yonko" } },
-  { id: "rank_king", name: "Poklad Kráľa pirátov", img: "/game/don/rank_king.webp", rule: { kind: "rank", rank: "king" } },
+  { id: "classic", name: "Klasický", en: "Classic", img: null, rule: { kind: "free" } },
+  { id: "ancient_map", name: "Stará mapa", en: "Ancient map", img: "/game/don/ancient_map.webp", rule: { kind: "free" } },
+  { id: "blue_wave", name: "Veľká vlna", en: "Great wave", img: "/game/don/blue_wave.webp", rule: { kind: "botWins", n: 1 } },
+  { id: "clear_sky", name: "Jasná obloha", en: "Clear sky", img: "/game/don/clear_sky.webp", rule: { kind: "botWins", n: 3 } },
+  { id: "teal_ocean", name: "Tyrkysový oceán", en: "Teal ocean", img: "/game/don/teal_ocean.webp", rule: { kind: "botWins", n: 5 } },
+  { id: "wood_grain", name: "Drevená paluba", en: "Wooden deck", img: "/game/don/wood_grain.webp", rule: { kind: "botWins", n: 10 } },
+  { id: "monochrome", name: "Čiernobiely", en: "Monochrome", img: "/game/don/monochrome.webp", rule: { kind: "games", n: 5 } },
+  { id: "moonlight", name: "Mesačný svit", en: "Moonlight", img: "/game/don/moonlight.webp", rule: { kind: "games", n: 15 } },
+  { id: "sakura", name: "Sakura", en: "Sakura", img: "/game/don/sakura.webp", rule: { kind: "games", n: 30 } },
+  { id: "sunset_ship", name: "Západ slnka", en: "Sunset", img: "/game/don/sunset_ship.webp", rule: { kind: "onlineWins", n: 1 } },
+  { id: "crimson_storm", name: "Karmínová búrka", en: "Crimson storm", img: "/game/don/crimson_storm.webp", rule: { kind: "onlineWins", n: 3 } },
+  { id: "golden_flame", name: "Zlatý plameň", en: "Golden flame", img: "/game/don/golden_flame.webp", rule: { kind: "onlineWins", n: 5 } },
+  { id: "black_gold", name: "Čierne zlato", en: "Black gold", img: "/game/don/black_gold.webp", rule: { kind: "onlineWins", n: 10 } },
+  { id: "level_05", name: "Rajský ostrov", en: "Paradise island", img: "/game/don/level_05.webp", rule: { kind: "level", n: 5 } },
+  { id: "level_10", name: "Hviezdna mapa", en: "Star map", img: "/game/don/level_10.webp", rule: { kind: "level", n: 10 } },
+  { id: "level_20", name: "Koralové kráľovstvo", en: "Coral kingdom", img: "/game/don/level_20.webp", rule: { kind: "level", n: 20 } },
+  { id: "level_30", name: "Lietajúci ostrov", en: "Sky island", img: "/game/don/level_30.webp", rule: { kind: "level", n: 30 } },
+  { id: "level_40", name: "Krvavá obloha", en: "Blood sky", img: "/game/don/level_40.webp", rule: { kind: "level", n: 40 } },
+  { id: "rank_captain", name: "Kapitánska búrka", en: "Captain\'s storm", img: "/game/don/rank_captain.webp", rule: { kind: "rank", rank: "captain" } },
+  { id: "rank_supernova", name: "Výbuch Supernovy", en: "Supernova blast", img: "/game/don/rank_supernova.webp", rule: { kind: "rank", rank: "supernova" } },
+  { id: "rank_warlord", name: "Búrka Warlorda", en: "Warlord\'s storm", img: "/game/don/rank_warlord.webp", rule: { kind: "rank", rank: "warlord" } },
+  { id: "rank_yonko", name: "Hnev Yonka", en: "Yonko\'s wrath", img: "/game/don/rank_yonko.webp", rule: { kind: "rank", rank: "yonko" } },
+  { id: "rank_king", name: "Poklad Kráľa pirátov", en: "Pirate King\'s treasure", img: "/game/don/rank_king.webp", rule: { kind: "rank", rank: "king" } },
 ];
 
 const STATS_KEY = "op-don-stats";
@@ -53,11 +56,21 @@ export const isUnlocked = (skin: DonSkin, st: DonStats) => {
   const p = progressOf(skin.rule, st);
   return p.have >= p.need;
 };
-export function ruleText(rule: Rule): string {
-  if (rule.kind === "free") return "Odomknutý";
+export function ruleText(rule: Rule, lang: Lang = "sk"): string {
+  const en = lang === "en";
+  if (rule.kind === "free") return en ? "Unlocked" : "Odomknutý";
   if (rule.kind === "level") return `Level ${rule.n}`;
-  if (rule.kind === "rank") return `Rank ${RANKS.find((r) => r.id === rule.rank)?.name ?? rule.rank}`;
+  if (rule.kind === "rank") {
+    const r = RANKS.find((x) => x.id === rule.rank);
+    return `Rank ${r ? rankName(r, lang) : rule.rank}`;
+  }
   const n = rule.n;
+  if (en) {
+    const s = n === 1 ? "" : "s";
+    if (rule.kind === "botWins") return `${n} win${s} vs the bot`;
+    if (rule.kind === "onlineWins") return `${n} online win${s}`;
+    return `${n} game${s} played`;
+  }
   const pl = (one: string, few: string, many: string) => (n === 1 ? one : n < 5 ? few : many);
   if (rule.kind === "botWins") return `${n} ${pl("výhra", "výhry", "výhier")} proti botovi`;
   if (rule.kind === "onlineWins") return `${n} ${pl("online výhra", "online výhry", "online výhier")}`;

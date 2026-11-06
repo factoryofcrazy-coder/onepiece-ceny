@@ -14,11 +14,13 @@ import { useCards } from "@/lib/data";
 import type { Action, GameState, P } from "@/lib/engine/types";
 import { byCodeOf, deckRef, gameCall, GameRow, loadRatings, Rating, useMyDecks } from "@/lib/game";
 import { sb } from "@/lib/supabase";
+import { useLang } from "@/lib/lang";
 
 type ViewRow = { seat: P; version: number; view: GameState };
 
 function OnlineGamePage() {
   const badges = useBadges();
+  const { t: L } = useLang();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { user, loading } = useAuth();
@@ -80,11 +82,11 @@ function OnlineGamePage() {
   const myMove = !!(g && user && g.status === "playing" && g.to_move === user.id);
   useEffect(() => {
     const base = "Grand Line Tracker";
-    document.title = myMove ? "● Si na ťahu – Hra" : g?.status === "playing" ? "Hra – hrá súper" : base;
+    document.title = myMove ? L("● Si na ťahu – Hra", "● Your turn – Play") : g?.status === "playing" ? L("Hra – hrá súper", "Play – opponent's turn") : base;
     return () => {
       document.title = base;
     };
-  }, [myMove, g?.status]);
+  }, [myMove, g?.status, L]);
 
   const act = async (a: Action) => {
     if (!v) return;
@@ -114,12 +116,12 @@ function OnlineGamePage() {
   };
 
   if (cardsErr) return <DataError error={cardsErr} file="cards" />;
-  if (loading || !cards || (user && g === undefined)) return <Loading what="Načítavam hru" shape="tiles" />;
+  if (loading || !cards || (user && g === undefined)) return <Loading what={L("Načítavam hru", "Loading the game")} shape="tiles" />;
   if (!user)
     return (
       <div className="glob">
         <div className="empty">
-          Na online hru sa treba <Link href={`/login`}>prihlásiť</Link>. Potom otvor tento odkaz znova.
+          {L("Na online hru sa treba", "To play online you need to")} <Link href={`/login`}>{L("prihlásiť", "sign in")}</Link>. {L("Potom otvor tento odkaz znova.", "Then open this link again.")}
         </div>
       </div>
     );
@@ -127,7 +129,7 @@ function OnlineGamePage() {
     return (
       <div className="glob">
         <div className="empty">
-          Táto hra neexistuje. <Link href="/hra">Späť do lobby</Link>
+          {L("Táto hra neexistuje.", "This game doesn't exist.")} <Link href="/hra">{L("Späť do lobby", "Back to the lobby")}</Link>
         </div>
       </div>
     );
@@ -141,8 +143,8 @@ function OnlineGamePage() {
     return (
       <div className="glob">
         <div className="gcard feat" style={{ maxWidth: 620, margin: "0 auto" }}>
-          <span className="kicker">{g.rated ? "Hodnotená výzva" : "Priateľská výzva"}</span>
-          <h3>{mine ? "Tvoja výzva" : `${g.host_name} ťa vyzýva!`}</h3>
+          <span className="kicker">{g.rated ? L("Hodnotená výzva", "Ranked challenge") : L("Priateľská výzva", "Friendly challenge")}</span>
+          <h3>{mine ? L("Tvoja výzva", "Your challenge") : L(`${g.host_name} ťa vyzýva!`, `${g.host_name} challenges you!`)}</h3>
           <div className="vsline">
             <div className="pl">
               {leader(g.host_leader) && <CardImg card={leader(g.host_leader)!} />}
@@ -154,42 +156,42 @@ function OnlineGamePage() {
             <span className="vs">VS</span>
             <div className="pl">
               {!mine && leader(deck?.leader) ? <CardImg card={leader(deck.leader)!} /> : <i className="back" style={{ display: "block", width: 110, aspectRatio: "600/838", borderRadius: 8 }} />}
-              <b className="small">{mine ? "?" : "Ty"}</b>
+              <b className="small">{mine ? "?" : L("Ty", "You")}</b>
             </div>
           </div>
           {g.status === "cancelled" ? (
-            <p className="muted">Výzva bola zrušená.</p>
+            <p className="muted">{L("Výzva bola zrušená.", "The challenge was cancelled.")}</p>
           ) : mine ? (
             <>
               <div className="waiting">
-                <span className="spin" /> Čakáš, kým sa kamoš pripojí. Pošli mu tento odkaz:
+                <span className="spin" /> {L("Čakáš, kým sa kamoš pripojí. Pošli mu tento odkaz:", "Waiting for your friend to join. Send them this link:")}
               </div>
               <div className="linkbox">
                 <code>{location.href}</code>
                 <button className="btn sm" onClick={() => navigator.clipboard?.writeText(location.href)}>
-                  Kopírovať
+                  {L("Kopírovať", "Copy")}
                 </button>
               </div>
               <div className="row gap">
                 <button className="btn ghost sm" onClick={() => simple("cancel").then(() => router.push("/hra"))} disabled={busy}>
-                  Zrušiť výzvu
+                  {L("Zrušiť výzvu", "Cancel challenge")}
                 </button>
               </div>
             </>
           ) : (
             <>
               <label className="field">
-                <span>Tvoj deck</span>
+                <span>{L("Tvoj deck", "Your deck")}</span>
                 <DeckSelect decks={decks} value={deck?.id} onChange={(id) => setDeckId(id)} />
               </label>
               <button className="btn" disabled={busy} onClick={() => simple("join", { deck: deckRef(deck) })}>
-                {busy ? "Pripájam…" : "Prijať výzvu a hrať"}
+                {busy ? L("Pripájam…", "Joining…") : L("Prijať výzvu a hrať", "Accept and play")}
               </button>
             </>
           )}
           {err && <p className="gerr">{err}</p>}
           <Link href="/hra" className="small">
-            ← Späť do lobby
+            ← {L("Späť do lobby", "Back to the lobby")}
           </Link>
         </div>
       </div>
@@ -201,7 +203,7 @@ function OnlineGamePage() {
     return (
       <div className="glob">
         <div className="empty">
-          Túto hru hrajú {g.host_name} a {g.guest_name}. Diváci zatiaľ nie sú podporovaní. <Link href="/hra">Späť do lobby</Link>
+          {L(`Túto hru hrajú ${g.host_name} a ${g.guest_name}. Diváci zatiaľ nie sú podporovaní.`, `This game is between ${g.host_name} and ${g.guest_name}. Spectating isn't supported yet.`)} <Link href="/hra">{L("Späť do lobby", "Back to the lobby")}</Link>
         </div>
       </div>
     );
@@ -216,7 +218,7 @@ function OnlineGamePage() {
         {g.elo_delta} → {ratings.get(user.id)?.elo ?? "…"}
       </p>
     ) : g.status === "done" && !g.rated ? (
-      <p>Priateľská hra – bez zmeny ELO.</p>
+      <p>{L("Priateľská hra – bez zmeny ELO.", "Friendly game – no ELO change.")}</p>
     ) : null;
 
   return (
@@ -238,7 +240,7 @@ function OnlineGamePage() {
         <>
           {result}
           <Link href="/rebricek" className="small" style={{ position: "relative" }}>
-            Rebríček →
+            {L("Rebríček", "Leaderboard")} →
           </Link>
         </>
       }

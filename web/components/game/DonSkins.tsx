@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { levelOf, loadBadges, rankIndex } from "@/lib/gamify";
-import { cacheOnlineStats, cacheProgress, DON_SKINS, isUnlocked, progressOf, ruleText, useDonSkin, useLocalDonStats } from "@/lib/donSkins";
+import { cacheOnlineStats, cacheProgress, DON_SKINS, isUnlocked, progressOf, ruleText, skinName, useDonSkin, useLocalDonStats } from "@/lib/donSkins";
 import { loadRatings } from "@/lib/game";
 import { Icon } from "./icons";
+import { useLang } from "@/lib/lang";
 
 export default function DonSkins() {
   const { user } = useAuth();
+  const { t, lang } = useLang();
   const local = useLocalDonStats();
   const { skin, choose } = useDonSkin();
   const [online, setOnline] = useState<{ games: number; wins: number } | null>(null);
@@ -54,22 +56,22 @@ export default function DonSkins() {
     <section className="gcard dskins" aria-labelledby="dskins-h">
       <div className="dskins-head">
         <div>
-          <h3 id="dskins-h">DON!! skiny</h3>
+          <h3 id="dskins-h">{t("DON!! skiny", "DON!! skins")}</h3>
           <p className="small muted">
-            Takto budú vyzerať tvoje DON!! v hre. Ďalšie si odomkneš hraním, zatiaľ máš {open} z {DON_SKINS.length}.
+            {t(`Takto budú vyzerať tvoje DON!! v hre. Ďalšie si odomkneš hraním, zatiaľ máš ${open} z ${DON_SKINS.length}.`, `This is how your DON!! will look in game. Unlock more by playing – you have ${open} of ${DON_SKINS.length}.`)}
           </p>
         </div>
         <dl className="dskins-stats">
           <div>
-            <dt title="Stredný a Ťažký bot">Výhry proti botovi</dt>
+            <dt title={t("Stredný a Ťažký bot", "Medium and Hard bot")}>{t("Výhry proti botovi", "Wins vs the bot")}</dt>
             <dd>{st.botWins}</dd>
           </div>
           <div>
-            <dt>Odohrané hry</dt>
+            <dt>{t("Odohrané hry", "Games played")}</dt>
             <dd>{st.botGames + st.onlineGames}</dd>
           </div>
           <div>
-            <dt>Online výhry</dt>
+            <dt>{t("Online výhry", "Online wins")}</dt>
             <dd>{user ? st.onlineWins : "–"}</dd>
           </div>
         </dl>
@@ -87,7 +89,7 @@ export default function DonSkins() {
               aria-disabled={!ok}
               className={`dskin ${on ? "on" : ""} ${ok ? "" : "locked"}`}
               onClick={() => ok && choose(k.id)}
-              title={ok ? `Použiť skin ${k.name}` : `Zamknuté: ${ruleText(k.rule)}`}
+              title={ok ? t(`Použiť skin ${k.name}`, `Use skin ${k.en}`) : `${t("Zamknuté", "Locked")}: ${ruleText(k.rule, lang)}`}
             >
               <span className="dskin-art">
                 {k.img ? <img src={k.img} alt="" loading="lazy" /> : <span className="dskin-classic" aria-hidden />}
@@ -102,9 +104,9 @@ export default function DonSkins() {
                   </span>
                 )}
               </span>
-              <span className="dskin-name">{k.name}</span>
+              <span className="dskin-name">{skinName(k, lang)}</span>
               <span className="dskin-req">
-                {on ? "Používaš" : ok ? "Odomknutý" : `${ruleText(k.rule)} · ${Math.min(p.have, p.need)}/${p.need}`}
+                {on ? t("Používaš", "In use") : ok ? t("Odomknutý", "Unlocked") : `${ruleText(k.rule, lang)} · ${Math.min(p.have, p.need)}/${p.need}`}
               </span>
               {!ok && (
                 <span className="dskin-bar" aria-hidden>
@@ -115,7 +117,7 @@ export default function DonSkins() {
           );
         })}
       </div>
-      {!user && <p className="small muted" style={{ margin: 0 }}>Online výhry sa rátajú, keď si prihlásený. Výhry nad Stredným a Ťažkým botom si pamätá tento prehliadač.</p>}
+      {!user && <p className="small muted" style={{ margin: 0 }}>{t("Online výhry sa rátajú, keď si prihlásený. Výhry nad Stredným a Ťažkým botom si pamätá tento prehliadač.", "Online wins count when you're signed in. Wins against the Medium and Hard bot are remembered by this browser.")}</p>}
     </section>
   );
 }
