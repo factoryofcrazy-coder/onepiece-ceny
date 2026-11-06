@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useLang } from "@/lib/lang";
 
 type Platform = "android" | "ios" | "pc";
 type InstallEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: string }> };
@@ -9,6 +10,7 @@ const TABS: { id: Platform; label: string }[] = [
   { id: "ios", label: "iPhone" },
   { id: "pc", label: "Počítač" },
 ];
+const TABS_EN: Record<Platform, string> = { android: "Android", ios: "iPhone", pc: "Computer" };
 
 const STEPS: Record<Platform, { note: string; steps: string[] }> = {
   android: {
@@ -39,7 +41,23 @@ const STEPS: Record<Platform, { note: string; steps: string[] }> = {
   },
 };
 
+const STEPS_EN: Record<Platform, { note: string; steps: string[] }> = {
+  android: {
+    note: "Open the site in Chrome.",
+    steps: ["Tap the three dots in the top right.", "Choose Install app or Add to Home screen.", "Confirm with Install.", "The Grand Line icon appears on your home screen or among your apps."],
+  },
+  ios: {
+    note: "Open the site in Safari.",
+    steps: ["Tap the Share button (square with an arrow up).", "Scroll down and choose Add to Home Screen.", "Tap Add in the top right.", "The Grand Line icon appears on your home screen."],
+  },
+  pc: {
+    note: "Open the site in Chrome or Edge.",
+    steps: ["Click the install icon on the right of the address bar.", "If it isn't there, open the browser menu and look for Install or Apps.", "Confirm with Install."],
+  },
+};
+
 export default function InstallGuide() {
+  const { t, lang } = useLang();
   const [platform, setPlatform] = useState<Platform>("android");
   const [installed, setInstalled] = useState(false);
   const [prompt, setPrompt] = useState<InstallEvent | null>(null);
@@ -72,24 +90,24 @@ export default function InstallGuide() {
     setPrompt(null);
   };
 
-  const guide = STEPS[platform];
+  const guide = (lang === "en" ? STEPS_EN : STEPS)[platform];
   return (
     <div className="ucet app-guide">
-      <h1>Aplikácia do mobilu</h1>
-      <p className="muted">Grand Line Tracker si pridáš na plochu ako bežnú aplikáciu: má vlastnú ikonu a otvára sa na celú obrazovku. Nič nesťahuješ z obchodu a je to zadarmo.</p>
+      <h1>{t("Aplikácia do mobilu", "Mobile app")}</h1>
+      <p className="muted">{t("Grand Line Tracker si pridáš na plochu ako bežnú aplikáciu: má vlastnú ikonu a otvára sa na celú obrazovku. Nič nesťahuješ z obchodu a je to zadarmo.", "Add Grand Line Tracker to your home screen like a regular app: it has its own icon and opens full screen. Nothing to download from a store and it's free.")}</p>
 
-      {installed && <p className="okc">Aplikáciu už používaš, netreba nič robiť.</p>}
+      {installed && <p className="okc">{t("Aplikáciu už používaš, netreba nič robiť.", "You're already using the app, nothing to do.")}</p>}
 
       {prompt && !installed && (
         <button className="btn" onClick={install}>
-          Nainštalovať aplikáciu
+          {t("Nainštalovať aplikáciu", "Install app")}
         </button>
       )}
 
-      <div className="rep-kinds" role="tablist" aria-label="Zariadenie">
+      <div className="rep-kinds" role="tablist" aria-label={t("Zariadenie", "Device")}>
         {TABS.map((t) => (
           <button key={t.id} role="tab" aria-selected={platform === t.id} className={platform === t.id ? "on" : ""} onClick={() => setPlatform(t.id)}>
-            {t.label}
+            {lang === "en" ? TABS_EN[t.id] : t.label}
           </button>
         ))}
       </div>
@@ -103,17 +121,17 @@ export default function InstallGuide() {
             <li key={s}>{s}</li>
           ))}
         </ol>
-        <p className="tiny muted">Názvy v menu sa môžu podľa verzie telefónu trochu líšiť.</p>
+        <p className="tiny muted">{t("Názvy v menu sa môžu podľa verzie telefónu trochu líšiť.", "Menu names may differ slightly depending on your phone's version.")}</p>
       </section>
 
       <section className="ucet-card">
-        <h2>Dobré vedieť</h2>
+        <h2>{t("Dobré vedieť", "Good to know")}</h2>
         <ul className="app-steps">
-          <li>Aktualizácie sú automatické, nič nemusíš inštalovať znova.</li>
-          <li>Aplikácia potrebuje internet.</li>
-          <li>Prvýkrát sa v aplikácii znova prihlás, prihlásenie z prehliadača sa nemusí preniesť.</li>
-          <li>Skener si pri prvom spustení vypýta prístup ku kamere, povoľ ho.</li>
-          <li>Odstránenie je rovnaké ako pri inej aplikácii: podrž ikonu a vyber odstránenie.</li>
+          <li>{t("Aktualizácie sú automatické, nič nemusíš inštalovať znova.", "Updates are automatic, you don't need to reinstall anything.")}</li>
+          <li>{t("Aplikácia potrebuje internet.", "The app needs an internet connection.")}</li>
+          <li>{t("Prvýkrát sa v aplikácii znova prihlás, prihlásenie z prehliadača sa nemusí preniesť.", "Sign in again the first time in the app, your browser sign-in may not carry over.")}</li>
+          <li>{t("Skener si pri prvom spustení vypýta prístup ku kamere, povoľ ho.", "The scanner asks for camera access the first time, allow it.")}</li>
+          <li>{t("Odstránenie je rovnaké ako pri inej aplikácii: podrž ikonu a vyber odstránenie.", "Removing it works like any other app: hold the icon and choose remove.")}</li>
         </ul>
       </section>
     </div>

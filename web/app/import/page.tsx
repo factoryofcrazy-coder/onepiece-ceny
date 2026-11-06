@@ -6,11 +6,13 @@ import { useAuth } from "@/lib/auth";
 import { Card, eur, useCards, usePrices, cardEur } from "@/lib/data";
 import { HdRow, matchRows, readHolodex } from "@/lib/holodex";
 import { sb } from "@/lib/supabase";
+import { useLang } from "@/lib/lang";
 
 type Existing = Record<string, { qty: number; hd: number }>;
 type Status = "new" | "have" | "same" | "changed" | "removed";
 type PlanRow = { id: string; card?: Card; before: number; after: number; oldHd: number; newHd: number; status: Status; rows: HdRow[] };
 
+const STATUS_EN: Record<Status, string> = { new: "New", have: "You have it", same: "No change", changed: "Count changed", removed: "Missing in CSV" };
 const STATUS: Record<Status, string> = {
   new: "Nová",
   have: "Už ju máš",
@@ -21,6 +23,8 @@ const STATUS: Record<Status, string> = {
 
 export default function ImportPage() {
   const { user, loading } = useAuth();
+  const { t, lang } = useLang();
+  const en = lang === "en";
   const { data, error } = useCards();
   const { data: prices } = usePrices();
   const usd = prices?.fx?.USD ?? 1.12;
@@ -92,9 +96,9 @@ export default function ImportPage() {
   }, [existing, data, matches, override, manual, removeMissing]);
 
   if (loading) return <Loading shape="rows" />;
-  if (!user) return <NeedLogin what="Import zbierky" />;
+  if (!user) return <NeedLogin what={t("Import zbierky", "Collection import")} />;
   if (error) return <DataError error={error} file="cards" />;
-  if (!data || !existing) return <Loading what="Načítavam" shape="rows" />;
+  if (!data || !existing) return <Loading what={t("Načítavam", "Loading")} shape="rows" />;
 
   const unmatched = matches.filter((m, i) => !(override[i] ?? m.card));
   const guesses = matches.map((m, i) => ({ m, i })).filter(({ m, i }) => m.card && !m.sure && !override[i]);
@@ -128,8 +132,8 @@ export default function ImportPage() {
       if (error) err = error.message;
     }
     setBusy(false);
-    if (err) return setDone(`Import zlyhal: ${err}`);
-    setDone(`Hotovo – uložené zmeny: ${changes.length}.`);
+    if (err) return setDone(`${t("Import zlyhal", "Import failed")}: ${err}`);
+    setDone(t(`Hotovo – uložené zmeny: ${changes.length}.`, `Done – changes saved: ${changes.length}.`));
     setText("");
     setFileName("");
     loadExisting();
@@ -143,52 +147,51 @@ export default function ImportPage() {
     <>
       <div className="head">
         <div>
-          <h1>Import z HoloDex</h1>
+          <h1>{t("Import z HoloDex", "Import from HoloDex")}</h1>
           <p className="muted">
-            V appke HoloDex exportuj portfólio do CSV a nahraj ho sem. Karty, ktoré už máš, sa nezdvojnásobia. Pri ďalšom
-            importe sa prenesie len to, čo sa v HoloDex zmenilo.
+            {t("V appke HoloDex exportuj portfólio do CSV a nahraj ho sem. Karty, ktoré už máš, sa nezdvojnásobia. Pri ďalšom importe sa prenesie len to, čo sa v HoloDex zmenilo.", "Export your portfolio to CSV in the HoloDex app and upload it here. Cards you already have won't be doubled. The next import only brings over what changed in HoloDex.")}
           </p>
         </div>
       </div>
 
       <label className={`drop ${fileName ? "has" : ""}`}>
         <input type="file" accept=".csv,text/csv" onChange={(e) => onFile(e.target.files?.[0])} />
-        <b>{fileName || "Vyber alebo pretiahni CSV súbor"}</b>
+        <b>{fileName || t("Vyber alebo pretiahni CSV súbor", "Choose or drag a CSV file")}</b>
         <span className="muted small">
-          {fileName ? `${parsed?.rows.length ?? 0} riadkov One Piece` : "holodex-export-….csv"}
+          {fileName ? t(`${parsed?.rows.length ?? 0} riadkov One Piece`, `${parsed?.rows.length ?? 0} One Piece rows`) : "holodex-export-….csv"}
         </span>
       </label>
       <details className="paste">
-        <summary className="small">alebo vlož obsah CSV ako text</summary>
+        <summary className="small">{t("alebo vlož obsah CSV ako text", "or paste the CSV content as text")}</summary>
         <textarea rows={6} value={text} onChange={(e) => (setText(e.target.value), setFileName(""), setDone(null))} />
       </details>
 
-      {done && <p className={done.startsWith("Hotovo") ? "okc" : "badc"}>{done} {done.startsWith("Hotovo") && <Link href="/master-sety">Pozrieť master sety</Link>}</p>}
+      {done && <p className={/^(Hotovo|Done)/.test(done) ? "okc" : "badc"}>{done} {/^(Hotovo|Done)/.test(done) && <Link href="/master-sety">{t("Pozrieť master sety", "See master sets")}</Link>}</p>}
       {parsed?.error && <p className="badc">{parsed.error}</p>}
 
       {plan && parsed && parsed.rows.length > 0 && (
         <>
           <div className="istats">
             <button className={filter === "all" ? "on" : ""} onClick={() => setFilter("all")}>
-              <b>{parsed.rows.length}</b> riadkov v CSV
+              <b>{parsed.rows.length}</b> {t("riadkov v CSV", "rows in CSV")}
             </button>
             <button className={filter === "new" ? "on" : ""} onClick={() => setFilter("new")}>
-              <b>{count("new")}</b> nových
+              <b>{count("new")}</b> {t("nových", "new")}
             </button>
             <button className={filter === "have" ? "on" : ""} onClick={() => setFilter("have")}>
-              <b>{count("have")}</b> už máš
+              <b>{count("have")}</b> {t("už máš", "you have")}
             </button>
             <button className={filter === "same" ? "on" : ""} onClick={() => setFilter("same")}>
-              <b>{count("same")}</b> bez zmeny
+              <b>{count("same")}</b> {t("bez zmeny", "unchanged")}
             </button>
             <button className={filter === "changed" ? "on" : ""} onClick={() => setFilter("changed")}>
-              <b>{count("changed")}</b> zmenených
+              <b>{count("changed")}</b> {t("zmenených", "changed")}
             </button>
             <button className={filter === "removed" ? "on" : ""} onClick={() => setFilter("removed")}>
-              <b>{count("removed")}</b> odstránených
+              <b>{count("removed")}</b> {t("odstránených", "removed")}
             </button>
             <button className={filter === "warn" ? "on" : ""} onClick={() => setFilter("warn")}>
-              <b className={unmatched.length + guesses.length ? "badc" : ""}>{unmatched.length + guesses.length}</b> na kontrolu
+              <b className={unmatched.length + guesses.length ? "badc" : ""}>{unmatched.length + guesses.length}</b> {t("na kontrolu", "to check")}
             </button>
           </div>
 
@@ -196,9 +199,9 @@ export default function ImportPage() {
             <label className="panel check removebox">
               <input type="checkbox" checked={removeMissing} onChange={(e) => setRemoveMissing(e.target.checked)} />
               <span>
-                Odstrániť zo zbierky karty, ktoré v tomto CSV chýbajú ({count("removed")}).{" "}
+                {t("Odstrániť zo zbierky karty, ktoré v tomto CSV chýbajú", "Remove cards missing from this CSV from the collection")} ({count("removed")}).{" "}
                 <span className="muted small">
-                  Zapni, len ak je to export celej zbierky – inak by si prišiel o karty z iných portfólií.
+                  {t("Zapni, len ak je to export celej zbierky – inak by si prišiel o karty z iných portfólií.", "Only turn this on if it's an export of your whole collection – otherwise you'd lose cards from other portfolios.")}
                 </span>
               </span>
             </label>
@@ -206,13 +209,13 @@ export default function ImportPage() {
 
           {count("have") > 0 && (
             <div className="panel row gap wrapr">
-              <span>Karty, ktoré už máš pridané ručne:</span>
+              <span>{t("Karty, ktoré už máš pridané ručne:", "Cards you already added manually:")}</span>
               <div className="seg">
                 <button className={manual === "max" ? "on" : ""} onClick={() => setManual("max")}>
-                  Sú to tie isté
+                  {t("Sú to tie isté", "They're the same ones")}
                 </button>
                 <button className={manual === "add" ? "on" : ""} onClick={() => setManual("add")}>
-                  Pripočítať
+                  {t("Pripočítať", "Add up")}
                 </button>
               </div>
             </div>
@@ -220,13 +223,13 @@ export default function ImportPage() {
 
           {(filter === "warn" || filter === "all") && (unmatched.length > 0 || guesses.length > 0) && (
             <div className="warnbox">
-              <h2 className="sub">Na kontrolu</h2>
+              <h2 className="sub">{t("Na kontrolu", "To check")}</h2>
               {unmatched.map((m) => (
                 <div key={m.row.line} className="wrow">
                   <span>
                     <b>{m.row.code}</b> {m.row.name} <span className="muted small">({m.row.set})</span>
                   </span>
-                  <span className="badc small">{m.note ?? "Nenapárované"} – preskočí sa</span>
+                  <span className="badc small">{m.note ?? t("Nenapárované", "Not matched")} – {t("preskočí sa", "will be skipped")}</span>
                 </div>
               ))}
               {guesses.map(({ m, i }) => (
@@ -237,7 +240,7 @@ export default function ImportPage() {
                   <select value={override[i] ?? m.card!.id} onChange={(e) => setOverride({ ...override, [i]: e.target.value })}>
                     {(byCode.get(m.row.code) ?? []).map((c) => (
                       <option key={c.id} value={c.id}>
-                        {c.v || "Základná"} · {c.setName} · ${c.usd ?? "?"}
+                        {c.v || t("Základná", "Base")} · {c.setName} · ${c.usd ?? "?"}
                       </option>
                     ))}
                   </select>
@@ -254,13 +257,13 @@ export default function ImportPage() {
                   <div className="iname">
                     <b>{p.card?.name ?? p.id}</b>
                     <span className="small muted">
-                      {p.id} {p.card?.v && <span className="tag tiny">{p.card.v}</span>}
+                      {p.card?.code ?? p.id} {p.card?.v && <span className="tag tiny">{p.card.v}</span>}
                     </span>
                     {p.rows[0] && p.rows[0].name !== p.card?.name && (
                       <span className="tiny muted">HoloDex: {p.rows.map((r) => r.name).join(", ")}</span>
                     )}
                   </div>
-                  <span className={`ist ist-${p.status}`}>{STATUS[p.status]}</span>
+                  <span className={`ist ist-${p.status}`}>{(en ? STATUS_EN : STATUS)[p.status]}</span>
                   <span className="iqty">
                     {p.before} <span className="muted">→</span> <b>{p.after}</b>
                   </span>
@@ -273,14 +276,14 @@ export default function ImportPage() {
             <span>
               {changes.length ? (
                 <>
-                  Zmeny v zbierke: <b>{changes.length}</b> · hodnota importu {eur(value)}
+                  {t("Zmeny v zbierke", "Collection changes")}: <b>{changes.length}</b> · {t("hodnota importu", "import value")} {eur(value)}
                 </>
               ) : (
-                "Všetko už máš – nič sa nezmení."
+                t("Všetko už máš – nič sa nezmení.", "You already have everything – nothing will change.")
               )}
             </span>
             <button className="btn" disabled={busy || !changes.length} onClick={apply}>
-              {busy ? "Ukladám…" : `Importovať zmeny (${changes.length})`}
+              {busy ? t("Ukladám…", "Saving…") : t(`Importovať zmeny (${changes.length})`, `Import changes (${changes.length})`)}
             </button>
           </div>
         </>
