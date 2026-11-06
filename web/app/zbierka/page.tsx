@@ -117,8 +117,11 @@ function OpCollection() {
     const a = document.createElement("a");
     a.href = url;
     a.download = `grand-line-zbierka-${new Date().toISOString().slice(0, 10)}.csv`;
+    // Firefox a Safari potrebujú odkaz v stránke a adresu ešte chvíľu platnú, inak sťahovanie potichu zruší
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const list = useMemo(() => {
@@ -175,7 +178,7 @@ function OpCollection() {
             )}
             {mine && items.length > 0 && (
               <button className="btn ghost sm" onClick={exportCsv}>
-                Export do Excelu
+                Stiahnuť CSV
               </button>
             )}
           </div>
