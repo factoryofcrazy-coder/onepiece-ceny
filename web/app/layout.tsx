@@ -14,13 +14,18 @@ import { LANG_COOKIE, parseLang } from "@/lib/lang-shared";
 import Footer from "@/components/Footer";
 import TabBar from "@/components/TabBar";
 
-export const metadata: Metadata = {
-  title: "Grand Line Tracker",
-  description: "One Piece a Pokémon TCG – ceny v SK/CZ obchodoch, zbierka, master sety a deckbuilder",
-  applicationName: "Grand Line Tracker",
-  // iPhone: „Pridať na plochu“ → appka cez celú obrazovku
-  appleWebApp: { capable: true, title: "Grand Line", statusBarStyle: "black-translucent" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const en = parseLang((await cookies()).get(LANG_COOKIE)?.value) === "en";
+  return {
+    title: "Grand Line Tracker",
+    description: en
+      ? "One Piece and Pokémon TCG – prices in SK/CZ shops, collection, master sets and deckbuilder"
+      : "One Piece a Pokémon TCG – ceny v SK/CZ obchodoch, zbierka, master sety a deckbuilder",
+    applicationName: "Grand Line Tracker",
+    // iPhone: „Pridať na plochu“ → appka cez celú obrazovku
+    appleWebApp: { capable: true, title: "Grand Line", statusBarStyle: "black-translucent" },
+  };
+}
 export const viewport: Viewport = { themeColor: "#0b0a14", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

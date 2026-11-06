@@ -9,6 +9,7 @@ import { ownedByCode, useCollection } from "@/lib/collection";
 import { Card, COLOR_SK, COLORS, eur, TYPE_SK, useCards, usePrices, cardEur } from "@/lib/data";
 import { sb } from "@/lib/supabase";
 import type { Deck } from "../page";
+import { useLang } from "@/lib/lang";
 
 const unlimited = (c: Card) => /any number of (this card|cards with this card name)/i.test(c.text);
 
@@ -16,6 +17,8 @@ export default function DeckEditor() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { user, loading } = useAuth();
+  const { t: L, lang } = useLang();
+  const en = lang === "en";
   const { data, error } = useCards();
   const { data: prices } = usePrices();
   const usd = prices?.fx?.USD ?? 1.12;
@@ -43,11 +46,11 @@ export default function DeckEditor() {
       .eq("id", id)
       .maybeSingle()
       .then(({ data, error }) => {
-        if (error || !data) return setStatus("Deck neexistuje.");
+        if (error || !data) return setStatus(L("Deck neexistuje.", "Deck doesn't exist."));
         setDeck(data as Deck);
         loadProfiles().then((p) => setOwner(p.find((x) => x.id === data.user_id)?.username ?? ""));
       });
-  }, [id, user]);
+  }, [id, user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // herný kód → základná verzia karty
   const byCode = useMemo(() => {
@@ -62,7 +65,7 @@ export default function DeckEditor() {
   if (loading) return <Loading />;
   if (!user) return <NeedLogin what="Deckbuilder" />;
   if (error) return <DataError error={error} file="cards" />;
-  if (!data || !deck) return <Loading what={status || "Načítavam deck"} />;
+  if (!data || !deck) return <Loading what={status || L("Načítavam deck", "Loading deck")} />;
 
   const editable = deck.user_id === user.id;
   const leader = deck.leader_id ? byCode.get(deck.leader_id) : undefined;
@@ -75,7 +78,7 @@ export default function DeckEditor() {
     if (!editable) return;
     const next = { ...deck, ...patch };
     setDeck(next);
-    setStatus("ukladám…");
+    setStatus(L("ukladám…", "saving…"));
     clearTimeout(saveT.current);
     saveT.current = setTimeout(async () => {
       const { error } = await sb()
@@ -88,7 +91,7 @@ export default function DeckEditor() {
           updated_at: new Date().toISOString(),
         })
         .eq("id", next.id);
-      setStatus(error ? `chyba: ${error.message}` : "uložené ✓");
+      setStatus(error ? `${L("chyba", "error")}: ${error.message}` : L("uložené ✓", "saved ✓"));
     }, 600);
   };
 
@@ -104,14 +107,14 @@ export default function DeckEditor() {
 
   // ---------- kontrola pravidiel
   const problems: string[] = [];
-  if (!leader) problems.push("Chýba leader.");
-  if (total !== 50) problems.push(`Deck má ${kartyAkuz(total)} (treba presne 50).`);
+  if (!leader) problems.push(L("Chýba leader.", "No leader."));
+  if (total !== 50) problems.push(en ? `The deck has ${total} cards (needs exactly 50).` : `Deck má ${kartyAkuz(total)} (treba presne 50).`);
   entries.forEach((e) => {
-    if (!e.c) problems.push(`${e.code}: neznáma karta.`);
+    if (!e.c) problems.push(`${e.code}: ${L("neznáma karta.", "unknown card.")}`);
     else {
-      if (e.n > 4 && !unlimited(e.c)) problems.push(`${e.c.name}: viac ako 4 kópie.`);
+      if (e.n > 4 && !unlimited(e.c)) problems.push(`${e.c.name}: ${L("viac ako 4 kópie.", "more than 4 copies.")}`);
       if (leader && !e.c.colors.some((x) => leader.colors.includes(x)))
-        problems.push(`${e.c.name}: farba nesedí s leaderom.`);
+        problems.push(`${e.c.name}: ${L("farba nesedí s leaderom.", "color doesn't match the leader.")}`);
     }
   });
 
@@ -171,7 +174,7 @@ export default function DeckEditor() {
   const copyToMine = async () => {
     const { data: d, error } = await sb()
       .from("decks")
-      .insert({ name: `${deck.name} (kópia)`, leader_id: deck.leader_id, cards: deck.cards, notes: deck.notes })
+      .insert({ name: `${deck.name} (${L("kópia", "copy")})`, leader_id: deck.leader_id, cards: deck.cards, notes: deck.notes })
       .select()
       .single();
     if (error) return alert(error.message);
@@ -180,7 +183,7 @@ export default function DeckEditor() {
 
   const remove = async () => {
     const { error } = await sb().from("decks").delete().eq("id", deck.id);
-    if (error) return setStatus(`chyba: ${error.message}`);
+    if (error) return setStatus(`${L("chyba", "error")}: ${error.message}`);
     router.push("/decky");
   };
 
@@ -189,13 +192,13 @@ export default function DeckEditor() {
       <div className="head">
         <div className="grow">
           <Link href="/decky" className="small">
-            ← Decky
+            ← {L("Decky", "Decks")}
           </Link>
           {editable ? (
             <input className="title-in" value={deck.name} onChange={(e) => update({ name: e.target.value })} />
           ) : (
             <h1>
-              {deck.name} <span className="muted small">od {owner}</span>
+              {deck.name} <span className="muted small">{L("od", "by")} {owner}</span>
             </h1>
           )}
           <p className="muted small">{status}</p>
@@ -206,22 +209,22 @@ export default function DeckEditor() {
           </button>
           {!editable && (
             <button className="btn sm" onClick={copyToMine}>
-              Skopírovať do mojich
+              {L("Skopírovať do mojich", "Copy to my decks")}
             </button>
           )}
           {editable &&
             (confirmDel ? (
               <>
                 <button className="btn sm" onClick={remove}>
-                  Áno, zmazať deck
+                  {L("Áno, zmazať deck", "Yes, delete deck")}
                 </button>
                 <button className="btn ghost sm" onClick={() => setConfirmDel(false)}>
-                  Nie
+                  {L("Nie", "No")}
                 </button>
               </>
             ) : (
               <button className="btn ghost sm danger" onClick={() => setConfirmDel(true)}>
-                Zmazať
+                {L("Zmazať", "Delete")}
               </button>
             ))}
         </div>
@@ -242,13 +245,13 @@ export default function DeckEditor() {
                   </div>
                   {editable && (
                     <button className="link small" onClick={() => (update({ leader_id: null }), setQ(""), setColor(""))}>
-                      zmeniť leadera
+                      {L("zmeniť leadera", "change leader")}
                     </button>
                   )}
                 </div>
               </>
             ) : (
-              <div className="empty small">Vyber leadera v zozname vpravo →</div>
+              <div className="empty small">{L("Vyber leadera v zozname vpravo →", "Pick a leader from the list on the right →")}</div>
             )}
           </div>
 
@@ -270,7 +273,7 @@ export default function DeckEditor() {
               g.items.length > 0 && (
                 <div key={g.t}>
                   <h3 className="sub">
-                    {TYPE_SK[g.t]} ({g.items.reduce((s, e) => s + e.n, 0)})
+                    {en ? g.t : TYPE_SK[g.t]} ({g.items.reduce((s, e) => s + e.n, 0)})
                   </h3>
                   <ul className="dlist">
                     {g.items.map((e) => {
@@ -281,7 +284,7 @@ export default function DeckEditor() {
                           <button className="link left" onClick={() => e.c && setOpen(e.c)}>
                             {e.c?.name ?? e.code} <span className="muted tiny">{e.code}</span>
                           </button>
-                          <span className={`tiny ${have >= e.n ? "okc" : "badc"}`} title="v mojej zbierke">
+                          <span className={`tiny ${have >= e.n ? "okc" : "badc"}`} title={L("v mojej zbierke", "in my collection")}>
                             {Math.min(have, e.n)}/{e.n}
                           </span>
                           {editable ? (
@@ -303,19 +306,19 @@ export default function DeckEditor() {
 
           <div className="panel">
             <div>
-              Cena decku: <b>{eur(deckCost)}</b>
+              {L("Cena decku", "Deck price")}: <b>{eur(deckCost)}</b>
             </div>
             <div>
-              Chýba mi: <b>{missing.reduce((s, e) => s + e.miss, 0)} kariet</b> za <b>{eur(missCost)}</b>
+              {L("Chýba mi", "Missing")}: <b>{missing.reduce((s, e) => s + e.miss, 0)} {L("kariet", "cards")}</b> {L("za", "for")} <b>{eur(missCost)}</b>
             </div>
             {missing.length > 0 && (
               <details>
-                <summary className="small">čo chýba</summary>
+                <summary className="small">{L("čo chýba", "what's missing")}</summary>
                 <ul className="small plain">
                   {missing.map((e) => (
                     <li key={e.code}>
                       {e.miss}× {e.c?.name ?? e.code} <span className="muted">{e.code}</span>{" "}
-                      {cardEur(e.c, usd) != null && <span className="muted">· {eur(cardEur(e.c, usd))}/ks</span>}
+                      {cardEur(e.c, usd) != null && <span className="muted">· {eur(cardEur(e.c, usd))}/{L("ks", "pc")}</span>}
                     </li>
                   ))}
                 </ul>
@@ -330,11 +333,11 @@ export default function DeckEditor() {
               ))}
             </ul>
           ) : (
-            <p className="okc small">✓ Deck je legálny</p>
+            <p className="okc small">✓ {L("Deck je legálny", "The deck is legal")}</p>
           )}
 
           <label className="field">
-            <span>Poznámky</span>
+            <span>{L("Poznámky", "Notes")}</span>
             <textarea
               rows={3}
               value={deck.notes ?? ""}
@@ -347,16 +350,16 @@ export default function DeckEditor() {
         <section>
           <FilterBar>
             <label className="field grow">
-              <span>{leader ? "Hľadať kartu" : "Hľadať leadera"}</span>
-              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="meno, kód, typ, text…" />
+              <span>{leader ? L("Hľadať kartu", "Find a card") : L("Hľadať leadera", "Find a leader")}</span>
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={L("meno, kód, typ, text…", "name, code, type, text…")} />
             </label>
             <label className="field">
-              <span>Farba</span>
+              <span>{L("Farba", "Color")}</span>
               <select value={color} onChange={(e) => setColor(e.target.value)}>
-                <option value="">Všetky</option>
+                <option value="">{L("Všetky", "All")}</option>
                 {(leader ? leader.colors : COLORS).map((c) => (
                   <option key={c} value={c}>
-                    {COLOR_SK[c] ?? c}
+                    {en ? c : COLOR_SK[c] ?? c}
                   </option>
                 ))}
               </select>
@@ -364,10 +367,10 @@ export default function DeckEditor() {
             {leader && (
               <>
                 <label className="field">
-                  <span>Typ</span>
+                  <span>{L("Typ", "Type")}</span>
                   <select value={type} onChange={(e) => setType(e.target.value)}>
-                    <option value="">Všetky</option>
-                    <option value="Character">Postava</option>
+                    <option value="">{L("Všetky", "All")}</option>
+                    <option value="Character">{L("Postava", "Character")}</option>
                     <option value="Event">Event</option>
                     <option value="Stage">Stage</option>
                   </select>
@@ -375,7 +378,7 @@ export default function DeckEditor() {
                 <label className="field">
                   <span>Cost</span>
                   <select value={cost} onChange={(e) => setCost(e.target.value)}>
-                    <option value="">Všetky</option>
+                    <option value="">{L("Všetky", "All")}</option>
                     {Array.from({ length: 11 }, (_, i) => (
                       <option key={i} value={i}>
                         {i === 10 ? "10+" : i}
@@ -384,13 +387,12 @@ export default function DeckEditor() {
                   </select>
                 </label>
                 <label className="check">
-                  <input type="checkbox" checked={onlyOwned} onChange={(e) => setOnlyOwned(e.target.checked)} /> Len
-                  čo mám
+                  <input type="checkbox" checked={onlyOwned} onChange={(e) => setOnlyOwned(e.target.checked)} /> {L("Len čo mám", "Only owned")}
                 </label>
               </>
             )}
           </FilterBar>
-          <p className="muted small">{karty(poolSorted.length)} · klik = pridať, pravý klik / ⓘ = detail</p>
+          <p className="muted small">{en ? `${poolSorted.length} cards · click = add, right-click / ⓘ = detail` : `${karty(poolSorted.length)} · klik = pridať, pravý klik / ⓘ = detail`}</p>
           <div className="cgrid small-cards">
             {poolSorted.slice(0, 240).map((c) => {
               const inDeck = deck.cards?.[c.code] ?? 0;
@@ -420,7 +422,7 @@ export default function DeckEditor() {
                   <div className="cmeta">
                     <span className="tiny">{c.code}</span>
                     <span className={`tiny ${(owned[c.code] ?? 0) > 0 ? "okc" : "muted"}`}>
-                      mám {owned[c.code] ?? 0}
+                      {L("mám", "own")} {owned[c.code] ?? 0}
                     </span>
                   </div>
                 </div>
@@ -435,15 +437,15 @@ export default function DeckEditor() {
         <div className="modal" onClick={() => setTxt(null)}>
           <div className="mbox col" onClick={(e) => e.stopPropagation()}>
             <h2>Export / import</h2>
-            <p className="small muted">Formát „4xOP01-016“ – funguje s OPTCGSim a väčšinou deckbuilderov.</p>
+            <p className="small muted">{L("Formát „4xOP01-016“ – funguje s OPTCGSim a väčšinou deckbuilderov.", "Format “4xOP01-016” – works with OPTCGSim and most deckbuilders.")}</p>
             <textarea rows={16} value={txt} onChange={(e) => setTxt(e.target.value)} />
             <div className="row gap">
               <button className="btn ghost sm" onClick={() => navigator.clipboard?.writeText(txt)}>
-                Kopírovať
+                {L("Kopírovať", "Copy")}
               </button>
               {editable && (
                 <button className="btn sm" onClick={() => importText(txt)}>
-                  Importovať (prepíše deck)
+                  {L("Importovať (prepíše deck)", "Import (overwrites deck)")}
                 </button>
               )}
             </div>
