@@ -261,7 +261,7 @@ export default function TradePage() {
                   <li key={c.id}>
                     <CardImg card={c} />
                     <span className="grow">
-                      <b>{c.name}</b> <span className="small muted">{c.id}{c.v ? ` · ${c.v}` : ""} · {eur(cardEur(c, usd))}</span>
+                      <b>{c.name}</b> <span className="small muted">{c.code}{c.v ? ` · ${c.v}` : ""} · {eur(cardEur(c, usd))}</span>
                     </span>
                     <button className="btn sm" onClick={() => add(c, "offer")}>
                       Ponúkam

@@ -279,7 +279,7 @@ function OpCollection() {
                   <p className="small muted">Priemerné predaje za 7 dní oproti 30 dňom. Ber to ako orientačné, ceny kariet bežne kolíšu.</p>
                   {[...moves.up, ...moves.down].map((m) => (
                     <button key={m.card.id} className="collector-row" onClick={() => setOpen(m.card)}>
-                      <span>{m.card.name} <span className="muted tiny">{m.card.id}</span></span>
+                      <span>{m.card.name} <span className="muted tiny">{m.card.code}{m.card.v ? ` · ${m.card.v}` : ""}</span></span>
                       <span className={`cmove ${m.pct > 0 ? "up" : "down"}`}>{formatPct(m.pct)}</span>
                     </button>
                   ))}
@@ -347,7 +347,7 @@ function OpCollection() {
                 <span className="vname">
                   <b>{i.card.name}</b>
                   <span className="small muted">
-                    {i.card.id} · {setKind(i.card.set) === "other" ? "Promo" : setKind(i.card.set) === "don" ? "DON!!" : i.card.set}
+                    {i.card.code} · {setKind(i.card.set) === "other" ? "Promo" : setKind(i.card.set) === "don" ? "DON!!" : i.card.set}
                     {i.card.v && <span className="tag tiny">{i.card.v}</span>}
                     {" "}<PriceMove card={i.card} />
                   </span>
