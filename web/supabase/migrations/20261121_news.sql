@@ -5,6 +5,7 @@ create table if not exists public.news (
   title text not null check (char_length(title) between 1 and 200),
   body text check (char_length(body) <= 4000),
   url text check (char_length(url) <= 500),
+  image text check (char_length(image) <= 500),
   author_id uuid default auth.uid() references auth.users(id) on delete set null
 );
 alter table public.news enable row level security;

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Loading } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
-import { addNews, loadNews, NewsItem, removeNews } from "@/lib/news";
+import { addNews, loadNews, NewsItem, readMins, removeNews } from "@/lib/news";
 
 const fmt = (d: string) => new Date(d).toLocaleDateString("sk-SK", { day: "numeric", month: "long", year: "numeric" });
 
@@ -27,11 +27,21 @@ export default function Page() {
         <div className="news-list">
           {items.map((n) => (
             <article key={n.id} className="news-item">
+              {n.image && (
+                <div className="news-img">
+                  <img src={n.image} alt="" loading="lazy" />
+                </div>
+              )}
               <div className="news-top">
                 <h2>{n.title}</h2>
                 <time className="muted small">{fmt(n.created_at)}</time>
               </div>
-              {n.body && <p className="news-body">{n.body}</p>}
+              {n.body && (
+                <>
+                  <p className="news-meta tiny muted">{readMins(n.body)} min čítania</p>
+                  <p className="news-body">{n.body}</p>
+                </>
+              )}
               <div className="news-foot">
                 {n.url && (
                   <a className="small" href={n.url} target="_blank" rel="noreferrer">
@@ -63,6 +73,7 @@ function NewsForm({ onSaved }: { onSaved: () => void }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [url, setUrl] = useState("");
+  const [image, setImage] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -70,12 +81,13 @@ function NewsForm({ onSaved }: { onSaved: () => void }) {
     e.preventDefault();
     setBusy(true);
     setErr(null);
-    const error = await addNews({ title, body, url });
+    const error = await addNews({ title, body, url, image });
     setBusy(false);
     if (error) return setErr(error);
     setTitle("");
     setBody("");
     setUrl("");
+    setImage("");
     onSaved();
   };
 
@@ -93,6 +105,10 @@ function NewsForm({ onSaved }: { onSaved: () => void }) {
       <label className="field">
         <span>Odkaz (nepovinné)</span>
         <input value={url} onChange={(e) => setUrl(e.target.value)} maxLength={500} placeholder="https://…" />
+      </label>
+      <label className="field">
+        <span>Obrázok – odkaz (nepovinné)</span>
+        <input value={image} onChange={(e) => setImage(e.target.value)} maxLength={500} placeholder="https://…/obrazok.jpg" />
       </label>
       {err && <p className="news-err small">{err}</p>}
       <button className="btn" disabled={busy || !title.trim()}>
