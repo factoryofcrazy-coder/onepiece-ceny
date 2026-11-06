@@ -102,6 +102,11 @@ export type MetaDeck = {
 export type MetaDb = { updated: string; tournaments: number; decks: MetaDeck[] };
 export const useMeta = () => useData<MetaDb>("meta");
 
+// Zapečatené produkty (boxy, displaye, startery…) s reálnou trhovou hodnotou z Cardmarketu.
+export type SealedItem = { id: number; name: string; set: string | null; setName: string; kind: string; lang: "EN" | "JP"; cm?: number; cm7?: number; cm30?: number; cmLow?: number };
+export type SealedDb = { updated: string; source: string; sealed: SealedItem[] };
+export const useSealed = () => useData<SealedDb>("sealed");
+
 export const COLORS = ["Red", "Green", "Blue", "Purple", "Black", "Yellow"];
 export const COLOR_SK: Record<string, string> = {
   Red: "Červená", Green: "Zelená", Blue: "Modrá", Purple: "Fialová", Black: "Čierna", Yellow: "Žltá",

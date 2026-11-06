@@ -38,6 +38,7 @@ const GROUPS: { title: string; links: { href: string; label: string; icon: strin
     links: [
       { href: "/", label: "Domov", icon: "home" },
       { href: "/ceny", label: "Ceny boxov", icon: "prices" },
+      { href: "/boxy", label: "Hodnoty boxov", icon: "prices" },
       { href: "/karty", label: "Karty", icon: "cards" },
       { href: "/pohyby", label: "Pohyby cien", icon: "prices" },
       { href: "/skener", label: "Skener", icon: "scan" },

@@ -58,6 +58,96 @@ function* permutations(n: number, k: number, used: boolean[] = [], cur: number[]
     }
 }
 
+/** Zapečatený produkt (box, display, starter…) s reálnou trhovou hodnotou z Cardmarketu. */
+export type SealedProduct = { id: number; name: string; set: string | null; setName: string; kind: string; lang: "EN" | "JP"; cm?: number; cm7?: number; cm30?: number; cmLow?: number };
+
+// Druh zapečateného produktu podľa názvu (poradie je dôležité).
+const SEALED_SKIP = /sleeve|playmat|binder|portfolio|album|toploader|protector|deck box|storage|dice|gift card|playset|promo pack$|single/i;
+function sealedKind(n: string): string | null {
+  if (SEALED_SKIP.test(n)) return null;
+  if (/booster box case|\bcase\b/i.test(n)) return "Case";
+  if (/double pack|\bDP-?\d/i.test(n)) return "Double Pack";
+  if (/booster box|\bdisplay\b|\bbox\b/i.test(n)) return "Box";
+  if (/premium booster|premium/i.test(n)) return "Premium";
+  if (/starter deck|structure deck|\bST-?\d/i.test(n)) return "Starter";
+  if (/booster pack|\bpack\b|\bbooster\b/i.test(n)) return "Pack";
+  return "Iné";
+}
+
+/** Zapečatené produkty One Piece s trend cenou z verejného cenníka Cardmarketu. */
+export async function sealedProducts(cards: CardLike[]): Promise<SealedProduct[]> {
+  const [pl, pg, ns] = await Promise.all([
+    getJson(`productList/products_singles_${GAME}.json`),
+    getJson(`priceGuide/price_guide_${GAME}.json`),
+    getJson(`productList/products_nonsingles_${GAME}.json`),
+  ]);
+  const price = new Map<number, CmPrice>((pg.priceGuides as CmPrice[]).map((g) => [g.idProduct, g]));
+  const tr = (id: number) => {
+    const g = price.get(id);
+    return g ? g.trend || g.avg7 || g.avg || null : null;
+  };
+  const r2 = (v: number | null | undefined) => (v ? Math.round(v * 100) / 100 : undefined);
+
+  // jazyk expanzie podľa zapečatených produktov
+  const votes = new Map<number, [number, number]>();
+  for (const p of ns.products as CmProduct[]) {
+    const v = votes.get(p.idExpansion) ?? [0, 0];
+    v[JP_RX.test(p.name) ? 1 : 0]++;
+    votes.set(p.idExpansion, v);
+  }
+  const lang = (e: number): "EN" | "JP" => (votes.get(e)?.[1] ?? 0) > (votes.get(e)?.[0] ?? 0) ? "JP" : "EN";
+
+  // expanzia (CM) → náš set: podľa prekryvu kódov kariet jednotlivín
+  const byExp = new Map<number, Set<string>>();
+  for (const p of pl.products as CmProduct[]) {
+    const m = p.name.match(CODE_RX);
+    if (!m) continue;
+    let s = byExp.get(p.idExpansion);
+    if (!s) byExp.set(p.idExpansion, (s = new Set()));
+    s.add(m[1]);
+  }
+  const setCodes = new Map<string, Set<string>>();
+  for (const c of cards) {
+    if (c.set === "P" || c.set === "DON" || c.set === "CM-PROMO") continue;
+    let s = setCodes.get(c.set);
+    if (!s) setCodes.set(c.set, (s = new Set()));
+    s.add(c.code);
+  }
+  const setName = new Map(cards.map((c) => [c.set, (c as CardLike & { setName?: string }).setName ?? c.set]));
+  const expSet = new Map<number, string>();
+  for (const [e, codes] of byExp) {
+    let bestSet: string | null = null, bestN = 0;
+    for (const [S, cs] of setCodes) {
+      const n = [...codes].filter((x) => cs.has(x)).length;
+      if (n > bestN) (bestN = n), (bestSet = S);
+    }
+    if (bestSet && bestN >= Math.max(3, 0.4 * codes.size)) expSet.set(e, bestSet);
+  }
+
+  const out: SealedProduct[] = [];
+  for (const p of ns.products as CmProduct[]) {
+    const kind = sealedKind(p.name);
+    if (!kind) continue;
+    const t = tr(p.idProduct);
+    if (!t) continue;
+    const set = expSet.get(p.idExpansion) ?? null;
+    out.push({
+      id: p.idProduct,
+      name: p.name.replace(/""/g, '"').trim(),
+      set,
+      setName: set ? setName.get(set) ?? set : "",
+      kind,
+      lang: lang(p.idExpansion),
+      cm: r2(t),
+      cm7: r2(price.get(p.idProduct)?.avg7),
+      cm30: r2(price.get(p.idProduct)?.avg30),
+      cmLow: r2(price.get(p.idProduct)?.low),
+    });
+  }
+  out.sort((a, b) => (b.cm ?? 0) - (a.cm ?? 0));
+  return out;
+}
+
 export async function cardmarketPrices(cards: CardLike[]): Promise<{ prices: Map<string, CmFields>; extras: CmExtra[] }> {
   const [pl, pg, ns] = await Promise.all([
     getJson(`productList/products_singles_${GAME}.json`),
