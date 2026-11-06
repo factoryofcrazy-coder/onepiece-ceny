@@ -1181,6 +1181,30 @@ body.in-game .app-main { padding-left: 0; }
 }
 .dash-deal-img img { border-radius: 10px; }
 
+/* Dashboard: prehľadové dlaždice */
+.dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.dash-stat { display: flex; flex-direction: column; gap: 4px; padding: 18px 20px; border-radius: 18px; background: linear-gradient(180deg, rgb(var(--sea2-rgb) / .75), rgb(var(--sea-rgb) / .9)); border: 1px solid var(--line); color: var(--text); transition: transform .18s var(--ease), border-color .18s; }
+.dash-stat:hover { transform: translateY(-2px); border-color: #2a5172; text-decoration: none; }
+.dash-stat-label { color: var(--muted); font-size: 13px; }
+.dash-stat-big { font: 800 34px/1.05 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.dash-stat-sub { display: block; }
+.dash-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.dash-mv { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.dash-mv li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.dash-mv li:last-child { border-bottom: 0; }
+.dash-mv-name { display: flex; flex-direction: column; min-width: 0; color: var(--text); }
+.dash-mv-name b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--display); }
+.dash-mv-price { font-family: var(--display); color: var(--gold); white-space: nowrap; }
+.dash-news { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.dash-news-item { display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 14px; background: var(--sea); border: 1px solid var(--line); color: var(--text); transition: border-color .18s; }
+.dash-news-item:hover { border-color: #2a5172; text-decoration: none; }
+.dash-news-item img { width: 72px; height: 54px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+.dash-news-item b { display: block; font-family: var(--display); margin-bottom: 3px; }
+@media (max-width: 860px) {
+  .dash-two { grid-template-columns: 1fr; }
+  .dash-news { grid-template-columns: 1fr; }
+}
+
 /* Hra: tri spôsoby hry */
 .gm-hero { margin-bottom: 16px; }
 .gm-hero h1 { margin: 0 0 4px; }
