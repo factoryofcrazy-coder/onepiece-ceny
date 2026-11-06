@@ -57,7 +57,8 @@ def rpc(name, body, key):
         headers={"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json"},
     )
     with urllib.request.urlopen(req, timeout=60) as r:
-        return json.loads(r.read())
+        raw = r.read()
+    return json.loads(raw) if raw else None  # funkcie vracajúce void majú prázdne telo
 
 
 def discord(text):
