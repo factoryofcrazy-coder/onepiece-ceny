@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { DataError, FilterBar, Loading } from "@/components/ui";
+import { DataError, FilterBar, Loading, Qty } from "@/components/ui";
 import { eur, Offer, SealedItem, setOrder, useSealed, usePrices } from "@/lib/data";
 import { formatPct } from "@/lib/price-series";
 import { useTcg } from "@/lib/tcg";
+import { useAuth } from "@/lib/auth";
+import { useSealedCollection } from "@/lib/sealed-collection";
 
 const PER = 24;
 const KINDS = ["Box", "Case", "Pack", "Double Pack", "Starter", "Premium", "Iné"];
@@ -27,6 +29,8 @@ export default function Page() {
 function Boxes() {
   const { data, error } = useSealed();
   const { data: prices } = usePrices();
+  const { user } = useAuth();
+  const { qty, setQty } = useSealedCollection(user?.id, !!user);
   const [kind, setKind] = useState("Box");
   const [lang, setLang] = useState<"EN" | "JP">("EN");
   const [set, setSet] = useState("");
@@ -131,19 +135,26 @@ function Boxes() {
               const pct = movePct(s);
               const img = thumbFor(s);
               return (
-                <a key={s.id} className="vrow" href={cmUrl(s.name)} target="_blank" rel="noreferrer">
+                <div key={s.id} className={`vrow${user ? " qrow" : ""}`}>
                   <span className="vrank">{page * PER + k + 1}</span>
-                  <span className="boxthumb">{img ? <img src={img} alt="" loading="lazy" /> : <span className="boxthumb-ph" aria-hidden />}</span>
-                  <span className="vname">
+                  <a className="boxthumb" href={cmUrl(s.name)} target="_blank" rel="noreferrer" aria-label={s.name}>
+                    {img ? <img src={img} alt="" loading="lazy" /> : <span className="boxthumb-ph" aria-hidden />}
+                  </a>
+                  <a className="vname" href={cmUrl(s.name)} target="_blank" rel="noreferrer">
                     <b>{s.name}</b>
                     <span className="small muted">
                       {s.set && <span className="tag tiny">{s.set}</span>} {s.kind}
                     </span>
-                  </span>
+                  </a>
                   {pct != null ? <span className={`vqty cmove ${pct > 0 ? "up" : pct < 0 ? "down" : ""}`}>{formatPct(pct)}</span> : <span className="vqty muted tiny">–</span>}
-                  {s.cmLow != null && <span className="vunit small muted">od {eur(s.cmLow)}</span>}
+                  {s.cmLow != null ? <span className="vunit small muted">od {eur(s.cmLow)}</span> : <span className="vunit" />}
                   <b className="vtotal">{eur(s.cm)}</b>
-                </a>
+                  {user && (
+                    <span className="boxqty">
+                      <Qty n={qty[s.id] ?? 0} onSet={(v) => setQty(s.id, v)} />
+                    </span>
+                  )}
+                </div>
               );
             })}
           </div>

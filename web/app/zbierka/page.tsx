@@ -12,7 +12,8 @@ import { gradedEur, GradedPrice, loadGraded } from "@/lib/grading";
 import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OtherGameHint, OwnerPicker, PriceMove } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { Card, eur, setKind, useCards, usePrices, cardEur } from "@/lib/data";
+import { useSealedCollection } from "@/lib/sealed-collection";
+import { Card, eur, setKind, SealedItem, useCards, usePrices, useSealed, cardEur } from "@/lib/data";
 
 type Item = { card: Card; n: number; unit: number | null; total: number };
 
@@ -80,6 +81,23 @@ function OpCollection() {
     const cards = items.map((i) => i.card);
     return { up: topMoves(cards, usd, "up", 1).slice(0, 3), down: topMoves(cards, usd, "down", 1).slice(0, 3) };
   }, [items, usd]);
+  const { data: sealedDb } = useSealed();
+  const { qty: sealedQty } = useSealedCollection(viewing, mine);
+  const myBoxes = useMemo(() => {
+    if (!sealedDb) return { list: [] as { s: SealedItem; n: number; total: number }[], total: 0 };
+    const byId = new Map(sealedDb.sealed.map((s) => [s.id, s]));
+    const list: { s: SealedItem; n: number; total: number }[] = [];
+    let total = 0;
+    for (const [idStr, n] of Object.entries(sealedQty)) {
+      const s = byId.get(Number(idStr));
+      if (!s || n <= 0) continue;
+      const v = (s.cm ?? 0) * n;
+      total += v;
+      list.push({ s, n, total: v });
+    }
+    list.sort((a, b) => b.total - a.total);
+    return { list, total };
+  }, [sealedDb, sealedQty]);
   const [slabPrices, setSlabPrices] = useState<Map<string, GradedPrice[]>>(new Map());
   useEffect(() => {
     const ids = [...new Set((copies ?? []).filter((c) => c.grader).map((c) => c.card_id))];
@@ -181,6 +199,32 @@ function OpCollection() {
           </div>
         )}
       </section>
+
+      {myBoxes.list.length > 0 && (
+        <section className="panel vault-boxes">
+          <div className="vault-head">
+            <h2 className="sub">Moje boxy a sealed</h2>
+            <span className="muted">
+              spolu <b>{eur(myBoxes.total)}</b>
+            </span>
+          </div>
+          <div className="vlist">
+            {myBoxes.list.map(({ s, n, total }) => (
+              <Link key={s.id} href="/boxy" className="vrow boxrow">
+                <span className="vname">
+                  <b>{s.name}</b>
+                  <span className="small muted">
+                    {s.set && <span className="tag tiny">{s.set}</span>} {s.kind} · {eur(s.cm)} / ks
+                  </span>
+                </span>
+                <span className="vqty">×{n}</span>
+                <b className="vtotal">{eur(total)}</b>
+              </Link>
+            ))}
+          </div>
+          {mine && <p className="tiny muted">Počet kusov upravíš v sekcii Hodnoty boxov. Hodnota je z trend ceny Cardmarketu.</p>}
+        </section>
+      )}
 
       {items.length === 0 ? (
         <div className="empty">
