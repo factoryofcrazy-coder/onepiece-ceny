@@ -3,15 +3,22 @@ import { plural } from "@/lib/sk";
 import PkCollection from "@/components/pk/PkCollection";
 import { useTcg } from "@/lib/tcg";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OtherGameHint, OwnerPicker } from "@/components/ui";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { collectionChange, collectionCsv, topMoves } from "@/lib/collector";
+import { Copy, gradedCounts, loadCopies, portfolio } from "@/lib/copies";
+import { formatPct, salesChange } from "@/lib/price-series";
+import GradingAdvice from "@/components/GradingAdvice";
+import { gradedEur, GradedPrice, loadGraded } from "@/lib/grading";
+import { Bar, CardImg, CardModal, CountUp, DataError, Foil, Loading, NeedLogin, OtherGameHint, OwnerPicker, PriceMove } from "@/components/ui";
 import { useAuth } from "@/lib/auth";
 import { useCollection } from "@/lib/collection";
-import { Card, eur, setKind, useCards, usePrices, cardEur } from "@/lib/data";
+import { useSealedCollection } from "@/lib/sealed-collection";
+import { Card, eur, setKind, SealedItem, useCards, usePrices, useSealed, cardEur } from "@/lib/data";
 
 type Item = { card: Card; n: number; unit: number | null; total: number };
 
-const SORTS = { total: "Celková hodnota", unit: "Cena za kus", qty: "Počet kusov", name: "Meno" } as const;
+const SORTS = { total: "Celková hodnota", unit: "Cena za kus", move: "Pohyb ceny", qty: "Počet kusov", name: "Meno" } as const;
+const signedEur = (v: number) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${eur(Math.abs(v))}`;
 
 function OpCollection() {
   const { user, loading } = useAuth();
@@ -25,6 +32,15 @@ function OpCollection() {
   const [sort, setSort] = useState<keyof typeof SORTS>("total");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState<Card | null>(null);
+  // null = tabuľka kusov ešte nie je v databáze, sekcia sa neukáže
+  const [copies, setCopies] = useState<Copy[] | null>(null);
+  const reloadCopies = useCallback(() => {
+    if (mine) loadCopies().then(setCopies);
+  }, [mine]);
+  useEffect(() => {
+    setCopies(null);
+    reloadCopies();
+  }, [reloadCopies]);
 
   const items = useMemo(() => {
     if (!data) return [];
@@ -60,6 +76,51 @@ function OpCollection() {
     return { value, pieces, sets, rarities, top, unpriced: items.filter((i) => i.unit == null).length };
   }, [items]);
 
+  const change = useMemo(() => collectionChange(items), [items]);
+  const moves = useMemo(() => {
+    const cards = items.map((i) => i.card);
+    return { up: topMoves(cards, usd, "up", 1).slice(0, 3), down: topMoves(cards, usd, "down", 1).slice(0, 3) };
+  }, [items, usd]);
+  const { data: sealedDb } = useSealed();
+  const { qty: sealedQty } = useSealedCollection(viewing, mine);
+  const myBoxes = useMemo(() => {
+    if (!sealedDb) return { list: [] as { s: SealedItem; n: number; total: number }[], total: 0 };
+    const byId = new Map(sealedDb.sealed.map((s) => [s.id, s]));
+    const list: { s: SealedItem; n: number; total: number }[] = [];
+    let total = 0;
+    for (const [idStr, n] of Object.entries(sealedQty)) {
+      const s = byId.get(Number(idStr));
+      if (!s || n <= 0) continue;
+      const v = (s.cm ?? 0) * n;
+      total += v;
+      list.push({ s, n, total: v });
+    }
+    list.sort((a, b) => b.total - a.total);
+    return { list, total };
+  }, [sealedDb, sealedQty]);
+  const [slabPrices, setSlabPrices] = useState<Map<string, GradedPrice[]>>(new Map());
+  useEffect(() => {
+    const ids = [...new Set((copies ?? []).filter((c) => c.grader).map((c) => c.card_id))];
+    if (ids.length) loadGraded(ids).then(setSlabPrices);
+  }, [copies]);
+  const profit = useMemo(() => {
+    if (!copies || !data) return null;
+    return portfolio(
+      copies,
+      (id) => cardEur(data.byId.get(id), usd),
+      (c) => (c.grader && c.grade != null ? gradedEur(slabPrices.get(c.card_id), c.grader, c.grade, usd)?.eur ?? null : null),
+    );
+  }, [copies, data, usd, slabPrices]);
+  const adviceCards = useMemo(() => items.map((i) => i.card), [items]);
+  const exportCsv = () => {
+    const url = URL.createObjectURL(new Blob([collectionCsv(items, copies ?? [])], { type: "text/csv;charset=utf-8" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `grand-line-zbierka-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const list = useMemo(() => {
     const s = q.trim().toLowerCase();
     const l = items.filter(
@@ -68,6 +129,8 @@ function OpCollection() {
     l.sort((a, b) =>
       sort === "total"
         ? b.total - a.total
+        : sort === "move"
+          ? Math.abs(salesChange(b.card)?.pct ?? -1) - Math.abs(salesChange(a.card)?.pct ?? -1)
         : sort === "unit"
           ? (b.unit ?? -1) - (a.unit ?? -1)
           : sort === "qty"
@@ -110,6 +173,11 @@ function OpCollection() {
                 Import z HoloDex
               </Link>
             )}
+            {mine && items.length > 0 && (
+              <button className="btn ghost sm" onClick={exportCsv}>
+                Export do Excelu
+              </button>
+            )}
           </div>
         </div>
         {stats.top.length > 0 && (
@@ -132,6 +200,32 @@ function OpCollection() {
         )}
       </section>
 
+      {myBoxes.list.length > 0 && (
+        <section className="panel vault-boxes">
+          <div className="vault-head">
+            <h2 className="sub">Moje boxy a sealed</h2>
+            <span className="muted">
+              spolu <b>{eur(myBoxes.total)}</b>
+            </span>
+          </div>
+          <div className="vlist">
+            {myBoxes.list.map(({ s, n, total }) => (
+              <Link key={s.id} href="/boxy" className="vrow boxrow">
+                <span className="vname">
+                  <b>{s.name}</b>
+                  <span className="small muted">
+                    {s.set && <span className="tag tiny">{s.set}</span>} {s.kind} · {eur(s.cm)} / ks
+                  </span>
+                </span>
+                <span className="vqty">×{n}</span>
+                <b className="vtotal">{eur(total)}</b>
+              </Link>
+            ))}
+          </div>
+          {mine && <p className="tiny muted">Počet kusov upravíš v sekcii Hodnoty boxov. Hodnota je z trend ceny Cardmarketu.</p>}
+        </section>
+      )}
+
       {items.length === 0 ? (
         <div className="empty">
           {mine ? (
@@ -146,6 +240,57 @@ function OpCollection() {
         </div>
       ) : (
         <>
+          {(change || (mine && copies)) && (
+            <div className="collector-grid">
+              {mine && profit && (
+                <section className="panel collector">
+                  <h2 className="sub">Zisk a strata</h2>
+                  {copies && gradedCounts(copies).length > 0 && (
+                    <p className="small">Hodnotené karty: {gradedCounts(copies).map(([g, n]) => `${g} ${n}×`).join(", ")}</p>
+                  )}
+                  {profit.counted > 0 ? (
+                    <>
+                      <p className="collector-big">
+                        <b className={profit.diff > 0 ? "cmove up" : profit.diff < 0 ? "cmove down" : ""}>{signedEur(profit.diff)}</b>
+                        {profit.pct != null && <span className="muted"> {formatPct(profit.pct)}</span>}
+                      </p>
+                      <p className="small muted">
+                        Zaplatené {eur(profit.paid)}, dnešná hodnota {eur(profit.value)}. Počíta sa z {profit.counted} {plural(profit.counted, "kusu", "kusov", "kusov")}.
+                      </p>
+                      {profit.noPaid + profit.noValue > 0 && (
+                        <p className="tiny muted">
+                          Nezapočítané: {profit.noPaid > 0 && `${profit.noPaid} bez nákupnej ceny`}
+                          {profit.noPaid > 0 && profit.noValue > 0 && ", "}
+                          {profit.noValue > 0 && `${profit.noValue} bez hodnoty (pri gradovanej karte zapíš hodnotu podľa predajov)`}.
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <p className="small muted">Otvor kartu a v časti Moje kusy zapíš, za koľko si ju kúpil. Tu uvidíš, či si v pluse. Vidíš to len ty.</p>
+                  )}
+                </section>
+              )}
+              {change && (
+                <section className="panel collector">
+                  <h2 className="sub">Čo sa v zbierke hýbe</h2>
+                  <p className="collector-big">
+                    <b className={change.pct > 0 ? "cmove up" : change.pct < 0 ? "cmove down" : ""}>{formatPct(change.pct)}</b>
+                  </p>
+                  <p className="small muted">Priemerné predaje za 7 dní oproti 30 dňom. Ber to ako orientačné, ceny kariet bežne kolíšu.</p>
+                  {[...moves.up, ...moves.down].map((m) => (
+                    <button key={m.card.id} className="collector-row" onClick={() => setOpen(m.card)}>
+                      <span>{m.card.name} <span className="muted tiny">{m.card.id}</span></span>
+                      <span className={`cmove ${m.pct > 0 ? "up" : "down"}`}>{formatPct(m.pct)}</span>
+                    </button>
+                  ))}
+                  <Link className="small" href="/pohyby">Všetky pohyby cien →</Link>
+                </section>
+              )}
+            </div>
+          )}
+
+          {mine && <GradingAdvice cards={adviceCards} usd={usd} onOpen={setOpen} />}
+
           <div className="vault-grid">
             <section className="panel vault-sets">
               <h2 className="sub">Hodnota podľa setov</h2>
@@ -204,6 +349,7 @@ function OpCollection() {
                   <span className="small muted">
                     {i.card.id} · {setKind(i.card.set) === "other" ? "Promo" : setKind(i.card.set) === "don" ? "DON!!" : i.card.set}
                     {i.card.v && <span className="tag tiny">{i.card.v}</span>}
+                    {" "}<PriceMove card={i.card} />
                   </span>
                 </span>
                 <span className="vqty">{i.n}×</span>
@@ -222,6 +368,7 @@ function OpCollection() {
           onClose={() => setOpen(null)}
           qty={qty[open.id] ?? 0}
           onSet={mine ? (v) => setQty(open.id, v) : undefined}
+          onCopies={reloadCopies}
         />
       )}
     </>

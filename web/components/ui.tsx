@@ -5,6 +5,10 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { loadProfiles, Profile, useAuth } from "@/lib/auth";
 import type { Card } from "@/lib/data";
 import { loadCardAlts, cardEur, COLOR_SK, eur, thumb } from "@/lib/data";
+import CopiesPanel from "@/components/CopiesPanel";
+import PriceChart from "@/components/PriceChart";
+import { gradedEur, GradedPrice, loadGraded } from "@/lib/grading";
+import { formatPct, notableMove, salesChange } from "@/lib/price-series";
 
 /** Kostra namiesto „Načítavam…“ – tvar zodpovedá obsahu, ktorý príde. */
 export function Loading({ what = "Načítavam", shape = "cards" }: { what?: string; shape?: "cards" | "rows" | "tiles" }) {
@@ -196,18 +200,32 @@ export function CardImg({
   );
 }
 
+/** Značka v mriežke: len výrazný pohyb, inak by pri rozkolísaných cenách svietila polovica kariet. */
+export function PriceMove({ card }: { card: Card }) {
+  const pct = notableMove(card);
+  if (pct == null) return null;
+  return (
+    <span className={`cmove ${pct > 0 ? "up" : "down"}`} title="Priemerný predaj za 7 dní oproti 30 dňom (Cardmarket)">
+      {formatPct(pct)}
+    </span>
+  );
+}
+
 export function CardModal({
   card,
   onClose,
   usd,
   qty,
   onSet,
+  onCopies,
 }: {
   card: Card;
   onClose: () => void;
   usd: number;
   qty?: number;
   onSet?: (n: number) => void;
+  /** zmena zapísaných kusov, nech si zbierka prepočíta zisk */
+  onCopies?: () => void;
 }) {
   useEffect(() => {
     const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -233,6 +251,15 @@ export function CardModal({
       live = false;
     };
   }, [card.id, card.code, card.imgBase]);
+  const [graded, setGraded] = useState<GradedPrice[]>([]);
+  useEffect(() => {
+    setGraded([]);
+    let live = true;
+    loadGraded([card.id]).then((m) => live && setGraded(m.get(card.id) ?? []));
+    return () => {
+      live = false;
+    };
+  }, [card.id]);
   const { user: me } = useAuth();
   const [trade, setTrade] = useState("");
   const toTrade = async (kind: "offer" | "want") => {
@@ -240,6 +267,7 @@ export function CardModal({
     const err = await addListing({ card_id: card.id, kind });
     setTrade(err ?? (kind === "offer" ? "Pridané do tvojej ponuky na trhovisku ✓" : "Pridané do hľadaných na trhovisku ✓"));
   };
+  const sales = salesChange(card);
   const src = card.cm != null ? "Cardmarket trend" : card.usd != null ? "TCGplayer (USA)" : "";
   const stats = [
     ["Cost", card.cost],
@@ -284,6 +312,11 @@ export function CardModal({
             <span className="cd-plabel">{src || "Cena"}</span>
             <b>{main != null ? eur(main) : "–"}</b>
             {card.cmLow != null && <span className="cd-psub">najlacnejšia ponuka od {eur(card.cmLow)}</span>}
+            {sales && (
+              <span className="cd-psub">
+                priemerný predaj za 7 dní {eur(sales.avg7)}, <span className={sales.pct > 0 ? "cmove up" : sales.pct < 0 ? "cmove down" : "cmove"}>{formatPct(sales.pct)}</span> oproti 30 dňom ({eur(sales.avg30)})
+              </span>
+            )}
           </div>
           <div className="cd-palt">
             {card.cmJp != null && (
@@ -325,6 +358,18 @@ export function CardModal({
           )}
         </div>
         <div className="cd-rest">
+          {main != null && <PriceChart key={card.id} card={card} usd={usd} source={src} />}
+          <section className="pchart graded-soon" aria-label="Hodnotené kusy">
+            <div className="pchart-head">
+              <h3>Hodnotené kusy</h3>
+              <span className="chip">Pripravujeme</span>
+            </div>
+            <p className="tiny muted">Na cenách hodnotených kariet (PSA, Beckett, CGC) pracujeme. Zatiaľ si predané kusy pozri priamo na eBay.</p>
+            <a className="small" target="_blank" rel="noreferrer" href={`https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece ${card.code} PSA`)}&_sacat=0&LH_Sold=1&LH_Complete=1`}>
+              Predané hodnotené kusy na eBay ↗
+            </a>
+          </section>
+          {me && onSet && <CopiesPanel key={`k${card.id}`} card={card} market={main} qty={qty ?? 0} onSet={onSet} onChange={onCopies} gradedOf={(c) => (c.grader && c.grade != null ? gradedEur(graded, c.grader, c.grade, usd)?.eur ?? null : null)} />}
           {alts.length > 0 && (
             <section className="cd-looks" aria-label="Možné vzhľady">
               <h3>Možné vzhľady ({alts.length})</h3>

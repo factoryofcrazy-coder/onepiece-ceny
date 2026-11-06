@@ -7,6 +7,7 @@ on:
     branches: [main]
     paths:
       - "web/lib/cards-build.ts"
+      - "web/lib/cardmarket.ts"
       - "web/lib/promo-images.ts"
       - "web/scripts/build-cards.ts"
       - ".github/workflows/cards.yml"
@@ -50,12 +51,12 @@ jobs:
         env:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: python3 ../tools/price_history.py --cards ../docs/data/cards.json
+        run: python3 ../tools/price_history.py --cards ../docs/data/cards.json --sealed ../docs/data/sealed.json
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ../docs/data/cards.json ../docs/data/card-alts.json
+          git add ../docs/data/cards.json ../docs/data/card-alts.json ../docs/data/sealed.json
           git diff --cached --quiet && exit 0
           git commit -m "databáza kariet $(date -u +'%Y-%m-%d')"
           for i in 1 2 3; do git pull --rebase -X theirs -q && git push && exit 0; sleep 5; done

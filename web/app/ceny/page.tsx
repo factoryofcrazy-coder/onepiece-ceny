@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CountUp, DataError, Loading, FilterBar } from "@/components/ui";
 import { eur, Offer, usePrices } from "@/lib/data";
 import { Tcg, useTcg } from "@/lib/tcg";
+import MarketTabs from "@/components/MarketTabs";
 
 type Product = {
   key: string;
@@ -101,6 +102,7 @@ export default function PricesPage() {
 
   return (
     <>
+      <MarketTabs />
       <section className="hero">
         <div className="hero-copy">
           <h1>

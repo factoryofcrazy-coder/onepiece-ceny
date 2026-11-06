@@ -57,7 +57,8 @@ def rpc(name, body, key):
         headers={"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json"},
     )
     with urllib.request.urlopen(req, timeout=60) as r:
-        return json.loads(r.read())
+        raw = r.read()
+    return json.loads(raw) if raw else None  # funkcie vracajúce void majú prázdne telo
 
 
 def discord(text):
@@ -73,9 +74,36 @@ def discord(text):
     urllib.request.urlopen(req, timeout=20).read()
 
 
+def fetch_spy():
+    """Denné zatváracie kurzy SPY (S&P 500 ETF) za 3 mesiace z Yahoo Finance, bez kľúča."""
+    req = urllib.request.Request(
+        "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=3mo&interval=1d",
+        headers={"User-Agent": "Mozilla/5.0"},
+    )
+    with urllib.request.urlopen(req, timeout=30) as r:
+        d = json.load(r)
+    res = d["chart"]["result"][0]
+    ts, cl = res["timestamp"], res["indicators"]["quote"][0]["close"]
+    return [
+        {"day": datetime.datetime.fromtimestamp(t, datetime.timezone.utc).date().isoformat(), "close": round(c, 2)}
+        for t, c in zip(ts, cl)
+        if c is not None
+    ]
+
+
+def market_index(cards, sealed):
+    """Priemerná trend cena koša v eurách: karty od 1 € a zapečatené boxy/startery. Index so základom 1000 počíta web."""
+    vals = [c["cm"] for c in cards if not c["id"].startswith("pk:") and c.get("cm") and c["cm"] >= 1]
+    vals += [s["cm"] for s in sealed if s.get("cm") and s.get("lang") == "EN" and s.get("kind") in ("Box", "Starter", "Premium")]
+    if not vals:
+        return None
+    return {"value": round(sum(vals) / len(vals), 2), "items": len(vals)}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cards", required=True)
+    ap.add_argument("--sealed")
     a = ap.parse_args()
     key = os.environ.get("SUPABASE_SERVICE_KEY", "").strip()
     if not key:
@@ -91,12 +119,28 @@ def main():
             discord(m)
     except Exception as e:
         print(f"chyba: {e}", file=sys.stderr)
-        # samotný text chyby na Discord nejde, je v logu úlohy
         try:
             discord("**História cien:** dnešné uloženie alebo kontrola databázy zlyhali, pozri log úlohy Databáza kariet.")
         except Exception as e2:
             print(f"Discord: {e2}", file=sys.stderr)
         return 1
+    # trhový index – zlyhanie nezhodí uloženie cien
+    try:
+        if a.sealed:
+            with open(a.cards, encoding="utf-8") as f:
+                cards = json.load(f)["cards"]
+            with open(a.sealed, encoding="utf-8") as f:
+                sealed = json.load(f).get("sealed", [])
+            mi = market_index(cards, sealed)
+            if mi:
+                rpc("record_market_index", {"p_day": today.isoformat(), "p_value": mi["value"], "p_items": mi["items"]}, key)
+                print(f"index: {mi['value']} € priemer, {mi['items']} položiek")
+            spy = fetch_spy()
+            if spy:
+                rpc("record_spy", {"p_rows": spy}, key)
+                print(f"SPY: {len(spy)} dní, posledný {spy[-1]['close']}")
+    except Exception as e:
+        print(f"index/SPY zlyhal (nekritické): {e}", file=sys.stderr)
     return 0
 
 

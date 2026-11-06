@@ -61,7 +61,7 @@ const OP_TABS: Tab[] = [
   { href: "/zbierka", label: "Zbierka", icon: I.vault },
 ];
 const OP_MORE = [
-  { href: "/ceny", label: "Ceny boxov" },
+  { href: "/boxy", label: "Trh (boxy, ceny, index)" },
   { href: "/trhovisko", label: "Trhovisko" },
   { href: "/master-sety", label: "Master sety" },
   { href: "/decky", label: "Decky" },
@@ -73,6 +73,7 @@ const OP_MORE = [
       ]
     : []),
   { href: "/import", label: "Import z HoloDex" },
+  { href: "/novinky", label: "Novinky" },
   { href: "/chat", label: "Chat" },
   { href: "/report", label: "Report" },
   { href: "/aplikacia", label: "Aplikácia do mobilu" },
