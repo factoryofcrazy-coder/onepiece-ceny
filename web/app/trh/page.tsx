@@ -8,7 +8,10 @@ import MarketTabs from "@/components/MarketTabs";
 
 const W = 720, H = 240, LEFT = 48, RIGHT = 14, TOP = 14, BOT = 28;
 const dayLabel = (d: string) => new Date(d + "T00:00:00Z").toLocaleDateString("sk-SK", { day: "numeric", month: "numeric", timeZone: "UTC" });
-const pctTxt = (v: number) => (v > 0 ? `▲ ${v.toLocaleString("sk-SK", { maximumFractionDigits: 1 })} %` : v < 0 ? `▼ ${(-v).toLocaleString("sk-SK", { maximumFractionDigits: 1 })} %` : "bez zmeny");
+const pctTxt = (raw: number) => {
+  const v = Math.abs(raw) < 0.05 ? 0 : raw;
+  return v > 0 ? `▲ ${v.toLocaleString("sk-SK", { maximumFractionDigits: 1 })} %` : v < 0 ? `▼ ${(-v).toLocaleString("sk-SK", { maximumFractionDigits: 1 })} %` : "bez zmeny";
+};
 
 export default function Page() {
   const [points, setPoints] = useState<IndexPoint[] | null>(null);
@@ -35,7 +38,7 @@ export default function Page() {
   // graf – spoločná os pre obe krivky
   const all = [...idx.map((p) => p.idx), ...spyIdx.filter((v): v is number => v != null), 1000];
   const lo = Math.min(...all), hi = Math.max(...all);
-  const pad = (hi - lo) * 0.12 || 50;
+  const pad = Math.max((hi - lo) * 0.12, 20); // min. odstup, nech niceTicks nedostane takmer nulový rozsah
   const yticks = niceTicks(lo - pad, hi + pad).filter((t) => t >= lo - pad && t <= hi + pad);
   const y0 = Math.min(lo - pad, ...yticks), y1 = Math.max(hi + pad, ...yticks);
   const x = (i: number) => LEFT + (idx.length <= 1 ? 0 : (i / (idx.length - 1)) * (W - LEFT - RIGHT));
