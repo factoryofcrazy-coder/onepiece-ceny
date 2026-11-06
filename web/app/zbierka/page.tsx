@@ -205,7 +205,7 @@ function OpCollection() {
                         <p className="tiny muted">
                           Nezapočítané: {profit.noPaid > 0 && `${profit.noPaid} bez nákupnej ceny`}
                           {profit.noPaid > 0 && profit.noValue > 0 && ", "}
-                          {profit.noValue > 0 && `${profit.noValue} bez hodnoty (pri gradovanej karte zadaj vlastný odhad)`}.
+                          {profit.noValue > 0 && `${profit.noValue} bez hodnoty (pri gradovanej karte zapíš hodnotu podľa predajov)`}.
                         </p>
                       )}
                     </>

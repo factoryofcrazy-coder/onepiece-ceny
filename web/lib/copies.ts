@@ -56,6 +56,12 @@ export function certUrl(c: Pick<Copy, "grader" | "cert">): string | null {
   return null;
 }
 
+/** Skutočné predaje na eBay: otvára ich používateľ, dáta neťaháme ani neukladáme. */
+export function soldSearchUrl(code: string, grader: string, grade: number | string) {
+  const q = encodeURIComponent(`${code} ${grader} ${grade}`).replace(/%20/g, "+");
+  return `https://www.ebay.com/sch/i.html?_nkw=${q}&LH_Sold=1&LH_Complete=1`;
+}
+
 /** Číslo z obalu: bez medzier, len znaky, ktoré databáza pustí. null = nezadané, undefined = neplatné. */
 export function parseCert(v: string): string | null | undefined {
   const t = v.replace(/\s/g, "");

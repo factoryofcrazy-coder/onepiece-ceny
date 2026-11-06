@@ -2,7 +2,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import type { Card } from "@/lib/data";
 import { eur } from "@/lib/data";
-import { addCopy, certUrl, CONDS, Copy, copyLabel, copyValue, GRADERS, loadCopies, parseCert, parseMoney, removeCopy } from "@/lib/copies";
+import { addCopy, certUrl, CONDS, Copy, copyLabel, copyValue, GRADERS, loadCopies, parseCert, parseMoney, removeCopy, soldSearchUrl } from "@/lib/copies";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -79,7 +79,7 @@ export default function CopiesPanel({ card, market, qty, onSet, onChange }: { ca
           {form ? "Zavrieť" : "Zapísať kus"}
         </button>
       </div>
-      <p className="copies-private">Nákupnú cenu, stav a certifikát vidíš len ty. Cena pri karte platí pre negradovanú kartu, pri gradovanej si zapíš vlastný odhad.</p>
+      <p className="copies-private">Nákupnú cenu, stav a certifikát vidíš len ty. Cena pri karte platí pre negradovanú kartu. Pri gradovanej si pozri skutočné predaje a zapíš hodnotu podľa nich.</p>
       {copies.map((c) => {
         const v = copyValue(c, market);
         const diff = c.paid != null && v != null ? v - c.paid : null;
@@ -94,7 +94,7 @@ export default function CopiesPanel({ card, market, qty, onSet, onChange }: { ca
               Zmazať
             </button>
             <small>
-              {[c.bought_on && new Date(c.bought_on + "T00:00:00Z").toLocaleDateString("sk-SK", { timeZone: "UTC" }), c.own_value != null && `môj odhad ${eur(c.own_value)}`, c.grader && c.own_value == null && "bez odhadu hodnoty", c.note].filter(Boolean).join(" · ")}
+              {[c.bought_on && new Date(c.bought_on + "T00:00:00Z").toLocaleDateString("sk-SK", { timeZone: "UTC" }), c.own_value != null && `hodnota podľa predajov ${eur(c.own_value)}`, c.grader && c.own_value == null && "bez zapísanej hodnoty", c.note].filter(Boolean).join(" · ")}
               {certUrl(c) ? (
                 <>
                   {" · "}
@@ -144,9 +144,14 @@ export default function CopiesPanel({ card, market, qty, onSet, onChange }: { ca
           {kind && (
             <>
               <label className="field">
-                <span>Môj odhad hodnoty €</span>
+                <span>Hodnota podľa predajov €</span>
                 <input type="text" inputMode="decimal" value={own} onChange={(e) => setOwn(e.target.value)} />
               </label>
+              <p className="tiny wide">
+                <a href={soldSearchUrl(card.code, kind === "Iný" ? "graded" : kind, kind === "Iný" ? "" : grade)} target="_blank" rel="noreferrer">
+                  Pozrieť predaje na eBay ↗
+                </a>
+              </p>
               <label className="field">
                 <span>Číslo certifikátu</span>
                 <input type="text" maxLength={40} autoCapitalize="characters" value={cert} onChange={(e) => setCert(e.target.value)} />

@@ -7,6 +7,7 @@ import type { Card } from "@/lib/data";
 import { loadCardAlts, cardEur, COLOR_SK, eur, thumb } from "@/lib/data";
 import CopiesPanel from "@/components/CopiesPanel";
 import PriceChart from "@/components/PriceChart";
+import { soldSearchUrl } from "@/lib/copies";
 import { formatPct, notableMove, salesChange } from "@/lib/price-series";
 
 /** Kostra namiesto „Načítavam…“ – tvar zodpovedá obsahu, ktorý príde. */
@@ -349,6 +350,17 @@ export function CardModal({
         </div>
         <div className="cd-rest">
           {main != null && <PriceChart key={card.id} card={card} usd={usd} source={src} />}
+          <section className="pchart graded-links" aria-label="Predaje hodnotených kariet">
+            <h3>Hodnotené kusy: skutočné predaje</h3>
+            <p className="pchart-sum">Otvorí predané kusy na eBay. Skontroluj, že ide o rovnakú verziu karty.</p>
+            <div className="graded-row">
+              {([["PSA", 10], ["PSA", 9], ["CGC", 10], ["BGS", 9.5]] as const).map(([g, n]) => (
+                <a key={`${g}${n}`} className="btn ghost sm" href={soldSearchUrl(card.code, g, n)} target="_blank" rel="noreferrer">
+                  {g} {n} ↗
+                </a>
+              ))}
+            </div>
+          </section>
           {me && onSet && <CopiesPanel key={`k${card.id}`} card={card} market={main} qty={qty ?? 0} onSet={onSet} onChange={onCopies} />}
           {alts.length > 0 && (
             <section className="cd-looks" aria-label="Možné vzhľady">

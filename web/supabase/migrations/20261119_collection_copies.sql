@@ -5,7 +5,7 @@ create table if not exists public.collection_copies (
   user_id uuid not null default auth.uid() references auth.users on delete cascade,
   card_id text not null check (char_length(card_id) <= 60),
   paid numeric(10,2) check (paid is null or paid between 0 and 1000000),
-  own_value numeric(10,2) check (own_value is null or own_value between 0 and 1000000), -- vlastný odhad, pri gradovanej karte trhovú cenu nepoznáme
+  own_value numeric(10,2) check (own_value is null or own_value between 0 and 1000000), -- hodnota, ktorú si zapísal majiteľ, pri gradovanej karte trhovú cenu nemáme
   bought_on date,
   cond text check (cond in ('NM', 'LP', 'MP', 'HP', 'DMG')),
   grader text check (grader in ('PSA', 'CGC', 'BGS', 'TAG', 'Iný')),

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Card } from "./data";
 import { collectionChange, collectionCsv, topMoves } from "./collector";
-import { certUrl, Copy, copyLabel, copyValue, gradedCounts, parseCert, parseMoney, portfolio } from "./copies";
+import { certUrl, Copy, copyLabel, copyValue, gradedCounts, parseCert, parseMoney, portfolio, soldSearchUrl } from "./copies";
 
 const card = (id: string, cm?: number, cm7?: number, cm30?: number) => ({ id, code: id, name: id, v: "", set: "OP-01", cm, cm7, cm30, usd: null }) as unknown as Card;
 const copy = (o: Partial<Copy>): Copy => ({ id: "x", card_id: "A", paid: null, own_value: null, bought_on: null, cond: "NM", grader: null, grade: null, cert: null, note: null, ...o });
@@ -40,6 +40,14 @@ describe("hodnota kusu a zisk", () => {
     expect(copyLabel(copy({ cond: "LP" }))).toBe("LP");
     expect(copyLabel(copy({ cond: null }))).toBe("Bez stavu");
   });
+});
+
+describe("predaje na eBay", () => {
+  it("hľadá kód, firmu a známku medzi predanými", () => {
+    expect(soldSearchUrl("OP01-120", "PSA", 10)).toBe("https://www.ebay.com/sch/i.html?_nkw=OP01-120+PSA+10&LH_Sold=1&LH_Complete=1");
+    expect(soldSearchUrl("OP01-120", "CGC", 9.5)).toContain("_nkw=OP01-120+CGC+9.5&");
+  });
+  it("cudzie znaky neporušia adresu", () => expect(soldSearchUrl("A&B", "PSA", 10)).toContain("A%26B+PSA+10"));
 });
 
 describe("certifikát", () => {
