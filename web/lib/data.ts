@@ -155,6 +155,7 @@ export function setKind(id: string): SetKind {
   return "other";
 }
 export const SET_KIND_SK = { booster: "Booster sety", starter: "Starter decky", other: "Promo karty", don: "DON!! karty" } as const;
+export const SET_KIND_EN = { booster: "Booster sets", starter: "Starter decks", other: "Promo cards", don: "DON!! cards" } as const;
 
 export function sortSets<T extends { id: string }>(sets: T[]) {
   return [...sets].sort((a, b) => {
