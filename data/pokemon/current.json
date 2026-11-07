@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-07T07:24:00Z",
+ "updated": "2026-11-07T07:25:17Z",
  "fx": {
   "CZK": 24.35,
   "USD": 1.1165,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "veselydrak": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -4251,8 +4251,8 @@
    ]
   },
   "kartovo": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Pokémon TCG: Mega Evolution – Delta Reign Booster Pack",
@@ -4434,10 +4434,13 @@
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.kartovo.net/user/shop/detail/3652_pokemon-tcg--chien-pao-ex-battle-deck.jpg?ff=1&x=423&y=318&q=85&ts=654965da&sg=2175fb9d"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.kartovo.net/pokemon/)",
+   "fails": 1,
+   "warned": false
   },
   "xzone": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -4686,7 +4689,7 @@
    ]
   },
   "pompo_sk": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -4708,6 +4711,15 @@
      "img": "https://pompo.sk/data/tmp/2/8/517108_2.jpg?1777026105_1"
     },
     {
+     "name": "Pokémon TCG: ME04 Chaos Rising - Elite Trainer Box",
+     "url": "https://pompo.sk/pokemon-tcg-me04-chaos-rising-elite-trainer-box_z267627/",
+     "price": 95.99,
+     "currency": "EUR",
+     "eur": 95.99,
+     "inStock": false,
+     "img": "https://pompo.sk/data/tmp/2/9/517079_2.jpg?1777026088_1"
+    },
+    {
      "name": "Pokémon TCG: ME02.5 Ascended Heroes - ex Box",
      "url": "https://pompo.sk/pokemon-tcg-me02-5-ascended-heroes-ex-box_z267622/",
      "price": 64.99,
@@ -4715,42 +4727,6 @@
      "eur": 64.99,
      "inStock": true,
      "img": "https://pompo.sk/data/tmp/2/2/517062_2.jpg?1777026077_1"
-    },
-    {
-     "name": "Pokémon TCG: First Partner Illustration Collection - Series 2",
-     "url": "https://pompo.sk/pokemon-tcg-first-partner-illustration-collection-series-2_z267626/",
-     "price": 43.99,
-     "currency": "EUR",
-     "eur": 43.99,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/9/517089_2.jpg?1777026093_1"
-    },
-    {
-     "name": "Pokémon TCG: Battle Academy 2024 CZ/SK - kartová hra",
-     "url": "https://pompo.sk/pokemon-tcg-battle-academy-2024-cz-sk-kartova-hra_z211025/",
-     "price": 41.99,
-     "currency": "EUR",
-     "eur": 41.99,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/1/355831_2.jpg?1723023348_1"
-    },
-    {
-     "name": "Pokémon TCG: ME05 Pitch Black - Booster",
-     "url": "https://pompo.sk/pokemon-tcg-me05-pitch-black-booster_z272061/",
-     "price": 6.59,
-     "currency": "EUR",
-     "eur": 6.59,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/3/533993_2.jpg?1783491695_1"
-    },
-    {
-     "name": "Pokémon TCG: SV10 Destined Rivals - Booster",
-     "url": "https://pompo.sk/pokemon-tcg-sv10-destined-rivals-booster_z236308/",
-     "price": 10.99,
-     "currency": "EUR",
-     "eur": 10.99,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/2/415522_2.jpg?1749104694_1"
     },
     {
      "name": "Pokémon TCG: ME06 Delta Reign - Elite Trainer Box",
@@ -4780,24 +4756,6 @@
      "img": "https://pompo.sk/data/tmp/2/6/496816_2.jpg?1770999986_1"
     },
     {
-     "name": "Pokémon TCG: First Partners Illustration Collection - Series 3",
-     "url": "https://pompo.sk/pokemon-tcg-first-partners-illustration-collection-series-3_z273805/",
-     "price": 38.99,
-     "currency": "EUR",
-     "eur": 38.99,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/5/544875_2.jpg?1786443607_1"
-    },
-    {
-     "name": "Pokémon TCG: Lumiose City Mini Tin",
-     "url": "https://pompo.sk/pokemon-tcg-lumiose-city-mini-tin_z267625/",
-     "price": 16.4,
-     "currency": "EUR",
-     "eur": 16.4,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/5/517075_2.jpg?1777026085_1"
-    },
-    {
      "name": "Pokémon TCG: Mega Charizard Tin",
      "url": "https://pompo.sk/pokemon-tcg-mega-charizard-tin_z262208/",
      "price": 52.3,
@@ -4816,6 +4774,69 @@
      "img": "https://pompo.sk/data/tmp/2/1/509511_2.jpg?1774520520_1"
     },
     {
+     "name": "Pokémon TCG: First Partner Illustration Collection - Series 2",
+     "url": "https://pompo.sk/pokemon-tcg-first-partner-illustration-collection-series-2_z267626/",
+     "price": 43.99,
+     "currency": "EUR",
+     "eur": 43.99,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/9/517089_2.jpg?1777026093_1"
+    },
+    {
+     "name": "Pokémon TCG: ME02.5 Ascended Heroes - Elite Trainer Box",
+     "url": "https://pompo.sk/pokemon-tcg-me02-5-ascended-heroes-elite-trainer-box_z262209/",
+     "price": 203.5,
+     "currency": "EUR",
+     "eur": 203.5,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/1/496811_2.jpg?1770999985_1"
+    },
+    {
+     "name": "Pokémon TCG: Battle Academy 2024 CZ/SK - kartová hra",
+     "url": "https://pompo.sk/pokemon-tcg-battle-academy-2024-cz-sk-kartova-hra_z211025/",
+     "price": 41.99,
+     "currency": "EUR",
+     "eur": 41.99,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/1/355831_2.jpg?1723023348_1"
+    },
+    {
+     "name": "Pokémon TCG: ME05 Pitch Black - Booster",
+     "url": "https://pompo.sk/pokemon-tcg-me05-pitch-black-booster_z272061/",
+     "price": 6.59,
+     "currency": "EUR",
+     "eur": 6.59,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/3/533993_2.jpg?1783491695_1"
+    },
+    {
+     "name": "Pokémon TCG: SV10 Destined Rivals - Booster",
+     "url": "https://pompo.sk/pokemon-tcg-sv10-destined-rivals-booster_z236308/",
+     "price": 10.99,
+     "currency": "EUR",
+     "eur": 10.99,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/2/415522_2.jpg?1749104694_1"
+    },
+    {
+     "name": "Pokémon TCG: First Partners Illustration Collection - Series 3",
+     "url": "https://pompo.sk/pokemon-tcg-first-partners-illustration-collection-series-3_z273805/",
+     "price": 38.99,
+     "currency": "EUR",
+     "eur": 38.99,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/5/544875_2.jpg?1786443607_1"
+    },
+    {
+     "name": "Pokémon TCG: Lumiose City Mini Tin",
+     "url": "https://pompo.sk/pokemon-tcg-lumiose-city-mini-tin_z267625/",
+     "price": 16.4,
+     "currency": "EUR",
+     "eur": 16.4,
+     "inStock": true,
+     "img": "https://pompo.sk/data/tmp/2/5/517075_2.jpg?1777026085_1"
+    },
+    {
      "name": "Pokémon TCG: Pokémon Day 2026 Collection",
      "url": "https://pompo.sk/pokemon-tcg-pokemon-day-2026-collection_z260183/",
      "price": 57.6,
@@ -4832,15 +4853,6 @@
      "eur": 62.6,
      "inStock": true,
      "img": "https://pompo.sk/data/tmp/2/1/517081_2.jpg?1777026089_1"
-    },
-    {
-     "name": "Pokémon TCG: ME02.5 Ascended Heroes - Elite Trainer Box",
-     "url": "https://pompo.sk/pokemon-tcg-me02-5-ascended-heroes-elite-trainer-box_z262209/",
-     "price": 203.5,
-     "currency": "EUR",
-     "eur": 203.5,
-     "inStock": true,
-     "img": "https://pompo.sk/data/tmp/2/1/496811_2.jpg?1770999985_1"
     },
     {
      "name": "Pokémon TCG: ME02.5 Ascended Heroes - Tech Sticker Collection, viac druhov",
@@ -4877,15 +4889,6 @@
      "eur": 7.39,
      "inStock": false,
      "img": "https://pompo.sk/data/tmp/2/7/517097_2.jpg?1777026098_1"
-    },
-    {
-     "name": "Pokémon TCG: ME04 Chaos Rising - Elite Trainer Box",
-     "url": "https://pompo.sk/pokemon-tcg-me04-chaos-rising-elite-trainer-box_z267627/",
-     "price": 95.99,
-     "currency": "EUR",
-     "eur": 95.99,
-     "inStock": false,
-     "img": "https://pompo.sk/data/tmp/2/9/517079_2.jpg?1777026088_1"
     },
     {
      "name": "Pokémon TCG: First Partner Illustration Collection - Series 1",
@@ -5223,7 +5226,7 @@
    ]
   },
   "gorila": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -5281,31 +5284,13 @@
      "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157829.jpg?v=17928327692"
     },
     {
-     "name": "Pokémon TCG: Mega Brave - Booster (japonský)",
-     "url": "https://www.gorila.sk/detail/4157839/Pokemon-TCG-Mega-Brave-Booster-japonsky",
-     "price": 7.0,
+     "name": "Pokémon TCG: Violet ex - Booster (japonský)",
+     "url": "https://www.gorila.sk/detail/4157847/Pokemon-TCG-Violet-ex-Booster-japonsky",
+     "price": 6.06,
      "currency": "EUR",
-     "eur": 7.0,
+     "eur": 6.06,
      "inStock": false,
-     "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157839.jpg?v=17940332502"
-    },
-    {
-     "name": "Pokémon: Kroužkové album na stránkové obaly 25 x 31,5 cm - Pikachu & Mimikyu",
-     "url": "https://www.gorila.sk/detail/1968579/Pokemon-Krouzkove-album-na-strankove-obaly-25-x-31-5-cm-Pikachu-Mimikyu",
-     "price": 18.75,
-     "currency": "EUR",
-     "eur": 18.75,
-     "inStock": false,
-     "img": "https://mrtns.sk/gorila/products/_ml/1968/ml1968579.jpg?v=17933295042"
-    },
-    {
-     "name": "Pokémon Prerelease Box Of Energy",
-     "url": "https://www.gorila.sk/detail/1989251/Pokemon-Prerelease-Box-Of-Energy",
-     "price": 9.99,
-     "currency": "EUR",
-     "eur": 9.99,
-     "inStock": true,
-     "img": "https://mrtns.sk/gorila/products/_ml/1989/ml1989251.jpg?v=17940332722"
+     "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157847.jpg?v=17940332502"
     },
     {
      "name": "Pokémon: Deck Box krabička na 75 karet - Snorlax and Munchlax",
@@ -5315,15 +5300,6 @@
      "eur": 3.53,
      "inStock": true,
      "img": "https://mrtns.sk/gorila/products/_ml/1814/ml1814705.jpg?v=17940332632"
-    },
-    {
-     "name": "Pokémon TCG: Violet ex - Booster (japonský)",
-     "url": "https://www.gorila.sk/detail/4157847/Pokemon-TCG-Violet-ex-Booster-japonsky",
-     "price": 6.06,
-     "currency": "EUR",
-     "eur": 6.06,
-     "inStock": false,
-     "img": "https://mrtns.sk/gorila/products/_ml/4157/ml4157847.jpg?v=17940332502"
     },
     {
      "name": "Pokémon TCG: Stella Miracle - Booster (japonský)",
@@ -5346,8 +5322,8 @@
    ]
   },
   "konzoliste": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Pokémon TCG: 30th Celebration - Booster Bundle (6 boosterů)",
@@ -5490,10 +5466,13 @@
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.konzoliste.cz/user/shop/detail/126708_pokemon-tcg--me02-5-ascended-heroes-mega-charizard-tin.jpg?ff=1&x=423&y=317&q=85&ts=69985267&sg=6978f29b"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.konzoliste.cz/sk/pokemon-booster-boxy/)",
+   "fails": 1,
+   "warned": false
   },
   "gengar": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -6024,7 +6003,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -6471,7 +6450,7 @@
    "warned": true
   },
   "hrananetu": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -6801,7 +6780,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -7023,8 +7002,8 @@
    ]
   },
   "planetaher": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Pokémon TCG: Delta Reign Booster",
@@ -7638,11 +7617,14 @@
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.planetaher.cz/user/shop/detail/125340-2_snimek-obrazovky-2026-11-05-125459.png?ff=1&x=423&y=318&q=85&ts=6aec6f0b&sg=2175fb9d"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.planetaher.cz/pokemon/)",
+   "fails": 1,
+   "warned": false
   },
   "tlama": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Pokémon TCG: Mega Evolution Pitch Black - Booster",
@@ -7959,11 +7941,14 @@
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.tlamagames.com/user/shop/detail/34873_ultra-pro-ultrapro--gallery-series-seaside-9-pocket-pro-binder-for-pokemon.jpg?ff=1&x=423&y=318&q=85&ts=60afa1de&sg=2175fb9d"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.tlamagames.com/pokemon/)",
+   "fails": 1,
+   "warned": false
   },
   "pokeunited": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Delta Reign ENG booster",
@@ -8271,11 +8256,14 @@
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.pokeunited.cz/user/shop/detail/1090_snimek-obrazovky-2026-09-10-v--11-53-12.png?ff=1&x=423&y=318&q=85&ts=6aa27e89&sg=2175fb9d"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.pokeunited.cz/pokemon/)",
+   "fails": 1,
+   "warned": false
   },
   "fyft": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Pokémon album 9-pocket Portfolio Pokeball (UP)",
@@ -8511,10 +8499,13 @@
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.fyft.cz/user/shop/detail/90325_snimek-obrazovky-2026-07-07-v--14-02-41.png?ff=1&x=423&y=423&q=85&ts=6a4ceb13&sg=89595c3b"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.fyft.cz/pokemon/)",
+   "fails": 1,
+   "warned": false
   },
   "imago": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -8808,7 +8799,7 @@
    ]
   },
   "dobrovsky": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -8940,7 +8931,7 @@
    ]
   },
   "svether": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -9054,7 +9045,7 @@
    ]
   },
   "pompo_cz": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -9074,6 +9065,24 @@
      "eur": 93.92,
      "inStock": true,
      "img": "https://data.pompo.cz/data/tmp/2/8/517108_2.jpg?1777026105_1"
+    },
+    {
+     "name": "Pokémon TCG: ME05 Pitch Black - Booster",
+     "url": "https://pompo.cz/pokemon-tcg-me05-pitch-black-booster_z272061/",
+     "price": 149.0,
+     "currency": "CZK",
+     "eur": 6.12,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/3/533993_2.jpg?1783491695_1"
+    },
+    {
+     "name": "Pokémon TCG: SV10 Destined Rivals - Booster",
+     "url": "https://pompo.cz/pokemon-tcg-sv10-destined-rivals-booster_z236308/",
+     "price": 249.0,
+     "currency": "CZK",
+     "eur": 10.23,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/2/415522_2.jpg?1749104694_1"
     },
     {
      "name": "Pokémon TCG: ME02.5 Ascended Heroes - ex Box",
@@ -9103,78 +9112,6 @@
      "img": "https://data.pompo.cz/data/tmp/2/5/566155_2.jpg?1793708494_1"
     },
     {
-     "name": "Pokémon TCG: First Partners Illustration Collection - Series 3",
-     "url": "https://pompo.cz/pokemon-tcg-first-partners-illustration-collection-series-3_z273805/",
-     "price": 899.0,
-     "currency": "CZK",
-     "eur": 36.92,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/5/544875_2.jpg?1786443607_1"
-    },
-    {
-     "name": "Pokémon TCG: First Partner Illustration Collection - Series 2",
-     "url": "https://pompo.cz/pokemon-tcg-first-partner-illustration-collection-series-2_z267626/",
-     "price": 1098.0,
-     "currency": "CZK",
-     "eur": 45.09,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/9/517089_2.jpg?1777026093_1"
-    },
-    {
-     "name": "Pokémon TCG: Pokémon Day 2026 Collection",
-     "url": "https://pompo.cz/pokemon-tcg-pokemon-day-2026-collection_z260183/",
-     "price": 2037.0,
-     "currency": "CZK",
-     "eur": 83.66,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/2/494332_2.jpg?1769595848_1"
-    },
-    {
-     "name": "Pokémon TCG: ME02.5 Ascended Heroes - Elite Trainer Box",
-     "url": "https://pompo.cz/pokemon-tcg-me02-5-ascended-heroes-elite-trainer-box_z262209/",
-     "price": 3999.0,
-     "currency": "CZK",
-     "eur": 164.23,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/1/496811_2.jpg?1770999985_1"
-    },
-    {
-     "name": "Pokémon TCG: Battle Academy 2024 CZ/SK - karetní hra",
-     "url": "https://pompo.cz/pokemon-tcg-battle-academy-2024-cz-sk-karetni-hra_z211025/",
-     "price": 949.0,
-     "currency": "CZK",
-     "eur": 38.97,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/1/355831_2.jpg?1723023348_1"
-    },
-    {
-     "name": "Pokémon TCG: ME02.5 Ascended Heroes - Tech Sticker Collection, více druhů",
-     "url": "https://pompo.cz/pokemon-tcg-me02-5-ascended-heroes-tech-sticker-collection-vice-druhu_z260182/",
-     "price": 1199.0,
-     "currency": "CZK",
-     "eur": 49.24,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/2/494322_2.jpg?1769782861_1"
-    },
-    {
-     "name": "Pokémon TCG: ME05 Pitch Black - Booster",
-     "url": "https://pompo.cz/pokemon-tcg-me05-pitch-black-booster_z272061/",
-     "price": 149.0,
-     "currency": "CZK",
-     "eur": 6.12,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/3/533993_2.jpg?1783491695_1"
-    },
-    {
-     "name": "Pokémon TCG: SV10 Destined Rivals - Booster",
-     "url": "https://pompo.cz/pokemon-tcg-sv10-destined-rivals-booster_z236308/",
-     "price": 249.0,
-     "currency": "CZK",
-     "eur": 10.23,
-     "inStock": true,
-     "img": "https://data.pompo.cz/data/tmp/2/2/415522_2.jpg?1749104694_1"
-    },
-    {
      "name": "Pokémon TCG: ME02.5 Ascended Heroes - Mini Tin",
      "url": "https://pompo.cz/pokemon-tcg-me02-5-ascended-heroes-mini-tin_z262210/",
      "price": 799.0,
@@ -9182,6 +9119,15 @@
      "eur": 32.81,
      "inStock": true,
      "img": "https://data.pompo.cz/data/tmp/2/6/496816_2.jpg?1770999986_1"
+    },
+    {
+     "name": "Pokémon TCG: First Partners Illustration Collection - Series 3",
+     "url": "https://pompo.cz/pokemon-tcg-first-partners-illustration-collection-series-3_z273805/",
+     "price": 899.0,
+     "currency": "CZK",
+     "eur": 36.92,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/5/544875_2.jpg?1786443607_1"
     },
     {
      "name": "Pokémon TCG: Lumiose City Mini Tin",
@@ -9211,6 +9157,24 @@
      "img": "https://data.pompo.cz/data/tmp/2/1/509511_2.jpg?1774520520_1"
     },
     {
+     "name": "Pokémon TCG: First Partner Illustration Collection - Series 2",
+     "url": "https://pompo.cz/pokemon-tcg-first-partner-illustration-collection-series-2_z267626/",
+     "price": 1098.0,
+     "currency": "CZK",
+     "eur": 45.09,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/9/517089_2.jpg?1777026093_1"
+    },
+    {
+     "name": "Pokémon TCG: Pokémon Day 2026 Collection",
+     "url": "https://pompo.cz/pokemon-tcg-pokemon-day-2026-collection_z260183/",
+     "price": 2037.0,
+     "currency": "CZK",
+     "eur": 83.66,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/2/494332_2.jpg?1769595848_1"
+    },
+    {
      "name": "Pokémon TCG: Mega Zygarde ex Premium Collection",
      "url": "https://pompo.cz/pokemon-tcg-mega-zygarde-ex-premium-collection_z267623/",
      "price": 1399.0,
@@ -9218,6 +9182,33 @@
      "eur": 57.45,
      "inStock": true,
      "img": "https://data.pompo.cz/data/tmp/2/1/517081_2.jpg?1777026089_1"
+    },
+    {
+     "name": "Pokémon TCG: ME02.5 Ascended Heroes - Elite Trainer Box",
+     "url": "https://pompo.cz/pokemon-tcg-me02-5-ascended-heroes-elite-trainer-box_z262209/",
+     "price": 3999.0,
+     "currency": "CZK",
+     "eur": 164.23,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/1/496811_2.jpg?1770999985_1"
+    },
+    {
+     "name": "Pokémon TCG: Battle Academy 2024 CZ/SK - karetní hra",
+     "url": "https://pompo.cz/pokemon-tcg-battle-academy-2024-cz-sk-karetni-hra_z211025/",
+     "price": 949.0,
+     "currency": "CZK",
+     "eur": 38.97,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/1/355831_2.jpg?1723023348_1"
+    },
+    {
+     "name": "Pokémon TCG: ME02.5 Ascended Heroes - Tech Sticker Collection, více druhů",
+     "url": "https://pompo.cz/pokemon-tcg-me02-5-ascended-heroes-tech-sticker-collection-vice-druhu_z260182/",
+     "price": 1199.0,
+     "currency": "CZK",
+     "eur": 49.24,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/2/494322_2.jpg?1769782861_1"
     },
     {
      "name": "Pokémon TCG: Mega Greninja ex Premium Collection",
@@ -9270,8 +9261,35 @@
      "price": 159.0,
      "currency": "CZK",
      "eur": 6.53,
-     "inStock": true,
+     "inStock": false,
      "img": "https://data.pompo.cz/data/tmp/2/7/517097_2.jpg?1777026098_1"
+    },
+    {
+     "name": "Pokémon TCG: ME04 Chaos Rising - Elite Trainer Box",
+     "url": "https://pompo.cz/pokemon-tcg-me04-chaos-rising-elite-trainer-box_z267627/",
+     "price": 2099.0,
+     "currency": "CZK",
+     "eur": 86.2,
+     "inStock": false,
+     "img": "https://data.pompo.cz/data/tmp/2/9/517079_2.jpg?1777026088_1"
+    },
+    {
+     "name": "Pokémon TCG: First Partner Illustration Collection - Series 1",
+     "url": "https://pompo.cz/pokemon-tcg-first-partner-illustration-collection-series-1_z264778/",
+     "price": 11789.0,
+     "currency": "CZK",
+     "eur": 484.15,
+     "inStock": false,
+     "img": "https://data.pompo.cz/data/tmp/2/5/506675_2.jpg?1773915655_1"
+    },
+    {
+     "name": "Pokémon TCG: ex Battle Deck - Melmetal & Houndoom",
+     "url": "https://pompo.cz/pokemon-tcg-ex-battle-deck-melmetal-houndoom_z177906/",
+     "price": 624.0,
+     "currency": "CZK",
+     "eur": 25.63,
+     "inStock": true,
+     "img": "https://data.pompo.cz/data/tmp/2/5/301015_2.jpg?1706279295_1"
     },
     {
      "name": "Pokémon TCG: ME02.5 Ascended Heroes - Premium Poster Collection",
@@ -9308,6 +9326,15 @@
      "eur": 20.49,
      "inStock": false,
      "img": "https://data.pompo.cz/data/tmp/2/8/544868_2.jpg?1786443602_1"
+    },
+    {
+     "name": "Pokémon TCG: ME06 Delta Reign - 3 Blister booster",
+     "url": "https://pompo.cz/pokemon-tcg-me06-delta-reign-3-blister-booster_z278728/",
+     "price": 449.0,
+     "currency": "CZK",
+     "eur": 18.44,
+     "inStock": false,
+     "img": "https://data.pompo.cz/data/tmp/2/0/566180_2.jpg?1793708514_1"
     },
     {
      "name": "Pokémon TCG: ME05 Pitch Black - Elite Trainer Box",
@@ -9546,8 +9573,8 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-11-07T05:09:29Z",
-   "ok": false,
+   "ts": "2026-11-07T07:25:17Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon - 30th Anniversary Celebration Coin Set - CHN",
@@ -16844,14 +16871,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/Inserate_9.webp?v=1793970990"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "playmaniac": {
-   "ts": "2026-11-07T05:09:29Z",
-   "ok": false,
+   "ts": "2026-11-07T07:25:17Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon Karmesin & Purpur Set 1 Build & Battle Stadium Box Deutsch",
@@ -17303,14 +17327,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0324/5867/0218/files/pokemon-30-jahre-quajutsu-ex-tin-box-deutsch.png?v=1793038045"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "yonko": {
-   "ts": "2026-11-07T05:09:29Z",
-   "ok": false,
+   "ts": "2026-11-07T07:25:17Z",
+   "ok": true,
    "items": [
     {
      "name": "[S-CHN] Pokémon Box - Gengar Kartenhalter (CSU)",
@@ -20896,14 +20917,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0814/4656/8264/files/japanisch-Pokemon-Display-Aura-Seeker-M7-Display.jpg?v=1793714910"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "crispycards": {
-   "ts": "2026-11-07T05:09:29Z",
-   "ok": false,
+   "ts": "2026-11-07T07:25:17Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon  Phantasmal Flames 1-Pack Blister (ENG)",
@@ -25886,14 +25904,11 @@
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0950/2733/1402/files/PokemonSilverTempest3-PackBlister.webp?v=1758110314"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "pushdich": {
-   "ts": "2026-11-07T05:09:29Z",
-   "ok": false,
+   "ts": "2026-11-07T07:25:17Z",
+   "ok": true,
    "items": [
     {
      "name": "1x Booster Pokémon 151 sv2a JP",
@@ -26057,13 +26072,10 @@
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0600/6010/6901/files/21eba0d3-ce80-431a-933c-090317251e8e.jpg?v=1783595006"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "cardcorner": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -26287,7 +26299,7 @@
    ]
   },
   "gate": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -26768,7 +26780,7 @@
    ]
   },
   "comicplanet": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -27206,7 +27218,7 @@
    ]
   },
   "trader": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -27536,7 +27548,7 @@
    ]
   },
   "geodude": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -28516,8 +28528,8 @@
    ]
   },
   "funkelpappe": {
-   "ts": "2026-11-07T05:09:29Z",
-   "ok": false,
+   "ts": "2026-11-07T07:25:17Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon TCG 30th Anniversary First Partner Vol. 3 Booster Display – Chinesisch",
@@ -28762,14 +28774,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/1050/1786/8620/files/PKM-PO-ETB-EN.png?v=1782656470"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "mikis": {
-   "ts": "2026-11-07T05:09:29Z",
-   "ok": false,
+   "ts": "2026-11-07T07:25:17Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon - 30th Anniversary Iridescent Future Gift Box - Chinesisch",
@@ -30391,14 +30400,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/Pokemon_Schwert_Schild_Strahlende_Sterne_Booster_Display_-_Deutsch.jpg?v=1720349472"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "rays": {
-   "ts": "2026-11-07T05:09:29Z",
-   "ok": false,
+   "ts": "2026-11-07T07:25:17Z",
+   "ok": true,
    "items": [
     {
      "name": "Pokémon Mega Brave Display m1L Japanese",
@@ -30562,13 +30568,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0581/8846/4185/files/PokemonTheGloryofTeamRocketDisplayKorean.png?v=1755212415"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 2,
-   "warned": true
+   ]
   },
   "sammelmania": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -30783,7 +30786,7 @@
    ]
   },
   "samurai": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -32511,8 +32514,8 @@
    ]
   },
   "fyft_sk": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Acrylic Booster Box Display - Pokémon (UP)",
@@ -32748,10 +32751,13 @@
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.fyft.sk/user/shop/detail/70108_snimek-obrazovky-2026-07-07-v--14-02-41.png?ff=1&x=423&y=423&q=85&ts=6a4ef1bb&sg=89595c3b"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.fyft.sk/pokemon/)",
+   "fails": 1,
+   "warned": false
   },
   "ihrysko": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -34107,7 +34113,7 @@
    ]
   },
   "kitstore_sk": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -34284,7 +34290,7 @@
    ]
   },
   "sparkys": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -34596,7 +34602,7 @@
    ]
   },
   "cernyrytir": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -35916,7 +35922,7 @@
    ]
   },
   "kitstore": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -36093,8 +36099,8 @@
    ]
   },
   "plastic": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Pokémon TCG: ME06 Delta Reign - Booster BOX",
@@ -36988,10 +36994,13 @@
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.plasticwargaming.com/user/shop/detail/55165-1_up16202.jpg?ff=1&x=423&y=318&q=85&ts=6a1ea66e&sg=2175fb9d"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.plasticwargaming.com/pokemon-booster-boxy/)",
+   "fails": 1,
+   "warned": false
   },
   "xzone_cz": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -37240,7 +37249,7 @@
    ]
   },
   "veselydrak_cz": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -41835,7 +41844,7 @@
    ]
   },
   "gengar_cz": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -41981,8 +41990,8 @@
    ]
   },
   "konzoliste_cz": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Pokémon TCG: 30th Celebration - Booster Bundle (6 boosterů)",
@@ -42098,11 +42107,14 @@
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.konzoliste.cz/user/shop/detail/83342_pokemon-tcg--battle-academy-2024-cz-sk.jpg?ff=1&x=423&y=317&q=85&ts=667211b2&sg=6978f29b"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.konzoliste.cz/pokemon-booster-boxy/)",
+   "fails": 1,
+   "warned": false
   },
   "pokepop": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Album na karty Ultra Pro: Pokémon 9-Pocket Mega Evolution Delta Reign",
@@ -42428,11 +42440,14 @@
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.pokepop.cz/user/shop/detail/5066_collectorstore00001-4864999a-808b-4676-bf85-40269842c26b.webp?ff=1&x=423&y=318&q=85&ts=6acdffb2&sg=2175fb9d"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.pokepop.cz/pokemon/)",
+   "fails": 1,
+   "warned": false
   },
   "hras": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Pokémon TCG: 30th Celebration Ultra-Premium Collection – Night",
@@ -42533,11 +42548,14 @@
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.hras.cz/user/shop/detail/106103_pokemon-tcg--battle-academy-2024-cz-sk.jpg?ff=1&x=423&y=318&q=85&ts=6676bb88&sg=2175fb9d"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.hras.cz/pokemon/)",
+   "fails": 1,
+   "warned": false
   },
   "pokekarty": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Pokémon TCG: 151 Poster Collection",
@@ -42755,11 +42773,14 @@
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.pokekarty.cz/user/shop/detail_small/648_karetni-hra-pokemon-tcg-trading-card-game-classic-900w.png?ff=1&x=290&y=218&q=85&ts=6550f997&sg=2f1e9886"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.pokekarty.cz/)",
+   "fails": 1,
+   "warned": false
   },
   "spellbound": {
-   "ts": "2026-11-07T07:24:00Z",
-   "ok": true,
+   "ts": "2026-11-07T05:23:50Z",
+   "ok": false,
    "items": [
     {
      "name": "Pokémon - Mega Evolution - Delta Reign - trainer kit",
@@ -42788,10 +42809,13 @@
      "inStock": false,
      "img": "https://cdn.myshoptet.com/usr/www.spellbound.cz/user/shop/related/2036_pkm-30th-trainer.jpg?ff=1&x=100&y=100&q=85&ts=6ad1d0db&sg=8dda0505"
     }
-   ]
+   ],
+   "error": "HTTP Error 403: Forbidden (https://www.spellbound.cz/pokemon/)",
+   "fails": 1,
+   "warned": false
   },
   "kartickarna": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -43212,7 +43236,7 @@
    ]
   },
   "akcnihracky": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -43308,7 +43332,7 @@
    ]
   },
   "toysshop": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
@@ -43593,7 +43617,7 @@
    ]
   },
   "geekhall": {
-   "ts": "2026-11-07T07:24:00Z",
+   "ts": "2026-11-07T07:25:17Z",
    "ok": true,
    "items": [
     {
