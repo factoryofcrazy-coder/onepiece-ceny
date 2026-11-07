@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Loading } from "@/components/ui";
-import { indexed, IndexPoint, loadMarketIndex, loadSpy, spyAligned, SpyPoint } from "@/lib/market";
+import { indexed, IndexPoint, lastSpyDay, loadMarketIndex, loadSpy, spyAligned, SpyPoint } from "@/lib/market";
 import MarketTabs from "@/components/MarketTabs";
 import { useLang } from "@/lib/lang";
 
@@ -30,7 +30,7 @@ export default function Page() {
   const [hover, setHover] = useState<number | null>(null);
   const [width, setWidth] = useState(680);
   const box = useRef<HTMLDivElement>(null);
-  const { t } = useLang();
+  const { t, locale } = useLang();
 
   useEffect(() => {
     loadMarketIndex().then(setPoints);
@@ -57,6 +57,10 @@ export default function Page() {
   const pctAll = latest ? (latest.idx / 1000 - 1) * 100 : null;
   const spyLast = [...spyIdx].reverse().find((v) => v != null) ?? null;
   const spyAll = spyLast != null ? spyLast / 10 - 100 : null;
+  // burza cez víkend a sviatky nehandluje – vtedy ukáž, z ktorého dňa je posledný kurz
+  const spyDay = latest ? lastSpyDay(spy, latest.day) : null;
+  const spyStale = !!spyDay && !!latest && spyDay < latest.day;
+  const spyDayTxt = spyDay ? new Date(spyDay + "T12:00:00").toLocaleDateString(locale, { day: "numeric", month: locale.startsWith("en") ? "short" : "numeric" }) : "";
 
   // os
   const all = [...idx.map((p) => p.idx), ...spyIdx.filter((v): v is number => v != null), 1000];
@@ -110,8 +114,9 @@ export default function Page() {
 
           {pctAll != null && spyAll != null && (
             <p className="mindex-verdict">
-              {t("Za toto obdobie", "Over this period")} {Math.abs(pctAll - spyAll) < 0.1 ? t("išli rovnako", "both moved the same") : pctAll > spyAll ? t("rástol rýchlejšie One Piece", "One Piece grew faster") : t("rástli rýchlejšie akcie", "stocks grew faster")}:{" "}
-              <b className="op">One Piece {pctTxt(pctAll)}</b> vs <b className="spy">SPY {pctTxt(spyAll)}</b>.
+              {t("Za toto obdobie", "Over this period")} {Math.abs(pctAll - spyAll) < 0.1 ? t("išli rovnako", "both moved the same") : pctAll > spyAll ? t("si lepšie viedol One Piece", "One Piece did better") : t("si lepšie viedli akcie", "stocks did better")}:{" "}
+              <b className="op">One Piece {pctTxt(pctAll)}</b> vs <b className="spy">SPY {pctTxt(spyAll)}</b>
+              {spyStale && <span className="muted small"> ({t(`kurz z ${spyDayTxt}, burza cez víkend a sviatky nehandluje`, `price from ${spyDayTxt}, the stock market is closed on weekends and holidays`)})</span>}.
             </p>
           )}
 
