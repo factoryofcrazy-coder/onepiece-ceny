@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-07T05:23:05Z",
+ "updated": "2026-11-07T07:23:07Z",
  "fx": {
   "CZK": 24.35,
   "USD": 1.1165,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -553,7 +553,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -649,7 +649,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -1896,7 +1896,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -2262,7 +2262,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -2863,11 +2863,11 @@
     }
    ],
    "error": "obchod vrátil 0 produktov – možno zmenil web alebo URL kategórie",
-   "fails": 18,
+   "fails": 19,
    "warned": true
   },
   "cernyrytir": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3026,7 +3026,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3599,7 +3599,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3755,7 +3755,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3779,7 +3779,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3830,7 +3830,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3881,7 +3881,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -4015,7 +4015,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -4836,8 +4836,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "yonko": {
    "ts": "2026-11-07T05:08:55Z",
@@ -5448,8 +5448,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "funkelpappe": {
    "ts": "2026-11-07T05:08:55Z",
@@ -5529,8 +5529,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "mikis": {
    "ts": "2026-11-07T05:08:55Z",
@@ -5682,11 +5682,11 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "butticards": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -5855,7 +5855,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -5933,7 +5933,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -6448,11 +6448,11 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "samurai": {
-   "ts": "2026-11-07T05:23:05Z",
+   "ts": "2026-11-07T07:23:07Z",
    "ok": true,
    "items": [
     {
@@ -6476,18 +6476,18 @@
     {
      "name": "OP-01 Romance Dawn Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op01box-damaged-box",
-     "price": 35099.0,
+     "price": 34927.0,
      "currency": "JPY",
-     "eur": 198.56,
+     "eur": 197.58,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4106-b4c20ebc0716/op01box_sst_88bb8ccc-0939-4e52-b392-8d54ae1ce257-thumb-320.webp"
     },
     {
      "name": "OP-17 The World’s Strongest Warriors Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box-damaged-box",
-     "price": 8861.0,
+     "price": 8729.0,
      "currency": "JPY",
-     "eur": 50.13,
+     "eur": 49.38,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
@@ -6566,9 +6566,9 @@
     {
      "name": "OP-13 Carrying on His Will Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-13-carrying-on-his-will-japanese-one-piece-booster-box-damaged-box",
-     "price": 17042.0,
+     "price": 17032.0,
      "currency": "JPY",
-     "eur": 96.41,
+     "eur": 96.35,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4130-f30c2b9ef984/op13box_sst-thumb-320.webp"
     },
@@ -6602,9 +6602,9 @@
     {
      "name": "OP-09 The New Emperor Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-09-the-new-emperor-japanese-one-piece-booster-box-damaged-box",
-     "price": 16291.0,
+     "price": 16271.0,
      "currency": "JPY",
-     "eur": 92.16,
+     "eur": 92.05,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4122-7d51d8b80f93/op09box_sst_b1b724f6-dabc-460d-81f5-d44b25d33101-thumb-320.webp"
     },
@@ -6656,9 +6656,9 @@
     {
      "name": "OP-02 Paramount War Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-02-paramount-war-japanese-one-piece-booster-box-damaged-box",
-     "price": 16789.0,
+     "price": 16748.0,
      "currency": "JPY",
-     "eur": 94.98,
+     "eur": 94.74,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4108-686aa9402225/op02box_sst-thumb-320.webp"
     },
@@ -6674,9 +6674,9 @@
     {
      "name": "OP-17 The World’s Strongest Warriors Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op-17-the-worlds-strongest-warriors-japanese-one-piece-booster-box",
-     "price": 9703.0,
+     "price": 9564.0,
      "currency": "JPY",
-     "eur": 54.89,
+     "eur": 54.1,
      "inStock": true,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/2026/08/op17-worlds-strongest-warriors-box-sst-logo-300x300.webp"
     },
@@ -6728,9 +6728,9 @@
     {
      "name": "OP-13 Carrying on His Will Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op13box",
-     "price": 18121.0,
+     "price": 18111.0,
      "currency": "JPY",
-     "eur": 102.51,
+     "eur": 102.46,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4130-f30c2b9ef984/op13box_sst-thumb-320.webp"
     },
@@ -6764,9 +6764,9 @@
     {
      "name": "OP-09 The New Emperor Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op09box",
-     "price": 18012.0,
+     "price": 17990.0,
      "currency": "JPY",
-     "eur": 101.9,
+     "eur": 101.77,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4122-7d51d8b80f93/op09box_sst_b1b724f6-dabc-460d-81f5-d44b25d33101-thumb-320.webp"
     },
@@ -6827,18 +6827,18 @@
     {
      "name": "OP-02 Paramount War Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op02box",
-     "price": 19097.0,
+     "price": 19043.0,
      "currency": "JPY",
-     "eur": 108.03,
+     "eur": 107.73,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4108-686aa9402225/op02box_sst-thumb-320.webp"
     },
     {
      "name": "OP-01 Romance Dawn Japanese One Piece Booster Box",
      "url": "https://samuraiswordtokyo.com/products/op01box",
-     "price": 38803.0,
+     "price": 38611.0,
      "currency": "JPY",
-     "eur": 219.51,
+     "eur": 218.43,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4106-b4c20ebc0716/op01box_sst_88bb8ccc-0939-4e52-b392-8d54ae1ce257-thumb-320.webp"
     },
@@ -8552,8 +8552,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "underpaid": {
    "ts": "2026-11-07T05:08:55Z",
@@ -9353,8 +9353,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "cardbinder": {
    "ts": "2026-11-07T05:08:55Z",
@@ -9857,8 +9857,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   }
  }
 }
