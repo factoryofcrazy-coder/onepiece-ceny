@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-07T15:23:08Z",
+ "updated": "2026-11-07T17:23:07Z",
  "fx": {
   "CZK": 24.35,
   "USD": 1.1165,
@@ -7,7 +7,7 @@
  },
  "shops": {
   "cardempire": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -52,7 +52,7 @@
      "price": 190.0,
      "currency": "EUR",
      "eur": 190.0,
-     "inStock": false,
+     "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/related/19142_upper-deck-premier-2024-25-hockey-hobby-box--5.png?ff=1&x=100&y=100&q=85&ts=6a1dec4c&sg=8dda0505"
     },
     {
@@ -106,7 +106,7 @@
      "price": 280.0,
      "currency": "EUR",
      "eur": 280.0,
-     "inStock": false,
+     "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/23372_untitled-design-2026-10-28t122902-939.png?ff=1&x=423&y=318&q=85&ts=6ae1dc7c&sg=2175fb9d"
     },
     {
@@ -117,6 +117,15 @@
      "eur": 850.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/23216_untitled-design-2026-10-24t155146-132.png?ff=1&x=423&y=318&q=85&ts=6adcb972&sg=2175fb9d"
+    },
+    {
+     "name": "One Piece TCG - Heroines Edition vol.2 - Booster Box - Sealed Case",
+     "url": "https://www.cardempire.sk/one-piece-tcg-heroines-edition-vol-2-booster-box-sealed-case/",
+     "price": 3420.0,
+     "currency": "EUR",
+     "eur": 3420.0,
+     "inStock": true,
+     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/22595_slab--3.png?ff=1&x=423&y=318&q=85&ts=6ad79474&sg=2175fb9d"
     },
     {
      "name": "One Piece TCG - Awakening of the New Era - Double Pack Set Vol. 2 - Display",
@@ -214,7 +223,7 @@
      "price": 350.0,
      "currency": "EUR",
      "eur": 350.0,
-     "inStock": false,
+     "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/21161_op17box.png?ff=1&x=423&y=318&q=85&ts=6a899ced&sg=2175fb9d"
     },
     {
@@ -333,15 +342,6 @@
      "eur": 270.0,
      "inStock": true,
      "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/17478_upper-deck-premier-2024-25-hockey-hobby-box--2.png?ff=1&x=423&y=318&q=85&ts=69c46e73&sg=2175fb9d"
-    },
-    {
-     "name": "One Piece TCG - Two Legends - Booster Box - Japonský",
-     "url": "https://www.cardempire.sk/one-piece-tcg-two-legends-booster-box-japonsky/",
-     "price": 100.0,
-     "currency": "EUR",
-     "eur": 100.0,
-     "inStock": false,
-     "img": "https://cdn.myshoptet.com/usr/www.cardempire.sk/user/shop/detail/17022-1_one-piece-tcg-two-legends-booster-box-japonsky.jpg?ff=1&x=423&y=318&q=85&ts=69aef36f&sg=2175fb9d"
     },
     {
      "name": "One Piece TCG - OP15 The Adventure of the Island of God - Booster Box - Japonský",
@@ -544,7 +544,7 @@
    ]
   },
   "pikazard": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -640,7 +640,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -1887,7 +1887,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -2253,7 +2253,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -2863,11 +2863,11 @@
     }
    ],
    "error": "obchod vrátil 0 produktov – možno zmenil web alebo URL kategórie",
-   "fails": 23,
+   "fails": 24,
    "warned": true
   },
   "cernyrytir": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3026,7 +3026,7 @@
    ]
   },
   "nekonecno": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3599,7 +3599,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3745,7 +3745,7 @@
    ]
   },
   "pokemon4u": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3769,7 +3769,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -3820,18 +3820,9 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
-    {
-     "name": "One Piece - OP-17 The World's Strongest Warriors Booster Box (24 boosterů)",
-     "url": "https://hrydoruky.cz/one-piece-cg-op17-booster-pack",
-     "price": 5999.0,
-     "currency": "CZK",
-     "eur": 246.37,
-     "inStock": true,
-     "img": "https://hrydoruky.cz/images/thumbs/0169687_one-piece-op-17-the-worlds-strongest-warriors-booster-box-24-boosteru_360.webp"
-    },
     {
      "name": "Bandai One Piece TCG Starter Deck - PURPLE Charlotte Katakuri",
      "url": "https://hrydoruky.cz/one-piece-cg-starter-deck-st-34",
@@ -3871,7 +3862,7 @@
    ]
   },
   "poring": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -4005,7 +3996,7 @@
    ]
   },
   "cardstore": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -4826,8 +4817,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "yonko": {
    "ts": "2026-11-07T14:57:07Z",
@@ -5438,8 +5429,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "funkelpappe": {
    "ts": "2026-11-07T14:57:07Z",
@@ -5519,8 +5510,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "mikis": {
    "ts": "2026-11-07T14:57:07Z",
@@ -5672,11 +5663,11 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "butticards": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -5845,7 +5836,7 @@
    ]
   },
   "wombat": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -5923,7 +5914,7 @@
    ]
   },
   "blacklotus": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -6429,11 +6420,11 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "samurai": {
-   "ts": "2026-11-07T15:23:08Z",
+   "ts": "2026-11-07T17:23:07Z",
    "ok": true,
    "items": [
     {
@@ -6514,7 +6505,7 @@
      "price": 9907.0,
      "currency": "JPY",
      "eur": 56.04,
-     "inStock": true,
+     "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4482-c81e01b21a23/prb02box_sst-thumb-320.webp"
     },
     {
@@ -8533,8 +8524,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "underpaid": {
    "ts": "2026-11-07T14:57:07Z",
@@ -9334,8 +9325,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   },
   "cardbinder": {
    "ts": "2026-11-07T14:57:07Z",
@@ -9838,8 +9829,8 @@
     }
    ],
    "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   "fails": 2,
+   "warned": true
   }
  }
 }
