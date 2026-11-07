@@ -1,4 +1,4 @@
-import { sb } from "@/lib/supabase";
+import { sb } from "./supabase";
 
 export type IndexPoint = { day: string; value: number; items: number };
 export type SpyPoint = { day: string; close: number };
@@ -31,6 +31,13 @@ export function spyAligned(indexDays: string[], spy: SpyPoint[]): (number | null
     const c = closeAt(d);
     return c ? (1000 * c) / base : null;
   });
+}
+
+/** Deň posledného známeho kurzu SPY do daného dňa (víkend a sviatky = starší kurz). */
+export function lastSpyDay(spy: SpyPoint[], upTo: string): string | null {
+  let d: string | null = null;
+  for (const p of spy) if (p.day <= upTo && (!d || p.day > d)) d = p.day;
+  return d;
 }
 
 /** Body prepočítané na index so základom 1000 na prvý deň. */
