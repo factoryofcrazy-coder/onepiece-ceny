@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-07T11:23:06Z",
+ "updated": "2026-11-07T13:14:20Z",
  "fx": {
   "CZK": 24.35,
   "USD": 1.1165,
@@ -649,7 +649,7 @@
    ]
   },
   "veselydrak": {
-   "ts": "2026-11-07T11:23:06Z",
+   "ts": "2026-11-07T13:14:20Z",
    "ok": true,
    "items": [
     {
@@ -1896,7 +1896,7 @@
    ]
   },
   "ihrysko": {
-   "ts": "2026-11-07T11:23:06Z",
+   "ts": "2026-11-07T13:14:20Z",
    "ok": true,
    "items": [
     {
@@ -2262,7 +2262,7 @@
    ]
   },
   "najada": {
-   "ts": "2026-11-07T11:23:06Z",
+   "ts": "2026-11-07T13:14:20Z",
    "ok": true,
    "items": [
     {
@@ -2872,11 +2872,11 @@
     }
    ],
    "error": "obchod vrátil 0 produktov – možno zmenil web alebo URL kategórie",
-   "fails": 21,
+   "fails": 22,
    "warned": true
   },
   "cernyrytir": {
-   "ts": "2026-11-07T11:23:06Z",
+   "ts": "2026-11-07T13:14:20Z",
    "ok": true,
    "items": [
     {
@@ -3608,7 +3608,7 @@
    ]
   },
   "hrananetu": {
-   "ts": "2026-11-07T11:23:06Z",
+   "ts": "2026-11-07T13:14:20Z",
    "ok": true,
    "items": [
     {
@@ -3778,7 +3778,7 @@
    ]
   },
   "xzone": {
-   "ts": "2026-11-07T11:23:06Z",
+   "ts": "2026-11-07T13:14:20Z",
    "ok": true,
    "items": [
     {
@@ -3829,7 +3829,7 @@
    ]
   },
   "hrydoruky": {
-   "ts": "2026-11-07T11:23:06Z",
+   "ts": "2026-11-07T13:14:20Z",
    "ok": true,
    "items": [
     {
@@ -4317,8 +4317,8 @@
    ]
   },
   "cardcosmos": {
-   "ts": "2026-11-07T10:59:19Z",
-   "ok": false,
+   "ts": "2026-11-07T13:14:20Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game - OP13 Booster Display - JPN",
@@ -4332,9 +4332,9 @@
     {
      "name": "One Piece Card Game - OP17 Booster Display The World’s Strongest Warriors - JPN",
      "url": "https://cardcosmos.de/products/one-piece-card-game-op17-booster-display-the-worlds-strongest-warriors-japanisch",
-     "price": 114.9,
+     "price": 99.9,
      "currency": "EUR",
-     "eur": 114.9,
+     "eur": 99.9,
      "inStock": true,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP17_Booster_Display_The_World_s_Strongest_Warriors_-_JPN_05db0a3e7b138a91.png?v=1791205878"
     },
@@ -4627,15 +4627,6 @@
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP-10_Royal_Blood_Booster_Pack_-_JPN_24592913b0beff5e.webp?v=1791207502"
     },
     {
-     "name": "One Piece Card Game - OP11 Booster Box - EN",
-     "url": "https://cardcosmos.de/products/one-piece-op11-booster-box-englisch",
-     "price": 99.99,
-     "currency": "EUR",
-     "eur": 99.99,
-     "inStock": false,
-     "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP11_Booster_Box_-_EN_0c017dca7a604168.webp?v=1791208195"
-    },
-    {
      "name": "One Piece Card Game - OP16 Booster Pack - JPN",
      "url": "https://cardcosmos.de/products/one-piece-card-game-op16-booster-pack-jpn",
      "price": 4.9,
@@ -4643,6 +4634,15 @@
      "eur": 4.9,
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP16_Booster_Pack_-_JPN_bb4b0f238c839e80.png?v=1791205633"
+    },
+    {
+     "name": "One Piece Card Game - OP11 Booster Box - EN",
+     "url": "https://cardcosmos.de/products/one-piece-op11-booster-box-englisch",
+     "price": 99.99,
+     "currency": "EUR",
+     "eur": 99.99,
+     "inStock": false,
+     "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP11_Booster_Box_-_EN_0c017dca7a604168.webp?v=1791208195"
     },
     {
      "name": "One Piece Card Game - OP15 Adventure on KAMI's Island Booster Display - EN",
@@ -4833,14 +4833,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0809/9473/0327/files/One_Piece_Card_Game_-_OP-08_-_Two_Legends_Booster_Box_-_EN_cd4ac2e07120627d.webp?v=1791208428"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "yonko": {
-   "ts": "2026-11-07T10:59:19Z",
-   "ok": false,
+   "ts": "2026-11-07T13:14:20Z",
+   "ok": true,
    "items": [
     {
      "name": "[JP] One Piece · Card Game Display - Royal Bloodline (OP-10)",
@@ -5445,14 +5442,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0814/4656/8264/files/One-Piece-Card-Game-BOOSTERPACK-Emperors-In-The-New-World-OP-09-english.jpg?v=1755092829"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "funkelpappe": {
-   "ts": "2026-11-07T10:59:19Z",
-   "ok": false,
+   "ts": "2026-11-07T13:14:20Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece TCG OP-17 The World's Strongest Warriors Booster Display – Japanisch",
@@ -5526,14 +5520,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/1050/1786/8620/files/OP-OP13COHW-BD-JPN.png?v=1782678633"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "mikis": {
-   "ts": "2026-11-07T10:59:19Z",
-   "ok": false,
+   "ts": "2026-11-07T13:14:20Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game Illustration Box IB-07 - Englisch",
@@ -5679,13 +5670,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0635/3646/4111/files/OnePieceCardGameAdventureonKamisIslandOP-15BoosterDisplay_Englisch.webp?v=1775934440"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "butticards": {
-   "ts": "2026-11-07T11:23:06Z",
+   "ts": "2026-11-07T13:14:20Z",
    "ok": true,
    "items": [
     {
@@ -6136,8 +6124,8 @@
    ]
   },
   "playmaniac": {
-   "ts": "2026-11-07T10:59:19Z",
-   "ok": false,
+   "ts": "2026-11-07T13:14:20Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game - 3D2Y ST-14 Starter Deck Englisch",
@@ -6445,13 +6433,10 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0324/5867/0218/files/one-piece-card-game-the-worlds-strongest-warriors-op-17-booster-display-japanisch.webp?v=1790449080"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "samurai": {
-   "ts": "2026-11-07T11:23:06Z",
+   "ts": "2026-11-07T13:14:20Z",
    "ok": true,
    "items": [
     {
@@ -6601,9 +6586,9 @@
     {
      "name": "OP-09 The New Emperor Japanese One Piece Booster Box – Damaged Box",
      "url": "https://samuraiswordtokyo.com/products/op-09-the-new-emperor-japanese-one-piece-booster-box-damaged-box",
-     "price": 16251.0,
+     "price": 16261.0,
      "currency": "JPY",
-     "eur": 91.93,
+     "eur": 91.99,
      "inStock": false,
      "img": "https://samuraiswordtokyo.com/wp-content/uploads/samurai-media/2026/05/4122-7d51d8b80f93/op09box_sst_b1b724f6-dabc-460d-81f5-d44b25d33101-thumb-320.webp"
     },
@@ -6880,8 +6865,8 @@
    ]
   },
   "crispycards": {
-   "ts": "2026-11-07T10:59:19Z",
-   "ok": false,
+   "ts": "2026-11-07T13:14:20Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece OP14 The Azure Sea's Seven Display (ENG)",
@@ -8549,14 +8534,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0950/2733/1402/files/one-piece-adventure-on-kamis-island-dash-pack-eng-kaufen.webp?v=1792788325"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "underpaid": {
-   "ts": "2026-11-07T10:59:19Z",
-   "ok": false,
+   "ts": "2026-11-07T13:14:20Z",
+   "ok": true,
    "items": [
     {
      "name": "One Piece Card Game: The Azure Sea’s Seven OP-14 Boosterpack (JP)",
@@ -9350,14 +9332,11 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0729/9871/5717/files/one-piece-japanese-2nd-anniversary-set-en-851361.webp?v=1746214435"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   },
   "cardbinder": {
-   "ts": "2026-11-07T10:59:19Z",
-   "ok": false,
+   "ts": "2026-11-07T13:14:20Z",
+   "ok": true,
    "items": [
     {
      "name": "The Best Volume 2 Japanese Booster Box",
@@ -9854,10 +9833,7 @@
      "inStock": false,
      "img": "https://cdn.shopify.com/s/files/1/0865/2816/4189/files/One-Piece-TCG-PRB01-The-Best-Volume-one-Booster-Box-English.webp?v=1759844795"
     }
-   ],
-   "error": "HTTP Error 429: Too Many Requests",
-   "fails": 1,
-   "warned": false
+   ]
   }
  }
 }
